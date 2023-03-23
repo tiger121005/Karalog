@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
+		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
+		19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D3029CC2C9E00B798A4 /* ViewController.swift */; };
+		19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3229CC2C9E00B798A4 /* Main.storyboard */; };
+		19A12D3629CC2C9F00B798A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3529CC2C9F00B798A4 /* Assets.xcassets */; };
+		19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */; };
+		19A12D4429CC2CA000B798A4 /* KaralogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4329CC2CA000B798A4 /* KaralogTests.swift */; };
+		19A12D4E29CC2CA000B798A4 /* KaralogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */; };
+		19A12D5029CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4F29CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		19A12D4029CC2CA000B798A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 19A12D2129CC2C9E00B798A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 19A12D2829CC2C9E00B798A4;
+			remoteInfo = Karalog;
+		};
+		19A12D4A29CC2CA000B798A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 19A12D2129CC2C9E00B798A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 19A12D2829CC2C9E00B798A4;
+			remoteInfo = Karalog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		19A12D2929CC2C9E00B798A4 /* Karalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		19A12D3029CC2C9E00B798A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		19A12D3329CC2C9E00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		19A12D3529CC2C9F00B798A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		19A12D3829CC2C9F00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		19A12D3A29CC2C9F00B798A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		19A12D4329CC2CA000B798A4 /* KaralogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogTests.swift; sourceTree = "<group>"; };
+		19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogUITests.swift; sourceTree = "<group>"; };
+		19A12D4F29CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		19A12D2629CC2C9E00B798A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D3C29CC2CA000B798A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D4629CC2CA000B798A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19A12D2029CC2C9E00B798A4 = {
+			isa = PBXGroup;
+			children = (
+				19A12D2B29CC2C9E00B798A4 /* Karalog */,
+				19A12D4229CC2CA000B798A4 /* KaralogTests */,
+				19A12D4C29CC2CA000B798A4 /* KaralogUITests */,
+				19A12D2A29CC2C9E00B798A4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		19A12D2A29CC2C9E00B798A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D2929CC2C9E00B798A4 /* Karalog.app */,
+				19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */,
+				19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		19A12D2B29CC2C9E00B798A4 /* Karalog */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */,
+				19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */,
+				19A12D3029CC2C9E00B798A4 /* ViewController.swift */,
+				19A12D3229CC2C9E00B798A4 /* Main.storyboard */,
+				19A12D3529CC2C9F00B798A4 /* Assets.xcassets */,
+				19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */,
+				19A12D3A29CC2C9F00B798A4 /* Info.plist */,
+			);
+			path = Karalog;
+			sourceTree = "<group>";
+		};
+		19A12D4229CC2CA000B798A4 /* KaralogTests */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D4329CC2CA000B798A4 /* KaralogTests.swift */,
+			);
+			path = KaralogTests;
+			sourceTree = "<group>";
+		};
+		19A12D4C29CC2CA000B798A4 /* KaralogUITests */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */,
+				19A12D4F29CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift */,
+			);
+			path = KaralogUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		19A12D2829CC2C9E00B798A4 /* Karalog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19A12D5329CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "Karalog" */;
+			buildPhases = (
+				19A12D2529CC2C9E00B798A4 /* Sources */,
+				19A12D2629CC2C9E00B798A4 /* Frameworks */,
+				19A12D2729CC2C9E00B798A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Karalog;
+			productName = Karalog;
+			productReference = 19A12D2929CC2C9E00B798A4 /* Karalog.app */;
+			productType = "com.apple.product-type.application";
+		};
+		19A12D3E29CC2CA000B798A4 /* KaralogTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19A12D5629CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogTests" */;
+			buildPhases = (
+				19A12D3B29CC2CA000B798A4 /* Sources */,
+				19A12D3C29CC2CA000B798A4 /* Frameworks */,
+				19A12D3D29CC2CA000B798A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				19A12D4129CC2CA000B798A4 /* PBXTargetDependency */,
+			);
+			name = KaralogTests;
+			productName = KaralogTests;
+			productReference = 19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		19A12D4829CC2CA000B798A4 /* KaralogUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19A12D5929CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogUITests" */;
+			buildPhases = (
+				19A12D4529CC2CA000B798A4 /* Sources */,
+				19A12D4629CC2CA000B798A4 /* Frameworks */,
+				19A12D4729CC2CA000B798A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				19A12D4B29CC2CA000B798A4 /* PBXTargetDependency */,
+			);
+			name = KaralogUITests;
+			productName = KaralogUITests;
+			productReference = 19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		19A12D2129CC2C9E00B798A4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					19A12D2829CC2C9E00B798A4 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					19A12D3E29CC2CA000B798A4 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 19A12D2829CC2C9E00B798A4;
+					};
+					19A12D4829CC2CA000B798A4 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 19A12D2829CC2C9E00B798A4;
+					};
+				};
+			};
+			buildConfigurationList = 19A12D2429CC2C9E00B798A4 /* Build configuration list for PBXProject "Karalog" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 19A12D2029CC2C9E00B798A4;
+			productRefGroup = 19A12D2A29CC2C9E00B798A4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				19A12D2829CC2C9E00B798A4 /* Karalog */,
+				19A12D3E29CC2CA000B798A4 /* KaralogTests */,
+				19A12D4829CC2CA000B798A4 /* KaralogUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		19A12D2729CC2C9E00B798A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */,
+				19A12D3629CC2C9F00B798A4 /* Assets.xcassets in Resources */,
+				19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D3D29CC2CA000B798A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D4729CC2CA000B798A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		19A12D2529CC2C9E00B798A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */,
+				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
+				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D3B29CC2CA000B798A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19A12D4429CC2CA000B798A4 /* KaralogTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19A12D4529CC2CA000B798A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19A12D5029CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift in Sources */,
+				19A12D4E29CC2CA000B798A4 /* KaralogUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		19A12D4129CC2CA000B798A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 19A12D2829CC2C9E00B798A4 /* Karalog */;
+			targetProxy = 19A12D4029CC2CA000B798A4 /* PBXContainerItemProxy */;
+		};
+		19A12D4B29CC2CA000B798A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 19A12D2829CC2C9E00B798A4 /* Karalog */;
+			targetProxy = 19A12D4A29CC2CA000B798A4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		19A12D3229CC2C9E00B798A4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				19A12D3329CC2C9E00B798A4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				19A12D3829CC2C9F00B798A4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		19A12D5129CC2CA000B798A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		19A12D5229CC2CA000B798A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		19A12D5429CC2CA000B798A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Karalog/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.Karalog;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		19A12D5529CC2CA000B798A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Karalog/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.Karalog;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		19A12D5729CC2CA000B798A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Karalog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Karalog";
+			};
+			name = Debug;
+		};
+		19A12D5829CC2CA000B798A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Karalog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Karalog";
+			};
+			name = Release;
+		};
+		19A12D5A29CC2CA000B798A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Karalog;
+			};
+			name = Debug;
+		};
+		19A12D5B29CC2CA000B798A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H27PW62KS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Karalog;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		19A12D2429CC2C9E00B798A4 /* Build configuration list for PBXProject "Karalog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19A12D5129CC2CA000B798A4 /* Debug */,
+				19A12D5229CC2CA000B798A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		19A12D5329CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "Karalog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19A12D5429CC2CA000B798A4 /* Debug */,
+				19A12D5529CC2CA000B798A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		19A12D5629CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19A12D5729CC2CA000B798A4 /* Debug */,
+				19A12D5829CC2CA000B798A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		19A12D5929CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19A12D5A29CC2CA000B798A4 /* Debug */,
+				19A12D5B29CC2CA000B798A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 19A12D2129CC2C9E00B798A4 /* Project object */;
+}
