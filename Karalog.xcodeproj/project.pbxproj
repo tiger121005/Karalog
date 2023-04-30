@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */; };
+		1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB529D012E700245BB3 /* TableViewCell1.swift */; };
+		1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBB629D012E700245BB3 /* TableViewCell1.xib */; };
+		1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB929D045B900245BB3 /* AddToListViewController.swift */; };
+		1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */; };
+		1938FBBE29D0584600245BB3 /* CollectionViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */; };
+		1938FBC129D0641700245BB3 /* CollectionViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */; };
+		1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */; };
+		1938FBC429D0696400245BB3 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC329D0696400245BB3 /* FirebaseFirestoreSwift */; };
+		1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC629D0741300245BB3 /* GoogleSignIn */; };
+		1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC829D0741300245BB3 /* GoogleSignInSwift */; };
+		1938FBCC29D08C1900245BB3 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBCB29D08C1900245BB3 /* FacebookCore */; };
+		1938FBCE29D08C1900245BB3 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBCD29D08C1900245BB3 /* FacebookLogin */; };
+		1938FBD029D08C1900245BB3 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBCF29D08C1900245BB3 /* FacebookShare */; };
+		1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */; };
+		1960CD2129FE30730065FF05 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2029FE30730065FF05 /* Manager.swift */; };
 		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
 		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
 		19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D3029CC2C9E00B798A4 /* ViewController.swift */; };
@@ -16,6 +32,32 @@
 		19A12D4429CC2CA000B798A4 /* KaralogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4329CC2CA000B798A4 /* KaralogTests.swift */; };
 		19A12D4E29CC2CA000B798A4 /* KaralogUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */; };
 		19A12D5029CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D4F29CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift */; };
+		19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D5C29CD941200B798A4 /* MusicViewController.swift */; };
+		19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */; };
+		19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6029CD945100B798A4 /* SearchViewController.swift */; };
+		19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */; };
+		19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */; };
+		19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6629CD94AC00B798A4 /* DetailViewController.swift */; };
+		19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6829CD94C300B798A4 /* AllListViewController.swift */; };
+		19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6A29CD94D500B798A4 /* AddListViewController.swift */; };
+		19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6C29CD94E300B798A4 /* ListViewController.swift */; };
+		19A12D6F29CD94ED00B798A4 /* AddListMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */; };
+		19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7029CD955500B798A4 /* ProfileViewController.swift */; };
+		19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7229CD957600B798A4 /* NotificationViewController.swift */; };
+		19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7429CD958300B798A4 /* FriendsViewController.swift */; };
+		19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7629CD95A200B798A4 /* MatchViewController.swift */; };
+		19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */; };
+		19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */; };
+		19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7E29CD960200B798A4 /* ChatViewController.swift */; };
+		19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8029CD964F00B798A4 /* LoginViewController.swift */; };
+		19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */; };
+		19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */; };
+		19A12D8729CF465900B798A4 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8629CF465900B798A4 /* Article.swift */; };
+		19A12D8929CF487E00B798A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D8829CF487E00B798A4 /* GoogleService-Info.plist */; };
+		19A12D8C29CF4A5600B798A4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 19A12D8B29CF4A5600B798A4 /* FirebaseAuth */; };
+		19A12D8E29CF4A5600B798A4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 19A12D8D29CF4A5600B798A4 /* FirebaseFirestore */; };
+		60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */; };
+		C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +78,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		19A12D2929CC2C9E00B798A4 /* Karalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		19019BF729E189CD00315AFD /* Karalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		19019BF829E189CD00315AFD /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		19019BF929E189CD00315AFD /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1938FBB529D012E700245BB3 /* TableViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell1.swift; sourceTree = "<group>"; };
+		1938FBB629D012E700245BB3 /* TableViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCell1.xib; sourceTree = "<group>"; };
+		1938FBB929D045B900245BB3 /* AddToListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListViewController.swift; sourceTree = "<group>"; };
+		1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell1.swift; sourceTree = "<group>"; };
+		1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell1.xib; sourceTree = "<group>"; };
+		1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell2.swift; sourceTree = "<group>"; };
+		1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell2.xib; sourceTree = "<group>"; };
+		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
+		1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
+		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		19A12D3029CC2C9E00B798A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -44,11 +99,39 @@
 		19A12D3529CC2C9F00B798A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		19A12D3829CC2C9F00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		19A12D3A29CC2C9F00B798A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19A12D4329CC2CA000B798A4 /* KaralogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogTests.swift; sourceTree = "<group>"; };
-		19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogUITests.swift; sourceTree = "<group>"; };
 		19A12D4F29CC2CA000B798A4 /* KaralogUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		19A12D5C29CD941200B798A4 /* MusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
+		19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMusicViewController.swift; sourceTree = "<group>"; };
+		19A12D6029CD945100B798A4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailViewController.swift; sourceTree = "<group>"; };
+		19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDetailViewController.swift; sourceTree = "<group>"; };
+		19A12D6629CD94AC00B798A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		19A12D6829CD94C300B798A4 /* AllListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllListViewController.swift; sourceTree = "<group>"; };
+		19A12D6A29CD94D500B798A4 /* AddListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListViewController.swift; sourceTree = "<group>"; };
+		19A12D6C29CD94E300B798A4 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListMusicViewController.swift; sourceTree = "<group>"; };
+		19A12D7029CD955500B798A4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		19A12D7229CD957600B798A4 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		19A12D7429CD958300B798A4 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		19A12D7629CD95A200B798A4 /* MatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
+		19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationViewController.swift; sourceTree = "<group>"; };
+		19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeGroupViewController.swift; sourceTree = "<group>"; };
+		19A12D7E29CD960200B798A4 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		19A12D8029CD964F00B798A4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeAccountViewController.swift; sourceTree = "<group>"; };
+		19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
+		19A12D8629CF465900B798A4 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		19A12D8829CF487E00B798A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog_KaralogUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog-KaralogUITests.release.xcconfig"; path = "Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests.release.xcconfig"; sourceTree = "<group>"; };
+		6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.release.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.release.xcconfig"; sourceTree = "<group>"; };
+		71F78DB740A4C53BC199E6EF /* Pods-Karalog-KaralogUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog-KaralogUITests.debug.xcconfig"; path = "Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		7E0371CBD3B5DE3B9D47BAF9 /* Pods-KaralogTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaralogTests.release.xcconfig"; path = "Target Support Files/Pods-KaralogTests/Pods-KaralogTests.release.xcconfig"; sourceTree = "<group>"; };
+		9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaralogTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E101F8ECE477F51A4867B549 /* Pods-KaralogTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaralogTests.debug.xcconfig"; path = "Target Support Files/Pods-KaralogTests/Pods-KaralogTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E590B4190CFA172B8D53B312 /* Pods-Karalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.debug.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +139,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1938FBCE29D08C1900245BB3 /* FacebookLogin in Frameworks */,
+				1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */,
+				1938FBD029D08C1900245BB3 /* FacebookShare in Frameworks */,
+				19A12D8C29CF4A5600B798A4 /* FirebaseAuth in Frameworks */,
+				1938FBCC29D08C1900245BB3 /* FacebookCore in Frameworks */,
+				19A12D8E29CF4A5600B798A4 /* FirebaseFirestore in Frameworks */,
+				1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */,
+				1938FBC429D0696400245BB3 /* FirebaseFirestoreSwift in Frameworks */,
+				0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,42 +163,93 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1960CD1B29FE0E780065FF05 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D8029CD964F00B798A4 /* LoginViewController.swift */,
+				19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */,
+				19A12D5C29CD941200B798A4 /* MusicViewController.swift */,
+				1938FBB929D045B900245BB3 /* AddToListViewController.swift */,
+				19A12D6029CD945100B798A4 /* SearchViewController.swift */,
+				19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */,
+				19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */,
+				19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */,
+				19A12D6629CD94AC00B798A4 /* DetailViewController.swift */,
+				19A12D6829CD94C300B798A4 /* AllListViewController.swift */,
+				19A12D6A29CD94D500B798A4 /* AddListViewController.swift */,
+				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
+				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
+				19A12D3029CC2C9E00B798A4 /* ViewController.swift */,
+				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
+				19A12D7229CD957600B798A4 /* NotificationViewController.swift */,
+				19A12D7429CD958300B798A4 /* FriendsViewController.swift */,
+				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
+				19A12D7629CD95A200B798A4 /* MatchViewController.swift */,
+				19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */,
+				19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */,
+				19A12D7E29CD960200B798A4 /* ChatViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		1960CD1C29FE0EA40065FF05 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D8629CF465900B798A4 /* Article.swift */,
+				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
+				1960CD2029FE30730065FF05 /* Manager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1960CD1D29FE0ECD0065FF05 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D3229CC2C9E00B798A4 /* Main.storyboard */,
+				1938FBB529D012E700245BB3 /* TableViewCell1.swift */,
+				1938FBB629D012E700245BB3 /* TableViewCell1.xib */,
+				1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */,
+				1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */,
+				1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */,
+				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		19A12D2029CC2C9E00B798A4 = {
 			isa = PBXGroup;
 			children = (
 				19A12D2B29CC2C9E00B798A4 /* Karalog */,
 				19A12D4229CC2CA000B798A4 /* KaralogTests */,
 				19A12D4C29CC2CA000B798A4 /* KaralogUITests */,
-				19A12D2A29CC2C9E00B798A4 /* Products */,
+				F2BBB3838BA6CDDE220C1AF8 /* Pods */,
+				4F8BBBA3376CBB0741A1F3F3 /* Frameworks */,
+				19019BF729E189CD00315AFD /* Karalog.app */,
+				19019BF829E189CD00315AFD /* KaralogTests.xctest */,
+				19019BF929E189CD00315AFD /* KaralogUITests.xctest */,
 			);
-			sourceTree = "<group>";
-		};
-		19A12D2A29CC2C9E00B798A4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				19A12D2929CC2C9E00B798A4 /* Karalog.app */,
-				19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */,
-				19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		19A12D2B29CC2C9E00B798A4 /* Karalog */ = {
 			isa = PBXGroup;
 			children = (
+				1938FBD129D0A05C00245BB3 /* Karalog.entitlements */,
 				19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */,
 				19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */,
-				19A12D3029CC2C9E00B798A4 /* ViewController.swift */,
-				19A12D3229CC2C9E00B798A4 /* Main.storyboard */,
+				1960CD1B29FE0E780065FF05 /* Controller */,
+				1960CD1D29FE0ECD0065FF05 /* View */,
+				1960CD1C29FE0EA40065FF05 /* Model */,
 				19A12D3529CC2C9F00B798A4 /* Assets.xcassets */,
 				19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */,
 				19A12D3A29CC2C9F00B798A4 /* Info.plist */,
+				19A12D8829CF487E00B798A4 /* GoogleService-Info.plist */,
 			);
 			path = Karalog;
 			sourceTree = "<group>";
@@ -127,6 +271,29 @@
 			path = KaralogUITests;
 			sourceTree = "<group>";
 		};
+		4F8BBBA3376CBB0741A1F3F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */,
+				35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */,
+				9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2BBB3838BA6CDDE220C1AF8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E590B4190CFA172B8D53B312 /* Pods-Karalog.debug.xcconfig */,
+				6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */,
+				71F78DB740A4C53BC199E6EF /* Pods-Karalog-KaralogUITests.debug.xcconfig */,
+				6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */,
+				E101F8ECE477F51A4867B549 /* Pods-KaralogTests.debug.xcconfig */,
+				7E0371CBD3B5DE3B9D47BAF9 /* Pods-KaralogTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -134,23 +301,36 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 19A12D5329CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "Karalog" */;
 			buildPhases = (
+				D63FEE7E3725EEC2AE3C7C7F /* [CP] Check Pods Manifest.lock */,
 				19A12D2529CC2C9E00B798A4 /* Sources */,
 				19A12D2629CC2C9E00B798A4 /* Frameworks */,
 				19A12D2729CC2C9E00B798A4 /* Resources */,
+				CA995D447BA67BFB762CA7EC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Karalog;
+			packageProductDependencies = (
+				19A12D8B29CF4A5600B798A4 /* FirebaseAuth */,
+				19A12D8D29CF4A5600B798A4 /* FirebaseFirestore */,
+				1938FBC329D0696400245BB3 /* FirebaseFirestoreSwift */,
+				1938FBC629D0741300245BB3 /* GoogleSignIn */,
+				1938FBC829D0741300245BB3 /* GoogleSignInSwift */,
+				1938FBCB29D08C1900245BB3 /* FacebookCore */,
+				1938FBCD29D08C1900245BB3 /* FacebookLogin */,
+				1938FBCF29D08C1900245BB3 /* FacebookShare */,
+			);
 			productName = Karalog;
-			productReference = 19A12D2929CC2C9E00B798A4 /* Karalog.app */;
+			productReference = 19019BF729E189CD00315AFD /* Karalog.app */;
 			productType = "com.apple.product-type.application";
 		};
 		19A12D3E29CC2CA000B798A4 /* KaralogTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 19A12D5629CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogTests" */;
 			buildPhases = (
+				B13763599DAECABABBBDE1B2 /* [CP] Check Pods Manifest.lock */,
 				19A12D3B29CC2CA000B798A4 /* Sources */,
 				19A12D3C29CC2CA000B798A4 /* Frameworks */,
 				19A12D3D29CC2CA000B798A4 /* Resources */,
@@ -162,16 +342,18 @@
 			);
 			name = KaralogTests;
 			productName = KaralogTests;
-			productReference = 19A12D3F29CC2CA000B798A4 /* KaralogTests.xctest */;
+			productReference = 19019BF829E189CD00315AFD /* KaralogTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		19A12D4829CC2CA000B798A4 /* KaralogUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 19A12D5929CC2CA000B798A4 /* Build configuration list for PBXNativeTarget "KaralogUITests" */;
 			buildPhases = (
+				4DC2946A9EEF79B4718921E6 /* [CP] Check Pods Manifest.lock */,
 				19A12D4529CC2CA000B798A4 /* Sources */,
 				19A12D4629CC2CA000B798A4 /* Frameworks */,
 				19A12D4729CC2CA000B798A4 /* Resources */,
+				8110E69052B15D00938301DF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -180,7 +362,7 @@
 			);
 			name = KaralogUITests;
 			productName = KaralogUITests;
-			productReference = 19A12D4929CC2CA000B798A4 /* KaralogUITests.xctest */;
+			productReference = 19019BF929E189CD00315AFD /* KaralogUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -215,7 +397,12 @@
 				Base,
 			);
 			mainGroup = 19A12D2029CC2C9E00B798A4;
-			productRefGroup = 19A12D2A29CC2C9E00B798A4 /* Products */;
+			packageReferences = (
+				19A12D8A29CF4A5600B798A4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+			);
+			productRefGroup = 19A12D2029CC2C9E00B798A4;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -231,7 +418,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */,
 				19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */,
+				1938FBBE29D0584600245BB3 /* CollectionViewCell1.xib in Resources */,
+				19A12D8929CF487E00B798A4 /* GoogleService-Info.plist in Resources */,
+				1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */,
 				19A12D3629CC2C9F00B798A4 /* Assets.xcassets in Resources */,
 				19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */,
 			);
@@ -253,12 +444,142 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4DC2946A9EEF79B4718921E6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Karalog-KaralogUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8110E69052B15D00938301DF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B13763599DAECABABBBDE1B2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KaralogTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CA995D447BA67BFB762CA7EC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D63FEE7E3725EEC2AE3C7C7F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Karalog-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		19A12D2529CC2C9E00B798A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */,
+				19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */,
+				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
+				19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */,
+				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
+				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
+				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
+				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
+				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
+				19A12D6F29CD94ED00B798A4 /* AddListMusicViewController.swift in Sources */,
+				19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */,
+				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
+				19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */,
+				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
+				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,
+				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
 				19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */,
+				19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */,
+				1938FBC129D0641700245BB3 /* CollectionViewCell2.swift in Sources */,
+				1960CD2129FE30730065FF05 /* Manager.swift in Sources */,
+				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
+				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
+				19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */,
+				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
+				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,
+				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
+				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
+				19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
 			);
@@ -366,7 +687,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +741,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -432,19 +753,26 @@
 		};
 		19A12D5429CC2CA000B798A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E590B4190CFA172B8D53B312 /* Pods-Karalog.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs to access the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -460,19 +788,26 @@
 		};
 		19A12D5529CC2CA000B798A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs to access the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -488,6 +823,7 @@
 		};
 		19A12D5729CC2CA000B798A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E101F8ECE477F51A4867B549 /* Pods-KaralogTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -495,7 +831,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -508,6 +844,7 @@
 		};
 		19A12D5829CC2CA000B798A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E0371CBD3B5DE3B9D47BAF9 /* Pods-KaralogTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -515,7 +852,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -528,12 +865,14 @@
 		};
 		19A12D5A29CC2CA000B798A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71F78DB740A4C53BC199E6EF /* Pods-Karalog-KaralogUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -546,12 +885,14 @@
 		};
 		19A12D5B29CC2CA000B798A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2H27PW62KS;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -602,6 +943,76 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		19A12D8A29CF4A5600B798A4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1938FBC329D0696400245BB3 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19A12D8A29CF4A5600B798A4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		1938FBC629D0741300245BB3 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		1938FBC829D0741300245BB3 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		1938FBCB29D08C1900245BB3 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		1938FBCD29D08C1900245BB3 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		1938FBCF29D08C1900245BB3 /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
+		};
+		19A12D8B29CF4A5600B798A4 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19A12D8A29CF4A5600B798A4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		19A12D8D29CF4A5600B798A4 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19A12D8A29CF4A5600B798A4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 19A12D2129CC2C9E00B798A4 /* Project object */;
 }
