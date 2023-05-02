@@ -13,7 +13,7 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
     
     
     var musicRef: CollectionReference!
-    var tvList: [SimpleMusic] = []
+    var tvList: [MusicList] = []
     var fromFav = false
     var idList: [String] = []
     var listID = ""
@@ -34,7 +34,7 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
                 idList = []
                 for i in indexPathList {
                     idList.append(tvList[i.row].id!)
-                    print("😂")
+                    
                 }
                 if fromFav == false {
                     for i in 0...indexPathList.count - 1 {
@@ -96,7 +96,7 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
                     let image = document["musicImage"] as! Data
                     let id = document.documentID
                     
-                    self.tvList.append(SimpleMusic(musicName: name, artistName: artist, musicImage: image, id: id))
+                    self.tvList.append(MusicList(musicName: name, artistName: artist, musicImage: image, favorite: false, lists: [], data: [], id: id))
                 }
                 self.tableView.reloadData()
             }

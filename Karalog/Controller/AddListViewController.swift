@@ -83,29 +83,13 @@ class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         var resizedImage: Data!
         if let image = UIImage(systemName: randomImage)?.withTintColor(UIColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)) {
             resizedImage = image.jpegData(compressionQuality: 1.0)
-            print(resizedImage!)
-            print(2222222)
+            
         } else {
             resizedImage = resizedData(image: image!, maxSize: 1024, quality: 0.5)
-            print(3333333)
-        }
-
-        
-        print(Double(resizedImage!.count) / 1000)
-        
-        let docRef = listRef.addDocument(data: [
-            "listName": listTF.text!,
-            "listImage": resizedImage!,
             
-        ]) { err in
-            if let err = err {
-                print("Error adding list: \(err)")
-            } else {
-                
-            }
         }
-        Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).updateData([
-            "listOrder": FieldValue.arrayUnion([docRef.documentID])])
+        
+        FirebaseAPI.shared.addList(listName: listTF.text!, listImage: resizedImage!)
         
         self.navigationController?.popViewController(animated: true)
     }

@@ -12,7 +12,6 @@ import DZNEmptyDataSet
 class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, DZNEmptyDataSetDelegate, DZNEmptyDataSetSource, TableViewCell1Delegate {
     
     //曲名,アーティスト名が入る
-    var musicList: [MusicList] = []
     var tvList: [MusicList] = []
     //sortされている種類を調べる
     var judgeSort = 0
@@ -113,12 +112,10 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toAddToList" {
             let nextView = segue.destination as! AddToListViewController
-            print("🇳🇴", idList)
             idList = []
             let indexPathList = tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
             for i in indexPathList {
                 idList.append(tvList[i.row].id!)
-                print("😂")
             }
             nextView.idList = idList
             
@@ -128,7 +125,6 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }else if segue.identifier == "toMusicDetail" {
             let nextView = segue.destination as! MusicDetailViewController
-            nextView.musicData = musicData
             nextView.musicName = musicName
             nextView.musicID = musicID
             
@@ -179,7 +175,6 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
             musicData = tvList[indexPath.row].data
             musicName = tvList[indexPath.row].musicName
             musicID = tvList[indexPath.row].id
-            print(idList)
             if searchBar.isFirstResponder {
                 searchBar.resignFirstResponder()
             }
@@ -247,9 +242,9 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tvList = []
         print(searchText)
         if searchText == "" {
-            tvList = musicList
+            tvList = Manager.shared.musicList
         }else{
-            for d in musicList {
+            for d in Manager.shared.musicList {
                 if d.musicName.contains(searchText) {
                     tvList.append(d)
                 }else if d.artistName.contains(searchText) {
@@ -365,14 +360,13 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             allSelectBtn.title = "全て選択"
             allSelected = false
-            print("🇯🇵", idList)
+            
         }else{
             for i in 0...tvList.count - 1 {
                 self.tableView.selectRow(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: .none)
             }
             allSelectBtn.title = "全て解除"
             allSelected = true
-            print("🇳🇫", idList)
         }
         
     }

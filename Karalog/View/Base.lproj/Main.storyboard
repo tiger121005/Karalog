@@ -1000,7 +1000,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bestLabel" destination="SNO-oT-ceu" id="oIx-G7-IEd"/>
-                        <outlet property="dataTV" destination="PIs-bu-XeA" id="vdN-ev-WAe"/>
+                        <outlet property="tableView" destination="PIs-bu-XeA" id="Mju-3M-9eB"/>
                         <segue destination="Ghf-Jk-6ml" kind="show" identifier="toDetail" id="55n-37-eDk"/>
                     </connections>
                 </viewController>
@@ -2034,7 +2034,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="listCV" destination="gBt-qI-Bir" id="B5S-JV-Ezd"/>
+                        <outlet property="collectionView" destination="gBt-qI-Bir" id="RAG-Tm-q2w"/>
                         <segue destination="aOf-MN-iAD" kind="show" identifier="toList" id="Clw-0G-4fS"/>
                     </connections>
                 </viewController>
@@ -2102,9 +2102,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wLi-IT-D5I"/>
+        <segue reference="57p-0q-63F"/>
         <segue reference="QA8-j6-C1e"/>
-        <segue reference="7ga-I9-0FK"/>
+        <segue reference="fyV-sm-Y83"/>
         <segue reference="9r5-ef-xkP"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemBackgroundColor"/>

@@ -23,6 +23,7 @@
 		1938FBD029D08C1900245BB3 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBCF29D08C1900245BB3 /* FacebookShare */; };
 		1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */; };
 		1960CD2129FE30730065FF05 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2029FE30730065FF05 /* Manager.swift */; };
+		1960CD2329FE7B250065FF05 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2229FE7B250065FF05 /* Material.swift */; };
 		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
 		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
 		19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D3029CC2C9E00B798A4 /* ViewController.swift */; };
@@ -92,6 +93,7 @@
 		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
 		1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
+		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		19A12D3029CC2C9E00B798A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				19A12D8629CF465900B798A4 /* Article.swift */,
+				1960CD2229FE7B250065FF05 /* Material.swift */,
 				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
 			);
@@ -580,6 +583,7 @@
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
 				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
 				19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */,
+				1960CD2329FE7B250065FF05 /* Material.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
 			);

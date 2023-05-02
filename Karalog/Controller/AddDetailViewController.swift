@@ -6,18 +6,17 @@
 //
 
 import UIKit
-import FirebaseFirestore
 
 class AddDetailViewController: UIViewController, UITextFieldDelegate {
 
-    var musicDoc: DocumentReference! = nil
     var alertCtl: UIAlertController!
     var time: String!
     var fromWanna = false
     var musicName = ""
     var artistName = ""
     var musicImage: Data!
-    var id = ""
+    var musicID = ""
+    var wannaID = ""
     
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var keySlider: UISlider!
@@ -135,37 +134,13 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
             df.dateFormat = "yy年MM月dd日HH:mm"
             df.timeZone = TimeZone.current
             time = df.string(from: Date())
-            let d = [
-                "time": time!,
-                "score": Double(scoreTF.text!)!,
-                "key": Int(keyLabel.text!)!,
-                "model": String(selectedMenuType.rawValue),
-                "comment": textView.text!] as [String : Any]
+            
+            
             if fromWanna == false {
-                musicDoc.updateData([
-                    "data": FieldValue.arrayUnion([d])
-                ]) { err in
-                    if let err = err {
-                        print("Error adding data: \(err)")
-                    }else{
-                        print("data added")
-                    }
-                }
+                FirebaseAPI.shared.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
             } else {
-                Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).collection("musicList").addDocument(data: [
-                    "musicName": musicName,
-                    "artistName": artistName,
-                    "musicImage": musicImage!,
-                    "favorite": false,
-                    "data": [d]
-                ]) { err in
-                    if let err = err {
-                        print("Error adding data: \(err)")
-                    }else{
-                        print("data added")
-                    }
-                }
-                Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).collection("wannaList").document(id).delete()
+                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+                FirebaseAPI.shared.deleteWanna(wannaID: wannaID)
             }
             
 //            UserDefaults.standard.set([time, scoreTF.text!, keyLabel.text!, selectedMenuType.rawValue, textView.text!], forKey: "addData")

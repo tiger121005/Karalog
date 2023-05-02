@@ -38,6 +38,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
+        tableView.rowHeight = 50
         
         let userDoc = Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!)
         
@@ -47,7 +48,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tvList = []
-        print(listID)
+        
         if listID == "0" {
             self.tvList = Manager.shared.musicList.filter {$0.favorite == true}
             self.tableView.reloadData()
@@ -79,12 +80,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             nextView.fromList = true
         } else if segue.identifier  == "toAddDetail" {
             let nextView = segue.destination as! AddDetailViewController
-            nextView.musicDoc = musicRef.document(listID)
+            
             nextView.fromWanna = true
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = musicImage
-            nextView.id = selectedID
+            nextView.wannaID = selectedID
         }
     }
     

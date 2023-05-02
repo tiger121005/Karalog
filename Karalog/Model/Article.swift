@@ -33,7 +33,7 @@ public struct MusicList: Codable {
     let musicImage: Data
     var favorite: Bool
     var lists: [String]
-    let data: [MusicData]
+    var data: [MusicData]
     @DocumentID var id: String?
 }
 

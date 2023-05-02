@@ -112,18 +112,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
             
             performSegue(withIdentifier: "toAddMusic", sender: nil)
         } else {
+            FirebaseAPI.shared.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
+                                        artistName: musicInfoModel[indexPath.row].artistName,
+                                        musicImage: try! Data(contentsOf: URL(string: musicInfoModel[indexPath.row].artworkUrl100)!))
             
-            Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).collection("wannaList").addDocument(data: [
-                "musicName": musicInfoModel[indexPath.row].trackName,
-                "artistName": musicInfoModel[indexPath.row].artistName,
-                "musicImage": try! Data(contentsOf: URL(string: musicInfoModel[indexPath.row].artworkUrl100)!)
-            ]) { err in
-                if let err = err {
-                    print("Error adding music: \(err)")
-                }else{
-                    print("music added")
-                }
-            }
             fromList = false
             self.navigationController?.popViewController(animated: true)
         }

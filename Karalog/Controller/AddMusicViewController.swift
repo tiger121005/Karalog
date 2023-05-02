@@ -7,9 +7,6 @@
 
 import UIKit
 import Alamofire
-import FirebaseCore
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 class AddMusicViewController: UIViewController, UITextFieldDelegate {
     
@@ -27,11 +24,8 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var modelBtn: UIButton!
     @IBOutlet var textView: UITextView!
     @IBOutlet var addBtn: UIButton!
-    @IBOutlet var labelsArray: [UILabel] = []
     
     
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

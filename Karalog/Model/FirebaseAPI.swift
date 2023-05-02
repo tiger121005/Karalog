@@ -23,6 +23,8 @@ struct FirebaseAPI {
         
         userRef = Firestore.firestore().collection("user").document(userID!)
         musicRef = userRef.collection("musicList")
+        listRef = userRef.collection("lists")
+        wannaRef = userRef.collection("wannaList")
     }
     
     
@@ -47,37 +49,73 @@ struct FirebaseAPI {
         }
     }
     
-    func getlist(completionHandler: @escaping ([Lists]) -> Void) {
+    func getMusicDetail(musicID: String, completionHandler: @escaping ([MusicData]) -> Void) {
+        musicRef.document(musicID).getDocument() { (document, err) in
+            if let err = err {
+                print("Error getting music: \(err)")
+                completionHandler([])
+            }else{
+                var list: [MusicData] = []
+                do{
+                    let a: [MusicList] = [try document!.data(as: MusicList.self)]
+                    list = a[0].data
+                }
+                catch{
+                    print(error)
+                }
+                completionHandler(list)
+            }
+        }
+    }
+    
+    func getlist(completionHandler: @escaping (Any) -> Void) {
         userRef.getDocument() { (document, err) in
             if let document = document, document.exists{
                 Manager.shared.listOrder = document.data()!["listOrder"] as? [String] ?? []
                 print("getting listOrder")
+                
             } else {
                 print("Error getting listOrder")
             }
-        }
-        listRef.getDocuments() { (collection, err) in
-            if let err = err {
-                print("error geting list: \(err)")
-                completionHandler([])
-            }else{
-                Manager.shared.lists = []
-                for document in collection!.documents {
-                    do{
-                        Manager.shared.lists.append(try document.data(as: Lists.self))
-                    }catch{
-                        print(error)
+            listRef.getDocuments() { (collection, err) in
+                if let err = err {
+                    print("error getting list: \(err)")
+                    
+                }else{
+                    print("getting list")
+                    Manager.shared.lists = []
+                    for document in collection!.documents {
+                        do{
+                            Manager.shared.lists.append(try document.data(as: Lists.self))
+                        }catch{
+                            print(error)
+                        }
                     }
+                    var preList: [Lists] = []
+                    
+                    
+                    for i in Manager.shared.listOrder {
+                        
+                        preList.append(Manager.shared.lists.first(where: {$0.id!.contains(i)})!)
+                    }
+                    Manager.shared.lists = Material.shared.initialListData
+                    
+                    
+                    Manager.shared.lists += preList
+                    
+                    completionHandler(true)
                 }
-                completionHandler(Manager.shared.lists)
+                
+                
             }
         }
+        
     }
     
     func getWanna(completionHandler: @escaping ([MusicList]) -> Void) {
         wannaRef.getDocuments { (collection, err) in
             var list: [MusicList] = []
-            if let error = err {
+            if let err = err {
                 print("Error getting wanna list: \(String(describing: err))")
                 completionHandler([])
             } else {
@@ -100,12 +138,83 @@ struct FirebaseAPI {
             "artistName": artistName,
             "musicImage": musicImage,
             "favorite": false,
+            "lists": [],
             "data": [detailData]
         ]) { err in
             if let err = err {
                 print("Error adding music: \(err)")
             }else{
                 print("music added")
+                Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: []))
+            }
+        }
+    }
+    
+    func addMusicToList(musicID: String, listID: String) {
+        let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
+        musicRef.document(listID).updateData([
+            "lists": FieldValue.arrayUnion([listID])
+        ]) { err in
+            if let err = err {
+                print("Error adding music \(err)")
+            }else{
+                print("musicAdded")
+                Manager.shared.musicList[indexPath].lists.append(listID)
+            }
+        }
+    }
+    
+    func addMusicDetail(musicID: String, time: String, score: Double, key: Int, model: String, comment: String) {
+        let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
+        let d = [
+            "time": time,
+            "score": score,
+            "key": key,
+            "model": model,
+            "comment": comment
+        ] as [String : Any]
+        musicRef.document(musicID).updateData([
+            "data": FieldValue.arrayUnion([d])
+        ]) {err in
+            if let err = err {
+                print("Error adding detail \(err)")
+            }else{
+                print("detail successfully added")
+                Manager.shared.musicList[indexPath].data.append(MusicData(time: time, score: score, key: key, model: model, comment: comment))
+            }
+        }
+    }
+    
+    func addList(listName: String, listImage: Data) {
+        let ref = listRef.addDocument(data: [
+            "listName": listName,
+            "listImage": listImage
+        ]){err in
+            if let err = err {
+                print("Error adding list")
+            }else{
+                print("list successfully added")
+                
+            }
+            
+        }
+        userRef.updateData([
+            "listOrder": FieldValue.arrayUnion([ref.documentID])
+        ])
+        Manager.shared.lists.append(Lists(listName: listName, listImage: listImage, id: ref.documentID))
+        Manager.shared.listOrder.append(ref.documentID)
+    }
+    
+    func addWanna(musicName: String, artistName: String, musicImage: Data) {
+        wannaRef.addDocument(data: [
+            "musicName": musicName,
+            "artistName": artistName,
+            "musicImage": musicImage
+        ]) {err in
+            if let err = err {
+                print("Error adding music: \(err)")
+            }else{
+                print("music successfully added")
             }
         }
     }
@@ -113,13 +222,70 @@ struct FirebaseAPI {
     func deleteMusic(id: String, completionHandler: @escaping (Any) -> Void) {
         musicRef.document(id).delete() { err in
             if let err = err {
+                print("error deleting music: \(err)")
+            }else{
+                print("music successfully deleted")
+                Manager.shared.musicList.removeAll(where: {$0.id == id})
+                completionHandler(true)
+            }
+            
+        }
+    }
+    
+    func deleteMusicDetail(musicID: String, data: MusicData, completionHandler: @escaping (Any) -> Void) {
+        let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
+        let d = ["comment": data.comment,
+                 "key": data.key,
+                 "model": data.model,
+                 "score": data.score,
+                 "time": data.time] as [String : Any]
+        musicRef.document(musicID).updateData([
+            "data": FieldValue.arrayRemove([d])
+        ]){err in
+            if let err = err {
+                print("Error deleting detail: \(err)")
+            }else{
+                print("detail successfully deleted")
+                
+                Manager.shared.musicList[indexPath].data.removeAll(where: {$0.time == data.time})
+                completionHandler(true)
+            }
+        }
+    }
+    
+    //曲のlistsから削除するかどうか
+    func deleteList(indexPath: IndexPath, completionHandler: @escaping (Any) -> Void) {
+        let listID = Manager.shared.lists[indexPath.row].id!
+        listRef.document(listID).delete() { err in
+            if let err = err {
                 print("error removing music: \(err)")
             }else{
                 print("music successfully removed")
+                userRef.updateData([
+                    "listOrder": FieldValue.arrayRemove([listID])
+                ]){err in
+                    if let err = err {
+                        print("Error deleting music order: \(err)")
+                    }else{
+                        print("music order successfully deleted")
+                        Manager.shared.lists.remove(at: indexPath.row)
+                        
+                    }
+                    completionHandler(true)
+                }
             }
-            let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(id)})
-            Manager.shared.musicList.remove(at: num!)
             
+        }
+    }
+    
+    func deleteWanna(wannaID: String) {
+        wannaRef.document(wannaID).delete(){err in
+            if let err = err {
+                print("Error deleting detail: \(err)")
+            }else{
+                print("detail successfully deleted")
+                
+            }
         }
     }
     
@@ -170,6 +336,19 @@ struct FirebaseAPI {
                 Manager.shared.musicList.remove(at: num!)
                 
                 completionHandler(true)
+            }
+        }
+    }
+    
+    func listOrderUpdate(listOrder: [String]) {
+        userRef.updateData([
+            "listOrder": listOrder
+        ]) {err in
+            if let err = err {
+                print("Error updating list order: \(err)")
+            }else{
+                print("list order successfully updated")
+                Manager.shared.listOrder = listOrder
             }
         }
     }

@@ -7,15 +7,12 @@
 
 import UIKit
 import DZNEmptyDataSet
-import FirebaseFirestore
 
 class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
-    var musicDoc: DocumentReference!
-    
     var musicName = ""
     var music: [MusicList] = []
-    var musicData: [MusicData] = []
+    var tvList: [MusicData] = []
     var musicID = ""
     //次の画面に渡す値
     var time = ""
@@ -27,19 +24,17 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBOutlet var bestLabel: UILabel!
     
-    @IBOutlet var dataTV: UITableView!
+    @IBOutlet var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        dataTV.delegate = self
-        dataTV.dataSource = self
-        dataTV.rowHeight = 50
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = 50
         
-        self.dataTV.emptyDataSetSource = self
-        self.dataTV.emptyDataSetDelegate = self
-        
-        musicDoc = Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).collection("musicList").document(musicID)
+        self.tableView.emptyDataSetSource = self
+        self.tableView.emptyDataSetDelegate = self
         
         navigationItem.title = musicName
     }
@@ -48,17 +43,6 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewWillAppear(animated)
         
         getData()
-
-//        if let mapData = UserDefaults.standard.array(forKey: "addData") {
-//            print(mapData)
-//            musicData.append(MusicData(time: mapData[0] as! String,
-//                                       score: mapData[1] as! Double,
-//                                       key: mapData[2] as! Int,
-//                                       model: mapData[3] as! String,
-//                                       comment: mapData[4] as! String))
-//            dataTV.reloadData()
-//            UserDefaults.standard.set([], forKey: "addData")
-//        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,19 +55,19 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
             nextView.comment = comment
         }else if segue.identifier == "toAddDetail" {
             let nextView = segue.destination as! AddDetailViewController
-            nextView.musicDoc = musicDoc
+            nextView.musicID = musicID
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        musicData.count
+        tvList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
-        cell.textLabel?.text = String(musicData[indexPath.row].score)//追加の際入力した文字を表示
-        cell.detailTextLabel?.text = musicData[indexPath.row].time + "　　　キー:　" + String(musicData[indexPath.row].key) + "　　　機種:　" + musicData[indexPath.row].model
+        cell.textLabel?.text = String(tvList[indexPath.row].score)//追加の際入力した文字を表示
+        cell.detailTextLabel?.text = tvList[indexPath.row].time + "　　　キー:　" + String(tvList[indexPath.row].key) + "　　　機種:　" + tvList[indexPath.row].model
         
         //cell.textLabel?.textAlignment = NSTextAlignment.center//文字位置変更center,right、left
         //cell.textLabel?.font = UIFont.italicSystemFont(ofSize: 20)//文字サイズ、フォント変更
@@ -106,11 +90,11 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
     //セルが選択されたとき
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
-        time = musicData[indexPath.row].time
-        score = String(musicData[indexPath.row].score)
-        key = String(musicData[indexPath.row].key)
-        model = musicData[indexPath.row].model
-        comment = musicData[indexPath.row].comment
+        time = tvList[indexPath.row].time
+        score = String(tvList[indexPath.row].score)
+        key = String(tvList[indexPath.row].key)
+        model = tvList[indexPath.row].model
+        comment = tvList[indexPath.row].comment
         performSegue(withIdentifier: "toDetail", sender: nil)
          tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -123,17 +107,20 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 
             }
             let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
-                self.musicData.remove(at: indexPath.row)
-                self.musicDoc.updateData([
-                    "data": self.musicDoc!])
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                self.selectBest()
-                tableView.reloadData()
+                let a = self.tvList[indexPath.row]
+                self.tvList.remove(at: indexPath.row)
+                FirebaseAPI.shared.deleteMusicDetail(musicID: self.musicID, data: a, completionHandler: {_ in
+                    
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    self.selectBest()
+                    
+                })
+                
                 
             }
             alert.addAction(cancel)
             alert.addAction(delete)
-            present(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
             
         }
     }
@@ -144,9 +131,9 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     func selectBest() {
-        print(musicData)
+        
         var scoreList: [Double] = []
-        for data in musicData {
+        for data in tvList {
             scoreList.append(data.score)
         }
         
@@ -154,22 +141,11 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getData() {
-        musicDoc.getDocument() { (document, err) in
-            if let err = err {
-                print("error getting music: \(err)")
-            }else{
-                self.musicData = []
-                self.music = []
-                do{
-                    self.music.append(try document!.data(as: MusicList.self))
-                    self.musicData = self.music[0].data
-                }
-                catch{
-                    print(error)
-                }
-                self.dataTV.reloadData()
-                self.selectBest()
-            }
-        }
+        FirebaseAPI.shared.getMusicDetail(musicID: musicID, completionHandler: {data in
+            self.tvList = data
+            self.selectBest()
+            self.tableView.reloadData()
+        })
+        
     }
 }
