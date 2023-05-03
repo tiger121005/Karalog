@@ -126,7 +126,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
                 let selectedID = self.tvList[indexPath.row].id
-                FirebaseAPI.shared.listUpdate(selectedID: selectedID!, listID: self.listID, completionHandler: {_ in
+                FirebaseAPI.shared.deleteMusicFromList(selectedID: selectedID!, listID: self.listID, completionHandler: {_ in
                     self.tvList.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .fade)
                 })

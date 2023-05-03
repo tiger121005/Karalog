@@ -27,7 +27,7 @@ struct FirebaseAPI {
         wannaRef = userRef.collection("wannaList")
     }
     
-    
+    //musicListを取得
     func getMusic(completionHandler: @escaping ([MusicList]) -> Void) {
         
         musicRef.getDocuments() { (collection, err) in
@@ -49,25 +49,7 @@ struct FirebaseAPI {
         }
     }
     
-    func getMusicDetail(musicID: String, completionHandler: @escaping ([MusicData]) -> Void) {
-        musicRef.document(musicID).getDocument() { (document, err) in
-            if let err = err {
-                print("Error getting music: \(err)")
-                completionHandler([])
-            }else{
-                var list: [MusicData] = []
-                do{
-                    let a: [MusicList] = [try document!.data(as: MusicList.self)]
-                    list = a[0].data
-                }
-                catch{
-                    print(error)
-                }
-                completionHandler(list)
-            }
-        }
-    }
-    
+    //listsを取得
     func getlist(completionHandler: @escaping (Any) -> Void) {
         userRef.getDocument() { (document, err) in
             if let document = document, document.exists{
@@ -112,6 +94,7 @@ struct FirebaseAPI {
         
     }
     
+    //wannaListを取得
     func getWanna(completionHandler: @escaping ([MusicList]) -> Void) {
         wannaRef.getDocuments { (collection, err) in
             var list: [MusicList] = []
@@ -131,6 +114,7 @@ struct FirebaseAPI {
         }
     }
     
+    //musicListに追加
     func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String) {
         let detailData = ["time": time, "score": score, "key": key, "model": model, "comment": comment] as [String : Any]
         musicRef.addDocument(data: [
@@ -150,20 +134,7 @@ struct FirebaseAPI {
         }
     }
     
-    func addMusicToList(musicID: String, listID: String) {
-        let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
-        musicRef.document(musicID).updateData([
-            "lists": FieldValue.arrayUnion([listID])
-        ]) { err in
-            if let err = err {
-                print("Error adding music \(err)")
-            }else{
-                print("musicAdded")
-                Manager.shared.musicList[indexPath].lists.append(listID)
-            }
-        }
-    }
-    
+    //musicDataを追加
     func addMusicDetail(musicID: String, time: String, score: Double, key: Int, model: String, comment: String) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
         let d = [
@@ -185,6 +156,7 @@ struct FirebaseAPI {
         }
     }
     
+    //listを追加
     func addList(listName: String, listImage: Data) {
         let ref = listRef.addDocument(data: [
             "listName": listName,
@@ -205,6 +177,7 @@ struct FirebaseAPI {
         Manager.shared.listOrder.append(ref.documentID)
     }
     
+    //wannaListを追加
     func addWanna(musicName: String, artistName: String, musicImage: Data) {
         wannaRef.addDocument(data: [
             "musicName": musicName,
@@ -219,6 +192,22 @@ struct FirebaseAPI {
         }
     }
     
+    //listに追加
+    func addMusicToList(musicID: String, listID: String) {
+        let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
+        musicRef.document(musicID).updateData([
+            "lists": FieldValue.arrayUnion([listID])
+        ]) { err in
+            if let err = err {
+                print("Error adding music \(err)")
+            }else{
+                print("musicAdded")
+                Manager.shared.musicList[indexPath].lists.append(listID)
+            }
+        }
+    }
+    
+    //musicListを削除
     func deleteMusic(id: String, completionHandler: @escaping (Any) -> Void) {
         musicRef.document(id).delete() { err in
             if let err = err {
@@ -232,6 +221,7 @@ struct FirebaseAPI {
         }
     }
     
+    //musicDataを削除
     func deleteMusicDetail(musicID: String, data: MusicData, completionHandler: @escaping (Any) -> Void) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
         let d = ["comment": data.comment,
@@ -253,7 +243,7 @@ struct FirebaseAPI {
         }
     }
     
-    //曲のlistsから削除するかどうか
+    //listを削除
     func deleteList(indexPath: IndexPath, completionHandler: @escaping (Any) -> Void) {
         let listID = Manager.shared.lists[indexPath.row].id!
         listRef.document(listID).delete() { err in
@@ -278,6 +268,7 @@ struct FirebaseAPI {
         }
     }
     
+    //wannaListを削除
     func deleteWanna(wannaID: String) {
         wannaRef.document(wannaID).delete(){err in
             if let err = err {
@@ -289,6 +280,25 @@ struct FirebaseAPI {
         }
     }
     
+    //listからmusicを削除
+    func deleteMusicFromList(selectedID: String, listID: String, completionHandler: @escaping (Any) -> Void) {
+        musicRef.document(selectedID).updateData([
+            "lists": FieldValue.arrayRemove([listID])
+        ]) { err in
+            if let err = err {
+                print("Error updating favorite: \(err)")
+            } else {
+                print("favorite successfully updated")
+                
+                let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(selectedID)})
+                Manager.shared.musicList.remove(at: num!)
+                
+                completionHandler(true)
+            }
+        }
+    }
+    
+    //favoriteを更新
     func favoriteUpdate(id: String, favorite: Bool, completionHandler: @escaping (Any) -> Void) {
         if favorite == false {
             musicRef.document(id).updateData([
@@ -323,23 +333,7 @@ struct FirebaseAPI {
         }
     }
     
-    func listUpdate(selectedID: String, listID: String, completionHandler: @escaping (Any) -> Void) {
-        musicRef.document(selectedID).updateData([
-            "lists": FieldValue.arrayRemove([listID])
-        ]) { err in
-            if let err = err {
-                print("Error updating favorite: \(err)")
-            } else {
-                print("favorite successfully updated")
-                
-                let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(selectedID)})
-                Manager.shared.musicList.remove(at: num!)
-                
-                completionHandler(true)
-            }
-        }
-    }
-    
+    //listOrderを更新
     func listOrderUpdate(listOrder: [String]) {
         userRef.updateData([
             "listOrder": listOrder

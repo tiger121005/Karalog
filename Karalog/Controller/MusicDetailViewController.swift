@@ -141,11 +141,8 @@ class MusicDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getData() {
-        FirebaseAPI.shared.getMusicDetail(musicID: musicID, completionHandler: {data in
-            self.tvList = data
-            self.selectBest()
-            self.tableView.reloadData()
-        })
+        tvList = Manager.shared.musicList.first(where: {$0.id == musicID})!.data
+        selectBest()
         
     }
 }
