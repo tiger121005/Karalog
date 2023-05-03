@@ -152,7 +152,7 @@ struct FirebaseAPI {
     
     func addMusicToList(musicID: String, listID: String) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
-        musicRef.document(listID).updateData([
+        musicRef.document(musicID).updateData([
             "lists": FieldValue.arrayUnion([listID])
         ]) { err in
             if let err = err {

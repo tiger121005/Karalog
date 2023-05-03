@@ -9,12 +9,12 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 
-class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     var musicRef: CollectionReference!
     var wannaRef: CollectionReference!
     var listID = ""
-    var wannaList: [MusicList] = []
+    var originalList: [MusicList] = []
     var tvList: [MusicList] = []
     
     var selectedID = ""
@@ -22,6 +22,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var artistName = ""
     var musicImage: Data!
     
+    @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var tableView: UITableView!
     
     @IBAction func tapAdd() {
@@ -39,6 +40,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.delegate = self
         tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
         tableView.rowHeight = 50
+        searchBar.delegate = self
         
         let userDoc = Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!)
         
@@ -48,18 +50,22 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tvList = []
+        originalList = []
         
         if listID == "0" {
-            self.tvList = Manager.shared.musicList.filter {$0.favorite == true}
-            self.tableView.reloadData()
+            tvList = Manager.shared.musicList.filter {$0.favorite == true}
+            originalList = tvList
+            tableView.reloadData()
         } else if listID == "1" {
             FirebaseAPI.shared.getWanna(completionHandler: {wannaList in
-                self.tvList = wannaList
+                self.originalList = wannaList
+                self.tvList = self.originalList
                 self.tableView.reloadData()
             })
         } else {
-            self.tvList = Manager.shared.musicList.filter {$0.lists.contains(listID)}
-            self.tableView.reloadData()
+            tvList = Manager.shared.musicList.filter {$0.lists.contains(listID)}
+            originalList = tvList
+            tableView.reloadData()
         }
     }
     
@@ -154,5 +160,21 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        tvList = []
+        print(searchText)
+        if searchText == "" {
+            tvList = originalList
+        }else{
+            for d in originalList {
+                if d.musicName.contains(searchText) {
+                    tvList.append(d)
+                }else if d.artistName.contains(searchText) {
+                    tvList.append(d)
+                }
+            }
+        }
+        tableView.reloadData()
+    }
 
 }

@@ -13,6 +13,7 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     //曲名,アーティスト名が入る
     var tvList: [MusicList] = []
+    
     //sortされている種類を調べる
     var judgeSort = 0
     var allSelected = false
@@ -62,7 +63,6 @@ class MusicViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     idList = []
                     for i in indexPathList {
                         idList.append(tvList[i.row].id!)
-                        print("😂")
                     }
                     for i in 0...indexPathList.count - 1 {
                         FirebaseAPI.shared.deleteMusic(id: idList[i], completionHandler: {_ in

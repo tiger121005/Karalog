@@ -6,20 +6,16 @@
 //
 
 import UIKit
-import FirebaseCore
-import FirebaseFirestore
 
-class AddListMusicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AddListMusicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
-    
-    var musicRef: CollectionReference!
     var tvList: [MusicList] = []
     var fromFav = false
     var idList: [String] = []
     var listID = ""
     
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var searcBar: UISearchBar!
+    @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var addBtn: UIBarButtonItem!
     
     @IBAction func add() {
@@ -37,16 +33,14 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
                     
                 }
                 if fromFav == false {
+                    
                     for i in 0...indexPathList.count - 1 {
-                        self.musicRef.document(idList[i]).updateData([
-                            "lists": FieldValue.arrayUnion([listID])
-                        ])
+                        FirebaseAPI.shared.addMusicToList(musicID: idList[i], listID: listID)
                     }
                 } else {
                     for i in 0...indexPathList.count - 1 {
-                        self.musicRef.document(idList[i]).updateData([
-                            "favorite": true
-                        ])
+                        FirebaseAPI.shared.favoriteUpdate(id: idList[i], favorite: false, completionHandler: {_ in })
+                        
                     }
                 }
                 
@@ -77,35 +71,16 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.isEditing = true
         
+        searchBar.delegate = self
         
-        
-        musicRef = Firestore.firestore().collection("user").document(UserDefaults.standard.string(forKey: "userID")!).collection("musicList")
+        tvList = Manager.shared.musicList
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tvList = []
-        
-        musicRef.getDocuments { (collection, error) in
-            if let error = error {
-                print("Error getting music: \(error)")
-            } else {
-                for document in collection!.documents {
-                    let name = document["musicName"] as! String
-                    let artist = document["artistName"] as! String
-                    let image = document["musicImage"] as! Data
-                    let id = document.documentID
-                    
-                    self.tvList.append(MusicList(musicName: name, artistName: artist, musicImage: image, favorite: false, lists: [], data: [], id: id))
-                }
-                self.tableView.reloadData()
-            }
-        }
-    }
+    
     
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tvList.count
+        Manager.shared.musicList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -127,17 +102,34 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
         // 選択されたセルを取得する
         let selectedCell = tableView.cellForRow(at: indexPath)
         
-        print(selectedCell)
+        
     }
 
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         // 選択が解除されたセルを取得する
         let deselectedCell = tableView.cellForRow(at: indexPath)
-        print(deselectedCell)
         
         
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        tvList = []
+        print(searchText)
+        if searchText == "" {
+            tvList = Manager.shared.musicList
+        }else{
+            for d in Manager.shared.musicList {
+                if d.musicName.contains(searchText) {
+                    tvList.append(d)
+                }else if d.artistName.contains(searchText) {
+                    tvList.append(d)
+                }
+            }
+        }
+        tableView.reloadData()
+    }
+
 
     
 }
