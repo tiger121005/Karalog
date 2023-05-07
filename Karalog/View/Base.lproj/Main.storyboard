@@ -913,6 +913,7 @@
                         <viewLayoutGuide key="safeArea" id="sZ6-c0-7Jq"/>
                         <color key="backgroundColor" name="baseColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="ltQ-1L-TR1"/>
                     <connections>
                         <outlet property="collectionView" destination="yPZ-fg-a3k" id="hZZ-KY-zyJ"/>
                     </connections>
@@ -1848,6 +1849,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="imageColor"/>
+                        <color key="barTintColor" systemColor="systemBackgroundColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" systemColor="systemBackgroundColor"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="Su2-1i-z6G" kind="relationship" relationship="rootViewController" id="chw-q7-nzS"/>
@@ -1993,12 +1998,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LIST" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nEe-uY-uID">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nEe-uY-uID">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" name="imageColor"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="LIST">
+                                        <attributes>
+                                            <color key="NSColor" name="imageColor"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gBt-qI-Bir">
@@ -2100,12 +2111,15 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addBtn" destination="6Qp-H4-EXg" id="pFH-FD-VYX"/>
+                        <outlet property="editBtn" destination="q8c-Mf-Vh1" id="A0O-2s-Ipc"/>
                         <outlet property="searchBar" destination="zld-V7-1rc" id="eoI-ZI-sZn"/>
                         <outlet property="tableView" destination="oKS-Wb-FBn" id="Y1z-gm-c0M"/>
                         <segue destination="81G-z8-iDb" kind="show" identifier="toMusicDetail" id="57p-0q-63F"/>
                         <segue destination="GcH-rz-pJ4" kind="show" identifier="toAddWanna" id="fyV-sm-Y83"/>
                         <segue destination="YE3-ZG-H1b" kind="show" identifier="toAddListMusic" id="rCM-HR-UGm"/>
                         <segue destination="7HZ-IO-hqs" kind="show" identifier="toAddDetail" id="QA8-j6-C1e"/>
+                        <segue destination="2F0-Nh-Vbf" kind="showDetail" identifier="toAddToList" id="lBV-Gx-b3j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bgV-WN-0cO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2114,9 +2128,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="57p-0q-63F"/>
+        <segue reference="wLi-IT-D5I"/>
+        <segue reference="lBV-Gx-b3j"/>
         <segue reference="QA8-j6-C1e"/>
-        <segue reference="fyV-sm-Y83"/>
+        <segue reference="7ga-I9-0FK"/>
         <segue reference="9r5-ef-xkP"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemBackgroundColor"/>

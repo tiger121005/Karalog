@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseCore
 
-class AllListViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate, UICollectionViewDragDelegate {
+class AllListViewController: UIViewController {
     
     var index = 0
     var listID = ""
@@ -20,34 +20,16 @@ class AllListViewController: UIViewController, UICollectionViewDelegate, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(UINib(nibName: "CollectionViewCell1", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell1")
-        collectionView.dropDelegate = self
-        collectionView.dragDelegate = self
-        collectionView.dragInteractionEnabled = true
-        
+        setupCollectionView()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if Manager.shared.lists.isEmpty {
-            
-            FirebaseAPI.shared.getlist(completionHandler: {_ in
-                
-                self.collectionView.reloadData()
-            })
-        } else {
-            collectionView.reloadData()
-            
-        }
+        checkList()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if changeOrder {
-            FirebaseAPI.shared.listOrderUpdate(listOrder: Manager.shared.listOrder)
-            changeOrder = false
-        }
+        saveListOrder()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -61,30 +43,38 @@ class AllListViewController: UIViewController, UICollectionViewDelegate, UIColle
         } 
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Manager.shared.lists.count
+    func setupCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UINib(nibName: "CollectionViewCell1", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell1")
+        collectionView.dropDelegate = self
+        collectionView.dragDelegate = self
+        collectionView.dragInteractionEnabled = true
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
-        cell.label.text = Manager.shared.lists[indexPath.row].listName
-        if cell.image.image == UIImage(systemName: "music.mic"){
+    func checkList() {
+        if Manager.shared.lists.isEmpty {
+            
+            FirebaseAPI.shared.getlist(completionHandler: {_ in
+                
+                self.collectionView.reloadData()
+            })
+        } else {
+            collectionView.reloadData()
             
         }
-        
-//        cell.background.layer.cornerRadius = cell.background.frame.width * 0.2
-//        cell.background.clipsToBounds = true
-//        cell.ListNameLabel.textColor = .black
-        
-        return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 160, height: 170)
+    func saveListOrder() {
+        if changeOrder {
+            FirebaseAPI.shared.listOrderUpdate(listOrder: Manager.shared.listOrder)
+            changeOrder = false
+        }
     }
+    
+}
 
+extension AllListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             listID = "0"
@@ -143,7 +133,32 @@ class AllListViewController: UIViewController, UICollectionViewDelegate, UIColle
                                           previewProvider: nil,
                                           actionProvider: actionProvider)
     }
+}
+
+extension AllListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        Manager.shared.lists.count
+    }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
+        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
+        cell.label.text = Manager.shared.lists[indexPath.row].listName
+        if cell.image.image == UIImage(systemName: "music.mic"){
+            
+        }
+        
+        return cell
+    }
+}
+
+extension AllListViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 160, height: 170)
+    }
+}
+
+extension AllListViewController: UICollectionViewDropDelegate {
     //並び替え
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         switch coordinator.proposal.operation {
@@ -178,15 +193,6 @@ class AllListViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        if indexPath.row <= 1 { return [] }
-        let itemIdentifier = Manager.shared.lists[indexPath.item].id! as String
-        let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        return [dragItem]
-    }
-    
-    
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         let lastItemInFirstSection = collectionView.numberOfItems(inSection: 0)
         let destinationIndexPath: IndexPath = destinationIndexPath ?? .init(item: lastItemInFirstSection - 1, section: 0)
@@ -204,6 +210,14 @@ class AllListViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
     }
-    
+}
 
+extension AllListViewController: UICollectionViewDragDelegate {
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        if indexPath.row <= 1 { return [] }
+        let itemIdentifier = Manager.shared.lists[indexPath.item].id! as String
+        let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
 }

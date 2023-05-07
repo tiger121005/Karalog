@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddListMusicViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class AddListMusicViewController: UIViewController {
     
     var tvList: [MusicList] = []
     var fromFav = false
@@ -17,6 +17,28 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var addBtn: UIBarButtonItem!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupTableView()
+        searchBar.delegate = self
+        
+    }
+    
+    func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
+        
+        tableView.keyboardDismissMode = .onDrag
+        tableView.allowsMultipleSelection = true
+        tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.isEditing = true
+        
+        tvList = Manager.shared.musicList
+    }
     
     @IBAction func add() {
         if self.tableView.indexPathsForSelectedRows != nil {
@@ -59,26 +81,23 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
         
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+}
 
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
+extension AddListMusicViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 選択されたセルを取得する
+        let selectedCell = tableView.cellForRow(at: indexPath)
         
-        tableView.keyboardDismissMode = .onDrag
-        tableView.allowsMultipleSelection = true
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.isEditing = true
-        
-        searchBar.delegate = self
-        
-        tvList = Manager.shared.musicList
     }
-    
-    
-    
 
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        // 選択が解除されたセルを取得する
+        let deselectedCell = tableView.cellForRow(at: indexPath)
+        
+    }
+}
+
+extension AddListMusicViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Manager.shared.musicList.count
     }
@@ -94,25 +113,11 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
         cell.favoriteBtn.isHidden = true
         cell.selectionStyle = .default
         
-        
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 選択されたセルを取得する
-        let selectedCell = tableView.cellForRow(at: indexPath)
-        
-        
-    }
+}
 
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        // 選択が解除されたセルを取得する
-        let deselectedCell = tableView.cellForRow(at: indexPath)
-        
-        
-    }
-    
+extension AddListMusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         tvList = []
         print(searchText)
@@ -129,7 +134,4 @@ class AddListMusicViewController: UIViewController, UITableViewDelegate, UITable
         }
         tableView.reloadData()
     }
-
-
-    
 }

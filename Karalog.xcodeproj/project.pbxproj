@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */; };
+		192D26712A0543A80058D739 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26702A0543A80058D739 /* Function.swift */; };
 		1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB529D012E700245BB3 /* TableViewCell1.swift */; };
 		1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBB629D012E700245BB3 /* TableViewCell1.xib */; };
 		1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB929D045B900245BB3 /* AddToListViewController.swift */; };
@@ -83,6 +84,7 @@
 		19019BF729E189CD00315AFD /* Karalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19019BF829E189CD00315AFD /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19019BF929E189CD00315AFD /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		192D26702A0543A80058D739 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		1938FBB529D012E700245BB3 /* TableViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell1.swift; sourceTree = "<group>"; };
 		1938FBB629D012E700245BB3 /* TableViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCell1.xib; sourceTree = "<group>"; };
 		1938FBB929D045B900245BB3 /* AddToListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListViewController.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				19A12D8629CF465900B798A4 /* Article.swift */,
 				1960CD2229FE7B250065FF05 /* Material.swift */,
 				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
+				192D26702A0543A80058D739 /* Function.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
 			);
 			path = Model;
@@ -570,6 +573,7 @@
 				19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
 				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,
+				192D26712A0543A80058D739 /* Function.swift in Sources */,
 				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
 				19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */,
 				19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */,

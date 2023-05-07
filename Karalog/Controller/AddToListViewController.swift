@@ -7,25 +7,26 @@
 
 import UIKit
 
-class AddToListViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AddToListViewController: UIViewController {
     
     var idList: [String] = []
-    
-    
-    @IBAction func cancel() {
-        self.dismiss(animated: true)
-    }
     
     @IBOutlet var collectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        setupCollectionView()
+        checkIdListData()
+    }
+
+    func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "CollectionViewCell1", bundle: nil), forCellWithReuseIdentifier: "customCollectionCell1")
-        
+    }
+
+    func checkIdListData() {
         if Manager.shared.lists.isEmpty {
             FirebaseAPI.shared.getlist(completionHandler: {_ in
                 self.collectionView.reloadData()
@@ -33,21 +34,12 @@ class AddToListViewController: UIViewController, UICollectionViewDelegate, UICol
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Manager.shared.lists.count
+    @IBAction func cancel() {
+        self.dismiss(animated: true)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
-        cell.label.text = Manager.shared.lists[indexPath.row].listName
-        
-        return cell
-    }
+}
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 160, height: 170)
-    }
+extension AddToListViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -63,7 +55,24 @@ class AddToListViewController: UIViewController, UICollectionViewDelegate, UICol
         self.dismiss(animated: true)
             
     }
+}
+
+extension AddToListViewController: UICollectionViewDataSource {
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        Manager.shared.lists.count
+    }
     
-    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
+        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
+        cell.label.text = Manager.shared.lists[indexPath.row].listName
+        
+        return cell
+    }
+}
+extension AddToListViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 160, height: 170)
+    }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddDetailViewController: UIViewController, UITextFieldDelegate {
+class AddDetailViewController: UIViewController {
 
     var alertCtl: UIAlertController!
     var time: String!
@@ -17,6 +17,7 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
     var musicImage: Data!
     var musicID = ""
     var wannaID = ""
+    var selectedMenuType = modelMenuType.未選択
     
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var keySlider: UISlider!
@@ -29,14 +30,31 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupTextField()
         //UIButtonにUIMenuを設定する
-        self.configureMenuButton()
+        configureMenuButton()
+        setupKeyLabel()
+    }
+    
+    //キーボード以外をタップ時キーボードを閉じる
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (self.textView.isFirstResponder) {
+            self.textView.resignFirstResponder()
+        }else if (self.scoreTF.isFirstResponder){
+            self.scoreTF.resignFirstResponder()
+        }
         
+    }
+    
+    func setupTextField() {
+        scoreTF.delegate = self
+    }
+    
+    func setupKeyLabel() {
         keyLabel.layer.borderColor = CGColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)
         keyLabel.layer.borderWidth = 2
         keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
         keyLabel.clipsToBounds = true
-        
     }
     
 
@@ -57,15 +75,6 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let numCount = scoreTF.text else { return }
-        
-        if numCount.count > 6 {
-            scoreTF.text = String(numCount.prefix(6))
-        }
-    }
-    
     @IBAction func slider(_ sender: UISlider) {
         
         let sliderValue = round(sender.value)
@@ -75,6 +84,34 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
         }
         keySlider.setValue(sliderValue, animated: false)
     }
+    
+    @IBAction func tapAddBtn() {
+        if Double(scoreTF.text!) != nil {
+            let df = DateFormatter()
+            df.dateFormat = "yy年MM月dd日HH:mm"
+            df.timeZone = TimeZone.current
+            time = df.string(from: Date())
+            
+            if fromWanna {
+                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+                
+                FirebaseAPI.shared.deleteWanna(wannaID: wannaID)
+            }else{
+                FirebaseAPI.shared.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+            }
+            
+            self.navigationController?.popViewController(animated: true)
+        }else{
+            func alert(title: String, message: String) {
+                alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alertCtl, animated: true)
+            }
+            alert(title: "入力ミス", message: "値がうまく入力されていません")
+        }
+    }
+    
+    
     
     //sliderの開始点を自由にする
     @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
@@ -94,9 +131,7 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
         case JOYSOUND = "JOYSOUND"
     }
     
-    var selectedMenuType = modelMenuType.未選択
-    
-    private func configureMenuButton() {
+    func configureMenuButton() {
         var actions = [UIMenuElement]()
         // HIGH
         actions.append(UIAction(title: modelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.未選択 ? .on : .off,
@@ -128,47 +163,20 @@ class AddDetailViewController: UIViewController, UITextFieldDelegate {
         modelBtn.setTitle(self.selectedMenuType.rawValue, for: .normal)
     }
     
-    @IBAction func tapAddBtn() {
-        if Double(scoreTF.text!) != nil {
-            let df = DateFormatter()
-            df.dateFormat = "yy年MM月dd日HH:mm"
-            df.timeZone = TimeZone.current
-            time = df.string(from: Date())
-            
-            
-            if fromWanna == false {
-                FirebaseAPI.shared.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
-            } else {
-                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
-                FirebaseAPI.shared.deleteWanna(wannaID: wannaID)
-            }
-            
-//            UserDefaults.standard.set([time, scoreTF.text!, keyLabel.text!, selectedMenuType.rawValue, textView.text!], forKey: "addData")
-            self.navigationController?.popViewController(animated: true)
-        }else{
-            func alert(title: String, message: String) {
-                alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                present(alertCtl, animated: true)
-            }
-            alert(title: "入力ミス", message: "値がうまく入力されていません")
+}
+
+extension AddDetailViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let numCount = scoreTF.text else { return }
+        
+        if numCount.count > 6 {
+            scoreTF.text = String(numCount.prefix(6))
         }
     }
-    
     
     //改行したら自動的にキーボードを非表示にする
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         scoreTF.resignFirstResponder()
         return true
-    }
-    
-    //キーボード以外をタップ時キーボードを閉じる
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if (self.textView.isFirstResponder) {
-            self.textView.resignFirstResponder()
-        }else if (self.scoreTF.isFirstResponder){
-            self.scoreTF.resignFirstResponder()
-        }
-        
     }
 }

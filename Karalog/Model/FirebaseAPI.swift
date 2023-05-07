@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
 
@@ -129,7 +130,7 @@ struct FirebaseAPI {
                 print("Error adding music: \(err)")
             }else{
                 print("music added")
-                Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: []))
+                Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: [MusicData(time: time, score: score, key: key, model: model, comment: comment)]))
             }
         }
     }
@@ -151,9 +152,10 @@ struct FirebaseAPI {
                 print("Error adding detail \(err)")
             }else{
                 print("detail successfully added")
-                Manager.shared.musicList[indexPath].data.append(MusicData(time: time, score: score, key: key, model: model, comment: comment))
+                
             }
         }
+        Manager.shared.musicList[indexPath].data.append(MusicData(time: time, score: score, key: key, model: model, comment: comment))
     }
     
     //listを追加
@@ -163,7 +165,7 @@ struct FirebaseAPI {
             "listImage": listImage
         ]){err in
             if let err = err {
-                print("Error adding list")
+                print("Error adding list: \(err)")
             }else{
                 print("list successfully added")
                 

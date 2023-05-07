@@ -8,13 +8,17 @@
 import UIKit
 import Alamofire
 
-class AddMusicViewController: UIViewController, UITextFieldDelegate {
+class AddMusicViewController: UIViewController {
     
     var musicName = ""
     var artistName = ""
     var musicImage: Data!
     
+    var selectedMenuType = modelMenuType.未選択
+    
     var alertCtl: UIAlertController!
+    // 編集中のtextViewを保持する変数
+    var _activeTextView: UITextView? = nil
     
     @IBOutlet var musicTF: UITextField!
     @IBOutlet var artistTF: UITextField!
@@ -29,91 +33,50 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        musicTF.delegate = self
-        artistTF.delegate = self
-        musicTF.text = musicName
-        artistTF.text = artistName
+        setupTextField()
+        setupSlider()
         
-        //UISlider
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
-        self.keySlider.addGestureRecognizer(tapGestureRecognizer)
+        configureMenuButton()
         
-        //UIButtonにUIMenuを設定する
-        self.configureMenuButton()
-        
-        keyLabel.layer.borderColor = CGColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)
-        keyLabel.layer.borderWidth = 2
-        keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
-        keyLabel.clipsToBounds = true
+        setupKeyLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // キーボード開閉のタイミングを取得
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification,object: nil)
+        getTimingKeyboard()
+        
+    }
+    
+    //キーボード以外をタップ時キーボードを閉じる
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if textView.isFirstResponder {
+            self.textView.resignFirstResponder()
+        }else if scoreTF.isFirstResponder {
+            self.scoreTF.resignFirstResponder()
+        }else if musicTF.isFirstResponder {
+            musicTF.resignFirstResponder()
+        }else if artistTF.isFirstResponder {
+            artistTF.resignFirstResponder()
+        }
         
     }
     
 
-    @IBAction func editingChanged(_ sender: Any) {
-        if Double(scoreTF.text!) ?? 0 >= 100 {
-            scoreTF.text = String(Double(scoreTF.text!)! / 10)
-        }
-        
-        guard let scoreValue = scoreTF.text else { return }
-        
-        let maxLength: Int = 6
-        
-        // textField内の文字数
-        let textFieldNumber = scoreTF.text?.count ?? 0
-        
-        if textFieldNumber > maxLength {
-            scoreTF.text = String(scoreValue.prefix(maxLength))
-        }
+    
+    
+    func setupTextField() {
+        musicTF.delegate = self
+        artistTF.delegate = self
+        musicTF.text = musicName
+        artistTF.text = artistName
     }
     
-    
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let numCount = scoreTF.text else { return }
-        
-        if numCount.count > 6 {
-            scoreTF.text = String(numCount.prefix(6))
-        }
+    func setupSlider() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
+        self.keySlider.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @IBAction func slider(_ sender: UISlider) {
-        
-        let sliderValue = round(sender.value)
-        keyLabel.text = String(Int(sliderValue))
-        if keyLabel.text == "-0.0"{
-            keyLabel.text = "0.0"
-        }
-        keySlider.setValue(sliderValue, animated: false)
-    }
-    
-    //sliderの開始点を自由にする
-    @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
-
-        let pointTapped: CGPoint = gestureRecognizer.location(in: keySlider)
-
-        let widthOfSlider: CGFloat = keySlider.frame.size.width
-        let newValue = pointTapped.x * CGFloat(keySlider.maximumValue - keySlider.minimumValue) / widthOfSlider - CGFloat(keySlider.maximumValue)
-        keySlider.setValue(round(Float(newValue)), animated: false)
-        slider(keySlider)
-    }
-    
-    //機種設定
-    enum modelMenuType: String {
-        case 未選択 = "未選択"
-        case DAM = "DAM"
-        case JOYSOUND = "JOYSOUND"
-    }
-    
-    var selectedMenuType = modelMenuType.未選択
-    
-    private func configureMenuButton() {
+    func configureMenuButton() {
         var actions = [UIMenuElement]()
         // HIGH
         actions.append(UIAction(title: modelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.未選択 ? .on : .off,
@@ -144,7 +107,47 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
         // ボタンの表示を変更
         modelBtn.setTitle(self.selectedMenuType.rawValue, for: .normal)
     }
-
+    
+    func setupKeyLabel() {
+        keyLabel.layer.borderColor = CGColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)
+        keyLabel.layer.borderWidth = 2
+        keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
+        keyLabel.clipsToBounds = true
+    }
+    
+    func getTimingKeyboard() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification,object: nil)
+    }
+    
+    @IBAction func editingChanged(_ sender: Any) {
+        if Double(scoreTF.text!) ?? 0 >= 100 {
+            scoreTF.text = String(Double(scoreTF.text!)! / 10)
+        }
+        
+        guard let scoreValue = scoreTF.text else { return }
+        
+        let maxLength: Int = 6
+        
+        // textField内の文字数
+        let textFieldNumber = scoreTF.text?.count ?? 0
+        
+        if textFieldNumber > maxLength {
+            scoreTF.text = String(scoreValue.prefix(maxLength))
+        }
+    }
+    
+    @IBAction func slider(_ sender: UISlider) {
+        
+        let sliderValue = round(sender.value)
+        keyLabel.text = String(Int(sliderValue))
+        if keyLabel.text == "-0.0"{
+            keyLabel.text = "0.0"
+        }
+        keySlider.setValue(sliderValue, animated: false)
+    }
+    
     @IBAction func tapAddBtn(_ sender: Any) {
         
         if Double(scoreTF.text!) != nil {
@@ -168,9 +171,32 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    
+    
+    //機種設定
+    enum modelMenuType: String {
+        case 未選択 = "未選択"
+        case DAM = "DAM"
+        case JOYSOUND = "JOYSOUND"
+    }
+    
+    
+    
+    
+
+    
+    //sliderの開始点を自由にする
+    @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
+
+        let pointTapped: CGPoint = gestureRecognizer.location(in: keySlider)
+
+        let widthOfSlider: CGFloat = keySlider.frame.size.width
+        let newValue = pointTapped.x * CGFloat(keySlider.maximumValue - keySlider.minimumValue) / widthOfSlider - CGFloat(keySlider.maximumValue)
+        keySlider.setValue(round(Float(newValue)), animated: false)
+        slider(keySlider)
+    }
+    
     //textViewを開いたときにViewを上にずらして隠れないようにする
-    // 編集中のtextViewを保持する変数
-    private var _activeTextView: UITextView? = nil
     // キーボード表示通知の際の処理
     @objc func keyboardWillShow(_ notification: Notification) {
         // 編集中のtextViewを取得
@@ -203,10 +229,21 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
     }
 
     // textViewがタップされた際に呼ばれる
-    private func textFieldShouldBeginEditing(_ textView: UITextView) -> Bool {
+    func textFieldShouldBeginEditing(_ textView: UITextView) -> Bool {
         // 編集中のtextFieldを保持する
         _activeTextView = textView
         return true
+    }
+    
+}
+
+extension AddMusicViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let numCount = scoreTF.text else { return }
+        
+        if numCount.count > 6 {
+            scoreTF.text = String(numCount.prefix(6))
+        }
     }
     
     //改行したら自動的にキーボードを非表示にする
@@ -214,16 +251,4 @@ class AddMusicViewController: UIViewController, UITextFieldDelegate {
         scoreTF.resignFirstResponder()
         return true
     }
-    
-    //キーボード以外をタップ時キーボードを閉じる
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if (self.textView.isFirstResponder) {
-            self.textView.resignFirstResponder()
-        }else if (self.scoreTF.isFirstResponder){
-            self.scoreTF.resignFirstResponder()
-        }
-        
-    }
-    
-
 }

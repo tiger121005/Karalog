@@ -9,13 +9,47 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 
-class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddListViewController: UIViewController {
     
     var listRef: CollectionReference!
     var addID = ""
     
     @IBOutlet var listImage: UIButton!
     @IBOutlet var listTF: UITextField!
+    
+    
+    
+    var randomImage = ""
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupTextField()
+        setupInitialImage()
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //キーボード以外がタップされた時にキーボードを閉じる
+        self.listTF.resignFirstResponder()
+            
+    }
+    
+    func setupTextField() {
+        listTF.delegate = self
+    }
+    
+    func setupInitialImage() {
+        if (UIImage(systemName: "music.mic") != nil) {
+            randomImage = Material.shared.listImages.randomElement()!
+            let image = UIImage(systemName: randomImage)
+            
+            listImage.setBackgroundImage(image, for: .normal)
+            listImage.imageView?.contentMode = .scaleAspectFill
+        }else{
+            print("値が入力されていません")
+        }
+    }
     
     @IBAction func tapChangeImage() {
         changeImage()
@@ -24,37 +58,6 @@ class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePicke
     @IBAction func addListBtn() {
         addList()
     }
-    
-    let defaultImageList = ["music.mic", "music.note.list", "music.note", "music.quarternote.3", "music.note.tv.fill", "music.note.tv", "music.note.house", "music.note.house.fill"]
-    var randomImage = ""
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        listTF.delegate = self
-        
-        if (UIImage(systemName: "music.mic") != nil) {
-            randomImage = defaultImageList.randomElement()!
-            let image = UIImage(systemName: randomImage)
-            
-            listImage.setBackgroundImage(image, for: .normal)
-            listImage.imageView?.contentMode = .scaleAspectFill
-        }else{
-            print("値が入力されていません")
-        }
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.listTF.isFirstResponder) {
-            self.listTF.resignFirstResponder()
-        }else if (self.listTF.isFirstResponder){
-            self.listTF.resignFirstResponder()
-        }
-            
-    }
-    
 
     func changeImage() {
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
@@ -65,17 +68,6 @@ class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePicke
             picker.allowsEditing = true
             present(picker, animated: true, completion: nil)
         }
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        //ImagePickerで取得してきた画像をimageViewにセット
-        if let image = info[.originalImage] as? UIImage {
-            listImage.setBackgroundImage(image, for: .normal)
-            listImage.imageView?.contentMode = .scaleAspectFill
-            randomImage = ""
-        }
-        //ImagePickerを閉じる
-        dismiss(animated: true)
     }
     
     func addList() {
@@ -94,11 +86,7 @@ class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         self.navigationController?.popViewController(animated: true)
     }
     
-    //改行したら自動的にキーボードを非表示にする
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        listTF.resignFirstResponder()
-        return true
-    }
+    
 
     func resizedData(image: UIImage, maxSize: CGFloat, quality: CGFloat)  -> Data? {
         var size = image.size
@@ -114,4 +102,29 @@ class AddListViewController: UIViewController, UITextFieldDelegate, UIImagePicke
         return resizedImage?.jpegData(compressionQuality: quality)
         
     }
+}
+
+extension AddListViewController: UITextFieldDelegate {
+    //改行したら自動的にキーボードを非表示にする
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        listTF.resignFirstResponder()
+        return true
+    }
+}
+
+extension AddListViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        //ImagePickerで取得してきた画像をimageViewにセット
+        if let image = info[.originalImage] as? UIImage {
+            listImage.setBackgroundImage(image, for: .normal)
+            listImage.imageView?.contentMode = .scaleAspectFill
+            randomImage = ""
+        }
+        //ImagePickerを閉じる
+        dismiss(animated: true)
+    }
+}
+
+extension AddListViewController: UINavigationControllerDelegate {
+    
 }
