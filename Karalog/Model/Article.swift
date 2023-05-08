@@ -50,3 +50,5 @@ public struct Lists: Codable {
     let listImage: Data
     @DocumentID var id: String?
 }
+
+

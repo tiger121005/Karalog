@@ -18,6 +18,7 @@ class AddDetailViewController: UIViewController {
     var musicID = ""
     var wannaID = ""
     var selectedMenuType = modelMenuType.未選択
+    var sliderValue: Float = 0
     
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var keySlider: UISlider!
@@ -77,12 +78,16 @@ class AddDetailViewController: UIViewController {
     
     @IBAction func slider(_ sender: UISlider) {
         
-        let sliderValue = round(sender.value)
-        keyLabel.text = String(Int(sliderValue))
+        let preValue = round(sender.value)
+        keyLabel.text = String(Int(preValue))
         if keyLabel.text == "-0.0"{
             keyLabel.text = "0.0"
         }
-        keySlider.setValue(sliderValue, animated: false)
+        keySlider.setValue(preValue, animated: false)
+        if preValue != sliderValue {
+            Function.shared.playImpact(type: .impact(.light))
+            sliderValue = preValue
+        }
     }
     
     @IBAction func tapAddBtn() {
