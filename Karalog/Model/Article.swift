@@ -19,11 +19,13 @@ struct MusicInfoModel: Codable {
     var artistName: String
     var trackName: String
     var artworkUrl100: String
+    var trackId: Int
     
-    init(artistName: String, trackName: String, artworkUrl100: String){
+    init(artistName: String, trackName: String, artworkUrl100: String, trackId: Int){
         self.artistName = artistName
         self.trackName = trackName
         self.artworkUrl100 = artworkUrl100
+        self.trackId = trackId
     }
 }
 
@@ -51,4 +53,16 @@ public struct Lists: Codable {
     @DocumentID var id: String?
 }
 
-
+public struct Post: Codable {
+    let musicID: Int
+    let musicName: String
+    let artistName: String
+    let musicImage: Data
+    let content: String
+    let time: String
+    let userName: String
+    var goodNumber: Int
+    var goodSelf: Bool
+    var category: [String]
+    @DocumentID var id: String?
+}

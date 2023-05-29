@@ -98,7 +98,7 @@ class AddDetailViewController: UIViewController {
             time = df.string(from: Date())
             
             if fromWanna {
-                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text, completionHandler: {_ in})
                 
                 FirebaseAPI.shared.deleteWanna(wannaID: wannaID)
             }else{

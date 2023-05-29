@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */; };
 		192D26712A0543A80058D739 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26702A0543A80058D739 /* Function.swift */; };
+		192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26AE2A1F1AB20058D739 /* ShareViewController.swift */; };
+		192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B02A1F1C140058D739 /* ShareCell.swift */; };
+		192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 192D26B12A1F1C140058D739 /* ShareCell.xib */; };
+		192D26B52A1F98770058D739 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B42A1F98770058D739 /* PostViewController.swift */; };
+		192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */; };
 		1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB529D012E700245BB3 /* TableViewCell1.swift */; };
 		1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBB629D012E700245BB3 /* TableViewCell1.xib */; };
 		1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB929D045B900245BB3 /* AddToListViewController.swift */; };
@@ -85,6 +90,11 @@
 		19019BF829E189CD00315AFD /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19019BF929E189CD00315AFD /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		192D26702A0543A80058D739 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
+		192D26AE2A1F1AB20058D739 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		192D26B02A1F1C140058D739 /* ShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCell.swift; sourceTree = "<group>"; };
+		192D26B12A1F1C140058D739 /* ShareCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShareCell.xib; sourceTree = "<group>"; };
+		192D26B42A1F98770058D739 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMusicViewController.swift; sourceTree = "<group>"; };
 		1938FBB529D012E700245BB3 /* TableViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell1.swift; sourceTree = "<group>"; };
 		1938FBB629D012E700245BB3 /* TableViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCell1.xib; sourceTree = "<group>"; };
 		1938FBB929D045B900245BB3 /* AddToListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListViewController.swift; sourceTree = "<group>"; };
@@ -199,6 +209,9 @@
 				19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */,
 				19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */,
 				19A12D7E29CD960200B798A4 /* ChatViewController.swift */,
+				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
+				192D26B42A1F98770058D739 /* PostViewController.swift */,
+				192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -225,6 +238,8 @@
 				1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */,
 				1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */,
 				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
+				192D26B02A1F1C140058D739 /* ShareCell.swift */,
+				192D26B12A1F1C140058D739 /* ShareCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -425,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */,
+				192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */,
 				19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */,
 				1938FBBE29D0584600245BB3 /* CollectionViewCell1.xib in Resources */,
 				19A12D8929CF487E00B798A4 /* GoogleService-Info.plist in Resources */,
@@ -565,11 +581,15 @@
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
+				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
+				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
+				192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */,
 				19A12D6F29CD94ED00B798A4 /* AddListMusicViewController.swift in Sources */,
 				19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */,
 				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
+				192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */,
 				19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
 				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,

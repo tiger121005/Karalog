@@ -83,7 +83,7 @@ class ListViewController: UIViewController {
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicID = selectedID
         } else if segue.identifier == "toAddWanna" {
-            let nextView = segue.destination as! SearchViewController
+            let nextView = segue.destination as! GetMusicViewController
             nextView.fromList = true
         } else if segue.identifier  == "toAddDetail" {
             let nextView = segue.destination as! AddDetailViewController

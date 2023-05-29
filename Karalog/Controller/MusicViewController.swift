@@ -39,6 +39,7 @@ class MusicViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        judgeSort = UserDefaults.standard.integer(forKey: "judgeSort")
         setupTableView()
         setupSearchBar()
         setupBarButtonItem()

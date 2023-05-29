@@ -16,6 +16,7 @@ struct FirebaseAPI {
     static let shared = FirebaseAPI()
     var userID = UserDefaults.standard.string(forKey: "userID")
     var userRef: DocumentReference!
+    var shareRef: CollectionReference!
     var musicRef: CollectionReference!
     var listRef: CollectionReference!
     var wannaRef: CollectionReference!
@@ -23,9 +24,22 @@ struct FirebaseAPI {
     init() {
         
         userRef = Firestore.firestore().collection("user").document(userID!)
+        shareRef = Firestore.firestore().collection("share")
         musicRef = userRef.collection("musicList")
         listRef = userRef.collection("lists")
         wannaRef = userRef.collection("wannaList")
+        getUserName()
+    }
+    
+    //userNameを取得
+    func getUserName() {
+        userRef.getDocument() { (document, err) in
+            if let err = err {
+                print("Error getting userName: \(err)")
+            }else{
+                UserDefaults.standard.set(document?.data()!["name"] as! String, forKey: "userName")
+            }
+        }
     }
     
     //musicListを取得
@@ -108,7 +122,39 @@ struct FirebaseAPI {
                     let artist = document["artistName"] as! String
                     let image = document["musicImage"] as! Data
                     let id = document.documentID
-                    list.append(MusicList(musicName: name, artistName: artist, musicImage: image, favorite: false, lists: [], data: [], id: id))
+                    list.append(MusicList(musicName: name,
+                                          artistName: artist,
+                                          musicImage: image,
+                                          favorite: false,
+                                          lists: [],
+                                          data: [],
+                                          id: id))
+                }
+                completionHandler(list)
+            }
+        }
+    }
+    
+    func getPost(completionHandler: @escaping ([Post]) -> Void) {
+        shareRef.getDocuments { (collection, err) in
+            var list: [Post] = []
+            if let err = err {
+                print("Error getting post: \(String(describing: err))")
+                completionHandler([])
+            }else{
+                for document in collection!.documents {
+                    list.append(Post(musicID: document["musicID"] as! Int,
+                                     musicName: document["musicName"] as! String,
+                                     artistName: document["artistName"] as! String,
+                                     musicImage: document["musicImage"] as! Data,
+                                     content: document["content"] as! String,
+                                     time: document["time"] as! String,
+                                     userName: document["userName"] as! String,
+                                     goodNumber: document["goodNumber"] as! Int,
+                                     goodSelf: document["goodSelf"] as! Bool,
+                                     category: document["category"] as! [String],
+                                     id: document.documentID))
+                    
                 }
                 completionHandler(list)
             }
@@ -116,7 +162,7 @@ struct FirebaseAPI {
     }
     
     //musicListに追加
-    func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String) {
+    func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String, completionHandler: @escaping (Any) -> Void) {
         let detailData = ["time": time, "score": score, "key": key, "model": model, "comment": comment] as [String : Any]
         musicRef.addDocument(data: [
             "musicName": musicName,
@@ -131,6 +177,8 @@ struct FirebaseAPI {
             }else{
                 print("music added")
                 Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: [MusicData(time: time, score: score, key: key, model: model, comment: comment)]))
+                
+                completionHandler(true)
             }
         }
     }
@@ -208,6 +256,23 @@ struct FirebaseAPI {
             }
         }
     }
+    
+    func post(musicName: String, artistName: String, musicImage: Data, musicID: Int, content: String, time: String, category: [String]) {
+        shareRef.addDocument(data: [
+            "musicID": musicID,
+            "musicName": musicName,
+            "artistName": artistName,
+            "musicImage": musicImage,
+            "content": content,
+            "userName": UserDefaults.standard.string(forKey: "userName")!,
+            "time": time,
+            "goodNumber": 0,
+            "goodSelf": false,
+            "category": category])
+    }
+    
+    
+
     
     //musicListを削除
     func deleteMusic(id: String, completionHandler: @escaping (Any) -> Void) {
@@ -302,22 +367,7 @@ struct FirebaseAPI {
     
     //favoriteを更新
     func favoriteUpdate(id: String, favorite: Bool, completionHandler: @escaping (Any) -> Void) {
-        if favorite == false {
-            musicRef.document(id).updateData([
-                "favorite": true
-            ]){ err in
-                if let err = err {
-                    print("Error updating favorite: \(err)")
-                } else {
-                    print("favorite successfully updated")
-                    
-                    let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(id)})
-                    Manager.shared.musicList[num!].favorite = true
-                    
-                    completionHandler(true)
-                }
-            }
-        } else {
+        if favorite {
             musicRef.document(id).updateData([
                 "favorite": false
             ]){ err in
@@ -329,6 +379,21 @@ struct FirebaseAPI {
                     let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(id)})
                     Manager.shared.musicList[num!].favorite = false
                    
+                    completionHandler(true)
+                }
+            }
+        } else {
+            musicRef.document(id).updateData([
+                "favorite": true
+            ]){ err in
+                if let err = err {
+                    print("Error updating favorite: \(err)")
+                } else {
+                    print("favorite successfully updated")
+                    
+                    let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(id)})
+                    Manager.shared.musicList[num!].favorite = true
+                    
                     completionHandler(true)
                 }
             }
@@ -348,4 +413,29 @@ struct FirebaseAPI {
             }
         }
     }
+    
+    func goodUpdate(id: String, good: Bool, shareList: [Post]) {
+        if  good {
+            shareRef.document(id).updateData([
+                "goodSelf": false
+            ]){ err in
+                if let err = err {
+                    print("Error updating good: \(err)")
+                }else{
+                    
+                }
+            }
+        }else{
+            shareRef.document(id).updateData([
+                "goodSelf": true
+            ]){ err in
+                if let err = err {
+                    print("Error updating good: \(err)")
+                }else{
+                    
+                }
+            }
+        }
+    }
+    
 }

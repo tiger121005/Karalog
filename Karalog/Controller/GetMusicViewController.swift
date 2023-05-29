@@ -1,8 +1,8 @@
 //
-//  SearchViewController.swift
+//  GetMusicViewController.swift
 //  Karalog
 //
-//  Created by 伊藤汰海 on 2023/03/24.
+//  Created by 伊藤汰海 on 2023/05/25.
 //
 
 import UIKit
@@ -10,14 +10,12 @@ import UIKit
 import Alamofire
 import Dispatch
 
-import Vision
-import VisionKit
-
-class SearchViewController: UIViewController, VNDocumentCameraViewControllerDelegate {
+class GetMusicViewController: UIViewController {
     
     var musicName: String!
     var artistName: String!
     var musicImage: String!
+    var musicID: Int!
     
     //itunesの情報を取得
     let decoder: JSONDecoder = JSONDecoder()
@@ -26,12 +24,11 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         }
     }
     
+    var fromList = false
     var resultingText = ""
-    var requests = [VNRequest]()
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var textView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,11 +42,12 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toAddMusic"{
-            let nextView = segue.destination as! AddMusicViewController
+        if segue.identifier == "toPost"{
+            let nextView = segue.destination as! PostViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = try! Data(contentsOf: URL(string: musicImage)!)
+            nextView.musicID = musicID
             
         }
     }
@@ -58,7 +56,6 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         //キーボード以外がタップされた時にキーボードを閉じる
         self.searchBar.resignFirstResponder()
         
-            
     }
     
     func setupCollectionView() {
@@ -100,89 +97,32 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
             }
         }
     }
-    
-    
-    
-//    @IBAction func textRecognition(_ sender: UIButton) {
-//        let documentCameraViewController = VNDocumentCameraViewController()
-//        documentCameraViewController.delegate = self
-//        present(documentCameraViewController, animated: true)
-//    }
-//
-//
-//
-//    func setupVision() {
-//        let textRecognitionRequest = VNRecognizeTextRequest { request, _ in
-//            guard let observations = request.results as? [VNRecognizedTextObservation] else {
-//                print("The observations are of an unexpected type.")
-//                return
-//            }
-//            // 解析結果の文字列を連結する
-//            let maximumCandidates = 1
-//            for observation in observations {
-//                guard let candidate = observation.topCandidates(maximumCandidates).first else { continue }
-//                self.resultingText += candidate.string + "\n"
-//                let box = observation.boundingBox // 位置のボックス
-//                let topCandidate = observation.topCandidates(1)
-//                if let recognizedText = topCandidate.first?.string { // 検出したテキスト
-//                    print(recognizedText)
-//                }
-//            }
-//        }
-//        // 文字認識のレベルを設定
-//        textRecognitionRequest.recognitionLevel = .accurate
-//        let request = VNRecognizeTextRequest()
-//        request.recognitionLanguages = ["ja-JP", "en-US", "fr-FR", "it-IT", "de-DE", "es-ES", "pt-BR", "zh-Hans", "zh-Hant"] // 言語を指定
-//        self.requests = [textRecognitionRequest]
-//    }
-//
-//
-//
-//    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-//            controller.dismiss(animated: true)
-//
-//            // Dispatch queue to perform Vision requests.
-//            let textRecognitionWorkQueue = DispatchQueue(label: "TextRecognitionQueue",
-//                                                                 qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
-//            textRecognitionWorkQueue.async {
-//                self.resultingText = ""
-//                for pageIndex in 0 ..< scan.pageCount {
-//                    let image = scan.imageOfPage(at: pageIndex)
-//                    if let cgImage = image.cgImage {
-//                        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-//
-//                        do {
-//                            try requestHandler.perform(self.requests)
-//                        } catch {
-//                            print(error)
-//                        }
-//                    }
-//                }
-//                DispatchQueue.main.async(execute: {
-//                    print(self.resultingText)
-//                    // textViewに表示する
-//                    self.textView.text = self.resultingText
-//
-//                })
-//            }
-//        }
-    
-    
-    
+  
 }
 
-extension SearchViewController: UICollectionViewDelegate {
+extension GetMusicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        musicName = musicInfoModel[indexPath.row].trackName
-        artistName = musicInfoModel[indexPath.row].artistName
-        musicImage = musicInfoModel[indexPath.row].artworkUrl100
-        
-        performSegue(withIdentifier: "toAddMusic", sender: nil)
+        print("🇯🇵", fromList)
+        if fromList {
+            FirebaseAPI.shared.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
+                                        artistName: musicInfoModel[indexPath.row].artistName,
+                                        musicImage: try! Data(contentsOf: URL(string: musicInfoModel[indexPath.row].artworkUrl100)!))
+            
+            fromList = false
+            self.navigationController?.popViewController(animated: true)
+            
+        } else {
+            musicName = musicInfoModel[indexPath.row].trackName
+            artistName = musicInfoModel[indexPath.row].artistName
+            musicImage = musicInfoModel[indexPath.row].artworkUrl100
+            musicID = musicInfoModel[indexPath.row].trackId
+            
+            performSegue(withIdentifier: "toPost", sender: nil)
+        }
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource {
+extension GetMusicViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         musicInfoModel.count
     }
@@ -198,22 +138,21 @@ extension SearchViewController: UICollectionViewDataSource {
 
         NSURLConnection.sendAsynchronousRequest(req as URLRequest, queue:OperationQueue.main){(res, data, err) in
             let image = UIImage(data:data!)
-            // 画像に対する処理 (UcellのUIImageViewに表示する等)
+            // 画像に対する処理 (cellのUIImageViewに表示する等)
             cell.image?.image = image
             
         }
-        
         return cell
     }
 }
 
-extension SearchViewController: UICollectionViewDelegateFlowLayout {
+extension GetMusicViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 160, height: 200)
     }
 }
 
-extension SearchViewController: UISearchBarDelegate {
+extension GetMusicViewController: UISearchBarDelegate {
     //searchBarに値が入力されるごとに呼び出される変数
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         getMusicArticles(text: searchText)
@@ -223,3 +162,4 @@ extension SearchViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
 }
+

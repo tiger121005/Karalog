@@ -159,11 +159,12 @@ class AddMusicViewController: UIViewController {
             df.dateFormat = "yy年MM月dd日HH:mm"
             df.timeZone = TimeZone.current
             let time = df.string(from: Date())
-            FirebaseAPI.shared.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+            FirebaseAPI.shared.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                //2画面前に戻る
+                let screenIndex = self.navigationController!.viewControllers.count - 3
+                self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
+            })
             
-            //2画面前に戻る
-            let screenIndex = navigationController!.viewControllers.count - 3
-            self.navigationController?.popToViewController(navigationController!.viewControllers[screenIndex], animated: true)
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
