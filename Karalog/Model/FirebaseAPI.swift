@@ -11,7 +11,7 @@ import FirebaseCore
 import FirebaseFirestore
 
 
-struct FirebaseAPI {
+class FirebaseAPI: ObservableObject {
     
     static let shared = FirebaseAPI()
     var userID = UserDefaults.standard.string(forKey: "userID")
@@ -20,6 +20,7 @@ struct FirebaseAPI {
     var musicRef: CollectionReference!
     var listRef: CollectionReference!
     var wannaRef: CollectionReference!
+    var postDocuments: [QueryDocumentSnapshot] = []
     
     init() {
         
@@ -74,7 +75,7 @@ struct FirebaseAPI {
             } else {
                 print("Error getting listOrder")
             }
-            listRef.getDocuments() { (collection, err) in
+            self.listRef.getDocuments() { (collection, err) in
                 if let err = err {
                     print("error getting list: \(err)")
                     
@@ -135,28 +136,50 @@ struct FirebaseAPI {
         }
     }
     
-    func getPost(completionHandler: @escaping ([Post]) -> Void) {
-        shareRef.getDocuments { (collection, err) in
-            var list: [Post] = []
-            if let err = err {
-                print("Error getting post: \(String(describing: err))")
-                completionHandler([])
-            }else{
-                for document in collection!.documents {
-                    list.append(Post(musicID: document["musicID"] as! Int,
-                                     musicName: document["musicName"] as! String,
-                                     artistName: document["artistName"] as! String,
-                                     musicImage: document["musicImage"] as! Data,
-                                     content: document["content"] as! String,
-                                     time: document["time"] as! String,
-                                     userName: document["userName"] as! String,
-                                     goodNumber: document["goodNumber"] as! Int,
-                                     goodSelf: document["goodSelf"] as! Bool,
-                                     category: document["category"] as! [String],
-                                     id: document.documentID))
+    func getPost(first: Bool, completionHandler: @escaping ([Post]) -> Void) {
+        if first {
+            shareRef.order(by: "time").limit(to: 5).getDocuments { (collection, err) in
+                var list: [Post] = []
+                if let err = err {
+                    print("Error getting post: \(String(describing: err))")
+                    completionHandler([])
+                }else{
+                    print(collection!.documents.count)
+                    for document in collection!.documents {
+                        do{
+                            list.append(try document.data(as: Post.self))
+                        }catch{
+                            print(error)
+                        }
+                        
+                    }
                     
+                    self.postDocuments = collection!.documents
+                    completionHandler(list)
                 }
-                completionHandler(list)
+            }
+        }else{
+            guard let lastDocument = postDocuments.last else {
+                return
+            }
+            shareRef.order(by: "time").start(afterDocument: lastDocument).limit(to: 4).getDocuments { (collection, err) in
+                var list: [Post] = []
+                if let err = err{
+                    print("Error getting post:\(err)")
+                    completionHandler([])
+                }else{
+                    for document in collection!.documents {
+                        
+                        do{
+                            list.append(try document.data(as: Post.self))
+                        }catch{
+                            print(error)
+                        }
+                    }
+                    print(list)
+                    self.postDocuments = collection!.documents
+                    completionHandler(list)
+                }
             }
         }
     }
@@ -257,7 +280,8 @@ struct FirebaseAPI {
         }
     }
     
-    func post(musicName: String, artistName: String, musicImage: Data, musicID: Int, content: String, time: String, category: [String]) {
+    func post(musicName: String, artistName: String, musicImage: Data, musicID: Int, content: String, category: [String]) {
+        let time = Timestamp(date: Date())
         shareRef.addDocument(data: [
             "musicID": musicID,
             "musicName": musicName,
@@ -318,7 +342,7 @@ struct FirebaseAPI {
                 print("error removing music: \(err)")
             }else{
                 print("music successfully removed")
-                userRef.updateData([
+                self.userRef.updateData([
                     "listOrder": FieldValue.arrayRemove([listID])
                 ]){err in
                     if let err = err {

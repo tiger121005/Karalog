@@ -260,7 +260,7 @@
                                 </cells>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iJG-1y-2KW">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="72"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -475,7 +475,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hph-81-5hF">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="58"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -564,7 +564,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0wL-D9-jaq">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="74"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -817,7 +817,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HOME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ALR-dy-mbj">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="67"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -932,7 +932,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otZ-63-QeS">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="73"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1019,7 +1019,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="詳細" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1os-vo-U6T">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1122,7 +1122,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0sT-J8-8sX">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1161,7 +1161,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="znS-a7-NQ0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="395" y="2507"/>
+            <point key="canvasLocation" x="394.6564885496183" y="2506.3380281690143"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="qTe-hE-tZm">
+            <objects>
+                <viewController id="brh-Sy-bTk" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Txo-67-lL6">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="OYG-7s-MC5"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fgo-xV-aiC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2264" y="2311"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -1172,7 +1187,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wX5-Wa-5J9">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1263,7 +1278,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1758" y="3041"/>
+            <point key="canvasLocation" x="1756.4885496183206" y="3040.8450704225352"/>
         </scene>
         <!--Match View Controller-->
         <scene sceneID="9UW-yf-QNa">
@@ -1541,7 +1556,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HQk-ar-ynH">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="61"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1606,7 +1621,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="曲を追加" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b56-KF-fBD">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="68"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1669,9 +1684,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nEe-uY-uID">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="63"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1725,7 +1741,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVL-mm-UAv">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1824,7 +1840,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="DNR-fp-l4H">
-                                <rect key="frame" x="0.0" y="100" width="393" height="749"/>
+                                <rect key="frame" x="0.0" y="100" width="393" height="703"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="baseColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gsa-J0-hfG">
@@ -1846,7 +1862,7 @@
                                 </cells>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nqg-Nn-62W">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1882,7 +1898,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Och-Jd-yB1">
-                                <rect key="frame" x="0.0" y="148" width="393" height="704"/>
+                                <rect key="frame" x="0.0" y="148" width="393" height="655"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Bee-MX-ltI">
                                     <size key="itemSize" width="128" height="128"/>
@@ -1902,7 +1918,7 @@
                                 </cells>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tXa-hX-cYm">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1943,7 +1959,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YK4-5b-EQE">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="95"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1955,6 +1971,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="textFieldColor"/>
                                 <color key="tintColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="コメント" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kVv-yU-LDr">
@@ -2068,9 +2085,9 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Val-AT-znc"/>
-        <segue reference="57p-0q-63F"/>
-        <segue reference="lBV-Gx-b3j"/>
-        <segue reference="QA8-j6-C1e"/>
+        <segue reference="wLi-IT-D5I"/>
+        <segue reference="Jdv-Bg-noN"/>
+        <segue reference="qcR-nH-NSM"/>
         <segue reference="9r5-ef-xkP"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemBackgroundColor"/>

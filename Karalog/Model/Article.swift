@@ -59,7 +59,7 @@ public struct Post: Codable {
     let artistName: String
     let musicImage: Data
     let content: String
-    let time: String
+    let time: Timestamp
     let userName: String
     var goodNumber: Int
     var goodSelf: Bool

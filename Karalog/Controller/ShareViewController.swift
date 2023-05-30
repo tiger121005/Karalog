@@ -21,7 +21,7 @@ class ShareViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        FirebaseAPI.shared.getPost(completionHandler: {list in
+        FirebaseAPI.shared.getPost(first: true, completionHandler: {list in
             self.shareList = list
             self.collectionView.reloadData()
         })
@@ -91,6 +91,21 @@ extension ShareViewController: UICollectionViewDataSource {
 extension ShareViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // スクロールが最下部に達したら次のページのデータを取得
+        print("🇲🇸", indexPath.item)
+        print("🇲🇱", FirebaseAPI.shared.postDocuments.count - 1)
+        print(self.shareList.count)
+        if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
+            print(33333333333)
+            FirebaseAPI.shared.getPost(first: false, completionHandler: { list in
+                self.shareList.append(contentsOf: list)
+                collectionView.reloadData()
+                
+            })
+        }
     }
 }
 

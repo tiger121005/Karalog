@@ -85,11 +85,7 @@ class PostViewController: UIViewController {
 
     @IBAction func tapPost() {
         
-        let df = DateFormatter()
-        df.dateFormat = "yy年MM月dd日HH:mm"
-        df.timeZone = TimeZone.current
-        let time = df.string(from: Date())
-        FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, musicID: musicID, content: contentTV.text, time: time, category: category)
+        FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, musicID: musicID, content: contentTV.text, category: category)
         let screenIndex = navigationController!.viewControllers.count - 3
         self.navigationController?.popToViewController(navigationController!.viewControllers[screenIndex], animated: true)
     }
