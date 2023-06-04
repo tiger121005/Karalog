@@ -22,6 +22,7 @@ class FirebaseAPI: ObservableObject {
     var wannaRef: CollectionReference!
     var postDocuments: [QueryDocumentSnapshot] = []
     
+    
     init() {
         
         userRef = Firestore.firestore().collection("user").document(userID!)
@@ -40,6 +41,17 @@ class FirebaseAPI: ObservableObject {
             }else{
                 UserDefaults.standard.set(document?.data()!["name"] as! String, forKey: "userName")
             }
+        }
+    }
+    
+    func createGoodList() {
+        userRef.setData([
+            "goodList": []
+        ]) {err in
+            if let err = err {
+                print("Error adding goodList: \(err)")
+            }
+        
         }
     }
     
@@ -178,6 +190,16 @@ class FirebaseAPI: ObservableObject {
                     self.postDocuments = collection!.documents
                     completionHandler(list)
                 }
+            }
+        }
+    }
+    
+    func getGoodList() {
+        userRef.getDocument { (document, err) in
+            if let err = err {
+                print("Error getting goodList: \(err)")
+            }else{
+                Manager.shared.goodList = document?.data()!["goodList"] as! [String]
             }
         }
     }
@@ -436,10 +458,12 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func goodUpdate(id: String, good: Bool, shareList: [Post]) {
+    func goodUpdate(id: String, good: Bool) {
         if  good {
-            shareRef.document(id).updateData([
-                "goodSelf": false
+            let num = Manager.shared.goodList.firstIndex(of: id)!
+            Manager.shared.goodList.remove(at: num)
+            userRef.updateData([
+                "goodList": FieldValue.arrayRemove([id])
             ]){ err in
                 if let err = err {
                     print("Error updating good: \(err)")
@@ -448,8 +472,9 @@ class FirebaseAPI: ObservableObject {
                 }
             }
         }else{
-            shareRef.document(id).updateData([
-                "goodSelf": true
+            Manager.shared.goodList.append(id)
+            userRef.updateData([
+                "goodList": FieldValue.arrayUnion([id])
             ]){ err in
                 if let err = err {
                     print("Error updating good: \(err)")

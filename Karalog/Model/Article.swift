@@ -62,7 +62,6 @@ public struct Post: Codable {
     let time: Timestamp
     let userName: String
     var goodNumber: Int
-    var goodSelf: Bool
     var category: [String]
     @DocumentID var id: String?
 }

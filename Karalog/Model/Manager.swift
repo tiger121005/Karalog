@@ -15,4 +15,6 @@ struct Manager {
     var lists: [Lists] = []
     
     var listOrder: [String] = []
+    
+    var goodList: [String] = []
 }

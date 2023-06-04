@@ -129,6 +129,7 @@ class LoginViewController: UIViewController {
         super.viewDidAppear(animated)
         if UserDefaults.standard.string(forKey: "userID") != nil {
             self.performSegue(withIdentifier: "toTabBar", sender: nil)
+            FirebaseAPI.shared.getGoodList()
         }
     }
     

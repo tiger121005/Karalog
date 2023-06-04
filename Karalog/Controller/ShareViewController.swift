@@ -10,6 +10,7 @@ import UIKit
 class ShareViewController: UIViewController {
     
     var shareList: [Post] = []
+    var goodList: [Bool] = []
     var sendWord = ""
     
     @IBOutlet var collectionView: UICollectionView!
@@ -28,8 +29,6 @@ class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        
-        
         
     }
     
@@ -110,13 +109,16 @@ extension ShareViewController: UICollectionViewDataSource {
         cell.musicImage?.setImage(useImage, for: .normal)
         cell.content.text = shareList[indexPath.row].content
         cell.userName.text = shareList[indexPath.row].userName
-        if shareList[indexPath.row].goodSelf {
+        print(Manager.shared.goodList)
+        print(Manager.shared.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}))
+        if Manager.shared.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
+            print(9999999999999)
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            goodList.append(true)
         }else{
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            goodList.append(false)
         }
-//        cell.configure(with: shareList[indexPath.row].content)
-//        cell.contentView.layoutIfNeeded()
         
         return cell
     }
@@ -141,12 +143,12 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
 extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let selectedID = shareList[indexPath.row].id!
-        FirebaseAPI.shared.goodUpdate(id: selectedID, good: shareList[indexPath.row].goodSelf, shareList: shareList)
-        shareList[indexPath.row].goodSelf.toggle()
+        FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
+        goodList[indexPath.row].toggle()
         
         collectionView.reloadData()
         
-        print(shareList[indexPath.row].goodSelf)
+        print(goodList[indexPath.row])
     }
 
 }
