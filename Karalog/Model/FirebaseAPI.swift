@@ -138,13 +138,12 @@ class FirebaseAPI: ObservableObject {
     
     func getPost(first: Bool, completionHandler: @escaping ([Post]) -> Void) {
         if first {
-            shareRef.order(by: "time").limit(to: 5).getDocuments { (collection, err) in
+            shareRef.order(by: "time", descending: true).limit(to: 10).getDocuments { (collection, err) in
                 var list: [Post] = []
                 if let err = err {
                     print("Error getting post: \(String(describing: err))")
                     completionHandler([])
                 }else{
-                    print(collection!.documents.count)
                     for document in collection!.documents {
                         do{
                             list.append(try document.data(as: Post.self))
@@ -162,7 +161,7 @@ class FirebaseAPI: ObservableObject {
             guard let lastDocument = postDocuments.last else {
                 return
             }
-            shareRef.order(by: "time").start(afterDocument: lastDocument).limit(to: 4).getDocuments { (collection, err) in
+            shareRef.order(by: "time", descending: true).start(afterDocument: lastDocument).limit(to: 10).getDocuments { (collection, err) in
                 var list: [Post] = []
                 if let err = err{
                     print("Error getting post:\(err)")
@@ -176,7 +175,6 @@ class FirebaseAPI: ObservableObject {
                             print(error)
                         }
                     }
-                    print(list)
                     self.postDocuments = collection!.documents
                     completionHandler(list)
                 }

@@ -10,12 +10,26 @@ import UIKit
 class ShareViewController: UIViewController {
     
     var shareList: [Post] = []
+    var sendWord = ""
     
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
+        didSet{
+            flowLayout.minimumLineSpacing = 1
+            flowLayout.minimumInteritemSpacing = 0
+            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+            flowLayout.scrollDirection = .vertical
+            flowLayout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        
+        
         
     }
     
@@ -27,11 +41,32 @@ class ShareViewController: UIViewController {
         })
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toSearchPost" {
+            
+        }
+    }
+    
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UINib(nibName: "ShareCell", bundle: nil), forCellWithReuseIdentifier: "shareCell")
         collectionView.keyboardDismissMode = .onDrag
+        
+        let compositionalLayout: UICollectionViewCompositionalLayout = {
+            //.estimateを使うと、AutoLayoutが優先されるから、そこの値は適当でいい
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+            //1つのグループに対して、1つのセルを指定
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            //1つのセクションに対して、1つのグループを指定
+            let section = NSCollectionLayoutSection(group: group)
+            return UICollectionViewCompositionalLayout(section: section)
+        }()
+        
+        collectionView.collectionViewLayout = compositionalLayout
     }
     
     func resize(image: UIImage, width: Double) -> UIImage {
@@ -50,7 +85,6 @@ class ShareViewController: UIViewController {
         return resizedImage!
     }
 
-    
 }
 
 extension ShareViewController: UICollectionViewDelegate {
@@ -81,6 +115,8 @@ extension ShareViewController: UICollectionViewDataSource {
         }else{
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
         }
+//        cell.configure(with: shareList[indexPath.row].content)
+//        cell.contentView.layoutIfNeeded()
         
         return cell
     }
@@ -89,17 +125,10 @@ extension ShareViewController: UICollectionViewDataSource {
 }
 
 extension ShareViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
-    }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // スクロールが最下部に達したら次のページのデータを取得
-        print("🇲🇸", indexPath.item)
-        print("🇲🇱", FirebaseAPI.shared.postDocuments.count - 1)
-        print(self.shareList.count)
         if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
-            print(33333333333)
             FirebaseAPI.shared.getPost(first: false, completionHandler: { list in
                 self.shareList.append(contentsOf: list)
                 collectionView.reloadData()
@@ -111,7 +140,6 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
 
 extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
-        dump(shareList[indexPath.row])
         let selectedID = shareList[indexPath.row].id!
         FirebaseAPI.shared.goodUpdate(id: selectedID, good: shareList[indexPath.row].goodSelf, shareList: shareList)
         shareList[indexPath.row].goodSelf.toggle()
@@ -120,4 +148,5 @@ extension ShareViewController: ShareCellDelegate {
         
         print(shareList[indexPath.row].goodSelf)
     }
+
 }

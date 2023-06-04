@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,38 +10,40 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="shareCell" id="vyg-nl-THw" customClass="ShareCell" customModule="Karalog" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="313" height="212"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="shareCell" id="vyg-nl-THw" customClass="ShareCell" customModule="Karalog" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="313" height="215"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mlS-9X-pL6">
-                <rect key="frame" x="0.0" y="0.0" width="313" height="212"/>
+                <rect key="frame" x="0.0" y="0.0" width="313" height="215"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="piN-up-avj">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="piN-up-avj">
                         <rect key="frame" x="16" y="11" width="45" height="45"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" systemColor="linkColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="47P-2e-3nM"/>
+                            <constraint firstAttribute="width" constant="45" id="5H2-t8-0qT"/>
+                        </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7tD-s4-apj">
-                        <rect key="frame" x="90" y="11" width="207" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7tD-s4-apj">
+                        <rect key="frame" x="90" y="11" width="69.333333333333314" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="69.329999999999998" id="By3-CV-bcH"/>
+                            <constraint firstAttribute="height" constant="22" id="tyk-KS-vk8"/>
+                        </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="music">
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oav-eW-QBO">
-                        <rect key="frame" x="26" y="65" width="251" height="104"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRs-En-pbP">
-                        <rect key="frame" x="16" y="170" width="45" height="35"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRs-En-pbP">
+                        <rect key="frame" x="16" y="171" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="Ph2-G4-WaK"/>
+                            <constraint firstAttribute="width" constant="44" id="Rtr-ic-c6G"/>
+                        </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system">
                             <color key="baseForegroundColor" name="imageColor"/>
@@ -50,24 +52,56 @@
                             <action selector="touchGoodBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="big-Os-6bI"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-wK-aWj">
-                        <rect key="frame" x="221" y="177" width="76" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
-                        <rect key="frame" x="90" y="37" width="207" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
+                        <rect key="frame" x="90" y="37" width="63" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="slb-pR-lbp"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63" id="ta8-n5-OwY"/>
+                        </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="artist">
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oav-eW-QBO">
+                        <rect key="frame" x="0.0" y="67" width="313" height="105"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="eZD-Z2-rIt"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-wK-aWj">
+                        <rect key="frame" x="237" y="180" width="76" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="31" id="4ao-Kf-3zx"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="pjs-wK-aWj" secondAttribute="bottom" constant="5" id="7o7-RF-ZcT"/>
+                    <constraint firstItem="YCy-vB-0lA" firstAttribute="top" secondItem="7tD-s4-apj" secondAttribute="bottom" constant="4" id="HIR-dt-UPk"/>
+                    <constraint firstItem="oav-eW-QBO" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="Ib8-ac-bhE"/>
+                    <constraint firstAttribute="trailing" secondItem="oav-eW-QBO" secondAttribute="trailing" constant="16" id="JYw-fA-K9u"/>
+                    <constraint firstItem="7tD-s4-apj" firstAttribute="leading" secondItem="piN-up-avj" secondAttribute="trailing" constant="29" id="LQK-h0-plS"/>
+                    <constraint firstItem="piN-up-avj" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="MEn-lj-bvD"/>
+                    <constraint firstAttribute="bottom" secondItem="kRs-En-pbP" secondAttribute="bottom" id="Pz6-ii-Ld9"/>
+                    <constraint firstItem="YCy-vB-0lA" firstAttribute="leading" secondItem="piN-up-avj" secondAttribute="trailing" constant="29" id="UK9-nv-p5t"/>
+                    <constraint firstItem="piN-up-avj" firstAttribute="top" secondItem="mlS-9X-pL6" secondAttribute="top" constant="11" id="azX-0j-eaD"/>
+                    <constraint firstItem="oav-eW-QBO" firstAttribute="top" secondItem="YCy-vB-0lA" secondAttribute="bottom" constant="7" id="eMc-IK-zZt"/>
+                    <constraint firstItem="oav-eW-QBO" firstAttribute="centerX" secondItem="mlS-9X-pL6" secondAttribute="centerX" id="iMa-HG-e10"/>
+                    <constraint firstItem="kRs-En-pbP" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="pBv-Xy-O2C"/>
+                    <constraint firstItem="7tD-s4-apj" firstAttribute="top" secondItem="mlS-9X-pL6" secondAttribute="top" constant="11" id="r1d-Kd-T2v"/>
+                    <constraint firstAttribute="trailing" secondItem="pjs-wK-aWj" secondAttribute="trailing" constant="16" id="ya5-zm-2n6"/>
+                    <constraint firstItem="kRs-En-pbP" firstAttribute="top" secondItem="oav-eW-QBO" secondAttribute="bottom" id="zHH-hC-0r1"/>
+                </constraints>
             </collectionViewCellContentView>
+            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
             <size key="customSize" width="313" height="212"/>
             <connections>
                 <outlet property="artistName" destination="YCy-vB-0lA" id="bhs-4Y-l9E"/>
@@ -77,7 +111,7 @@
                 <outlet property="musicName" destination="7tD-s4-apj" id="Edo-wV-fs9"/>
                 <outlet property="userName" destination="pjs-wK-aWj" id="Nmw-QS-4Vb"/>
             </connections>
-            <point key="canvasLocation" x="304.58015267175574" y="61.267605633802823"/>
+            <point key="canvasLocation" x="304.58015267175574" y="60.91549295774648"/>
         </collectionViewCell>
     </objects>
     <resources>

@@ -25,14 +25,10 @@ class ShareCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        content.numberOfLines = 0
     }
     
-    
-    
     @IBAction func touchGoodBtn(_ sender: Any) {
-
-        print(2222222222)
         delegate?.reloadCell(indexPath: indexPath)
     }
     
