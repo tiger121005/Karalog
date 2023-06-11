@@ -42,7 +42,7 @@ class MusicViewController: UIViewController {
         judgeSort = UserDefaults.standard.integer(forKey: "judgeSort")
         setupTableView()
         setupSearchBar()
-        setupBarButtonItem()
+        setupBarItem()
         
         let userID = UserDefaults.standard.string(forKey: "userID")
         print(userID!, "is logined")
@@ -87,7 +87,7 @@ class MusicViewController: UIViewController {
         tableView.delegate = self
         tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
         //セクションの高さ
-        tableView.rowHeight = 50
+        tableView.rowHeight = 70
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.keyboardDismissMode = .onDrag
         
@@ -99,7 +99,7 @@ class MusicViewController: UIViewController {
         searchBar.delegate = self
     }
     
-    func setupBarButtonItem() {
+    func setupBarItem() {
         let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"), handler: { [self]_ in
             if self.tableView.indexPathsForSelectedRows != nil {
                 let indexPathList = self.tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
@@ -133,7 +133,16 @@ class MusicViewController: UIViewController {
             }
         })
         let addToList = UIAction(title: "リストに追加", image: UIImage(systemName: "folder"), handler: { [self]_ in
-            performSegue(withIdentifier: "toAddToList", sender: nil)
+            if self.tableView.indexPathForSelectedRow != nil {
+                performSegue(withIdentifier: "toAddToList", sender: nil)
+            }else{
+                let alert = UIAlertController(title: "データなし", message: "データが選択されていません", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .cancel) { (action) in
+                    
+                }
+                alert.addAction(ok)
+                present(alert, animated: true)
+            }
         })
         let selectMenu = UIMenu(title: "", children: [delete, addToList])
         selectBtn = UIBarButtonItem(title: "", image: UIImage(systemName: "ellipsis.circle"), menu: selectMenu)
@@ -145,6 +154,9 @@ class MusicViewController: UIViewController {
         selectBtn.isHidden = true
         doneBtn.isHidden = true
         allSelectBtn.isHidden = true
+        
+        title = "HOME"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
     }
     
     func createMenu() {

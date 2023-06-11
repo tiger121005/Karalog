@@ -49,7 +49,7 @@ extension AddToListViewController: UICollectionViewDelegate {
             }
         } else {
             for id in idList {
-                FirebaseAPI.shared.addMusicToList(musicID: id, listID: Manager.shared.lists[indexPath.row].id!)
+                FirebaseAPI.shared.addMusicToList(musicID: id, listID: Manager.shared.lists[indexPath.row + 1].id!)
             }
         }
         self.dismiss(animated: true)
@@ -60,14 +60,15 @@ extension AddToListViewController: UICollectionViewDelegate {
 extension AddToListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Manager.shared.lists.count
+        Manager.shared.lists.count - 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
-        cell.label.text = Manager.shared.lists[indexPath.row].listName
-        
+        var a = Manager.shared.lists
+        a.remove(at: 1)
+        cell.image.image = UIImage(data: a[indexPath.row].listImage)!
+        cell.label.text = a[indexPath.row].listName
         return cell
     }
 }

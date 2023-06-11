@@ -13,11 +13,16 @@ import GoogleSignIn
 import FacebookLogin
 
 class LoginViewController: UIViewController {
+    
+    let db = Firestore.firestore()
 
-    //メール
     @IBOutlet var mailTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
     @IBOutlet var lookPasswordBtn: UIButton!
+    @IBOutlet var loginBtn: UIButton!
+    @IBOutlet var googleLoginView: UIView!
+    
+    //メール
     @IBAction func lookPassword() {
         if passwordTF.isSecureTextEntry == true {
             passwordTF.isSecureTextEntry = false
@@ -28,9 +33,8 @@ class LoginViewController: UIViewController {
         }
     }
     
-    let db = Firestore.firestore()
     
-    @IBOutlet var loginBtn: UIButton!
+    
     @IBAction func tapLoginBtn() {
         let mail = mailTF.text
         let password = passwordTF.text
@@ -48,10 +52,48 @@ class LoginViewController: UIViewController {
         }
     }
     //Google
-    @IBOutlet var googleLoginView: UIView!
-    
     @IBAction func didTapSignInButton(_ sender: Any) {
         auth()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        passwordTF.isSecureTextEntry = true
+
+//        let facebookLoginBtn = FBLoginButton()
+//        facebookLoginBtn.center = view.center
+//        facebookLoginBtn.frame.origin.y = googleLoginView.frame.maxY + 20
+//        view.addSubview(facebookLoginBtn)
+        
+        if let token = AccessToken.current,!token.isExpired {
+                // User is logged in, do work such as go to next view controller.
+            UserDefaults.standard.set(token.userID, forKey: "userID")
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if UserDefaults.standard.string(forKey: "userID") != nil {
+            self.performSegue(withIdentifier: "toTabBar", sender: nil)
+            if let a = UserDefaults.standard.array(forKey: "goodList") as? [String] {
+                Manager.shared.goodList = a
+            }else{
+                FirebaseAPI.shared.getGoodList()
+            }
+            
+        }
+    }
+    
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //キーボード以外がタップされた時にキーボードを閉じる
+        if (self.mailTF.isFirstResponder) {
+            self.mailTF.resignFirstResponder()
+        }else if (self.passwordTF.isFirstResponder) {
+            self.passwordTF.resignFirstResponder()
+        }
+            
     }
     
     private func auth() {
@@ -109,41 +151,6 @@ class LoginViewController: UIViewController {
 //        }
 //    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        passwordTF.isSecureTextEntry = true
-
-//        let facebookLoginBtn = FBLoginButton()
-//        facebookLoginBtn.center = view.center
-//        facebookLoginBtn.frame.origin.y = googleLoginView.frame.maxY + 20
-//        view.addSubview(facebookLoginBtn)
-        
-        if let token = AccessToken.current,!token.isExpired {
-                // User is logged in, do work such as go to next view controller.
-            UserDefaults.standard.set(token.userID, forKey: "userID")
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if UserDefaults.standard.string(forKey: "userID") != nil {
-            self.performSegue(withIdentifier: "toTabBar", sender: nil)
-            FirebaseAPI.shared.getGoodList()
-        }
-    }
-    
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.mailTF.isFirstResponder) {
-            self.mailTF.resignFirstResponder()
-        }else if (self.passwordTF.isFirstResponder) {
-            self.passwordTF.resignFirstResponder()
-        }
-            
-    }
-    
     //改行したら自動的にキーボードを非表示にする
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -151,6 +158,10 @@ class LoginViewController: UIViewController {
             passwordTF.becomeFirstResponder()
         }
         return true
+    }
+    
+    func layout() {
+        
     }
 
 }

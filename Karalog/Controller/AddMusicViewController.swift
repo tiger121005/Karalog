@@ -17,9 +17,8 @@ class AddMusicViewController: UIViewController {
     var selectedMenuType = modelMenuType.未選択
     
     var alertCtl: UIAlertController!
-    // 編集中のtextViewを保持する変数
-    var _activeTextView: UITextView? = nil
     
+    @IBOutlet var scroll: UIScrollView!
     @IBOutlet var musicTF: UITextField!
     @IBOutlet var artistTF: UITextField!
     @IBOutlet var scoreTF: UITextField!
@@ -34,46 +33,18 @@ class AddMusicViewController: UIViewController {
         super.viewDidLoad()
 
         setupTextField()
-        setupSlider()
-        
         configureMenuButton()
-        
         setupKeyLabel()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        setupKeyboard()
         getTimingKeyboard()
         
     }
-    
-    //キーボード以外をタップ時キーボードを閉じる
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        }else if scoreTF.isFirstResponder {
-            self.scoreTF.resignFirstResponder()
-        }else if musicTF.isFirstResponder {
-            musicTF.resignFirstResponder()
-        }else if artistTF.isFirstResponder {
-            artistTF.resignFirstResponder()
-        }
-        
-    }
-    
-
-    
     
     func setupTextField() {
         musicTF.delegate = self
         artistTF.delegate = self
         musicTF.text = musicName
         artistTF.text = artistName
-    }
-    
-    func setupSlider() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(sliderTapped(gestureRecognizer:)))
-        self.keySlider.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func configureMenuButton() {
@@ -118,7 +89,12 @@ class AddMusicViewController: UIViewController {
     func getTimingKeyboard() {
         let notification = NotificationCenter.default
         notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification,object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setupKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
+        self.view.addGestureRecognizer(tapGesture)
     }
     
     @IBAction func editingChanged(_ sender: Any) {
@@ -176,8 +152,6 @@ class AddMusicViewController: UIViewController {
         
     }
     
-    
-    
     //機種設定
     enum modelMenuType: String {
         case 未選択 = "未選択"
@@ -185,61 +159,57 @@ class AddMusicViewController: UIViewController {
         case JOYSOUND = "JOYSOUND"
     }
     
-    
-    
-    
-
-    
-    //sliderの開始点を自由にする
-    @objc func sliderTapped(gestureRecognizer: UIGestureRecognizer) {
-
-        let pointTapped: CGPoint = gestureRecognizer.location(in: keySlider)
-
-        let widthOfSlider: CGFloat = keySlider.frame.size.width
-        let newValue = pointTapped.x * CGFloat(keySlider.maximumValue - keySlider.minimumValue) / widthOfSlider - CGFloat(keySlider.maximumValue)
-        keySlider.setValue(round(Float(newValue)), animated: false)
-        slider(keySlider)
-    }
-    
     //textViewを開いたときにViewを上にずらして隠れないようにする
     // キーボード表示通知の際の処理
     @objc func keyboardWillShow(_ notification: Notification) {
-        // 編集中のtextViewを取得
-        _activeTextView = textView
-        guard let textView = _activeTextView else { return }
-        
         // キーボード、画面全体、textFieldのsizeを取得
         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         guard let keyboardHeight = rect?.size.height else { return }
-        let mainBoundsSize = UIScreen.main.bounds.size
-        let textViewHeight = textView.frame.height
+        let screenHeight = UIScreen.main.bounds.height
+        let safeAreaTop = self.view.safeAreaInsets.top
+        let safeAreaBottom = self.view.safeAreaInsets.bottom
+        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
+        let scrollPosition = scroll.contentOffset.y
+        // ナビゲーションバーの高さを取得する
+        let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(44)
+        let tabbarHeight = self.tabBarController?.tabBar.frame.size.height ?? CGFloat(48)
+        let keyboardPositionY = safeAreaHeight - keyboardHeight - navigationBarHeight
         
-        let textViewPositionY = textView.frame.origin.y + textViewHeight + 10.0
-        let keyboardPositionY = mainBoundsSize.height - keyboardHeight
+        print(keyboardPositionY + scrollPosition)
+        print(addBtn.frame.maxY)
+        print(safeAreaHeight)
             
-        if keyboardPositionY <= textViewPositionY {
-            let duration: TimeInterval? = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
-            UIView.animate(withDuration: duration!) {
-            self.view.transform = CGAffineTransform(translationX: 0, y: keyboardPositionY - textViewPositionY)
-            }
+        if keyboardPositionY + scrollPosition <= addBtn.frame.maxY {
+            scroll.setContentOffset(CGPoint.init(x: 0, y: addBtn.frame.maxY - safeAreaHeight + keyboardPositionY - tabbarHeight), animated: true)
         }
     }
     
-    // キーボード非表示通知の際の処理
     @objc func keyboardWillHide(_ notification: Notification) {
-        let duration: TimeInterval? = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Double
-        UIView.animate(withDuration: duration!) {
-            self.view.transform = CGAffineTransform.identity
+        let screenHeight = UIScreen.main.bounds.height
+        let safeAreaTop = self.view.safeAreaInsets.top
+        let safeAreaBottom = self.view.safeAreaInsets.bottom
+        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
+        // ナビゲーションバーの高さを取得する
+        let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
+        if addBtn.frame.maxY - safeAreaHeight > 0 {
+            scroll.setContentOffset(CGPoint.init(x: 0, y: addBtn.frame.maxY - safeAreaHeight), animated: true)
+        }else{
+            scroll.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+        }
+    }
+    
+    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
+        if textView.isFirstResponder {
+            self.textView.resignFirstResponder()
+        }else if scoreTF.isFirstResponder {
+            self.scoreTF.resignFirstResponder()
+        }else if musicTF.isFirstResponder {
+            musicTF.resignFirstResponder()
+        }else if artistTF.isFirstResponder {
+            artistTF.resignFirstResponder()
         }
     }
 
-    // textViewがタップされた際に呼ばれる
-    func textFieldShouldBeginEditing(_ textView: UITextView) -> Bool {
-        // 編集中のtextFieldを保持する
-        _activeTextView = textView
-        return true
-    }
-    
 }
 
 extension AddMusicViewController: UITextFieldDelegate {

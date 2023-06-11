@@ -199,7 +199,9 @@ class FirebaseAPI: ObservableObject {
             if let err = err {
                 print("Error getting goodList: \(err)")
             }else{
-                Manager.shared.goodList = document?.data()!["goodList"] as! [String]
+                if document?.data()!["goodList"] != nil {
+                    Manager.shared.goodList = document?.data()!["goodList"] as! [String]
+                }
             }
         }
     }
