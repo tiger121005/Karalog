@@ -36,8 +36,8 @@ class FirebaseAPI: ObservableObject {
     //userNameを取得
     func getUserName() {
         userRef.getDocument() { (document, err) in
-            if let err = err {
-                print("Error getting userName: \(err)")
+            if let _err = err {
+                print("Error getting userName: \(_err)")
             }else{
                 UserDefaults.standard.set(document?.data()!["name"] as! String, forKey: "userName")
             }
@@ -48,8 +48,8 @@ class FirebaseAPI: ObservableObject {
         userRef.setData([
             "goodList": []
         ]) {err in
-            if let err = err {
-                print("Error adding goodList: \(err)")
+            if let _err = err {
+                print("Error adding goodList: \(_err)")
             }
         
         }
@@ -59,8 +59,8 @@ class FirebaseAPI: ObservableObject {
     func getMusic(completionHandler: @escaping ([MusicList]) -> Void) {
         
         musicRef.getDocuments() { (collection, err) in
-            if let err = err {
-                print("error getting music: \(err)")
+            if let _err = err {
+                print("error getting music: \(_err)")
                 completionHandler([])
             }else{
                 Manager.shared.musicList = []
@@ -80,16 +80,16 @@ class FirebaseAPI: ObservableObject {
     //listsを取得
     func getlist(completionHandler: @escaping (Any) -> Void) {
         userRef.getDocument() { (document, err) in
-            if let document = document, document.exists{
-                Manager.shared.listOrder = document.data()!["listOrder"] as? [String] ?? []
+            if let _document = document, _document.exists{
+                Manager.shared.listOrder = _document.data()!["listOrder"] as? [String] ?? []
                 print("getting listOrder")
                 
             } else {
                 print("Error getting listOrder")
             }
             self.listRef.getDocuments() { (collection, err) in
-                if let err = err {
-                    print("error getting list: \(err)")
+                if let _err = err {
+                    print("error getting list: \(_err)")
                     
                 }else{
                     print("getting list")
@@ -126,8 +126,8 @@ class FirebaseAPI: ObservableObject {
     func getWanna(completionHandler: @escaping ([MusicList]) -> Void) {
         wannaRef.getDocuments { (collection, err) in
             var list: [MusicList] = []
-            if let err = err {
-                print("Error getting wanna list: \(String(describing: err))")
+            if let _err = err {
+                print("Error getting wanna list: \(String(describing: _err))")
                 completionHandler([])
             } else {
                 for document in collection!.documents {
@@ -152,8 +152,8 @@ class FirebaseAPI: ObservableObject {
         if first {
             shareRef.order(by: "time", descending: true).limit(to: 10).getDocuments { (collection, err) in
                 var list: [Post] = []
-                if let err = err {
-                    print("Error getting post: \(String(describing: err))")
+                if let _err = err {
+                    print("Error getting post: \(String(describing: _err))")
                     completionHandler([])
                 }else{
                     for document in collection!.documents {
@@ -170,13 +170,13 @@ class FirebaseAPI: ObservableObject {
                 }
             }
         }else{
-            guard let lastDocument = postDocuments.last else {
+            guard let _lastDocument = postDocuments.last else {
                 return
             }
-            shareRef.order(by: "time", descending: true).start(afterDocument: lastDocument).limit(to: 10).getDocuments { (collection, err) in
+            shareRef.order(by: "time", descending: true).start(afterDocument: _lastDocument).limit(to: 10).getDocuments { (collection, err) in
                 var list: [Post] = []
-                if let err = err{
-                    print("Error getting post:\(err)")
+                if let _err = err{
+                    print("Error getting post:\(_err)")
                     completionHandler([])
                 }else{
                     for document in collection!.documents {
@@ -196,8 +196,8 @@ class FirebaseAPI: ObservableObject {
     
     func getGoodList() {
         userRef.getDocument { (document, err) in
-            if let err = err {
-                print("Error getting goodList: \(err)")
+            if let _err = err {
+                print("Error getting goodList: \(_err)")
             }else{
                 if document?.data()!["goodList"] != nil {
                     Manager.shared.goodList = document?.data()!["goodList"] as! [String]
@@ -217,8 +217,8 @@ class FirebaseAPI: ObservableObject {
             "lists": [],
             "data": [detailData]
         ]) { err in
-            if let err = err {
-                print("Error adding music: \(err)")
+            if let _err = err {
+                print("Error adding music: \(_err)")
             }else{
                 print("music added")
                 Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: [MusicData(time: time, score: score, key: key, model: model, comment: comment)]))
@@ -241,8 +241,8 @@ class FirebaseAPI: ObservableObject {
         musicRef.document(musicID).updateData([
             "data": FieldValue.arrayUnion([d])
         ]) {err in
-            if let err = err {
-                print("Error adding detail \(err)")
+            if let _err = err {
+                print("Error adding detail \(_err)")
             }else{
                 print("detail successfully added")
                 
@@ -257,8 +257,8 @@ class FirebaseAPI: ObservableObject {
             "listName": listName,
             "listImage": listImage
         ]){err in
-            if let err = err {
-                print("Error adding list: \(err)")
+            if let _err = err {
+                print("Error adding list: \(_err)")
             }else{
                 print("list successfully added")
                 
@@ -279,8 +279,8 @@ class FirebaseAPI: ObservableObject {
             "artistName": artistName,
             "musicImage": musicImage
         ]) {err in
-            if let err = err {
-                print("Error adding music: \(err)")
+            if let _err = err {
+                print("Error adding music: \(_err)")
             }else{
                 print("music successfully added")
             }
@@ -293,8 +293,8 @@ class FirebaseAPI: ObservableObject {
         musicRef.document(musicID).updateData([
             "lists": FieldValue.arrayUnion([listID])
         ]) { err in
-            if let err = err {
-                print("Error adding music \(err)")
+            if let _err = err {
+                print("Error adding music \(_err)")
             }else{
                 print("musicAdded")
                 Manager.shared.musicList[indexPath].lists.append(listID)
@@ -323,8 +323,8 @@ class FirebaseAPI: ObservableObject {
     //musicListを削除
     func deleteMusic(id: String, completionHandler: @escaping (Any) -> Void) {
         musicRef.document(id).delete() { err in
-            if let err = err {
-                print("error deleting music: \(err)")
+            if let _err = err {
+                print("error deleting music: \(_err)")
             }else{
                 print("music successfully deleted")
                 Manager.shared.musicList.removeAll(where: {$0.id == id})
@@ -345,8 +345,8 @@ class FirebaseAPI: ObservableObject {
         musicRef.document(musicID).updateData([
             "data": FieldValue.arrayRemove([d])
         ]){err in
-            if let err = err {
-                print("Error deleting detail: \(err)")
+            if let _err = err {
+                print("Error deleting detail: \(_err)")
             }else{
                 print("detail successfully deleted")
                 
@@ -360,15 +360,15 @@ class FirebaseAPI: ObservableObject {
     func deleteList(indexPath: IndexPath, completionHandler: @escaping (Any) -> Void) {
         let listID = Manager.shared.lists[indexPath.row].id!
         listRef.document(listID).delete() { err in
-            if let err = err {
-                print("error removing music: \(err)")
+            if let _err = err {
+                print("error removing music: \(_err)")
             }else{
                 print("music successfully removed")
                 self.userRef.updateData([
                     "listOrder": FieldValue.arrayRemove([listID])
                 ]){err in
-                    if let err = err {
-                        print("Error deleting music order: \(err)")
+                    if let _err = err {
+                        print("Error deleting music order: \(_err)")
                     }else{
                         print("music order successfully deleted")
                         Manager.shared.lists.remove(at: indexPath.row)
@@ -384,8 +384,8 @@ class FirebaseAPI: ObservableObject {
     //wannaListを削除
     func deleteWanna(wannaID: String) {
         wannaRef.document(wannaID).delete(){err in
-            if let err = err {
-                print("Error deleting detail: \(err)")
+            if let _err = err {
+                print("Error deleting detail: \(_err)")
             }else{
                 print("detail successfully deleted")
                 
@@ -398,8 +398,8 @@ class FirebaseAPI: ObservableObject {
         musicRef.document(selectedID).updateData([
             "lists": FieldValue.arrayRemove([listID])
         ]) { err in
-            if let err = err {
-                print("Error updating favorite: \(err)")
+            if let _err = err {
+                print("Error updating favorite: \(_err)")
             } else {
                 print("favorite successfully updated")
                 
@@ -417,7 +417,7 @@ class FirebaseAPI: ObservableObject {
             musicRef.document(id).updateData([
                 "favorite": false
             ]){ err in
-                if let err = err {
+                if let _err = err {
                     print("Error updating favorite: \(err)")
                 } else {
                     print("favorite successfully updated")
@@ -432,8 +432,8 @@ class FirebaseAPI: ObservableObject {
             musicRef.document(id).updateData([
                 "favorite": true
             ]){ err in
-                if let err = err {
-                    print("Error updating favorite: \(err)")
+                if let _err = err {
+                    print("Error updating favorite: \(_err)")
                 } else {
                     print("favorite successfully updated")
                     
@@ -451,8 +451,8 @@ class FirebaseAPI: ObservableObject {
         userRef.updateData([
             "listOrder": listOrder
         ]) {err in
-            if let err = err {
-                print("Error updating list order: \(err)")
+            if let _err = err {
+                print("Error updating list order: \(_err)")
             }else{
                 print("list order successfully updated")
                 Manager.shared.listOrder = listOrder
@@ -467,8 +467,8 @@ class FirebaseAPI: ObservableObject {
             userRef.updateData([
                 "goodList": FieldValue.arrayRemove([id])
             ]){ err in
-                if let err = err {
-                    print("Error updating good: \(err)")
+                if let _err = err {
+                    print("Error updating good: \(_err)")
                 }else{
                     
                 }
@@ -478,8 +478,8 @@ class FirebaseAPI: ObservableObject {
             userRef.updateData([
                 "goodList": FieldValue.arrayUnion([id])
             ]){ err in
-                if let err = err {
-                    print("Error updating good: \(err)")
+                if let _err = err {
+                    print("Error updating good: \(_err)")
                 }else{
                     
                 }

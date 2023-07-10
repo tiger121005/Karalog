@@ -18,6 +18,7 @@ class MakeAccountViewController: UIViewController {
     @IBOutlet var passwordTF: UITextField!
     @IBOutlet var nameTF: UITextField!
     @IBOutlet var lookPasswordBtn: UIButton!
+    @IBOutlet var signUpBtn: CustomButton!
     @IBAction func lookPassword() {
         if passwordTF.isSecureTextEntry == true {
             passwordTF.isSecureTextEntry = false
@@ -29,12 +30,12 @@ class MakeAccountViewController: UIViewController {
     }
     
     @IBAction func createAccount() {
-        if let mail = mailTF.text,
+        if let _mail = mailTF.text,
            let password = passwordTF.text,
            let name = nameTF.text {
-            Auth.auth().createUser(withEmail: mail, password: password, completion: { (result, error) in
-                if let user = result?.user {
-                    self.db.collection("user").document(user.uid).setData([
+            Auth.auth().createUser(withEmail: _mail, password: password, completion: { (result, error) in
+                if let _user = result?.user {
+                    self.db.collection("user").document(_user.uid).setData([
                         "name": name
                     ], completion: { err in
                         if err != nil {
@@ -46,7 +47,7 @@ class MakeAccountViewController: UIViewController {
                             print("creating account succeeded")
                             let nextView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
                             nextView.modalPresentationStyle = .fullScreen
-                            UserDefaults.standard.set(user.uid, forKey: "userID")
+                            UserDefaults.standard.set(_user.uid, forKey: "userID")
                             self.present(nextView, animated: true, completion: nil)
                             
                         }

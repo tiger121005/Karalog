@@ -19,8 +19,41 @@ class LoginViewController: UIViewController {
     @IBOutlet var mailTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
     @IBOutlet var lookPasswordBtn: UIButton!
-    @IBOutlet var loginBtn: UIButton!
+    @IBOutlet var loginBtn: CustomButton!
     @IBOutlet var googleLoginView: UIView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        passwordTF.isSecureTextEntry = true
+
+        
+        let handle = Auth.auth().addStateDidChangeListener { auth, user in
+            print("🇲🇪", auth)
+            print("🇲🇱", user)
+        }
+//        let facebookLoginBtn = FBLoginButton()
+//        facebookLoginBtn.center = view.center
+//        facebookLoginBtn.frame.origin.y = googleLoginView.frame.maxY + 20
+//        view.addSubview(facebookLoginBtn)
+        
+        if let _token = AccessToken.current,!_token.isExpired {
+                // User is logged in, do work such as go to next view controller.
+            UserDefaults.standard.set(_token.userID, forKey: "userID")
+        }
+    }
+    
+    
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //キーボード以外がタップされた時にキーボードを閉じる
+        if (self.mailTF.isFirstResponder) {
+            self.mailTF.resignFirstResponder()
+        }else if (self.passwordTF.isFirstResponder) {
+            self.passwordTF.resignFirstResponder()
+        }
+            
+    }
     
     //メール
     @IBAction func lookPassword() {
@@ -36,12 +69,16 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func tapLoginBtn() {
-        let mail = mailTF.text
-        let password = passwordTF.text
+        guard let _mail = mailTF.text else {
+            return
+        }
+        guard let _password = passwordTF.text else {
+            return
+        }
         
-        Auth.auth().signIn(withEmail: mail!, password: password!) { (result, err) in
-            if let user = result?.user {
-                UserDefaults.standard.set(user.uid, forKey: "userID")
+        Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
+            if let _user = result?.user {
+                UserDefaults.standard.set(_user.uid, forKey: "userID")
                 self.performSegue(withIdentifier: "toTabBar", sender: nil)
             }else{
                 print("cannot find account:", err!)
@@ -56,51 +93,13 @@ class LoginViewController: UIViewController {
         auth()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        passwordTF.isSecureTextEntry = true
-
-//        let facebookLoginBtn = FBLoginButton()
-//        facebookLoginBtn.center = view.center
-//        facebookLoginBtn.frame.origin.y = googleLoginView.frame.maxY + 20
-//        view.addSubview(facebookLoginBtn)
-        
-        if let token = AccessToken.current,!token.isExpired {
-                // User is logged in, do work such as go to next view controller.
-            UserDefaults.standard.set(token.userID, forKey: "userID")
-        }
-    }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if UserDefaults.standard.string(forKey: "userID") != nil {
-            self.performSegue(withIdentifier: "toTabBar", sender: nil)
-            if let a = UserDefaults.standard.array(forKey: "goodList") as? [String] {
-                Manager.shared.goodList = a
-            }else{
-                FirebaseAPI.shared.getGoodList()
-            }
-            
-        }
-    }
-    
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.mailTF.isFirstResponder) {
-            self.mailTF.resignFirstResponder()
-        }else if (self.passwordTF.isFirstResponder) {
-            self.passwordTF.resignFirstResponder()
-        }
-            
-    }
     
     private func auth() {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        guard let _clientID = FirebaseApp.app()?.options.clientID else { return }
 
         // Create Google Sign In configuration object.
-        let config = GIDConfiguration(clientID: clientID)
+        let config = GIDConfiguration(clientID: _clientID)
         GIDSignIn.sharedInstance.configuration = config
 
         // Start the sign in flow!
@@ -109,17 +108,21 @@ class LoginViewController: UIViewController {
                 print("error")
                 return
             }
-            guard let user = result?.user, let idToken = user.idToken?.tokenString
+            guard let _user = result?.user, let idToken = _user.idToken?.tokenString
             else {
                 return
             }
+            
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                         accessToken: user.accessToken.tokenString)
+                                                         accessToken: _user.accessToken.tokenString)
             Auth.auth().signIn(with: credential) { result, error in
-                if let user = result?.user {
-                    self.db.collection("user").document(user.uid).setData([
-                        "name": user.displayName!])
-                    UserDefaults.standard.set(user.uid, forKey: "userID")
+                if let _user = result?.user {
+                    guard let _name = _user.displayName else {
+                        return
+                    }
+                    self.db.collection("user").document(_user.uid).setData([
+                        "name": _name])
+                    UserDefaults.standard.set(_user.uid, forKey: "userID")
                     self.performSegue(withIdentifier: "toTabBar", sender: nil)
                 }else {
                     print("google login error:", error!)

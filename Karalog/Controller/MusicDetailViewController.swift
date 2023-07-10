@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import DZNEmptyDataSet
 
 class MusicDetailViewController: UIViewController {
@@ -14,6 +15,8 @@ class MusicDetailViewController: UIViewController {
     var music: [MusicList] = []
     var tvList: [MusicData] = []
     var musicID = ""
+    var max: Double = 0.0
+    var min: Double = 0.0
     //次の画面に渡す値
     var time = ""
     var score = ""
@@ -23,6 +26,9 @@ class MusicDetailViewController: UIViewController {
     
     @IBOutlet var bestLabel: UILabel!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var graphView: UIView!
+    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +40,7 @@ class MusicDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         getData()
+        setupGraph()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,7 +65,6 @@ class MusicDetailViewController: UIViewController {
         self.tableView.emptyDataSetSource = self
         self.tableView.emptyDataSetDelegate = self
     }
-    
 
     func selectBest() {
         
@@ -66,15 +72,35 @@ class MusicDetailViewController: UIViewController {
         for data in tvList {
             scoreList.append(data.score)
         }
-        
-        bestLabel.text = String(format: "%.3f", scoreList.max()!)
+        max = scoreList.max()!
+        bestLabel.text = String(format: "%.3f", max)
+        min = scoreList.min()!
     }
     
     func getData() {
         tvList = Manager.shared.musicList.first(where: {$0.id == musicID})!.data
         selectBest()
         print(Manager.shared.musicList.first(where: {$0.id == musicID})!.data)
+        
         tableView.reloadData()
+    }
+    
+    func setupGraph() {
+        var a: [SampleData] = []
+        for i in tvList {
+            a.append(SampleData(date: i.time, score: i.score))
+        }
+        let vc: UIHostingController = UIHostingController(rootView: LineMarkView(sampleData: a, max: max, min: min))
+        
+        self.addChild(vc)
+        graphView.addSubview(vc.view)
+        vc.didMove(toParent: self)
+        // UIView内で表示されているSwiftUIビューの位置とサイズなどを調整
+        vc.view.translatesAutoresizingMaskIntoConstraints = false
+        vc.view.topAnchor.constraint(equalTo: graphView.topAnchor, constant: 0).isActive = true
+        vc.view.bottomAnchor.constraint(equalTo: graphView.bottomAnchor, constant: 0).isActive = true
+        vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
+        vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
     }
 }
 
@@ -88,7 +114,7 @@ extension MusicDetailViewController: UITableViewDelegate {
         model = tvList[indexPath.row].model
         comment = tvList[indexPath.row].comment
         performSegue(withIdentifier: "toDetail", sender: nil)
-         tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     //削除のラベルを変更

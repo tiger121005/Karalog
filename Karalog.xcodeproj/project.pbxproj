@@ -64,6 +64,11 @@
 		19A12D8929CF487E00B798A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D8829CF487E00B798A4 /* GoogleService-Info.plist */; };
 		19A12D8C29CF4A5600B798A4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 19A12D8B29CF4A5600B798A4 /* FirebaseAuth */; };
 		19A12D8E29CF4A5600B798A4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 19A12D8D29CF4A5600B798A4 /* FirebaseFirestore */; };
+		19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D363FE2A3DB1AF0046DA9A /* Slider.swift */; };
+		19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D364022A3DB24A0046DA9A /* CustomSliderView.swift */; };
+		19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */; };
+		19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */; };
+		19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B4872A59B44D008C8DB3 /* LineGraph.swift */; };
 		60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */; };
 		C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */; };
 /* End PBXBuildFile section */
@@ -140,6 +145,11 @@
 		19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		19A12D8629CF465900B798A4 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		19A12D8829CF487E00B798A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		19D363FE2A3DB1AF0046DA9A /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
+		19D364022A3DB24A0046DA9A /* CustomSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSliderView.swift; sourceTree = "<group>"; };
+		19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		19E8B4872A59B44D008C8DB3 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog_KaralogUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog-KaralogUITests.release.xcconfig"; path = "Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.release.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.release.xcconfig"; sourceTree = "<group>"; };
@@ -189,6 +199,7 @@
 		1960CD1B29FE0E780065FF05 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */,
 				19A12D8029CD964F00B798A4 /* LoginViewController.swift */,
 				19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */,
 				19A12D5C29CD941200B798A4 /* MusicViewController.swift */,
@@ -227,6 +238,10 @@
 				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
 				192D26702A0543A80058D739 /* Function.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
+				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
+				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
+				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
+				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -579,7 +594,10 @@
 			files = (
 				19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */,
 				19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */,
+				19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */,
+				19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */,
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
+				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
 				19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */,
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
@@ -596,6 +614,7 @@
 				19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
 				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,
+				19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */,
 				192D26712A0543A80058D739 /* Function.swift in Sources */,
 				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
 				19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */,
@@ -605,6 +624,7 @@
 				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
 				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
 				19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */,
+				19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */,
 				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
 				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
@@ -802,6 +822,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
@@ -837,6 +858,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;

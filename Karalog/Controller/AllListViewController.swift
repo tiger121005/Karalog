@@ -164,21 +164,21 @@ extension AllListViewController: UICollectionViewDropDelegate {
         switch coordinator.proposal.operation {
         case .move:
             let destinationIndexPath: IndexPath
-                    if let indexPath = coordinator.destinationIndexPath {
-                        destinationIndexPath = indexPath
+                    if let _indexPath = coordinator.destinationIndexPath {
+                        destinationIndexPath = _indexPath
                     } else {
                         let section = collectionView.numberOfSections - 1
                         let row = collectionView.numberOfItems(inSection: section)
                         destinationIndexPath = IndexPath(row: row, section: section)
                     }
                     coordinator.items.forEach { item in
-                        guard let sourceIndexPath = item.sourceIndexPath else { return }
+                        guard let _sourceIndexPath = item.sourceIndexPath else { return }
                         collectionView.performBatchUpdates({
-                            let i = Manager.shared.lists.remove(at: sourceIndexPath.row)
-                            let j = Manager.shared.listOrder.remove(at: sourceIndexPath.row - 2)
+                            let i = Manager.shared.lists.remove(at: _sourceIndexPath.row)
+                            let j = Manager.shared.listOrder.remove(at: _sourceIndexPath.row - 2)
                             Manager.shared.lists.insert(i, at: destinationIndexPath.row)
                             Manager.shared.listOrder.insert(j, at: destinationIndexPath.row - 2)
-                            collectionView.deleteItems(at: [sourceIndexPath])
+                            collectionView.deleteItems(at: [_sourceIndexPath])
                             collectionView.insertItems(at: [destinationIndexPath])
                             changeOrder = true
                         })

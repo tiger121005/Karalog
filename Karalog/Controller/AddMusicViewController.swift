@@ -15,19 +15,19 @@ class AddMusicViewController: UIViewController {
     var musicImage: Data!
     var sliderValue: Float = 0
     var selectedMenuType = modelMenuType.未選択
-    
     var alertCtl: UIAlertController!
+    var callView = true
+    var scaleList: [UIView] = []
     
     @IBOutlet var scroll: UIScrollView!
     @IBOutlet var musicTF: UITextField!
     @IBOutlet var artistTF: UITextField!
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var keyLabel: UILabel!
-    @IBOutlet var keySlider: UISlider!
-    @IBOutlet var modelBtn: UIButton!
+    @IBOutlet var modelBtn: CustomButton!
     @IBOutlet var textView: UITextView!
-    @IBOutlet var addBtn: UIButton!
-    
+    @IBOutlet var addBtn: CustomButton!
+    @IBOutlet var customSlider: CustomSliderView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +38,31 @@ class AddMusicViewController: UIViewController {
         setupKeyboard()
         getTimingKeyboard()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if callView {
+            scaleList = []
+            for i in 0...14 {
+                print(customSlider.slider.bounds.width)
+                let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
+                
+                if i <= 7 {
+                    view.backgroundColor = UIColor(named: "imageColor")
+                } else {
+                    view.backgroundColor = UIColor.label
+                }
+                view.layer.cornerRadius = 3
+                
+                customSlider.slider.addSubview(view)
+                
+                customSlider.bringSubviewToFront(customSlider.slider)
+                
+                scaleList.append(view)
+            }
+            callView = false
+        }
     }
     
     func setupTextField() {
@@ -102,7 +127,7 @@ class AddMusicViewController: UIViewController {
             scoreTF.text = String(Double(scoreTF.text!)! / 10)
         }
         
-        guard let scoreValue = scoreTF.text else { return }
+        guard let _scoreValue = scoreTF.text else { return }
         
         let maxLength: Int = 6
         
@@ -110,7 +135,7 @@ class AddMusicViewController: UIViewController {
         let textFieldNumber = scoreTF.text?.count ?? 0
         
         if textFieldNumber > maxLength {
-            scoreTF.text = String(scoreValue.prefix(maxLength))
+            scoreTF.text = String(_scoreValue.prefix(maxLength))
         }
     }
     
@@ -121,10 +146,17 @@ class AddMusicViewController: UIViewController {
         if keyLabel.text == "-0.0"{
             keyLabel.text = "0.0"
         }
-        keySlider.setValue(preValue, animated: false)
+        customSlider.slider.setValue(preValue, animated: false)
         if preValue != sliderValue {
             Function.shared.playImpact(type: .impact(.light))
             sliderValue = preValue
+            for i in 0...scaleList.count - 1 {
+                if i  <= Int(sliderValue) + 7 {
+                    scaleList[i].backgroundColor = UIColor(named: "imageColor")
+                } else {
+                    scaleList[i].backgroundColor = UIColor.label
+                }
+            }
         }
     }
     
@@ -164,7 +196,7 @@ class AddMusicViewController: UIViewController {
     @objc func keyboardWillShow(_ notification: Notification) {
         // キーボード、画面全体、textFieldのsizeを取得
         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        guard let keyboardHeight = rect?.size.height else { return }
+        guard let _keyboardHeight = rect?.size.height else { return }
         let screenHeight = UIScreen.main.bounds.height
         let safeAreaTop = self.view.safeAreaInsets.top
         let safeAreaBottom = self.view.safeAreaInsets.bottom
@@ -173,7 +205,7 @@ class AddMusicViewController: UIViewController {
         // ナビゲーションバーの高さを取得する
         let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(44)
         let tabbarHeight = self.tabBarController?.tabBar.frame.size.height ?? CGFloat(48)
-        let keyboardPositionY = safeAreaHeight - keyboardHeight - navigationBarHeight
+        let keyboardPositionY = safeAreaHeight - _keyboardHeight - navigationBarHeight
         
         print(keyboardPositionY + scrollPosition)
         print(addBtn.frame.maxY)
@@ -191,7 +223,7 @@ class AddMusicViewController: UIViewController {
         let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
         // ナビゲーションバーの高さを取得する
         let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
-        if addBtn.frame.maxY - safeAreaHeight > 0 {
+        if addBtn.frame.maxY - safeAreaHeight > 0 && callView == false {
             scroll.setContentOffset(CGPoint.init(x: 0, y: addBtn.frame.maxY - safeAreaHeight), animated: true)
         }else{
             scroll.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
@@ -214,10 +246,10 @@ class AddMusicViewController: UIViewController {
 
 extension AddMusicViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let numCount = scoreTF.text else { return }
+        guard let _numCount = scoreTF.text else { return }
         
-        if numCount.count > 6 {
-            scoreTF.text = String(numCount.prefix(6))
+        if _numCount.count > 6 {
+            scoreTF.text = String(_numCount.prefix(6))
         }
     }
     

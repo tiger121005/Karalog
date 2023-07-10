@@ -109,14 +109,21 @@ struct Function {
         return formatter.date(from: string)!
     }
     
+    func stringFromDate(date: Date, format: String) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = format
+        return formatter.string(from: date)
+    }
+    
     mutating func playImpact(type: Haptic) {
         switch type {
             case .impact(let style, let intensity):
                 impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style.value)
                 impactFeedbackGenerator?.prepare()
 
-                if let intensity = intensity {
-                    impactFeedbackGenerator?.impactOccurred(intensity: intensity)
+                if let _intensity = intensity {
+                    impactFeedbackGenerator?.impactOccurred(intensity: _intensity)
                 } else {
                     impactFeedbackGenerator?.impactOccurred()
                 }
@@ -158,56 +165,4 @@ enum NotificationFeedbackType: Int {
 enum Haptic {
     case impact(_ style: ImpactFeedbackStyle, intensity: CGFloat? = nil)
     case notification(_ type: NotificationFeedbackType)
-}
-
-extension UISlider {
-    
-    var trackBounds: CGRect {
-        return trackRect(forBounds: bounds)
-    }
-    
-    func positionX(at index: Int) -> CGFloat {
-        let rect = thumbRect(forBounds: bounds, trackRect: trackBounds, value: Float(index))
-        return rect.midX - CGFloat(index) - 7
-    }
-}
-
-class Slider: UISlider {
-    
-    private var labelList: [UIView] = []
-    
-    
-    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        let tapPoint = touch.location(in: self)
-        let fraction = Float(tapPoint.x / bounds.width)
-        let newValue = (maximumValue - minimumValue) * fraction + minimumValue
-        if round(newValue) != value {
-            value = round(newValue)
-        }
-        return true
-    }
-    
-//    func setupScale() {
-//        let width = self.frame.width - 150
-//        let space = (width / 14) - 14
-//        let center = (self.frame.maxX + self.frame.minX) / 2
-//        print(width)
-//        print(space)
-//        print(center)
-//        for i in -7...7 {
-//            let scale = UIView()
-//            print(center + space*CGFloat(i))
-//            scale.frame = CGRect(x: center + space * CGFloat(i), y: self.frame.maxY, width: CGFloat(1), height: CGFloat(4))
-//            scale.backgroundColor = UIColor.label
-//        }
-//    }
-//    var trackBounds: CGRect {
-//        return trackRect(forBounds: bounds)
-//    }
-//
-//    func positionX(at index: Int) -> CGFloat {
-//        let rect = thumbRect(forBounds: bounds, trackRect: trackBounds, value: Float(index))
-//        return rect.midX
-//    }
-    
 }

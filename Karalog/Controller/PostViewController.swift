@@ -22,7 +22,7 @@ class PostViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var categoryLabel: UILabel!
     @IBOutlet var contentTV: UITextView!
-    @IBOutlet var postBtn: UIButton!
+    @IBOutlet var postBtn: CustomButton!
     
 
     override func viewDidLoad() {
@@ -50,10 +50,10 @@ class PostViewController: UIViewController {
     
     func setUpCategory() {
         categoryLabel.numberOfLines = 0
-        if let indexPathList = self.tableView.indexPathsForSelectedRows {
+        if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text = ""
             var newLine = false
-            for i in indexPathList {
+            for i in _indexPathList {
                 if newLine {
                     text += "\n#" + Material.shared.categoryList[i.row]
                     category.append(Material.shared.categoryList[i.row])

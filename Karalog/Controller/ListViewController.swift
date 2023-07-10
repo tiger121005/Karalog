@@ -108,7 +108,7 @@ class ListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
-        tableView.rowHeight = 50
+        tableView.rowHeight = 70
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.keyboardDismissMode = .onDrag
     }

@@ -16,7 +16,7 @@ class AddListViewController: UIViewController {
     
     @IBOutlet var listImage: UIButton!
     @IBOutlet var listTF: UITextField!
-    
+    @IBOutlet var addBtn: CustomButton!
     
     
     var randomImage = ""
@@ -73,8 +73,8 @@ class AddListViewController: UIViewController {
     func addList() {
         let image = listImage.backgroundImage(for: .normal)
         var resizedImage: Data!
-        if let image = UIImage(systemName: randomImage)?.withTintColor(UIColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)) {
-            resizedImage = image.jpegData(compressionQuality: 1.0)
+        if let _image = UIImage(systemName: randomImage)?.withTintColor(UIColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)) {
+            resizedImage = _image.jpegData(compressionQuality: 1.0)
             
         } else {
             resizedImage = resizedData(image: image!, maxSize: 1024, quality: 0.5)
@@ -115,8 +115,8 @@ extension AddListViewController: UITextFieldDelegate {
 extension AddListViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         //ImagePickerで取得してきた画像をimageViewにセット
-        if let image = info[.originalImage] as? UIImage {
-            listImage.setBackgroundImage(image, for: .normal)
+        if let _image = info[.originalImage] as? UIImage {
+            listImage.setBackgroundImage(_image, for: .normal)
             listImage.imageView?.contentMode = .scaleAspectFill
             randomImage = ""
         }

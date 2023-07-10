@@ -65,3 +65,10 @@ public struct Post: Codable {
     var category: [String]
     @DocumentID var id: String?
 }
+
+public struct SampleData: Identifiable {
+    public var id: String { date }
+    let date: String
+    let score: Double
+}
+

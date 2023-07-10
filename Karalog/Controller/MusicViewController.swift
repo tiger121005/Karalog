@@ -82,6 +82,11 @@ class MusicViewController: UIViewController {
         searchBar.resignFirstResponder()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        // ステータスバーを黒く
+        return UIStatusBarStyle.lightContent;
+    }
+    
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
