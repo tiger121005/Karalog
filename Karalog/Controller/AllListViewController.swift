@@ -58,6 +58,7 @@ class AllListViewController: UIViewController {
             FirebaseAPI.shared.getlist(completionHandler: {_ in
                 
                 self.collectionView.reloadData()
+                print(Manager.shared.lists)
             })
         } else {
             collectionView.reloadData()

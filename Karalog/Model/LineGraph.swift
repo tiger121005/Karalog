@@ -15,54 +15,44 @@ struct LineMarkView: View {
     var min: Double = 0.0
     
     var body: some View {
-        
-        Chart(sampleData) { data in
+        ScrollViewReader { scrollProxy in
             
-            LineMark(
-                x: .value("Date", data.date),
-                y: .value("得点", data.score)
-            )
             
-            .lineStyle(StrokeStyle(lineWidth: 3))
-            
-        }
-        .chartYScale(domain: minRange(min: min)...maxRange(max: max))
-//        .chartXAxis {
-//            AxisMarks(values: .automatic) { date in
-//                AxisGridLine()
-//            AxisTick()
-//            AxisValueLabel(format: .dateTime.day().month().year())
-//            }
-//        }
-        .chartXAxis {
-            AxisMarks(values: sampleData.map{$0.date}) {
-                AxisValueLabel()
-                AxisGridLine()
+            ScrollView(.horizontal) {
+                
+                Chart() {
+                    ForEach(sampleData) { data in
+                        
+                        LineMark(
+                            x: .value("Date", data.date),
+                            y: .value("Score", data.score)
+                        )
+                        .lineStyle(StrokeStyle(lineWidth: 3))
+                        PointMark(
+                            x: .value("Date", data.date),
+                            y: .value("Score", data.score)
+                        )
+                        
+                    }
+                    
+                }
+                .id(1)
+                .frame(width: (CGFloat(sampleData.count) * 45) + 19)
+                .chartYScale(domain: minRange(min: min)...maxRange(max: max))
+                .foregroundColor(Color("imageColor"))
+                .padding(.top)
+                .chartXAxis {
+                    AxisMarks(preset: .extended) { value in
+                        AxisGridLine()
+                        AxisValueLabel()
+                    }
+                }
+                
+                .onAppear{scrollProxy.scrollTo(1)}
             }
         }
-            
-//        .chartXAxis{
-//            AxisMarks(
-//                values: xTitles(data: sampleData)
-//            ){
-//                AxisValueLabel(format: .dateTime.day().month().year())
-//            }
-//
-//            AxisMarks(
-//                values: xValues(data: sampleData)
-//            ){
-//                AxisGridLine()
-//            }
-//        }
-//        .chartYAxis{
-//            AxisMarks(
-//                values:
-//            )
-//        }
-        .foregroundColor(Color("imageColor"))
-        .padding()
     }
-        
+    
     func maxRange(max: Double) -> Double {
         var x = ceil(max/5)*5
         print("iiiiiiiiii", x)
@@ -106,13 +96,3 @@ struct LineMarkView: View {
     }
 }
 
-//extension LineMarkView: IAxisValueFormatter {
-//
-//    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-//        if axis is XAxis {
-//            // do something you need for X axis
-//            return valueTransformedToString
-//        }
-//    }
-//
-//}

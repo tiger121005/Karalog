@@ -902,6 +902,12 @@
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" systemColor="systemBackgroundColor"/>
                         </textAttributes>
+                        <navigationBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
                         <navigationBarAppearance key="compactScrollEdgeAppearance"/>
                     </navigationBar>
                     <connections>
@@ -1061,7 +1067,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="PIs-bu-XeA">
-                                <rect key="frame" x="0.0" y="374" width="393" height="448"/>
+                                <rect key="frame" x="0.0" y="384" width="393" height="438"/>
                                 <color key="backgroundColor" name="baseColor"/>
                                 <color key="sectionIndexBackgroundColor" name="baseColor"/>
                                 <prototypes>
@@ -1102,28 +1108,28 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vcr-Py-LWe">
-                                <rect key="frame" x="0.0" y="178" width="393" height="190"/>
+                                <rect key="frame" x="0.0" y="178" width="392" height="205"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="190" id="fNU-K2-7xc"/>
+                                    <constraint firstAttribute="height" constant="205" id="oNF-iB-m7Z"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mCB-O2-vcj"/>
                         <color key="backgroundColor" name="baseColor"/>
                         <constraints>
-                            <constraint firstItem="vcr-Py-LWe" firstAttribute="top" secondItem="SNO-oT-ceu" secondAttribute="bottom" constant="8" id="45c-pA-GGQ"/>
                             <constraint firstItem="SNO-oT-ceu" firstAttribute="top" secondItem="cGq-1T-heQ" secondAttribute="bottom" constant="5" id="9P7-OE-Cqe"/>
-                            <constraint firstItem="PIs-bu-XeA" firstAttribute="top" secondItem="vcr-Py-LWe" secondAttribute="bottom" constant="6" id="AiC-3f-b28"/>
-                            <constraint firstItem="vcr-Py-LWe" firstAttribute="trailing" secondItem="mCB-O2-vcj" secondAttribute="trailing" id="Hqx-7A-Pjo"/>
                             <constraint firstItem="PIs-bu-XeA" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="Muw-Av-k5z"/>
+                            <constraint firstItem="PIs-bu-XeA" firstAttribute="top" secondItem="vcr-Py-LWe" secondAttribute="bottom" constant="1" id="cIt-mk-U2L"/>
+                            <constraint firstItem="mCB-O2-vcj" firstAttribute="trailing" secondItem="vcr-Py-LWe" secondAttribute="trailing" constant="1" id="ftI-2L-UOT"/>
                             <constraint firstItem="cGq-1T-heQ" firstAttribute="top" secondItem="aHa-EB-JB2" secondAttribute="bottom" constant="45" id="h4m-sS-kBI"/>
-                            <constraint firstItem="vcr-Py-LWe" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="iut-F3-CvM"/>
                             <constraint firstItem="SNO-oT-ceu" firstAttribute="centerX" secondItem="eBM-FB-59j" secondAttribute="centerX" id="ivO-XW-gkQ"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="top" secondItem="eBM-FB-59j" secondAttribute="top" id="j35-1U-Oo3"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="j46-rD-Qxf"/>
+                            <constraint firstItem="vcr-Py-LWe" firstAttribute="top" secondItem="SNO-oT-ceu" secondAttribute="bottom" constant="8" id="mSW-VT-Flr"/>
                             <constraint firstItem="cGq-1T-heQ" firstAttribute="centerX" secondItem="eBM-FB-59j" secondAttribute="centerX" id="nhb-iG-Wy7"/>
                             <constraint firstAttribute="bottom" secondItem="PIs-bu-XeA" secondAttribute="bottom" constant="30" id="r9U-GQ-hPn"/>
+                            <constraint firstItem="vcr-Py-LWe" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="rCH-FG-iRH"/>
                             <constraint firstItem="PIs-bu-XeA" firstAttribute="trailing" secondItem="mCB-O2-vcj" secondAttribute="trailing" id="st1-Ic-3m4"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="trailing" secondItem="mCB-O2-vcj" secondAttribute="trailing" id="tI1-Pp-cnh"/>
                         </constraints>
@@ -1147,7 +1153,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0iv-gL-VOr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3310.6870229007632" y="-1309.1549295774648"/>
+            <point key="canvasLocation" x="3736.6412213740455" y="-1332.3943661971832"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="FRE-9d-gQf">
@@ -1666,6 +1672,12 @@
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" systemColor="systemBackgroundColor"/>
                         </textAttributes>
+                        <navigationBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
                     </navigationBar>
                     <connections>
                         <segue destination="Su2-1i-z6G" kind="relationship" relationship="rootViewController" id="chw-q7-nzS"/>
@@ -1972,6 +1984,12 @@
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" systemColor="systemBackgroundColor"/>
                         </textAttributes>
+                        <navigationBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" name="imageColor"/>
+                        </navigationBarAppearance>
                     </navigationBar>
                     <connections>
                         <segue destination="Cbm-Ux-TK0" kind="relationship" relationship="rootViewController" id="G6r-10-d0J"/>
@@ -2056,6 +2074,9 @@
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="検索"/>
+                                        <connections>
+                                            <action selector="tapSearchBtn" destination="Cbm-Ux-TK0" eventType="touchUpInside" id="1gY-8q-gHw"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="カテゴリー" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GG7-qr-cRZ">
                                         <rect key="frame" x="8" y="103" width="99" height="26"/>

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
@@ -51,7 +52,7 @@ class FirebaseAPI: ObservableObject {
             if let _err = err {
                 print("Error adding goodList: \(_err)")
             }
-        
+            
         }
     }
     
@@ -66,7 +67,9 @@ class FirebaseAPI: ObservableObject {
                 Manager.shared.musicList = []
                 for document in collection!.documents {
                     do{
-                        Manager.shared.musicList.append(try document.data(as: MusicList.self))
+                        
+                        let data = try document.data(as: MusicList.self)
+                        Manager.shared.musicList.append(data)
                         
                     }catch{
                         print(error)
@@ -87,6 +90,7 @@ class FirebaseAPI: ObservableObject {
             } else {
                 print("Error getting listOrder")
             }
+            
             self.listRef.getDocuments() { (collection, err) in
                 if let _err = err {
                     print("error getting list: \(_err)")
@@ -102,24 +106,15 @@ class FirebaseAPI: ObservableObject {
                         }
                     }
                     var preList: [Lists] = []
-                    
-                    
                     for i in Manager.shared.listOrder {
-                        
                         preList.append(Manager.shared.lists.first(where: {$0.id!.contains(i)})!)
                     }
                     Manager.shared.lists = Material.shared.initialListData
-                    
-                    
                     Manager.shared.lists += preList
-                    
                     completionHandler(true)
                 }
-                
-                
             }
         }
-        
     }
     
     //wannaListを取得
@@ -212,12 +207,13 @@ class FirebaseAPI: ObservableObject {
             if music != "" {
                 if artist != "" {
                     if category != [] {
+                        print(category)
                         shareRef
-                            .whereField("musicName", isGreaterThanOrEqualTo: music)
-                            .whereField("artistName", isGreaterThanOrEqualTo: artist)
+                            .whereField("musicName", isEqualTo: music)
+                            .whereField("artistName", isEqualTo: artist)
+                            .whereField("category", arrayContainsAny: category)
                             .order(by: "musicName")
                             .order(by: "artistName")
-                            .whereField("category", in: category)
                             .order(by: "time", descending: true)
                             .limit(to: 10)
                             .getDocuments { (collection, err) in
@@ -263,7 +259,6 @@ class FirebaseAPI: ObservableObject {
                     
                 }
             }
-        
             
         }
     }
@@ -379,7 +374,7 @@ class FirebaseAPI: ObservableObject {
     }
     
     
-
+    
     
     //musicListを削除
     func deleteMusic(id: String, completionHandler: @escaping (Any) -> Void) {
@@ -485,7 +480,7 @@ class FirebaseAPI: ObservableObject {
                     
                     let num = Manager.shared.musicList.firstIndex(where: {$0.id!.contains(id)})
                     Manager.shared.musicList[num!].favorite = false
-                   
+                    
                     completionHandler(true)
                 }
             }

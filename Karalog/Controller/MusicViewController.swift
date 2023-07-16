@@ -55,7 +55,6 @@ class MusicViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dump(Manager.shared.musicList)
         Function.shared.sort(sortKind: judgeSort, updateList: Manager.shared.musicList, completionHandler: {list in
             self.tvList = list
             self.tableView.reloadData()

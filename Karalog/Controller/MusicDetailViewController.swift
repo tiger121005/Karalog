@@ -42,7 +42,7 @@ class MusicDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         getData()
-        setupGraph()
+        setupGraphAndLabel()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -73,10 +73,7 @@ class MusicDetailViewController: UIViewController {
 
     func selectBest() {
         
-        let scoreList = tvList.map{$0.score}
-        max = scoreList.max()!
-        bestLabel.text = String(format: "%.3f", max)
-        min = scoreList.min()!
+        
     }
     
     func getData() {
@@ -87,12 +84,34 @@ class MusicDetailViewController: UIViewController {
         tableView.reloadData()
     }
     
-    func setupGraph() {
+    func setupGraphAndLabel() {
         var a: [SampleData] = []
+        print(44444444444, tvList.map{$0.time})
+        var start = true
+        
         for i in tvList {
-            a.append(SampleData(date: xTitle(data: i.time), score: i.score))
+            let date = xTitle(data: i.time)
+            if start == false {
+                if date == a[0].date {
+                    if i.score >= a[0].score {
+                        a[0] = SampleData(date: date, score: i.score)
+                    }
+                } else {
+                    a.insert(SampleData(date: xTitle(data: i.time), score: i.score), at: 0)
+                }
+            } else {
+                a.append(SampleData(date: date, score: i.score))
+                start = false
+            }
         }
-        print(23333333, a)
+        
+        a.reverse()
+        
+        let scoreList = a.map{$0.score}
+        max = scoreList.max()!
+        bestLabel.text = String(format: "%.3f", max)
+        min = scoreList.min()!
+        
         let vc: UIHostingController = UIHostingController(rootView: LineMarkView(sampleData: a, max: max, min: min))
         
         self.addChild(vc)

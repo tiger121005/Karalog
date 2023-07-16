@@ -98,12 +98,6 @@ class ShareViewController: UIViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toSearchPost" {
-            
-        }
-    }
-    
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
