@@ -15,7 +15,6 @@ class GetMusicViewController: UIViewController {
     var musicName: String!
     var artistName: String!
     var musicImage: String!
-    var musicID: Int!
     
     //itunesの情報を取得
     let decoder: JSONDecoder = JSONDecoder()
@@ -35,8 +34,6 @@ class GetMusicViewController: UIViewController {
         
         setupCollectionView()
         setupSearchBar()
-//        setupVision()
-        
         
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
@@ -47,7 +44,6 @@ class GetMusicViewController: UIViewController {
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = try! Data(contentsOf: URL(string: musicImage)!)
-            nextView.musicID = musicID
             
         }
     }
@@ -115,7 +111,6 @@ extension GetMusicViewController: UICollectionViewDelegate {
             musicName = musicInfoModel[indexPath.row].trackName
             artistName = musicInfoModel[indexPath.row].artistName
             musicImage = musicInfoModel[indexPath.row].artworkUrl100
-            musicID = musicInfoModel[indexPath.row].trackId
             
             performSegue(withIdentifier: "toPost", sender: nil)
         }

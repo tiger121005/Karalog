@@ -38,7 +38,6 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         
         setupCollectionView()
         setupSearchBar()
-//        setupVision()
         
         
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]

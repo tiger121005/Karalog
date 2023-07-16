@@ -12,6 +12,8 @@ import DZNEmptyDataSet
 class MusicDetailViewController: UIViewController {
     
     var musicName = ""
+    var artistName = ""
+    var musicImage: Data!
     var music: [MusicList] = []
     var tvList: [MusicData] = []
     var musicID = ""
@@ -54,6 +56,9 @@ class MusicDetailViewController: UIViewController {
         }else if segue.identifier == "toAddDetail" {
             let nextView = segue.destination as! AddDetailViewController
             nextView.musicID = musicID
+            nextView.musicName = musicName
+            nextView.artistName = artistName
+            nextView.musicImage = musicImage
         }
     }
     
@@ -68,10 +73,7 @@ class MusicDetailViewController: UIViewController {
 
     func selectBest() {
         
-        var scoreList: [Double] = []
-        for data in tvList {
-            scoreList.append(data.score)
-        }
+        let scoreList = tvList.map{$0.score}
         max = scoreList.max()!
         bestLabel.text = String(format: "%.3f", max)
         min = scoreList.min()!
@@ -88,8 +90,9 @@ class MusicDetailViewController: UIViewController {
     func setupGraph() {
         var a: [SampleData] = []
         for i in tvList {
-            a.append(SampleData(date: i.time, score: i.score))
+            a.append(SampleData(date: xTitle(data: i.time), score: i.score))
         }
+        print(23333333, a)
         let vc: UIHostingController = UIHostingController(rootView: LineMarkView(sampleData: a, max: max, min: min))
         
         self.addChild(vc)
@@ -101,6 +104,13 @@ class MusicDetailViewController: UIViewController {
         vc.view.bottomAnchor.constraint(equalTo: graphView.bottomAnchor, constant: 0).isActive = true
         vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
         vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
+    }
+    
+    func xTitle(data: String) -> String {
+        
+        let d = Function.shared.dateFromString(string: data, format: "yy年MM月dd日HH:mm")
+        let s = Function.shared.stringFromDate(date: d, format: "MM/dd")
+        return s
     }
 }
 

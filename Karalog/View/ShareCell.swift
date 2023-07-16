@@ -22,6 +22,7 @@ class ShareCell: UICollectionViewCell {
     @IBOutlet var content: UILabel!
     @IBOutlet var goodBtn: UIButton!
     @IBOutlet var userName: UILabel!
+    @IBOutlet var categoryLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

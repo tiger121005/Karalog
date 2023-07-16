@@ -27,12 +27,27 @@ struct LineMarkView: View {
             
         }
         .chartYScale(domain: minRange(min: min)...maxRange(max: max))
+//        .chartXAxis {
+//            AxisMarks(values: .automatic) { date in
+//                AxisGridLine()
+//            AxisTick()
+//            AxisValueLabel(format: .dateTime.day().month().year())
+//            }
+//        }
+        .chartXAxis {
+            AxisMarks(values: sampleData.map{$0.date}) {
+                AxisValueLabel()
+                AxisGridLine()
+            }
+        }
+            
 //        .chartXAxis{
 //            AxisMarks(
 //                values: xTitles(data: sampleData)
 //            ){
-//                AxisValueLabel<>
+//                AxisValueLabel(format: .dateTime.day().month().year())
 //            }
+//
 //            AxisMarks(
 //                values: xValues(data: sampleData)
 //            ){
@@ -74,8 +89,10 @@ struct LineMarkView: View {
         var values: [String] = []
         for i in data {
             let d = Function.shared.dateFromString(string: i.date, format: "yy年MM月dd日HH:mm")
-            let s = Function.shared.stringFromDate(date: d, format: "yy/MM/dd")
+            let s = Function.shared.stringFromDate(date: d, format: "MM/dd")
             values.append(s)
+            print("values2222222222", values)
+            print("6666666666666666", sampleData.map{$0.date})
         }
         return values
     }
@@ -88,3 +105,14 @@ struct LineMarkView: View {
         return values
     }
 }
+
+//extension LineMarkView: IAxisValueFormatter {
+//
+//    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+//        if axis is XAxis {
+//            // do something you need for X axis
+//            return valueTransformedToString
+//        }
+//    }
+//
+//}

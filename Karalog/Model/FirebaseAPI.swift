@@ -206,6 +206,68 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    func searchPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
+        
+        if first {
+            if music != "" {
+                if artist != "" {
+                    if category != [] {
+                        shareRef
+                            .whereField("musicName", isGreaterThanOrEqualTo: music)
+                            .whereField("artistName", isGreaterThanOrEqualTo: artist)
+                            .order(by: "musicName")
+                            .order(by: "artistName")
+                            .whereField("category", in: category)
+                            .order(by: "time", descending: true)
+                            .limit(to: 10)
+                            .getDocuments { (collection, err) in
+                                var list: [Post] = []
+                                if let _err = err {
+                                    print("Error getting post: \(String(describing: _err))")
+                                    completionHandler([])
+                                }else{
+                                    print(1111111, collection!.documents)
+                                    for document in collection!.documents {
+                                        do{
+                                            list.append(try document.data(as: Post.self))
+                                        }catch{
+                                            print(error)
+                                        }
+                                        
+                                    }
+                                    
+                                    self.postDocuments = collection!.documents
+                                    completionHandler(list)
+                                    print(222222222222, list)
+                                    
+                                }
+                            }
+                    } else {
+                        
+                    }
+                } else if category != [] {
+                    
+                } else {
+                    
+                }
+            } else {
+                if artist != "" {
+                    if category != [] {
+                        
+                    } else {
+                        
+                    }
+                } else if category != [] {
+                    
+                } else {
+                    
+                }
+            }
+        
+            
+        }
+    }
+    
     //musicListに追加
     func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String, completionHandler: @escaping (Any) -> Void) {
         let detailData = ["time": time, "score": score, "key": key, "model": model, "comment": comment] as [String : Any]
@@ -302,10 +364,9 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func post(musicName: String, artistName: String, musicImage: Data, musicID: Int, content: String, category: [String]) {
+    func post(musicName: String, artistName: String, musicImage: Data, content: String, category: [String]) {
         let time = Timestamp(date: Date())
         shareRef.addDocument(data: [
-            "musicID": musicID,
             "musicName": musicName,
             "artistName": artistName,
             "musicImage": musicImage,

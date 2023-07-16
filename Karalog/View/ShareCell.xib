@@ -11,10 +11,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="shareCell" id="vyg-nl-THw" customClass="ShareCell" customModule="Karalog" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="313" height="215"/>
+            <rect key="frame" x="0.0" y="0.0" width="313" height="287"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mlS-9X-pL6">
-                <rect key="frame" x="0.0" y="0.0" width="313" height="215"/>
+                <rect key="frame" x="0.0" y="0.0" width="313" height="287"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="piN-up-avj">
@@ -38,20 +38,6 @@
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRs-En-pbP">
-                        <rect key="frame" x="16" y="171" width="44" height="44"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="44" id="Ph2-G4-WaK"/>
-                            <constraint firstAttribute="width" constant="44" id="Rtr-ic-c6G"/>
-                        </constraints>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system">
-                            <color key="baseForegroundColor" name="imageColor"/>
-                        </buttonConfiguration>
-                        <connections>
-                            <action selector="touchGoodBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="big-Os-6bI"/>
-                        </connections>
-                    </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
                         <rect key="frame" x="90" y="37" width="63" height="22"/>
                         <constraints>
@@ -63,8 +49,8 @@
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oav-eW-QBO">
-                        <rect key="frame" x="0.0" y="67" width="313" height="105"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oav-eW-QBO">
+                        <rect key="frame" x="16" y="66" width="281" height="130"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="eZD-Z2-rIt"/>
                         </constraints>
@@ -72,46 +58,74 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-wK-aWj">
-                        <rect key="frame" x="237" y="180" width="76" height="31"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-wK-aWj">
+                        <rect key="frame" x="64" y="216" width="233" height="20.333333333333343"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="31" id="4ao-Kf-3zx"/>
+                            <constraint firstAttribute="height" constant="20.329999999999998" id="ed7-8g-NNn"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRs-En-pbP">
+                        <rect key="frame" x="16" y="204" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="JKt-12-bzP"/>
+                            <constraint firstAttribute="width" constant="44" id="lb4-WG-kjd"/>
+                        </constraints>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system">
+                            <color key="baseForegroundColor" name="imageColor"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="touchGoodBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="big-Os-6bI"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5w3-QY-XaB">
+                        <rect key="frame" x="16" y="256" width="281" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="DZl-DY-ngY"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="pjs-wK-aWj" secondAttribute="bottom" constant="5" id="7o7-RF-ZcT"/>
+                    <constraint firstAttribute="trailing" secondItem="pjs-wK-aWj" secondAttribute="trailing" constant="16" id="0Sf-i5-f3S"/>
+                    <constraint firstItem="pjs-wK-aWj" firstAttribute="leading" secondItem="kRs-En-pbP" secondAttribute="trailing" constant="4" id="1xw-EG-xp5"/>
+                    <constraint firstItem="pjs-wK-aWj" firstAttribute="centerY" secondItem="kRs-En-pbP" secondAttribute="centerY" id="587-gu-v3m"/>
+                    <constraint firstAttribute="bottom" secondItem="5w3-QY-XaB" secondAttribute="bottom" constant="10" id="9JY-z3-9WX"/>
+                    <constraint firstItem="5w3-QY-XaB" firstAttribute="top" secondItem="kRs-En-pbP" secondAttribute="bottom" constant="8" id="AVo-yz-QEV"/>
                     <constraint firstItem="YCy-vB-0lA" firstAttribute="top" secondItem="7tD-s4-apj" secondAttribute="bottom" constant="4" id="HIR-dt-UPk"/>
                     <constraint firstItem="oav-eW-QBO" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="Ib8-ac-bhE"/>
                     <constraint firstAttribute="trailing" secondItem="oav-eW-QBO" secondAttribute="trailing" constant="16" id="JYw-fA-K9u"/>
                     <constraint firstItem="7tD-s4-apj" firstAttribute="leading" secondItem="piN-up-avj" secondAttribute="trailing" constant="29" id="LQK-h0-plS"/>
                     <constraint firstItem="piN-up-avj" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="MEn-lj-bvD"/>
-                    <constraint firstAttribute="bottom" secondItem="kRs-En-pbP" secondAttribute="bottom" id="Pz6-ii-Ld9"/>
+                    <constraint firstItem="kRs-En-pbP" firstAttribute="top" secondItem="oav-eW-QBO" secondAttribute="bottom" constant="8" id="MHc-66-yp4"/>
                     <constraint firstItem="YCy-vB-0lA" firstAttribute="leading" secondItem="piN-up-avj" secondAttribute="trailing" constant="29" id="UK9-nv-p5t"/>
                     <constraint firstItem="piN-up-avj" firstAttribute="top" secondItem="mlS-9X-pL6" secondAttribute="top" constant="11" id="azX-0j-eaD"/>
                     <constraint firstItem="oav-eW-QBO" firstAttribute="top" secondItem="YCy-vB-0lA" secondAttribute="bottom" constant="7" id="eMc-IK-zZt"/>
                     <constraint firstItem="oav-eW-QBO" firstAttribute="centerX" secondItem="mlS-9X-pL6" secondAttribute="centerX" id="iMa-HG-e10"/>
-                    <constraint firstItem="kRs-En-pbP" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="pBv-Xy-O2C"/>
+                    <constraint firstAttribute="trailing" secondItem="5w3-QY-XaB" secondAttribute="trailing" constant="16" id="j3t-bc-Z4h"/>
                     <constraint firstItem="7tD-s4-apj" firstAttribute="top" secondItem="mlS-9X-pL6" secondAttribute="top" constant="11" id="r1d-Kd-T2v"/>
-                    <constraint firstAttribute="trailing" secondItem="pjs-wK-aWj" secondAttribute="trailing" constant="16" id="ya5-zm-2n6"/>
-                    <constraint firstItem="kRs-En-pbP" firstAttribute="top" secondItem="oav-eW-QBO" secondAttribute="bottom" id="zHH-hC-0r1"/>
+                    <constraint firstItem="kRs-En-pbP" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="xNC-tR-dFb"/>
+                    <constraint firstItem="5w3-QY-XaB" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="y64-Fp-Onp"/>
                 </constraints>
             </collectionViewCellContentView>
             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-            <size key="customSize" width="313" height="212"/>
+            <size key="customSize" width="313" height="284"/>
             <connections>
                 <outlet property="artistName" destination="YCy-vB-0lA" id="bhs-4Y-l9E"/>
+                <outlet property="categoryLabel" destination="5w3-QY-XaB" id="5kw-bQ-FKr"/>
                 <outlet property="content" destination="oav-eW-QBO" id="XP8-sr-dAf"/>
                 <outlet property="goodBtn" destination="kRs-En-pbP" id="ho3-wF-na0"/>
                 <outlet property="musicImage" destination="piN-up-avj" id="0mj-hz-DvR"/>
                 <outlet property="musicName" destination="7tD-s4-apj" id="Edo-wV-fs9"/>
                 <outlet property="userName" destination="pjs-wK-aWj" id="Nmw-QS-4Vb"/>
             </connections>
-            <point key="canvasLocation" x="304.58015267175574" y="60.91549295774648"/>
+            <point key="canvasLocation" x="333.58778625954199" y="79.929577464788736"/>
         </collectionViewCell>
     </objects>
     <resources>
@@ -124,6 +138,9 @@
         </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

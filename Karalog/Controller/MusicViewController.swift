@@ -24,7 +24,9 @@ class MusicViewController: UIViewController {
     var musicID: String!
     //次のviewに渡すdata
     var musicName = ""
+    var artistName = ""
     var musicData: [MusicData] = []
+    var musicImage: Data!
     let sortList: [String] = ["追加順(遅)", "追加順(早)", "スコア順(高)", "スコア順(低)", "曲名順(早)", "曲名順(遅)", "アーティスト順(早)", "アーティスト順(遅)"]
     
     
@@ -65,15 +67,21 @@ class MusicViewController: UIViewController {
         if segue.identifier == "toAddToList" {
             let nextView = segue.destination as! AddToListViewController
             idList = []
-            let indexPathList = tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
-            for i in indexPathList {
-                idList.append(tvList[i.row].id!)
+            if tableView.indexPathsForSelectedRows != nil {
+                let indexPathList = tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
+                for i in indexPathList {
+                    idList.append(tvList[i.row].id!)
+                }
+            } else {
+                idList = [musicID]
             }
             nextView.idList = idList
         }else if segue.identifier == "toMusicDetail" {
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicName = musicName
+            nextView.artistName = artistName
             nextView.musicID = musicID
+            nextView.musicImage = musicImage
             
         }
     }
@@ -335,7 +343,7 @@ extension MusicViewController: UITableViewDataSource {
         return tvList.count
     }
     
-    //セクションを生成
+    //セルを生成
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //tableView.bounds.widthはスマホの横幅を取得するメソッド
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell1", for: indexPath) as! TableViewCell1
@@ -348,6 +356,23 @@ extension MusicViewController: UITableViewDataSource {
         cell.artistLabel?.text = tvList[indexPath.row].artistName
         let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
+        let scoreList = tvList[indexPath.row].data.map{$0.score}
+        let max = scoreList.max()
+        if max! >= 95.0 {
+            cell.colorImage.tintColor = .red
+        } else if max! >= 90 {
+            cell.colorImage.tintColor = .orange
+        } else if max! >= 85 {
+            cell.colorImage.tintColor = .yellow
+        } else if max! >= 80 {
+            cell.colorImage.tintColor = .green
+        } else if max! >= 75 {
+            cell.colorImage.tintColor = .cyan
+        } else if max! >= 70 {
+            cell.colorImage.tintColor = .blue
+        } else {
+            cell.colorImage.tintColor = .purple
+        }
         
         if tvList[indexPath.row].favorite == false {
             cell.favoriteBtn?.setImage(UIImage(systemName: "star"), for: .normal)
@@ -396,13 +421,29 @@ extension MusicViewController: UITableViewDelegate {
         if isEditing == false {
             musicData = tvList[indexPath.row].data
             musicName = tvList[indexPath.row].musicName
+            artistName = tvList[indexPath.row].artistName
             musicID = tvList[indexPath.row].id
+            musicImage = tvList[indexPath.row].musicImage
             if searchBar.isFirstResponder {
                 searchBar.resignFirstResponder()
             }
             performSegue(withIdentifier: "toMusicDetail", sender: nil)
             tableView.deselectRow(at: indexPath, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let addList = UIAction(title: "リストに追加") {_ in
+            self.musicID = self.tvList[indexPath.row].id
+            self.performSegue(withIdentifier: "toAddToList", sender: nil)
+        }
+        
+        let menu = UIMenu(title: "選択", image: nil, identifier: nil, options: [], children: [addList])
+                let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+                    menu
+                }
+                
+                return contextMenuConfiguration
     }
     
 }

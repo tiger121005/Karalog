@@ -12,7 +12,6 @@ class PostViewController: UIViewController {
     var musicName: String = ""
     var artistName: String = ""
     var musicImage: Data!
-    var musicID: Int!
     var category: [String] = []
     var alertCtl: UIAlertController!
     
@@ -21,7 +20,7 @@ class PostViewController: UIViewController {
     @IBOutlet var addCategoryBtn: UIButton!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var categoryLabel: UILabel!
-    @IBOutlet var contentTV: UITextView!
+    @IBOutlet var textView: UITextView!
     @IBOutlet var postBtn: CustomButton!
     
 
@@ -30,7 +29,7 @@ class PostViewController: UIViewController {
 
         setUpMusic()
         setupTableView()
-        
+//        setupKeyboard()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -40,6 +39,9 @@ class PostViewController: UIViewController {
             tapOutTableView()
         }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
             tapOutTableView()
+        }
+        if textView.isFirstResponder {
+            textView.resignFirstResponder()
         }
     }
     
@@ -79,13 +81,18 @@ class PostViewController: UIViewController {
         tableView.allowsMultipleSelection = true
     }
     
+//    func setupKeyboard() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
+//        self.view.addGestureRecognizer(tapGesture)
+//    }
+    
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()
     }
 
     @IBAction func tapPost() {
         
-        FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, musicID: musicID, content: contentTV.text, category: category)
+        FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: textView.text, category: category)
         let screenIndex = navigationController!.viewControllers.count - 3
         self.navigationController?.popToViewController(navigationController!.viewControllers[screenIndex], animated: true)
     }
@@ -96,6 +103,12 @@ class PostViewController: UIViewController {
             setUpCategory()
         }
     }
+    
+//    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
+//        if textView.isFirstResponder {
+//            self.textView.resignFirstResponder()
+//        }
+//    }
 }
 
 extension PostViewController: UITableViewDelegate {

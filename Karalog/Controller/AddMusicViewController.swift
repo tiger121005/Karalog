@@ -18,8 +18,9 @@ class AddMusicViewController: UIViewController {
     var alertCtl: UIAlertController!
     var callView = true
     var scaleList: [UIView] = []
+    var post = false
     
-    @IBOutlet var scroll: UIScrollView!
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var musicTF: UITextField!
     @IBOutlet var artistTF: UITextField!
     @IBOutlet var scoreTF: UITextField!
@@ -28,6 +29,7 @@ class AddMusicViewController: UIViewController {
     @IBOutlet var textView: UITextView!
     @IBOutlet var addBtn: CustomButton!
     @IBOutlet var customSlider: CustomSliderView!
+    @IBOutlet var checkBox: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,6 +165,10 @@ class AddMusicViewController: UIViewController {
     @IBAction func tapAddBtn(_ sender: Any) {
         
         if Double(scoreTF.text!) != nil {
+            if post {
+                let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
+                FirebaseAPI.shared.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: [])
+            }
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
             df.timeZone = TimeZone.current
@@ -184,6 +190,10 @@ class AddMusicViewController: UIViewController {
         
     }
     
+    @IBAction func tapCheckBox() {
+        post.toggle()
+    }
+    
     //機種設定
     enum modelMenuType: String {
         case 未選択 = "未選択"
@@ -197,36 +207,41 @@ class AddMusicViewController: UIViewController {
         // キーボード、画面全体、textFieldのsizeを取得
         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         guard let _keyboardHeight = rect?.size.height else { return }
+        print(11111111111111)
+        print(textView.frame.maxY)
+        print(textView.frame.minY)
+        print(scrollView.frame.height)
+        print(scrollView.frame.minY)
+        print(_keyboardHeight)
+        print(UIScreen.main.bounds.height)
+        print(self.view.safeAreaInsets.top)
+        print(self.view.safeAreaInsets.bottom)
+        print(22222222222222)
         let screenHeight = UIScreen.main.bounds.height
         let safeAreaTop = self.view.safeAreaInsets.top
         let safeAreaBottom = self.view.safeAreaInsets.bottom
         let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-        let scrollPosition = scroll.contentOffset.y
-        // ナビゲーションバーの高さを取得する
-        let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(44)
-        let tabbarHeight = self.tabBarController?.tabBar.frame.size.height ?? CGFloat(48)
-        let keyboardPositionY = safeAreaHeight - _keyboardHeight - navigationBarHeight
-        
-        print(keyboardPositionY + scrollPosition)
-        print(addBtn.frame.maxY)
-        print(safeAreaHeight)
+        let scrollPosition = scrollView.contentOffset.y
+        let keyboardPositionY = safeAreaHeight + safeAreaBottom - _keyboardHeight
+        print(keyboardPositionY)
             
-        if keyboardPositionY + scrollPosition <= addBtn.frame.maxY {
-            scroll.setContentOffset(CGPoint.init(x: 0, y: addBtn.frame.maxY - safeAreaHeight + keyboardPositionY - tabbarHeight), animated: true)
+        if keyboardPositionY + scrollPosition <= textView.frame.maxY && textView.isFirstResponder {
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.minY - keyboardPositionY), animated: true)
         }
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
+        
         let screenHeight = UIScreen.main.bounds.height
         let safeAreaTop = self.view.safeAreaInsets.top
         let safeAreaBottom = self.view.safeAreaInsets.bottom
         let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
         // ナビゲーションバーの高さを取得する
         let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
-        if addBtn.frame.maxY - safeAreaHeight > 0 && callView == false {
-            scroll.setContentOffset(CGPoint.init(x: 0, y: addBtn.frame.maxY - safeAreaHeight), animated: true)
+        if checkBox.frame.maxY - screenHeight > 0 && textView.isFirstResponder {
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: checkBox.frame.maxY - screenHeight), animated: true)
         }else{
-            scroll.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
         }
     }
     
