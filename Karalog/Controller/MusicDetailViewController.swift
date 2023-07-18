@@ -112,7 +112,7 @@ class MusicDetailViewController: UIViewController {
         bestLabel.text = String(format: "%.3f", max)
         min = scoreList.min()!
         
-        let vc: UIHostingController = UIHostingController(rootView: LineMarkView(sampleData: a, max: max, min: min))
+        let vc: UIHostingController = UIHostingController(rootView: LineMarkView(sampleData: a, max: max, min: min, maxWidth: UIScreen.main.bounds.width - 1))
         
         self.addChild(vc)
         graphView.addSubview(vc.view)

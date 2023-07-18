@@ -13,10 +13,10 @@ struct LineMarkView: View {
     var sampleData: [SampleData] = []
     var max: Double = 0.0
     var min: Double = 0.0
+    var maxWidth = 0.0
     
     var body: some View {
         ScrollViewReader { scrollProxy in
-            
             
             ScrollView(.horizontal) {
                 
@@ -37,7 +37,7 @@ struct LineMarkView: View {
                     
                 }
                 .id(1)
-                .frame(width: (CGFloat(sampleData.count) * 45) + 19)
+                .frame(width: width())
                 .chartYScale(domain: minRange(min: min)...maxRange(max: max))
                 .foregroundColor(Color("imageColor"))
                 .padding(.top)
@@ -54,7 +54,7 @@ struct LineMarkView: View {
     }
     
     func maxRange(max: Double) -> Double {
-        var x = ceil(max/5)*5
+        var x = max + 3
         print("iiiiiiiiii", x)
         if x > 100 {
             x = 100
@@ -65,7 +65,7 @@ struct LineMarkView: View {
     }
     
     func minRange(min: Double) -> Double {
-        var n = floor(min/5)*5
+        var n = min - 3
         print("uuuuuuuuu", n)
         if n < 0 {
             n = 0
@@ -75,24 +75,13 @@ struct LineMarkView: View {
         return n
     }
     
-    func xTitles(data: [SampleData]) -> [String] {
-        var values: [String] = []
-        for i in data {
-            let d = Function.shared.dateFromString(string: i.date, format: "yy年MM月dd日HH:mm")
-            let s = Function.shared.stringFromDate(date: d, format: "MM/dd")
-            values.append(s)
-            print("values2222222222", values)
-            print("6666666666666666", sampleData.map{$0.date})
+    func width() -> CGFloat {
+        let wid = CGFloat(sampleData.count) * 45 + 19
+        if maxWidth >= wid {
+            return maxWidth
+        } else {
+            return wid
         }
-        return values
-    }
-    
-    func xValues(data: [SampleData]) -> [String] {
-        var values: [String] = []
-        for i in data {
-            values.append(i.date)
-        }
-        return values
     }
 }
 

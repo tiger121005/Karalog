@@ -218,6 +218,18 @@ class ShareViewController: UIViewController {
         self.searchViewTopConstraint.constant -= self.searchView.frame.height
         
     }
+    
+    func showGoodNumber(n: Int) -> String {
+        if n <= 9999 {
+            return String(n)
+        } else if n <= 99999999 {
+            return "\(Int(n/10000))万"
+        } else if n <= 999999999999 {
+            return "\(Int(n/100000000))億"
+        } else {
+            return "\(Int(n/1000000000000))兆"
+        }
+    }
 }
 
 extension ShareViewController: UICollectionViewDelegate {
@@ -255,6 +267,7 @@ extension ShareViewController: UICollectionViewDataSource {
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
             goodList.append(false)
         }
+        cell.goodNumLabel.text = showGoodNumber(n:shareList[indexPath.row].goodNumber)
         
         return cell
     }
@@ -287,9 +300,20 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
 
 extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
         FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
+        if goodList[indexPath.row] {
+            shareList[indexPath.row].goodNumber -= 1
+            print(true)
+        } else {
+            shareList[indexPath.row].goodNumber += 1
+            print(false)
+        }
+        print(shareList[indexPath.row].goodNumber)
+        cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
         goodList[indexPath.row].toggle()
+        
         
         collectionView.reloadData()
     }
