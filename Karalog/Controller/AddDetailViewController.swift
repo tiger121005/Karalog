@@ -22,6 +22,7 @@ class AddDetailViewController: UIViewController {
     var callView = true
     var scaleList: [UIView] = []
     var post = false
+    var category: [String] = []
     
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var customSlider: CustomSliderView!
@@ -32,7 +33,9 @@ class AddDetailViewController: UIViewController {
     @IBOutlet var scroll: UIScrollView!
     @IBOutlet var scrollView: UIView!
     @IBOutlet var checkBox: UIView!
-    
+    @IBOutlet var categoryView: UIView!
+    @IBOutlet var categoryLabel: UILabel!
+    @IBOutlet var tableView: UITableView!
     
     
     override func viewDidLoad() {
@@ -43,7 +46,7 @@ class AddDetailViewController: UIViewController {
         setupKeyLabel()
         getTimingKeyboard()
         setupKeyboard()
-        
+        setupCategoryView()
         
     }
     
@@ -129,6 +132,37 @@ class AddDetailViewController: UIViewController {
 //    func setupScale() {
 //        keySlider.thumbRadius
 //    }
+    
+    func setupCategoryView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.isHidden = true
+        tableView.allowsMultipleSelection = true
+        categoryView.isHidden = true
+    }
+    
+    func setupCategory() {
+        categoryLabel.numberOfLines = 0
+        if let _indexPathList = self.tableView.indexPathsForSelectedRows {
+            var text = ""
+            var newLine = false
+            for i in _indexPathList {
+                if newLine {
+                    text += "\n#" + Material.shared.categoryList[i.row]
+                    category.append(Material.shared.categoryList[i.row])
+                }else {
+                    text = "#" + Material.shared.categoryList[i.row]
+                    newLine = true
+                    category = [Material.shared.categoryList[i.row]]
+                    
+                }
+            }
+            categoryLabel.text = text
+        } else {
+            categoryLabel.text = ""
+            category = []
+        }
+    }
 
     @IBAction func editingChanged(_ sender: Any) {
         if Double(scoreTF.text!) ?? 0 >= 100 {
@@ -166,14 +200,13 @@ class AddDetailViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     @IBAction func tapAddBtn() {
         if Double(scoreTF.text!) != nil {
             if post {
                 let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: [])
+                FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: category)
             }
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
@@ -200,6 +233,11 @@ class AddDetailViewController: UIViewController {
     
     @IBAction func tapCheckBox() {
         post.toggle()
+        categoryView.isHidden.toggle()
+    }
+    
+    @IBAction func tapAddCategory() {
+        tableView.isHidden.toggle()
     }
     
     //機種設定
@@ -270,5 +308,51 @@ extension AddDetailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         scoreTF.resignFirstResponder()
         return true
+    }
+}
+
+extension AddDetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(9999999999)
+        let cell = tableView.cellForRow(at: indexPath)
+        if tableView.indexPathsForSelectedRows!.count <= 5 {
+            cell?.accessoryType = .checkmark
+            setupCategory()
+        }else{
+            func alert(title: String, message: String) {
+                alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alertCtl, animated: true)
+            }
+            alert(title: "入力ミス", message: "選択できるのは5個までです")
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at:indexPath)
+        cell?.accessoryType = .none
+        setupCategory()
+    }
+}
+
+extension AddDetailViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Material.shared.categoryList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        
+        cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
+        cell.selectionStyle = .none
+        // セルの状態を確認しチェック状態を反映する
+        let selectedIndexPaths = tableView.indexPathsForSelectedRows
+        if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        return cell
     }
 }

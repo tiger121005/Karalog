@@ -15,7 +15,6 @@ class ShareViewController: UIViewController {
     var category: [String] = []
     var alertCtl: UIAlertController!
     var searchViewHidden = true
-    var search = false
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -28,7 +27,6 @@ class ShareViewController: UIViewController {
     @IBOutlet var topView: UIView!
     @IBOutlet var searchViewTopConstraint: NSLayoutConstraint!
     
-    
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
         didSet{
             flowLayout.minimumLineSpacing = 1
@@ -37,38 +35,6 @@ class ShareViewController: UIViewController {
             flowLayout.scrollDirection = .vertical
             flowLayout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         }
-    }
-    
-    @IBAction func tapAddCategory() {
-        tableView.isHidden.toggle()
-    }
-    
-    @IBAction func tapSearchViewBtn() {
-        if searchViewHidden == true {
-            showSearchView()
-        } else {
-            hideSearchView()
-        }
-    }
-    
-    @IBAction func tapSearchBtn() {
-        search = true
-        FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
-            self.shareList = list
-            self.collectionView.reloadData()
-        })
-        hideSearchView()
-        tableView.isHidden = true
-    }
-    
-    @IBAction func clear() {
-        search = false
-        FirebaseAPI.shared.getPost(first: true, completionHandler: { list in
-            self.shareList = list
-            self.collectionView.reloadData()
-        })
-        hideSearchView()
-        tableView.isHidden = true
     }
     
     override func viewDidLoad() {
@@ -81,7 +47,7 @@ class ShareViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        FirebaseAPI.shared.getPost(first: true, completionHandler: {list in
+        FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: {list in
             self.shareList = list
             self.collectionView.reloadData()
         })
@@ -120,7 +86,7 @@ class ShareViewController: UIViewController {
         collectionView.collectionViewLayout = compositionalLayout
     }
     
-    func setUpCategory() {
+    func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text = ""
@@ -176,7 +142,6 @@ class ShareViewController: UIViewController {
     func tapOutTableView () {
         if tableView.isHidden == false {
             tableView.isHidden = true
-            setUpCategory()
         }
     }
     
@@ -230,6 +195,41 @@ class ShareViewController: UIViewController {
             return "\(Int(n/1000000000000))兆"
         }
     }
+    
+    @IBAction func tapAddCategory() {
+        tableView.isHidden.toggle()
+    }
+    
+    @IBAction func tapSearchViewBtn() {
+        if searchViewHidden == true {
+            showSearchView()
+        } else {
+            hideSearchView()
+        }
+    }
+    
+    @IBAction func tapSearchBtn() {
+        FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
+            self.shareList = list
+            self.collectionView.reloadData()
+        })
+        hideSearchView()
+        tableView.isHidden = true
+    }
+    
+    @IBAction func clear() {
+        musicTF.text = ""
+        artistTF.text = ""
+        category = []
+        categoryLabel.text = ""
+        FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [],  completionHandler: { list in
+            self.shareList = list
+            self.collectionView.reloadData()
+        })
+        hideSearchView()
+        tableView.isHidden = true
+    }
+    
 }
 
 extension ShareViewController: UICollectionViewDelegate {
@@ -272,28 +272,17 @@ extension ShareViewController: UICollectionViewDataSource {
         return cell
     }
     
-    
 }
 
 extension ShareViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // スクロールが最下部に達したら次のページのデータを取得
-        if search {
-            if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
-                FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
-                    self.shareList.append(contentsOf: list)
-                    collectionView.reloadData()
-                })
-            }
-        } else {
-            if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
-                FirebaseAPI.shared.getPost(first: false, completionHandler: { list in
-                    self.shareList.append(contentsOf: list)
-                    collectionView.reloadData()
-                    
-                })
-            }
+        if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
+            FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
+                self.shareList.append(contentsOf: list)
+                collectionView.reloadData()
+            })
         }
     }
 }
@@ -314,10 +303,8 @@ extension ShareViewController: ShareCellDelegate {
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
         goodList[indexPath.row].toggle()
         
-        
         collectionView.reloadData()
     }
-
 }
 
 extension ShareViewController: UITableViewDelegate {
@@ -325,7 +312,7 @@ extension ShareViewController: UITableViewDelegate {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setUpCategory()
+            setupCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -336,11 +323,11 @@ extension ShareViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
-
+    
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setUpCategory()
+        setupCategory()
     }
 }
 
@@ -364,6 +351,5 @@ extension ShareViewController: UITableViewDataSource {
         
         return cell
     }
-    
     
 }

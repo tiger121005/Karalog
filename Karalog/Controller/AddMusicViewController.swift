@@ -19,6 +19,7 @@ class AddMusicViewController: UIViewController {
     var callView = true
     var scaleList: [UIView] = []
     var post = false
+    var category: [String] = []
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var musicTF: UITextField!
@@ -30,6 +31,10 @@ class AddMusicViewController: UIViewController {
     @IBOutlet var addBtn: CustomButton!
     @IBOutlet var customSlider: CustomSliderView!
     @IBOutlet var checkBox: UIView!
+    @IBOutlet var categoryView: UIView!
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var addCategoryBtn: UIButton!
+    @IBOutlet var categoryLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +44,7 @@ class AddMusicViewController: UIViewController {
         setupKeyLabel()
         setupKeyboard()
         getTimingKeyboard()
-        
+        setupCategeoryView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,6 +70,20 @@ class AddMusicViewController: UIViewController {
             }
             callView = false
         }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch = touches.first!
+        let location: CGPoint = touch.location(in: self.view)
+        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
+            tapOutTableView()
+        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
+            tapOutTableView()
+        }
+        if textView.isFirstResponder {
+            textView.resignFirstResponder()
+        }
+        print(666666666)
     }
     
     func setupTextField() {
@@ -124,6 +143,47 @@ class AddMusicViewController: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
     }
     
+    func setupCategeoryView() {
+        categoryView.isHidden = true
+        tableView.isHidden = true
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.allowsMultipleSelection = true
+        tableView.rowHeight = 44
+    }
+    
+    func setupCategory() {
+        categoryLabel.numberOfLines = 0
+        if let _indexPathList = self.tableView.indexPathsForSelectedRows {
+            print(8888888888)
+            var text = ""
+            var newLine = false
+            for i in _indexPathList {
+                if newLine {
+                    text += "\n#" + Material.shared.categoryList[i.row]
+                    category.append(Material.shared.categoryList[i.row])
+                }else {
+                    text = "#" + Material.shared.categoryList[i.row]
+                    newLine = true
+                    category = [Material.shared.categoryList[i.row]]
+                    
+                }
+            }
+            categoryLabel.text = text
+        } else {
+            print(777777777777)
+            categoryLabel.text = ""
+            category = []
+        }
+    }
+    
+    func tapOutTableView () {
+        if tableView.isHidden == false {
+            tableView.isHidden = true
+            setupCategory()
+        }
+    }
+    
     @IBAction func editingChanged(_ sender: Any) {
         if Double(scoreTF.text!) ?? 0 >= 100 {
             scoreTF.text = String(Double(scoreTF.text!)! / 10)
@@ -167,7 +227,7 @@ class AddMusicViewController: UIViewController {
         if Double(scoreTF.text!) != nil {
             if post {
                 let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                FirebaseAPI.shared.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: [])
+                FirebaseAPI.shared.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: category)
             }
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
@@ -192,6 +252,11 @@ class AddMusicViewController: UIViewController {
     
     @IBAction func tapCheckBox() {
         post.toggle()
+        categoryView.isHidden.toggle()
+    }
+    
+    @IBAction func tapAddCategory() {
+        tableView.isHidden.toggle()
     }
     
     //機種設定
@@ -273,4 +338,52 @@ extension AddMusicViewController: UITextFieldDelegate {
         scoreTF.resignFirstResponder()
         return true
     }
+}
+
+extension AddMusicViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(9999999999999)
+        let cell = tableView.cellForRow(at: indexPath)
+        if tableView.indexPathsForSelectedRows!.count <= 5 {
+            cell?.accessoryType = .checkmark
+            setupCategory()
+        }else{
+            func alert(title: String, message: String) {
+                alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alertCtl, animated: true)
+            }
+            alert(title: "入力ミス", message: "選択できるのは5個までです")
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at:indexPath)
+        cell?.accessoryType = .none
+        setupCategory()
+    }
+}
+
+extension AddMusicViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Material.shared.categoryList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        
+        cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
+        cell.selectionStyle = .none
+        // セルの状態を確認しチェック状態を反映する
+        let selectedIndexPaths = tableView.indexPathsForSelectedRows
+        if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        return cell
+    }
+    
+    
 }

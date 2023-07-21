@@ -50,7 +50,7 @@ class PostViewController: UIViewController {
         artistLabel.text = artistName
     }
     
-    func setUpCategory() {
+    func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text = ""
@@ -100,7 +100,6 @@ class PostViewController: UIViewController {
     func tapOutTableView () {
         if tableView.isHidden == false {
             tableView.isHidden = true
-            setUpCategory()
         }
     }
     
@@ -116,7 +115,7 @@ extension PostViewController: UITableViewDelegate {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setUpCategory()
+            setupCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -131,7 +130,7 @@ extension PostViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setUpCategory()
+        setupCategory()
     }
 }
 
