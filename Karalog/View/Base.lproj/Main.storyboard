@@ -1256,15 +1256,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00.000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNO-oT-ceu">
-                                <rect key="frame" x="37.666666666666657" y="122" width="318" height="48"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="318" id="juv-39-prI"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aHa-EB-JB2">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
                                 <color key="backgroundColor" name="imageColor"/>
@@ -1279,24 +1270,33 @@
                                     <constraint firstAttribute="height" constant="205" id="oNF-iB-m7Z"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00.000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNO-oT-ceu">
+                                <rect key="frame" x="37.666666666666657" y="117" width="318" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="318" id="juv-39-prI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="46"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mCB-O2-vcj"/>
                         <color key="backgroundColor" name="baseColor"/>
                         <constraints>
-                            <constraint firstItem="SNO-oT-ceu" firstAttribute="top" secondItem="cGq-1T-heQ" secondAttribute="bottom" constant="5" id="9P7-OE-Cqe"/>
                             <constraint firstItem="PIs-bu-XeA" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="Muw-Av-k5z"/>
+                            <constraint firstItem="SNO-oT-ceu" firstAttribute="centerX" secondItem="eBM-FB-59j" secondAttribute="centerX" id="MwM-Nd-htt"/>
                             <constraint firstItem="PIs-bu-XeA" firstAttribute="top" secondItem="vcr-Py-LWe" secondAttribute="bottom" constant="1" id="cIt-mk-U2L"/>
                             <constraint firstItem="mCB-O2-vcj" firstAttribute="trailing" secondItem="vcr-Py-LWe" secondAttribute="trailing" constant="1" id="ftI-2L-UOT"/>
                             <constraint firstItem="cGq-1T-heQ" firstAttribute="top" secondItem="aHa-EB-JB2" secondAttribute="bottom" constant="45" id="h4m-sS-kBI"/>
-                            <constraint firstItem="SNO-oT-ceu" firstAttribute="centerX" secondItem="eBM-FB-59j" secondAttribute="centerX" id="ivO-XW-gkQ"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="top" secondItem="eBM-FB-59j" secondAttribute="top" id="j35-1U-Oo3"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="j46-rD-Qxf"/>
-                            <constraint firstItem="vcr-Py-LWe" firstAttribute="top" secondItem="SNO-oT-ceu" secondAttribute="bottom" constant="8" id="mSW-VT-Flr"/>
                             <constraint firstItem="cGq-1T-heQ" firstAttribute="centerX" secondItem="eBM-FB-59j" secondAttribute="centerX" id="nhb-iG-Wy7"/>
                             <constraint firstAttribute="bottom" secondItem="PIs-bu-XeA" secondAttribute="bottom" constant="30" id="r9U-GQ-hPn"/>
                             <constraint firstItem="vcr-Py-LWe" firstAttribute="leading" secondItem="mCB-O2-vcj" secondAttribute="leading" id="rCH-FG-iRH"/>
                             <constraint firstItem="PIs-bu-XeA" firstAttribute="trailing" secondItem="mCB-O2-vcj" secondAttribute="trailing" id="st1-Ic-3m4"/>
+                            <constraint firstItem="SNO-oT-ceu" firstAttribute="top" secondItem="cGq-1T-heQ" secondAttribute="bottom" id="tAm-yq-KTw"/>
                             <constraint firstItem="aHa-EB-JB2" firstAttribute="trailing" secondItem="mCB-O2-vcj" secondAttribute="trailing" id="tI1-Pp-cnh"/>
+                            <constraint firstItem="vcr-Py-LWe" firstAttribute="top" secondItem="SNO-oT-ceu" secondAttribute="bottom" constant="5" id="wqF-bK-vSd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ilb-UP-I1Z">

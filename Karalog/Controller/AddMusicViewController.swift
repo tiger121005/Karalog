@@ -39,10 +39,10 @@ class AddMusicViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupScroll()
         setupTextField()
         configureMenuButton()
         setupKeyLabel()
-        setupKeyboard()
         getTimingKeyboard()
         setupCategeoryView()
     }
@@ -72,18 +72,20 @@ class AddMusicViewController: UIViewController {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let location: CGPoint = touch.location(in: self.view)
-        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
-            tapOutTableView()
-        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
-            tapOutTableView()
-        }
-        if textView.isFirstResponder {
-            textView.resignFirstResponder()
-        }
-        print(666666666)
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        tapOutTableView()
+//
+//        musicTF.resignFirstResponder()
+//        artistTF.resignFirstResponder()
+//        scoreTF.resignFirstResponder()
+//        textView.resignFirstResponder()
+//
+//        print(666666666)
+//    }
+    
+    func setupScroll() {
+        scrollView.delegate = self
+        
     }
     
     func setupTextField() {
@@ -138,11 +140,6 @@ class AddMusicViewController: UIViewController {
         notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func setupKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
-        self.view.addGestureRecognizer(tapGesture)
-    }
-    
     func setupCategeoryView() {
         categoryView.isHidden = true
         tableView.isHidden = true
@@ -182,6 +179,18 @@ class AddMusicViewController: UIViewController {
             tableView.isHidden = true
             setupCategory()
         }
+    }
+    
+    func closeKeyboard() {
+        
+        self.textView.resignFirstResponder()
+        
+        self.scoreTF.resignFirstResponder()
+        
+        musicTF.resignFirstResponder()
+        artistTF.resignFirstResponder()
+        
+        print(55555555555)
     }
     
     @IBAction func editingChanged(_ sender: Any) {
@@ -310,17 +319,7 @@ class AddMusicViewController: UIViewController {
         }
     }
     
-    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
-        if textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        }else if scoreTF.isFirstResponder {
-            self.scoreTF.resignFirstResponder()
-        }else if musicTF.isFirstResponder {
-            musicTF.resignFirstResponder()
-        }else if artistTF.isFirstResponder {
-            artistTF.resignFirstResponder()
-        }
-    }
+    
 
 }
 
@@ -385,5 +384,12 @@ extension AddMusicViewController: UITableViewDataSource {
         return cell
     }
     
-    
+}
+
+extension UIScrollView {
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.next?.touchesBegan(touches, with: event)
+        
+        print(44444444444)
+    }
 }

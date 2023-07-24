@@ -29,20 +29,11 @@ class PostViewController: UIViewController {
 
         setUpMusic()
         setupTableView()
-//        setupKeyboard()
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let location: CGPoint = touch.location(in: self.view)
-        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
-            tapOutTableView()
-        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
-            tapOutTableView()
-        }
-        if textView.isFirstResponder {
-            textView.resignFirstResponder()
-        }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tapOutTableView()
+        textView.resignFirstResponder()
     }
     
     func setUpMusic() {
@@ -81,11 +72,6 @@ class PostViewController: UIViewController {
         tableView.allowsMultipleSelection = true
     }
     
-//    func setupKeyboard() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
-//        self.view.addGestureRecognizer(tapGesture)
-//    }
-    
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()
     }
@@ -103,11 +89,6 @@ class PostViewController: UIViewController {
         }
     }
     
-//    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
-//        if textView.isFirstResponder {
-//            self.textView.resignFirstResponder()
-//        }
-//    }
 }
 
 extension PostViewController: UITableViewDelegate {
