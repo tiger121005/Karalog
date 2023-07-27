@@ -15,6 +15,7 @@ class FirebaseAPI: ObservableObject {
     
     static let shared = FirebaseAPI()
     var userID = UserDefaults.standard.string(forKey: "userID")
+    var database = Firestore.firestore()
     var userRef: DocumentReference!
     var shareRef: CollectionReference!
     var musicRef: CollectionReference!
@@ -24,8 +25,8 @@ class FirebaseAPI: ObservableObject {
     
     init() {
         
-        userRef = Firestore.firestore().collection("user").document(userID!)
-        shareRef = Firestore.firestore().collection("share")
+        userRef = database.collection("user").document(userID!)
+        shareRef = database.collection("share")
         musicRef = userRef.collection("musicList")
         listRef = userRef.collection("lists")
         wannaRef = userRef.collection("wannaList")
@@ -37,20 +38,23 @@ class FirebaseAPI: ObservableObject {
         userRef.getDocument() { (document, err) in
             if let _err = err {
                 print("Error getting userName: \(_err)")
-            }else{
-                UserDefaults.standard.set(document?.data()!["name"] as! String, forKey: "userName")
+            } else {
+                UserDefaults.standard.set(document?["name"] as! String, forKey: "userName")
+                UserDefaults.standard.set(document?.documentID, forKey: "userID")
             }
         }
     }
     
-    func createGoodList() {
-        userRef.setData([
-            "goodList": []
-        ]) {err in
+    func getAnotherUser(id: String, completionHandler: @escaping (AnotherUser) -> Void) {
+        database.collection("user").document(id).getDocument{ (document, err) in
             if let _err = err {
-                print("Error adding goodList: \(_err)")
+                print("Error getting another user: \(_err)")
+                completionHandler(AnotherUser(follow: [], follower: []))
+            } else {
+                let follow = (document?["follow"] ?? []) as! [User]
+                let follower = (document?["follower"] ?? []) as! [User]
+                completionHandler(AnotherUser(follow: follow, follower: follower))
             }
-            
         }
     }
     
@@ -122,9 +126,9 @@ class FirebaseAPI: ObservableObject {
                 completionHandler([])
             } else {
                 for document in collection!.documents {
-                    let name = document["musicName"] as! String
-                    let artist = document["artistName"] as! String
-                    let image = document["musicImage"] as! Data
+                    let name = document.data()["musicName"] as! String
+                    let artist = document.data()["artistName"] as! String
+                    let image = document.data()["musicImage"] as! Data
                     let id = document.documentID
                     list.append(MusicList(musicName: name,
                                           artistName: artist,
@@ -601,6 +605,32 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    func searchUser(string: String, completionHandler: @escaping ([User]) -> Void) {
+        var list: [User] = []
+        database.collection("user")
+            .whereField("name", isEqualTo: string)
+            .getDocuments { (collection, err) in
+                
+                if let _err = err {
+                    print("Error getting user: \(_err)")
+                    
+                } else {
+                    for document in collection!.documents {
+                        let id = document.documentID
+                        list.append(User(name: string, id: id))
+                    }
+                }
+                self.database.collection("user").document(string).getDocument() { (document, err) in
+                    if let _err = err {
+                        print("Error getting user: \(_err)")
+                    } else {
+                        list.append(User(name: document?.data()!["name"] as! String, id: string))
+                    }
+                }
+                completionHandler(list)
+            }
+    }
+    
     //musicListに追加
     func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String, completionHandler: @escaping (Any) -> Void) {
         let detailData = ["time": time, "score": score, "key": key, "model": model, "comment": comment] as [String : Any]
@@ -616,7 +646,16 @@ class FirebaseAPI: ObservableObject {
                 print("Error adding music: \(_err)")
             }else{
                 print("music added")
-                Manager.shared.musicList.append(MusicList(musicName: musicName, artistName: artistName, musicImage: musicImage, favorite: false, lists: [], data: [MusicData(time: time, score: score, key: key, model: model, comment: comment)]))
+                Manager.shared.musicList.append(MusicList(musicName: musicName,
+                                                          artistName: artistName,
+                                                          musicImage: musicImage,
+                                                          favorite: false,
+                                                          lists: [],
+                                                          data: [MusicData(time: time,
+                                                                           score: score,
+                                                                           key: key,
+                                                                           model: model,
+                                                                           comment: comment)]))
                 
                 completionHandler(true)
             }
@@ -643,7 +682,11 @@ class FirebaseAPI: ObservableObject {
                 
             }
         }
-        Manager.shared.musicList[indexPath].data.append(MusicData(time: time, score: score, key: key, model: model, comment: comment))
+        Manager.shared.musicList[indexPath].data.append(MusicData(time: time,
+                                                                  score: score,
+                                                                  key: key,
+                                                                  model: model,
+                                                                  comment: comment))
     }
     
     //listを追加

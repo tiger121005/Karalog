@@ -279,7 +279,7 @@ class MusicViewController: UIViewController {
     func get() {
         FirebaseAPI.shared.getMusic(completionHandler: { musicList in
             self.tvList = musicList
-            Function.shared.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: {list in
+            Function.shared.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: { list in
                 self.tvList = list
                 
             })

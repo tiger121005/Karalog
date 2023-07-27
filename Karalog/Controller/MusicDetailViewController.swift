@@ -29,9 +29,12 @@ class MusicDetailViewController: UIViewController {
     @IBOutlet var bestLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var graphView: UIView!
+    @IBOutlet var leftTopEmphasize: UIView!
+    @IBOutlet var leftBottomEmphasize: UIView!
+    @IBOutlet var rightTopEmphasize: UIView!
+    @IBOutlet var rightBottomEmphasize: UIView!
+    @IBOutlet var emphasize: [UIView]!
     
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -70,23 +73,14 @@ class MusicDetailViewController: UIViewController {
         self.tableView.emptyDataSetSource = self
         self.tableView.emptyDataSetDelegate = self
     }
-
-    func selectBest() {
-        
-        
-    }
     
     func getData() {
         tvList = Manager.shared.musicList.first(where: {$0.id == musicID})!.data
-        selectBest()
-        print(Manager.shared.musicList.first(where: {$0.id == musicID})!.data)
-        
         tableView.reloadData()
     }
     
     func setupGraphAndLabel() {
         var a: [SampleData] = []
-        print(44444444444, tvList.map{$0.time})
         var start = true
         
         for i in tvList {
@@ -123,6 +117,29 @@ class MusicDetailViewController: UIViewController {
         vc.view.bottomAnchor.constraint(equalTo: graphView.bottomAnchor, constant: 0).isActive = true
         vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
         vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
+        
+        leftTopEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
+        leftBottomEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
+        rightTopEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
+        rightBottomEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
+        for i in emphasize {
+            if max >= 95.0 {
+                i.backgroundColor = .red
+            } else if max >= 90 {
+                i.backgroundColor = .orange
+            } else if max >= 85 {
+                i.backgroundColor = .yellow
+            } else if max >= 80 {
+                i.backgroundColor = .green
+            } else if max >= 75 {
+                i.backgroundColor = .cyan
+            } else if max >= 70 {
+                i.backgroundColor = .blue
+            } else {
+                i.backgroundColor = .purple
+            }
+            
+        }
     }
     
     func xTitle(data: String) -> String {
@@ -183,7 +200,7 @@ extension MusicDetailViewController: UITableViewDataSource {
                     FirebaseAPI.shared.deleteMusicDetail(musicID: self.musicID, data: a, completionHandler: {_ in
                         
                         tableView.deleteRows(at: [indexPath], with: .fade)
-                        self.selectBest()
+                        self.setupGraphAndLabel()
                         
                     })
                     

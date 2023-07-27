@@ -64,6 +64,15 @@ class ShareViewController: UIViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toProfile" {
+            let nextView = segue.destination as! ProfileViewController
+            nextView.userName = UserDefaults.standard.string(forKey: "userName")
+            nextView.userID = UserDefaults.standard.string(forKey: "userID")
+            
+        }
+    }
+    
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -196,6 +205,10 @@ class ShareViewController: UIViewController {
         }
     }
     
+    @IBAction func toProfile() {
+        performSegue(withIdentifier: "toProfile", sender: nil)
+    }
+    
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()
     }
@@ -294,12 +307,9 @@ extension ShareViewController: ShareCellDelegate {
         FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
         if goodList[indexPath.row] {
             shareList[indexPath.row].goodNumber -= 1
-            print(true)
         } else {
             shareList[indexPath.row].goodNumber += 1
-            print(false)
         }
-        print(shareList[indexPath.row].goodNumber)
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
         goodList[indexPath.row].toggle()
         

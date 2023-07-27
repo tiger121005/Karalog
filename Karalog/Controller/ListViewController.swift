@@ -394,7 +394,6 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         tvList = []
-        print(searchText)
         if searchText == "" {
             tvList = originalList
         }else{

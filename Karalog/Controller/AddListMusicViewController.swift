@@ -120,7 +120,6 @@ extension AddListMusicViewController: UITableViewDataSource {
 extension AddListMusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         tvList = []
-        print(searchText)
         if searchText == "" {
             tvList = Manager.shared.musicList
         }else{

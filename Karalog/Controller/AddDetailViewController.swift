@@ -23,6 +23,7 @@ class AddDetailViewController: UIViewController {
     var scaleList: [UIView] = []
     var post = false
     var category: [String] = []
+    var tapGesture: UITapGestureRecognizer!
     
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var customSlider: CustomSliderView!
@@ -30,8 +31,7 @@ class AddDetailViewController: UIViewController {
     @IBOutlet var modelBtn: UIButton!
     @IBOutlet var textView: UITextView!
     @IBOutlet var addBtn: CustomButton!
-    @IBOutlet var scroll: UIScrollView!
-    @IBOutlet var scrollView: UIView!
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var checkBox: UIView!
     @IBOutlet var categoryView: UIView!
     @IBOutlet var categoryLabel: UILabel!
@@ -55,7 +55,6 @@ class AddDetailViewController: UIViewController {
         if callView {
             scaleList = []
             for i in 0...14 {
-                print(customSlider.slider.bounds.width)
                 let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
                 
                 if i <= 7 {
@@ -120,23 +119,19 @@ class AddDetailViewController: UIViewController {
     
     func getTimingKeyboard() {
         let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func setupKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
+         tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
         self.view.addGestureRecognizer(tapGesture)
+        tapGesture.isEnabled = false
     }
-    
-//    func setupScale() {
-//        keySlider.thumbRadius
-//    }
     
     func setupCategoryView() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.isHidden = true
         tableView.allowsMultipleSelection = true
         categoryView.isHidden = true
     }
@@ -163,6 +158,8 @@ class AddDetailViewController: UIViewController {
             category = []
         }
     }
+    
+    
 
     @IBAction func editingChanged(_ sender: Any) {
         if Double(scoreTF.text!) ?? 0 >= 100 {
@@ -236,10 +233,6 @@ class AddDetailViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
-    @IBAction func tapAddCategory() {
-        tableView.isHidden.toggle()
-    }
-    
     //機種設定
     enum modelMenuType: String {
         case 未選択 = "未選択"
@@ -250,40 +243,37 @@ class AddDetailViewController: UIViewController {
     //textViewを開いたときにViewを上にずらして隠れないようにする
     // キーボード表示通知の際の処理
     @objc func keyboardWillShow(_ notification: Notification) {
-         //キーボード、画面全体、textFieldのsizeを取得
+        // キーボード、画面全体、textFieldのsizeを取得
         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         guard let _keyboardHeight = rect?.size.height else { return }
-        let topSpaceHeight = self.navigationController?.navigationBar.frame.maxY ?? CGFloat(44)
-        let bottomSpaceHeight = UIScreen.main.bounds.height - (tabBarController?.tabBar.frame.minY)!
-        let showScrollViewHeight = UIScreen.main.bounds.height - topSpaceHeight - bottomSpaceHeight
-        let textViewMaxY = textView.frame.maxY - topSpaceHeight
-//        let scrollViewHeight = scrollView.frame.height
-//        let scrollPosition = scroll.contentOffset.y
-//        let tabBarHeight = tabBarController?.tabBar.frame.height
-//        // ナビゲーションバーの高さを取得する
-//
-//        let keyboardPositionY = scrollViewHeight - _keyboardHeight - navigationBarHeight
-//
-        let space = showScrollViewHeight - _keyboardHeight - 10
-//        if keyboardPositionY + scrollPosition <= addBtn.frame.maxY && textView.isFirstResponder {
-//            scroll.setContentOffset(CGPoint.init(x: 0, y: textView.frame.maxY - (scrollViewHeight - _keyboardHeight - tabBarHeight - 10)), animated: true)
-//        }
-        if textViewMaxY - space < scroll.contentOffset.y && textView.isFirstResponder {
-            scroll.setContentOffset(CGPoint.init(x: 0, y: textViewMaxY - space), animated: true)
-        }
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
+        
         let screenHeight = UIScreen.main.bounds.height
         let safeAreaTop = self.view.safeAreaInsets.top
         let safeAreaBottom = self.view.safeAreaInsets.bottom
         let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-        // ナビゲーションバーの高さを取得する
-        if checkBox.frame.maxY - screenHeight > 0 {
-            scroll.setContentOffset(CGPoint.init(x: 0, y: checkBox.frame.maxY - screenHeight), animated: true)
-        }else{
-            scroll.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+        let scrollPosition = scrollView.contentOffset.y
+        let keyboardPositionY = safeAreaHeight + safeAreaBottom - _keyboardHeight
+        print(keyboardPositionY)
+            
+        if keyboardPositionY + scrollPosition <= textView.frame.maxY && textView.isFirstResponder {
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.maxY - keyboardPositionY + 10), animated: true)
         }
+        
+        tapGesture.isEnabled = true
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+//        let screenHeight = UIScreen.main.bounds.height
+//        let safeAreaTop = self.view.safeAreaInsets.top
+//        let safeAreaBottom = self.view.safeAreaInsets.bottom
+//        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
+//        // ナビゲーションバーの高さを取得する
+//        if checkBox.frame.maxY - screenHeight > 0 {
+//            scrollView.setContentOffset(CGPoint.init(x: 0, y: checkBox.frame.maxY - screenHeight), animated: true)
+//        }else{
+//            scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+//        }
+        tapGesture.isEnabled = false
     }
     
     @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
@@ -313,7 +303,6 @@ extension AddDetailViewController: UITextFieldDelegate {
 
 extension AddDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(9999999999)
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark

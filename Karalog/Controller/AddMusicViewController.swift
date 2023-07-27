@@ -20,6 +20,7 @@ class AddMusicViewController: UIViewController {
     var scaleList: [UIView] = []
     var post = false
     var category: [String] = []
+    var tapGesture: UITapGestureRecognizer!
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var musicTF: UITextField!
@@ -38,7 +39,7 @@ class AddMusicViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupKeyboard()
         setupScroll()
         setupTextField()
         configureMenuButton()
@@ -71,17 +72,6 @@ class AddMusicViewController: UIViewController {
             callView = false
         }
     }
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        tapOutTableView()
-//
-//        musicTF.resignFirstResponder()
-//        artistTF.resignFirstResponder()
-//        scoreTF.resignFirstResponder()
-//        textView.resignFirstResponder()
-//
-//        print(666666666)
-//    }
     
     func setupScroll() {
         scrollView.delegate = self
@@ -140,9 +130,14 @@ class AddMusicViewController: UIViewController {
         notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    func setupKeyboard() {
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
+        self.view.addGestureRecognizer(tapGesture)
+        tapGesture.isEnabled = false
+    }
+    
     func setupCategeoryView() {
         categoryView.isHidden = true
-        tableView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsMultipleSelection = true
@@ -152,7 +147,7 @@ class AddMusicViewController: UIViewController {
     func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
-            print(8888888888)
+            
             var text = ""
             var newLine = false
             for i in _indexPathList {
@@ -168,29 +163,9 @@ class AddMusicViewController: UIViewController {
             }
             categoryLabel.text = text
         } else {
-            print(777777777777)
             categoryLabel.text = ""
             category = []
         }
-    }
-    
-    func tapOutTableView () {
-        if tableView.isHidden == false {
-            tableView.isHidden = true
-            setupCategory()
-        }
-    }
-    
-    func closeKeyboard() {
-        
-        self.textView.resignFirstResponder()
-        
-        self.scoreTF.resignFirstResponder()
-        
-        musicTF.resignFirstResponder()
-        artistTF.resignFirstResponder()
-        
-        print(55555555555)
     }
     
     @IBAction func editingChanged(_ sender: Any) {
@@ -264,10 +239,6 @@ class AddMusicViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
-    @IBAction func tapAddCategory() {
-        tableView.isHidden.toggle()
-    }
-    
     //機種設定
     enum modelMenuType: String {
         case 未選択 = "未選択"
@@ -281,16 +252,7 @@ class AddMusicViewController: UIViewController {
         // キーボード、画面全体、textFieldのsizeを取得
         let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         guard let _keyboardHeight = rect?.size.height else { return }
-        print(11111111111111)
-        print(textView.frame.maxY)
-        print(textView.frame.minY)
-        print(scrollView.frame.height)
-        print(scrollView.frame.minY)
-        print(_keyboardHeight)
-        print(UIScreen.main.bounds.height)
-        print(self.view.safeAreaInsets.top)
-        print(self.view.safeAreaInsets.bottom)
-        print(22222222222222)
+        
         let screenHeight = UIScreen.main.bounds.height
         let safeAreaTop = self.view.safeAreaInsets.top
         let safeAreaBottom = self.view.safeAreaInsets.bottom
@@ -300,27 +262,30 @@ class AddMusicViewController: UIViewController {
         print(keyboardPositionY)
             
         if keyboardPositionY + scrollPosition <= textView.frame.maxY && textView.isFirstResponder {
-            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.minY - keyboardPositionY), animated: true)
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.maxY - keyboardPositionY + 10), animated: true)
         }
+        tapGesture.isEnabled = true
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        
-        let screenHeight = UIScreen.main.bounds.height
-        let safeAreaTop = self.view.safeAreaInsets.top
-        let safeAreaBottom = self.view.safeAreaInsets.bottom
-        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-        // ナビゲーションバーの高さを取得する
-        let navigationBarHeight = self.navigationController?.navigationBar.frame.size.height ?? CGFloat(0)
-        if checkBox.frame.maxY - screenHeight > 0 && textView.isFirstResponder {
-            scrollView.setContentOffset(CGPoint.init(x: 0, y: checkBox.frame.maxY - screenHeight), animated: true)
-        }else{
-            scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+        if musicTF.isFirstResponder || artistTF.isFirstResponder {
+            tapGesture.isEnabled = false
+        } else if scoreTF.isFirstResponder || textView.isFirstResponder {
+            tapGesture.isEnabled = false
         }
     }
     
-    
-
+    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
+        if textView.isFirstResponder {
+            self.textView.resignFirstResponder()
+        }else if scoreTF.isFirstResponder {
+            self.scoreTF.resignFirstResponder()
+        } else if musicTF.isFirstResponder {
+            self.musicTF.resignFirstResponder()
+        } else if artistTF.isFirstResponder {
+            self.artistTF.resignFirstResponder()
+        }
+    }
 }
 
 extension AddMusicViewController: UITextFieldDelegate {
@@ -341,7 +306,6 @@ extension AddMusicViewController: UITextFieldDelegate {
 
 extension AddMusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(9999999999999)
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark

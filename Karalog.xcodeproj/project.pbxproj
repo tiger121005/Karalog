@@ -214,16 +214,16 @@
 				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
 				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
 				19A12D3029CC2C9E00B798A4 /* ViewController.swift */,
-				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
 				19A12D7229CD957600B798A4 /* NotificationViewController.swift */,
 				19A12D7429CD958300B798A4 /* FriendsViewController.swift */,
-				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
 				19A12D7629CD95A200B798A4 /* MatchViewController.swift */,
 				19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */,
 				19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */,
 				19A12D7E29CD960200B798A4 /* ChatViewController.swift */,
 				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
 				192D26B42A1F98770058D739 /* PostViewController.swift */,
+				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
+				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
 				192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */,
 			);
 			path = Controller;

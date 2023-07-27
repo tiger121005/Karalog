@@ -55,7 +55,6 @@ struct LineMarkView: View {
     
     func maxRange(max: Double) -> Double {
         var x = max + 3
-        print("iiiiiiiiii", x)
         if x > 100 {
             x = 100
         } else if x == 0 {
@@ -66,7 +65,6 @@ struct LineMarkView: View {
     
     func minRange(min: Double) -> Double {
         var n = min - 3
-        print("uuuuuuuuu", n)
         if n < 0 {
             n = 0
         } else if n == 100 {

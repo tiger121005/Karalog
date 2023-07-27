@@ -69,3 +69,12 @@ public struct SampleData: Identifiable {
     let score: Double
 }
 
+public struct User: Codable {
+    let name: String
+    @DocumentID var id: String?
+}
+
+public struct AnotherUser: Codable {
+    let follow: [User]
+    let follower: [User]
+}
