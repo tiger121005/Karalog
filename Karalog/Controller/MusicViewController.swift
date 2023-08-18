@@ -8,23 +8,22 @@
 import UIKit
 import DZNEmptyDataSet
 
-
 class MusicViewController: UIViewController {
     
     //曲名,アーティスト名が入る
     var tvList: [MusicList] = []
     
     //sortされている種類を調べる
-    var judgeSort = 0
-    var allSelected = false
+    var judgeSort: String!
+    var allSelected: Bool = false
     //選択したセルのid
-    var selectedID = ""
+    var selectedID: String = ""
     var idList: [String] = []
     
     var musicID: String!
     //次のviewに渡すdata
-    var musicName = ""
-    var artistName = ""
+    var musicName: String = ""
+    var artistName: String = ""
     var musicData: [MusicData] = []
     var musicImage: Data!
     let sortList: [String] = ["追加順(遅)", "追加順(早)", "スコア順(高)", "スコア順(低)", "曲名順(早)", "曲名順(遅)", "アーティスト順(早)", "アーティスト順(遅)"]
@@ -37,17 +36,17 @@ class MusicViewController: UIViewController {
     var selectBtn: UIBarButtonItem!
     var doneBtn: UIBarButtonItem!
     var allSelectBtn: UIBarButtonItem!
+    let refreshCtl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        judgeSort = UserDefaults.standard.integer(forKey: "judgeSort")
+        
+        
+        judgeSort = UserDefaultsKey.judgeSort.get() ?? "0"
         setupTableView()
         setupSearchBar()
         setupBarItem()
-        
-        let userID = UserDefaults.standard.string(forKey: "userID")
-        print(userID!, "is logined")
         
         createMenu()
         get()
@@ -102,6 +101,11 @@ class MusicViewController: UIViewController {
         tableView.rowHeight = 70
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.keyboardDismissMode = .onDrag
+        
+        tableView.refreshControl = refreshCtl
+        refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
+        refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
+        tableView.addSubview(refreshCtl)
         
         tableView.emptyDataSetDelegate = self
         tableView.emptyDataSetSource = self
@@ -197,80 +201,82 @@ class MusicViewController: UIViewController {
             })
         ])
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
-            if judgeSort != 0 {
-                judgeSort = 0
+            if judgeSort != "0" {
+                judgeSort = "0"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 1
+                judgeSort = "1"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
-            if judgeSort != 2{
-                judgeSort = 2
+            if judgeSort != "2"{
+                judgeSort = "2"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 3
+                judgeSort = "3"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
-            if judgeSort != 4{
-                judgeSort = 4
+            if judgeSort != "4"{
+                judgeSort = "4"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 5
+                judgeSort = "5"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
-            if judgeSort != 6{
-                judgeSort = 6
+            if judgeSort != "6"{
+                judgeSort = "6"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 7
+                judgeSort = "7"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort")
-                
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
+
             }
             self.createMenu()
         })]
         
-        let sorts = UIMenu(title: "並び替え（" + sortList[UserDefaults.standard.integer(forKey: "judgeSort")] + ")", children: subItems)
+        let sortNum: String! = UserDefaultsKey.judgeSort.get() ?? "0"
+        print(sortNum)
+        let sorts = UIMenu(title: "並び替え（" + sortList[Int(sortNum)!] + ")", children: subItems)
         
         //editBtn.showsMenuAsPrimaryAction = true
         editBtn.menu = UIMenu(title: "", children: [items, sorts])
@@ -285,6 +291,8 @@ class MusicViewController: UIViewController {
             })
             self.tableView.reloadData()
         })
+        
+        
     }
     
     @objc func tapDoneBtn(_ sender: UIBarButtonItem) {
@@ -318,6 +326,13 @@ class MusicViewController: UIViewController {
         
     }
     
+    @objc func reload() {
+        FirebaseAPI.shared.getMusic() { list in
+            self.tvList = list
+            self.searchBar.text = ""
+            self.refreshCtl.endRefreshing()
+        }
+    }
     
     //改行したら自動的にキーボードを非表示にする
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -333,7 +348,6 @@ extension UIImage {
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()
     }
-    
 }
 
 extension MusicViewController: UITableViewDataSource {
@@ -347,6 +361,34 @@ extension MusicViewController: UITableViewDataSource {
         //tableView.bounds.widthはスマホの横幅を取得するメソッド
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell1", for: indexPath) as! TableViewCell1
         
+        var list: [MusicList] = []
+        var a: [Double] = []
+        for i in tvList {
+            let b = i.data
+            var c: [Double] = []
+            for j in b {
+                c.append(j.score)
+            }
+            a.append(c.max()!)
+        }
+        let d = a.indices.sorted{ a[$1] < a[$0]}
+        list = d.map{tvList[$0]}
+        
+        var n: Int!
+//        let n = Int(ceil(Double(tvList.count / 10)))
+        if tvList.count < 10 {
+            n = 1
+        } else if tvList.count < 40 {
+            n = Int(ceil(Double(tvList.count / 10)))
+        } else {
+            n = Int(ceil(Double(tvList.count / 5)))
+        }
+        let m = n * 3
+        let high = list[n - 1].data.map{$0.score}.max()!
+        var medium: Double = 0.0
+        if tvList.count > 3 {
+            medium = list[m - 1].data.map{$0.score}.max()!
+        }
         //cellのdelegateを呼び出して、indexに代入。お気に入りボタンに使用
         cell.delegate = self
         cell.indexPath = indexPath
@@ -355,22 +397,19 @@ extension MusicViewController: UITableViewDataSource {
         cell.artistLabel?.text = tvList[indexPath.row].artistName
         let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
+        
         let scoreList = tvList[indexPath.row].data.map{$0.score}
         let max = scoreList.max()
-        if max! >= 95.0 {
-            cell.colorImage.tintColor = .red
-        } else if max! >= 90 {
-            cell.colorImage.tintColor = .orange
-        } else if max! >= 85 {
-            cell.colorImage.tintColor = .yellow
-        } else if max! >= 80 {
-            cell.colorImage.tintColor = .green
-        } else if max! >= 75 {
-            cell.colorImage.tintColor = .cyan
-        } else if max! >= 70 {
-            cell.colorImage.tintColor = .blue
+        cell.scoreLabel.text = String(format: "%.3f", max!)
+        if max! >= Double(high) {
+            cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        } else if max! >= Double(medium) && tvList.count > 3 {
+            cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
         } else {
-            cell.colorImage.tintColor = .purple
+            cell.scoreLabel.textColor = UIColor.secondaryLabel
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
         }
         
         if tvList[indexPath.row].favorite == false {
@@ -379,7 +418,6 @@ extension MusicViewController: UITableViewDataSource {
             cell.favoriteBtn?.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         return cell
-        
     }
     
     //削除機能

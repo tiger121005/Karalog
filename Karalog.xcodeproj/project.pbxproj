@@ -33,6 +33,9 @@
 		196D97392A66A3AC00A96892 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 196D97382A66A3AC00A96892 /* FirebaseAuth */; };
 		196D973B2A66A3AC00A96892 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 196D973A2A66A3AC00A96892 /* FirebaseFirestore */; };
 		196D973D2A66A3AC00A96892 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 196D973C2A66A3AC00A96892 /* FirebaseFirestoreSwift */; };
+		197F7C6A2A83CAAE00F80C34 /* BorderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C692A83CAAE00F80C34 /* BorderLabel.swift */; };
+		197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */; };
+		197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */; };
 		1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1980AAC12A60DE0900FA93A1 /* CheckBox.swift */; };
 		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
 		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
@@ -113,6 +116,9 @@
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		196D97352A66A02B00A96892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		197F7C692A83CAAE00F80C34 /* BorderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderLabel.swift; sourceTree = "<group>"; };
+		197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizeLabel.swift; sourceTree = "<group>"; };
+		197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPostViewController.swift; sourceTree = "<group>"; };
 		1980AAC12A60DE0900FA93A1 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -224,6 +230,7 @@
 				192D26B42A1F98770058D739 /* PostViewController.swift */,
 				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
 				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
+				197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */,
 				192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */,
 			);
 			path = Controller;
@@ -240,6 +247,8 @@
 				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
 				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
 				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
+				197F7C692A83CAAE00F80C34 /* BorderLabel.swift */,
+				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
 				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
 				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
 			);
@@ -597,6 +606,7 @@
 				19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */,
 				19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */,
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
+				197F7C6A2A83CAAE00F80C34 /* BorderLabel.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
 				19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */,
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
@@ -604,6 +614,7 @@
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
 				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
+				197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */,
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
 				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
 				192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */,
@@ -634,6 +645,7 @@
 				1960CD2329FE7B250065FF05 /* Material.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
+				197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,7 +835,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -859,7 +871,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (

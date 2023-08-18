@@ -11,29 +11,24 @@ import DZNEmptyDataSet
 
 class MusicDetailViewController: UIViewController {
     
-    var musicName = ""
-    var artistName = ""
+    var musicName: String = ""
+    var artistName: String = ""
     var musicImage: Data!
     var music: [MusicList] = []
     var tvList: [MusicData] = []
-    var musicID = ""
+    var musicID: String = ""
     var max: Double = 0.0
     var min: Double = 0.0
     //次の画面に渡す値
-    var time = ""
-    var score = ""
-    var key = ""
-    var model = ""
-    var comment = ""
+    var time: String = ""
+    var score: String = ""
+    var key: String = ""
+    var model: String = ""
+    var comment: String = ""
     
-    @IBOutlet var bestLabel: UILabel!
+    @IBOutlet var bestLabel: EmphasizeLabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var graphView: UIView!
-    @IBOutlet var leftTopEmphasize: UIView!
-    @IBOutlet var leftBottomEmphasize: UIView!
-    @IBOutlet var rightTopEmphasize: UIView!
-    @IBOutlet var rightBottomEmphasize: UIView!
-    @IBOutlet var emphasize: [UIView]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,13 +71,13 @@ class MusicDetailViewController: UIViewController {
     
     func getData() {
         tvList = Manager.shared.musicList.first(where: {$0.id == musicID})!.data
+        tvList.reverse()
         tableView.reloadData()
     }
     
     func setupGraphAndLabel() {
         var a: [SampleData] = []
-        var start = true
-        
+        var start: Bool = true
         for i in tvList {
             let date = xTitle(data: i.time)
             if start == false {
@@ -98,8 +93,6 @@ class MusicDetailViewController: UIViewController {
                 start = false
             }
         }
-        
-        a.reverse()
         
         let scoreList = a.map{$0.score}
         max = scoreList.max()!
@@ -118,28 +111,35 @@ class MusicDetailViewController: UIViewController {
         vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
         vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
         
-        leftTopEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
-        leftBottomEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
-        rightTopEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
-        rightBottomEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
-        for i in emphasize {
-            if max >= 95.0 {
-                i.backgroundColor = .red
-            } else if max >= 90 {
-                i.backgroundColor = .orange
-            } else if max >= 85 {
-                i.backgroundColor = .yellow
-            } else if max >= 80 {
-                i.backgroundColor = .green
-            } else if max >= 75 {
-                i.backgroundColor = .cyan
-            } else if max >= 70 {
-                i.backgroundColor = .blue
-            } else {
-                i.backgroundColor = .purple
-            }
-            
-        }
+//        leftTopEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
+//        leftBottomEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
+//        rightTopEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
+//        rightBottomEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
+//        for i in emphasize {
+//            if max >= 95.0 {
+//                i.backgroundColor = .red
+//            } else if max >= 90 {
+//                i.backgroundColor = .orange
+//            } else if max >= 85 {
+//                i.backgroundColor = .yellow
+//            } else if max >= 80 {
+//                i.backgroundColor = .green
+//            } else if max >= 75 {
+//                i.backgroundColor = .cyan
+//            } else if max >= 70 {
+//                i.backgroundColor = .blue
+//            } else {
+//                i.backgroundColor = .purple
+//            }
+//
+//        }
+        
+//        bestLabel.strokeColor = UIColor(named: "imageColor")!
+//        bestLabel.strokeSize = 3.0
+        bestLabel.textColor = UIColor(named: "imageColor")!
+        bestLabel.shadowColorForCustom = (UIColor(named: "subImageColor")?.withAlphaComponent(0.8))!
+        bestLabel.shadowOffsetForCustom = CGSize(width: 2, height: 2)
+        
     }
     
     func xTitle(data: String) -> String {
@@ -176,7 +176,7 @@ extension MusicDetailViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        tvList.reverse()
+        
         cell.textLabel?.text = String(format: "%.3f", tvList[indexPath.row].score)//追加の際入力した文字を表示
         cell.detailTextLabel?.text = tvList[indexPath.row].time + "　　　キー:　" + String(tvList[indexPath.row].key) + "　　　機種:　" + tvList[indexPath.row].model
         

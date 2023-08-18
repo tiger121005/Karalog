@@ -10,9 +10,11 @@ import FirebaseCore
 
 class AllListViewController: UIViewController {
     
-    var index = 0
-    var listID = ""
-    var changeOrder = false
+    var index: Int = 0
+    var listID: String = ""
+    var changeOrder: Bool = false
+    
+    let refreshCtl = UIRefreshControl()
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -21,11 +23,11 @@ class AllListViewController: UIViewController {
         super.viewDidLoad()
         
         setupCollectionView()
-        
+        getList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        checkList()
+        reloadList()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -50,18 +52,16 @@ class AllListViewController: UIViewController {
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
         collectionView.dragInteractionEnabled = true
+        
+        collectionView.refreshControl = refreshCtl
+        refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
+        refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
+        collectionView.addSubview(refreshCtl)
     }
     
-    func checkList() {
-        if Manager.shared.lists.isEmpty {
-            
-            FirebaseAPI.shared.getlist(completionHandler: {_ in
-                
-                self.collectionView.reloadData()
-            })
-        } else {
-            collectionView.reloadData()
-            
+    func getList() {
+        FirebaseAPI.shared.getList() {_ in
+            self.collectionView.reloadData()
         }
     }
     
@@ -72,10 +72,23 @@ class AllListViewController: UIViewController {
         }
     }
     
+    func reloadList() {
+        collectionView.reloadData()
+    }
+    
+    @objc func reload() {
+        FirebaseAPI.shared.getList() {_ in
+            self.collectionView.reloadData()
+            self.refreshCtl.endRefreshing()
+        }
+        
+    }
+    
 }
 
 extension AllListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         if indexPath.row == 0 {
             listID = "0"
         } else if indexPath.row == 1 {

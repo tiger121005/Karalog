@@ -10,9 +10,9 @@ import UIKit
 class AddListMusicViewController: UIViewController {
     
     var tvList: [MusicList] = []
-    var fromFav = false
+    var fromFav: Bool = false
     var idList: [String] = []
-    var listID = ""
+    var listID: String = ""
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!

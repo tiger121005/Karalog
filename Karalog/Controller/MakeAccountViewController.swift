@@ -36,7 +36,10 @@ class MakeAccountViewController: UIViewController {
             Auth.auth().createUser(withEmail: _mail, password: password, completion: { (result, error) in
                 if let _user = result?.user {
                     self.db.collection("user").document(_user.uid).setData([
-                        "name": name
+                        "name": name,
+                        "showAll": true,
+                        "follow": [],
+                        "follower": []
                     ], completion: { err in
                         if err != nil {
                             print("cannot create account")
@@ -47,7 +50,7 @@ class MakeAccountViewController: UIViewController {
                             print("creating account succeeded")
                             let nextView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
                             nextView.modalPresentationStyle = .fullScreen
-                            UserDefaults.standard.set(_user.uid, forKey: "userID")
+                            UserDefaultsKey.userID.set(value: _user.uid)
                             self.present(nextView, animated: true, completion: nil)
                             
                         }

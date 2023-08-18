@@ -27,11 +27,11 @@ class AddToListViewController: UIViewController {
     }
 
     func checkIdListData() {
-        if Manager.shared.lists.isEmpty {
-            FirebaseAPI.shared.getlist(completionHandler: {_ in
-                self.collectionView.reloadData()
-            })
-        }
+        
+        FirebaseAPI.shared.getList(completionHandler: {_ in
+            self.collectionView.reloadData()
+        })
+        
     }
     
     @IBAction func cancel() {
@@ -65,7 +65,7 @@ extension AddToListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        var a = Manager.shared.lists
+        var a: [Lists] = Manager.shared.lists
         a.remove(at: 1)
         cell.image.image = UIImage(data: a[indexPath.row].listImage)!
         cell.label.text = a[indexPath.row].listName

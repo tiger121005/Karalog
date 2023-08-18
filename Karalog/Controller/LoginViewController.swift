@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 import GoogleSignIn
@@ -39,7 +40,7 @@ class LoginViewController: UIViewController {
         
         if let _token = AccessToken.current,!_token.isExpired {
                 // User is logged in, do work such as go to next view controller.
-            UserDefaults.standard.set(_token.userID, forKey: "userID")
+            UserDefaultsKey.userID.set(value: _token.userID)
         }
     }
     
@@ -78,7 +79,7 @@ class LoginViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
             if let _user = result?.user {
-                UserDefaults.standard.set(_user.uid, forKey: "userID")
+                UserDefaultsKey.userID.set(value: _user.uid)
                 self.performSegue(withIdentifier: "toTabBar", sender: nil)
             }else{
                 print("cannot find account:", err!)
@@ -122,7 +123,7 @@ class LoginViewController: UIViewController {
                     }
                     self.db.collection("user").document(_user.uid).setData([
                         "name": _name])
-                    UserDefaults.standard.set(_user.uid, forKey: "userID")
+                    UserDefaultsKey.userID.set(value: _user.uid)
                     self.performSegue(withIdentifier: "toTabBar", sender: nil)
                 }else {
                     print("google login error:", error!)
@@ -133,26 +134,6 @@ class LoginViewController: UIViewController {
     private func login(credential: AuthCredential) {
         print("ログイン完了")
     }
-    
-    
-    //facebook
-//    func loginButton(_ loginButton: FBLoginButton!, didCompleteWith result: LoginManagerLoginResult!, error: Error!) {
-//        if let error = error {
-//            print(error.localizedDescription)
-//            return
-//        }
-//
-//        let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
-//        Auth.auth().signIn(with: credential) { result, error in
-//            if let user = result?.user {
-//                print(user.uid)
-//                UserDefaults.standard.set(user.uid, forKey: "userID")
-//                self.performSegue(withIdentifier: "toTabBar", sender: nil)
-//            }else {
-//                print("facebook login error:", error!)
-//            }
-//        }
-//    }
     
     //改行したら自動的にキーボードを非表示にする
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

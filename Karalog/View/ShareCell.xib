@@ -18,43 +18,36 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="piN-up-avj">
-                        <rect key="frame" x="16" y="11" width="45" height="45"/>
+                        <rect key="frame" x="16" y="11" width="70" height="70"/>
                         <color key="backgroundColor" systemColor="linkColor"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="45" id="47P-2e-3nM"/>
-                            <constraint firstAttribute="width" constant="45" id="5H2-t8-0qT"/>
+                            <constraint firstAttribute="height" constant="70" id="47P-2e-3nM"/>
+                            <constraint firstAttribute="width" constant="70" id="5H2-t8-0qT"/>
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7tD-s4-apj">
-                        <rect key="frame" x="90" y="11" width="69.333333333333314" height="22"/>
+                        <rect key="frame" x="115" y="11" width="93.666666666666686" height="35"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="69.329999999999998" id="By3-CV-bcH"/>
-                            <constraint firstAttribute="height" constant="22" id="tyk-KS-vk8"/>
+                            <constraint firstAttribute="height" constant="35" id="tyk-KS-vk8"/>
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="music">
+                            <fontDescription key="titleFontDescription" type="system" pointSize="27"/>
                             <color key="baseForegroundColor" systemColor="labelColor"/>
                         </buttonConfiguration>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
-                        <rect key="frame" x="90" y="37" width="63" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="22" id="slb-pR-lbp"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63" id="ta8-n5-OwY"/>
-                        </constraints>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" title="artist">
-                            <color key="baseForegroundColor" systemColor="labelColor"/>
-                        </buttonConfiguration>
+                        <connections>
+                            <action selector="touchMusicBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="CFN-Rh-Fgo"/>
+                        </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oav-eW-QBO">
-                        <rect key="frame" x="16" y="66" width="281" height="130"/>
+                        <rect key="frame" x="16" y="85" width="281" height="111"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="eZD-Z2-rIt"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -99,6 +92,21 @@
                         <color key="textColor" systemColor="secondaryLabelColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
+                        <rect key="frame" x="115" y="49" width="78.666666666666657" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="slb-pR-lbp"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63" id="ta8-n5-OwY"/>
+                        </constraints>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title="artist">
+                            <fontDescription key="titleFontDescription" type="system" pointSize="22"/>
+                            <color key="baseForegroundColor" systemColor="labelColor"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="touchArtistBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="nG5-S2-AFY"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 <constraints>

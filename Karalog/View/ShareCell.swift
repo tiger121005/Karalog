@@ -9,6 +9,8 @@ import UIKit
 
 protocol ShareCellDelegate {
     func reloadCell(indexPath: IndexPath)
+    func tapMusic(indexpath: IndexPath)
+    func tapArtist(indexPath: IndexPath)
 }
 
 class ShareCell: UICollectionViewCell {
@@ -28,10 +30,41 @@ class ShareCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         content.numberOfLines = 0
+        
+        self.layer.cornerRadius = self.frame.width * 0.05
+        self.layer.cornerCurve = .continuous
+        
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor(named: "baseColor")?.cgColor
+        
+        self.musicName.configuration = nil
+        self.artistName.configuration = nil
+        
+        self.musicName.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        self.artistName.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        self.content.font = UIFont.systemFont(ofSize: 16)
+        self.userName.font = UIFont.systemFont(ofSize: 14)
+        self.goodNumLabel.font = UIFont.systemFont(ofSize: 14)
+        self.categoryLabel.font = UIFont.systemFont(ofSize: 14)
+        
+        self.musicName.tintColor = UIColor.label
+        self.artistName.tintColor = UIColor.label
+        
+        self.musicName.contentHorizontalAlignment = .left
+        self.artistName.contentHorizontalAlignment = .left
+        
     }
     
     @IBAction func touchGoodBtn(_ sender: Any) {
         delegate?.reloadCell(indexPath: indexPath)
+    }
+    
+    @IBAction func touchMusicBtn(_ sender: Any) {
+        delegate?.tapMusic(indexpath: indexPath)
+    }
+    
+    @IBAction func touchArtistBtn(_ sender: Any) {
+        delegate?.tapArtist(indexPath: indexPath)
     }
     
 }

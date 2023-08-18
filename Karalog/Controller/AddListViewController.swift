@@ -12,14 +12,13 @@ import FirebaseFirestore
 class AddListViewController: UIViewController {
     
     var listRef: CollectionReference!
-    var addID = ""
+    var addID: String = ""
+    var randomImage: String = ""
     
     @IBOutlet var listImage: UIButton!
     @IBOutlet var listTF: UITextField!
     @IBOutlet var addBtn: CustomButton!
     
-    
-    var randomImage = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +76,7 @@ class AddListViewController: UIViewController {
             resizedImage = _image.jpegData(compressionQuality: 1.0)
             
         } else {
-            resizedImage = resizedData(image: image!, maxSize: 1024, quality: 0.5)
+            resizedImage = resizedData(image: image!, maxSize: 1024, quality: 0.6)
             
         }
         
@@ -89,7 +88,7 @@ class AddListViewController: UIViewController {
     
 
     func resizedData(image: UIImage, maxSize: CGFloat, quality: CGFloat)  -> Data? {
-        var size = image.size
+        var size: CGSize = image.size
         var scale: CGFloat = 1.0
         if size.width > maxSize || size.height > maxSize {
             scale = min(maxSize / size.width, maxSize / size.height)

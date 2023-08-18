@@ -14,7 +14,7 @@ import FirebaseFirestore
 class FirebaseAPI: ObservableObject {
     
     static let shared = FirebaseAPI()
-    var userID = UserDefaults.standard.string(forKey: "userID")
+    var userID: String!
     var database = Firestore.firestore()
     var userRef: DocumentReference!
     var shareRef: CollectionReference!
@@ -22,38 +22,44 @@ class FirebaseAPI: ObservableObject {
     var listRef: CollectionReference!
     var wannaRef: CollectionReference!
     var postDocuments: [QueryDocumentSnapshot] = []
+    var myInformation: User!
+    
+    let emptyUser = User(name: "", goodList: [], listOrder: [], followLimit: true, showAll: false, follow: [], follower: [], id: "")
+    let getLimit = 6
     
     init() {
-        
+        UserDefaultsKey.userID.set(value: "imiWSXSa9tNBwNZvCWdjJ0Tw0Gr2")
+        userID = UserDefaultsKey.userID.get()
         userRef = database.collection("user").document(userID!)
         shareRef = database.collection("share")
         musicRef = userRef.collection("musicList")
         listRef = userRef.collection("lists")
         wannaRef = userRef.collection("wannaList")
-        getUserName()
-    }
-    
-    //userNameを取得
-    func getUserName() {
-        userRef.getDocument() { (document, err) in
-            if let _err = err {
-                print("Error getting userName: \(_err)")
-            } else {
-                UserDefaults.standard.set(document?["name"] as! String, forKey: "userName")
-                UserDefaults.standard.set(document?.documentID, forKey: "userID")
-            }
+        getUserInformation(id: userID) { user in
+            self.myInformation = user
         }
     }
     
-    func getAnotherUser(id: String, completionHandler: @escaping (AnotherUser) -> Void) {
-        database.collection("user").document(id).getDocument{ (document, err) in
+    //user情報を取得
+    func getUserInformation(id: String) async -> User {
+        
+        database.collection("user").document(id).getDocument { (document, err) in
+            var user: User!
             if let _err = err {
-                print("Error getting another user: \(_err)")
-                completionHandler(AnotherUser(follow: [], follower: []))
-            } else {
-                let follow = (document?["follow"] ?? []) as! [User]
-                let follower = (document?["follower"] ?? []) as! [User]
-                completionHandler(AnotherUser(follow: follow, follower: follower))
+                print("error getting music: \(_err)")
+                return(self.emptyUser)
+            }else{
+                print(9999999, document)
+                do{
+                    user = try document?.data(as: User.self)
+                        print(111111, user)
+                }catch{
+                    print(error)
+                    print(878787878)
+                    user = self.emptyUser
+                }
+                
+                return(user)
             }
         }
     }
@@ -81,39 +87,42 @@ class FirebaseAPI: ObservableObject {
     }
     
     //listsを取得
-    func getlist(completionHandler: @escaping (Any) -> Void) {
+    func getList(completionHandler: @escaping (Any) -> Void) {
         userRef.getDocument() { (document, err) in
             if let _document = document, _document.exists{
-                Manager.shared.listOrder = _document.data()!["listOrder"] as? [String] ?? []
+                Manager.shared.listOrder = _document.data()![UserRef.listOrder.rawValue] as? [String] ?? []
                 print("getting listOrder")
+                
+                self.listRef.getDocuments() { (collection, err) in
+                    if let _err = err {
+                        print("error getting list: \(_err)")
+                        
+                    }else{
+                        print("getting list")
+                        Manager.shared.lists = []
+                        for document in collection!.documents {
+                            do{
+                                Manager.shared.lists.append(try document.data(as: Lists.self))
+                            }catch{
+                                print(error)
+                            }
+                        }
+                        var preList: [Lists] = []
+                        for i in Manager.shared.listOrder {
+                            preList.append(Manager.shared.lists.first(where: {$0.id!.contains(i)})!)
+                        }
+                        Manager.shared.lists = Material.shared.initialListData
+                        Manager.shared.lists += preList
+                        print(Manager.shared.lists)
+                        completionHandler(true)
+                    }
+                }
                 
             } else {
                 print("Error getting listOrder")
             }
             
-            self.listRef.getDocuments() { (collection, err) in
-                if let _err = err {
-                    print("error getting list: \(_err)")
-                    
-                }else{
-                    print("getting list")
-                    Manager.shared.lists = []
-                    for document in collection!.documents {
-                        do{
-                            Manager.shared.lists.append(try document.data(as: Lists.self))
-                        }catch{
-                            print(error)
-                        }
-                    }
-                    var preList: [Lists] = []
-                    for i in Manager.shared.listOrder {
-                        preList.append(Manager.shared.lists.first(where: {$0.id!.contains(i)})!)
-                    }
-                    Manager.shared.lists = Material.shared.initialListData
-                    Manager.shared.lists += preList
-                    completionHandler(true)
-                }
-            }
+            
         }
     }
     
@@ -126,9 +135,9 @@ class FirebaseAPI: ObservableObject {
                 completionHandler([])
             } else {
                 for document in collection!.documents {
-                    let name = document.data()["musicName"] as! String
-                    let artist = document.data()["artistName"] as! String
-                    let image = document.data()["musicImage"] as! Data
+                    let name = document.data()[UserRef.WannaListRef.musicName.rawValue] as! String
+                    let artist = document.data()[UserRef.WannaListRef.artistName.rawValue] as! String
+                    let image = document.data()[UserRef.WannaListRef.musicImage.rawValue] as! Data
                     let id = document.documentID
                     list.append(MusicList(musicName: name,
                                           artistName: artist,
@@ -149,27 +158,27 @@ class FirebaseAPI: ObservableObject {
             if let _err = err {
                 print("Error getting goodList: \(_err)")
             }else{
-                if document?.data()!["goodList"] != nil {
-                    Manager.shared.goodList = document?.data()!["goodList"] as! [String]
+                if document?.data()![UserRef.goodList.rawValue] != nil {
+                    Manager.shared.goodList = document?.data()![UserRef.goodList.rawValue] as! [String]
                 }
             }
         }
     }
     
-    func searchPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
+    func getPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
         
         if first {
             if music != "" {
                 if artist != "" {
                     if category != [] {//all
                         shareRef
-                            .whereField("musicName", isEqualTo: music)
-                            .whereField("artistName", isEqualTo: artist)
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "musicName")
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
-                            .limit(to: 10)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                                 var list: [Post] = []
                                 if let _err = err {
@@ -191,12 +200,12 @@ class FirebaseAPI: ObservableObject {
                             }
                     } else {//music,artist
                         shareRef
-                            .whereField("musicName", isEqualTo: music)
-                            .whereField("artistName", isEqualTo: artist)
-                            .order(by: "musicName")
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
-                            .limit(to: 10)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                                 var list: [Post] = []
                                 if let _err = err {
@@ -219,11 +228,11 @@ class FirebaseAPI: ObservableObject {
                     }
                 } else if category != [] {//music, category
                     shareRef
-                        .whereField("musicName", isEqualTo: music)
-                        .whereField("category", arrayContainsAny: category)
-                        .order(by: "musicName")
-                        .order(by: "time", descending: true)
-                        .limit(to: 10)
+                        .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                        .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                        .order(by: ShareRef.musicName.rawValue)
+                        .order(by: ShareRef.time.rawValue, descending: true)
+                        .limit(to: getLimit)
                         .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err {
@@ -246,10 +255,10 @@ class FirebaseAPI: ObservableObject {
                     
                 } else {//music
                     shareRef
-                        .whereField("musicName", isEqualTo: music)
-                        .order(by: "musicName")
-                        .order(by: "time", descending: true)
-                        .limit(to: 10)
+                        .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                        .order(by: ShareRef.musicName.rawValue)
+                        .order(by: ShareRef.time.rawValue, descending: true)
+                        .limit(to: getLimit)
                         .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err {
@@ -274,11 +283,11 @@ class FirebaseAPI: ObservableObject {
                 if artist != "" {
                     if category != [] {//artist,category
                         shareRef
-                            .whereField("artistName", isEqualTo: artist)
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
-                            .limit(to: 10)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                                 var list: [Post] = []
                                 if let _err = err {
@@ -303,10 +312,10 @@ class FirebaseAPI: ObservableObject {
                             }
                     } else {//artist
                         shareRef
-                            .whereField("artistName", isEqualTo: artist)
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
-                            .limit(to: 10)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                                 var list: [Post] = []
                                 if let _err = err {
@@ -332,9 +341,9 @@ class FirebaseAPI: ObservableObject {
                     }
                 } else if category != [] {//category
                     shareRef
-                        .whereField("category", arrayContainsAny: category)
-                        .order(by: "time", descending: true)
-                        .limit(to: 10)
+                        .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                        .order(by: ShareRef.time.rawValue, descending: true)
+                        .limit(to: getLimit)
                         .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err {
@@ -359,8 +368,8 @@ class FirebaseAPI: ObservableObject {
                         }
                 } else {//no
                     shareRef
-                        .order(by: "time", descending: true)
-                        .limit(to: 10)
+                        .order(by: ShareRef.time.rawValue, descending: true)
+                        .limit(to: getLimit)
                         .getDocuments { (collection, err) in
                         var list: [Post] = []
                         if let _err = err {
@@ -391,15 +400,14 @@ class FirebaseAPI: ObservableObject {
                 if artist != "" {
                     if category != [] { //all
                         shareRef
-                            .whereField("music", isEqualTo: music)
-                            .whereField("artist", isEqualTo: artist)
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "music")
-                            .order(by: "artist")
-                            .order(by: "category")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -420,13 +428,13 @@ class FirebaseAPI: ObservableObject {
                         }
                     } else { //music,artist
                         shareRef
-                            .whereField("musicName", isEqualTo: music)
-                            .whereField("artistName", isEqualTo: artist)
-                            .order(by: "musicName")
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -449,12 +457,12 @@ class FirebaseAPI: ObservableObject {
                 } else {
                     if category != [] { //music,category
                         shareRef
-                            .whereField("musicName", isEqualTo: music)
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "musicName")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -475,11 +483,11 @@ class FirebaseAPI: ObservableObject {
                         }
                     } else { //music
                         shareRef
-                            .whereField("musicName", isEqualTo: music)
-                            .order(by: "musicName")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                            .order(by: ShareRef.musicName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -504,12 +512,12 @@ class FirebaseAPI: ObservableObject {
                 if artist != "" {
                     if category != [] { //artist,category
                         shareRef
-                            .whereField("artistName", isEqualTo: artist)
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -530,11 +538,11 @@ class FirebaseAPI: ObservableObject {
                         }
                     } else { //artist
                         shareRef
-                            .whereField("artistName", isEqualTo: artist)
-                            .order(by: "artistName")
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                            .order(by: ShareRef.artistName.rawValue)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -557,10 +565,10 @@ class FirebaseAPI: ObservableObject {
                 } else {
                     if category != [] { //category
                         shareRef
-                            .whereField("category", arrayContainsAny: category)
-                            .order(by: "time", descending: true)
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.time.rawValue, descending: true)
                             .start(afterDocument: _lastDocument)
-                            .limit(to: 10)
+                            .limit(to: getLimit)
                             .getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
@@ -580,7 +588,7 @@ class FirebaseAPI: ObservableObject {
                             }
                         }
                     } else { //no
-                        shareRef.order(by: "time", descending: true).start(afterDocument: _lastDocument).limit(to: 10).getDocuments { (collection, err) in
+                        shareRef.order(by: ShareRef.time.rawValue, descending: true).start(afterDocument: _lastDocument).limit(to: getLimit).getDocuments { (collection, err) in
                             var list: [Post] = []
                             if let _err = err{
                                 print("Error getting post:\(_err)")
@@ -590,9 +598,11 @@ class FirebaseAPI: ObservableObject {
                                     
                                     do{
                                         list.append(try document.data(as: Post.self))
+                                        
                                     }catch{
                                         print(error)
                                     }
+                                    
                                 }
                                 self.postDocuments = collection!.documents
                                 completionHandler(list)
@@ -601,30 +611,56 @@ class FirebaseAPI: ObservableObject {
                     }
                 }
             }
-            
         }
     }
     
-    func searchUser(string: String, completionHandler: @escaping ([User]) -> Void) {
+    func searchPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
+        
+        getPost(first: first, music: music, artist: artist, category: category) { list in
+            var a: [Post] = []
+            
+            await self.selectPost(post: list) { postOK in
+                
+                
+            }
+        }
+    }
+    
+    func selectPost(post: [Post], completionHandler: @escaping ([Post]) -> Void) async {
+        var list: [Post] = []
+        for await p in post {
+            
+            var _post = p
+            _post.userID = await getUserInformation(id: p.userID).name
+            var show = await getUserInformation(id: p.userID).showAll
+            if self.myInformation.follow.first(where: {$0 == p.userID}) != nil && show {
+                show = true
+            } else if p.userID == self.userID && show {
+                show = true
+            }
+            
+            if show {
+                list.append(p)
+            }
+            
+        }
+        completionHandler(list)
+    }
+    
+    func searchUserName(string: String, completionHandler: @escaping ([User]) -> Void) {
         var list: [User] = []
         database.collection("user")
-            .whereField("name", isEqualTo: string)
+            .whereField(UserRef.name.rawValue, isEqualTo: string)
             .getDocuments { (collection, err) in
-                
                 if let _err = err {
                     print("Error getting user: \(_err)")
-                    
                 } else {
                     for document in collection!.documents {
-                        let id = document.documentID
-                        list.append(User(name: string, id: id))
-                    }
-                }
-                self.database.collection("user").document(string).getDocument() { (document, err) in
-                    if let _err = err {
-                        print("Error getting user: \(_err)")
-                    } else {
-                        list.append(User(name: document?.data()!["name"] as! String, id: string))
+                        do {
+                            list.append(try document.data(as: User.self))
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
                 completionHandler(list)
@@ -633,14 +669,18 @@ class FirebaseAPI: ObservableObject {
     
     //musicListに追加
     func addMusic(musicName: String, artistName: String, musicImage: Data, time: String, score: Double, key: Int, model: String, comment: String, completionHandler: @escaping (Any) -> Void) {
-        let detailData = ["time": time, "score": score, "key": key, "model": model, "comment": comment] as [String : Any]
+        let detailData = [UserRef.MusicListRef.MusicDataRef.time.rawValue: time,
+                          UserRef.MusicListRef.MusicDataRef.score.rawValue: score,
+                          UserRef.MusicListRef.MusicDataRef.key.rawValue: key,
+                          UserRef.MusicListRef.MusicDataRef.model.rawValue: model,
+                          UserRef.MusicListRef.MusicDataRef.comment.rawValue: comment] as [String : Any]
         musicRef.addDocument(data: [
-            "musicName": musicName,
-            "artistName": artistName,
-            "musicImage": musicImage,
-            "favorite": false,
-            "lists": [],
-            "data": [detailData]
+            UserRef.MusicListRef.musicName.rawValue: musicName,
+            UserRef.MusicListRef.artistName.rawValue: artistName,
+            UserRef.MusicListRef.musicImage.rawValue: musicImage,
+            UserRef.MusicListRef.favorite.rawValue: false,
+            UserRef.MusicListRef.lists.rawValue: [],
+            UserRef.MusicListRef.data.rawValue: [detailData]
         ]) { err in
             if let _err = err {
                 print("Error adding music: \(_err)")
@@ -655,7 +695,8 @@ class FirebaseAPI: ObservableObject {
                                                                            score: score,
                                                                            key: key,
                                                                            model: model,
-                                                                           comment: comment)]))
+                                                                           comment: comment)],
+                                                          id: self.musicRef.document().documentID))
                 
                 completionHandler(true)
             }
@@ -666,14 +707,14 @@ class FirebaseAPI: ObservableObject {
     func addMusicDetail(musicID: String, time: String, score: Double, key: Int, model: String, comment: String) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
         let d = [
-            "time": time,
-            "score": score,
-            "key": key,
-            "model": model,
-            "comment": comment
+            UserRef.MusicListRef.MusicDataRef.time.rawValue: time,
+            UserRef.MusicListRef.MusicDataRef.score.rawValue: score,
+            UserRef.MusicListRef.MusicDataRef.key.rawValue: key,
+            UserRef.MusicListRef.MusicDataRef.model.rawValue: model,
+            UserRef.MusicListRef.MusicDataRef.comment.rawValue: comment
         ] as [String : Any]
         musicRef.document(musicID).updateData([
-            "data": FieldValue.arrayUnion([d])
+            UserRef.MusicListRef.data.rawValue: FieldValue.arrayUnion([d])
         ]) {err in
             if let _err = err {
                 print("Error adding detail \(_err)")
@@ -692,8 +733,8 @@ class FirebaseAPI: ObservableObject {
     //listを追加
     func addList(listName: String, listImage: Data) {
         let ref = listRef.addDocument(data: [
-            "listName": listName,
-            "listImage": listImage
+            UserRef.ListsRef.listName.rawValue: listName,
+            UserRef.ListsRef.listImage.rawValue: listImage
         ]){err in
             if let _err = err {
                 print("Error adding list: \(_err)")
@@ -704,7 +745,7 @@ class FirebaseAPI: ObservableObject {
             
         }
         userRef.updateData([
-            "listOrder": FieldValue.arrayUnion([ref.documentID])
+            UserRef.listOrder.rawValue: FieldValue.arrayUnion([ref.documentID])
         ])
         Manager.shared.lists.append(Lists(listName: listName, listImage: listImage, id: ref.documentID))
         Manager.shared.listOrder.append(ref.documentID)
@@ -713,9 +754,9 @@ class FirebaseAPI: ObservableObject {
     //wannaListを追加
     func addWanna(musicName: String, artistName: String, musicImage: Data) {
         wannaRef.addDocument(data: [
-            "musicName": musicName,
-            "artistName": artistName,
-            "musicImage": musicImage
+            UserRef.WannaListRef.musicName.rawValue: musicName,
+            UserRef.WannaListRef.artistName.rawValue: artistName,
+            UserRef.WannaListRef.musicImage.rawValue: musicImage
         ]) {err in
             if let _err = err {
                 print("Error adding music: \(_err)")
@@ -729,7 +770,7 @@ class FirebaseAPI: ObservableObject {
     func addMusicToList(musicID: String, listID: String) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
         musicRef.document(musicID).updateData([
-            "lists": FieldValue.arrayUnion([listID])
+            UserRef.MusicListRef.lists.rawValue: FieldValue.arrayUnion([listID])
         ]) { err in
             if let _err = err {
                 print("Error adding music \(_err)")
@@ -743,15 +784,14 @@ class FirebaseAPI: ObservableObject {
     func post(musicName: String, artistName: String, musicImage: Data, content: String, category: [String]) {
         let time = Timestamp(date: Date())
         shareRef.addDocument(data: [
-            "musicName": musicName,
-            "artistName": artistName,
-            "musicImage": musicImage,
-            "content": content,
-            "userName": UserDefaults.standard.string(forKey: "userName")!,
-            "time": time,
-            "goodNumber": 0,
-            "goodSelf": false,
-            "category": category])
+            ShareRef.musicName.rawValue: musicName,
+            ShareRef.artistName.rawValue: artistName,
+            ShareRef.musicImage.rawValue: musicImage,
+            ShareRef.content.rawValue: content,
+            ShareRef.userName.rawValue: UserDefaultsKey.userID.get()!,
+            ShareRef.time.rawValue: time,
+            ShareRef.goodNumber.rawValue: 0,
+            ShareRef.category.rawValue: category])
     }
     
     
@@ -774,13 +814,13 @@ class FirebaseAPI: ObservableObject {
     //musicDataを削除
     func deleteMusicDetail(musicID: String, data: MusicData, completionHandler: @escaping (Any) -> Void) {
         let indexPath = Manager.shared.musicList.firstIndex(where: {$0.id == musicID})!
-        let d = ["comment": data.comment,
-                 "key": data.key,
-                 "model": data.model,
-                 "score": data.score,
-                 "time": data.time] as [String : Any]
+        let d = [UserRef.MusicListRef.MusicDataRef.comment.rawValue: data.comment,
+                 UserRef.MusicListRef.MusicDataRef.key.rawValue: data.key,
+                 UserRef.MusicListRef.MusicDataRef.model.rawValue: data.model,
+                 UserRef.MusicListRef.MusicDataRef.score.rawValue: data.score,
+                 UserRef.MusicListRef.MusicDataRef.time.rawValue: data.time] as [String : Any]
         musicRef.document(musicID).updateData([
-            "data": FieldValue.arrayRemove([d])
+            UserRef.MusicListRef.data.rawValue: FieldValue.arrayRemove([d])
         ]){err in
             if let _err = err {
                 print("Error deleting detail: \(_err)")
@@ -802,7 +842,7 @@ class FirebaseAPI: ObservableObject {
             }else{
                 print("music successfully removed")
                 self.userRef.updateData([
-                    "listOrder": FieldValue.arrayRemove([listID])
+                    UserRef.listOrder.rawValue: FieldValue.arrayRemove([listID])
                 ]){err in
                     if let _err = err {
                         print("Error deleting music order: \(_err)")
@@ -833,7 +873,7 @@ class FirebaseAPI: ObservableObject {
     //listからmusicを削除
     func deleteMusicFromList(selectedID: String, listID: String, completionHandler: @escaping (Any) -> Void) {
         musicRef.document(selectedID).updateData([
-            "lists": FieldValue.arrayRemove([listID])
+            UserRef.MusicListRef.lists.rawValue: FieldValue.arrayRemove([listID])
         ]) { err in
             if let _err = err {
                 print("Error updating favorite: \(_err)")
@@ -852,10 +892,10 @@ class FirebaseAPI: ObservableObject {
     func favoriteUpdate(id: String, favorite: Bool, completionHandler: @escaping (Any) -> Void) {
         if favorite {
             musicRef.document(id).updateData([
-                "favorite": false
+                UserRef.MusicListRef.favorite.rawValue: false
             ]){ err in
                 if let _err = err {
-                    print("Error updating favorite: \(err)")
+                    print("Error updating favorite: \(_err)")
                 } else {
                     print("favorite successfully updated")
                     
@@ -867,7 +907,7 @@ class FirebaseAPI: ObservableObject {
             }
         } else {
             musicRef.document(id).updateData([
-                "favorite": true
+                UserRef.MusicListRef.favorite.rawValue: true
             ]){ err in
                 if let _err = err {
                     print("Error updating favorite: \(_err)")
@@ -886,7 +926,7 @@ class FirebaseAPI: ObservableObject {
     //listOrderを更新
     func listOrderUpdate(listOrder: [String]) {
         userRef.updateData([
-            "listOrder": listOrder
+            UserRef.listOrder.rawValue: listOrder
         ]) {err in
             if let _err = err {
                 print("Error updating list order: \(_err)")
@@ -902,11 +942,11 @@ class FirebaseAPI: ObservableObject {
             let num = Manager.shared.goodList.firstIndex(of: id)!
             Manager.shared.goodList.remove(at: num)
             userRef.updateData([
-                "goodList": FieldValue.arrayRemove([id])
+                UserRef.goodList.rawValue: FieldValue.arrayRemove([id])
                 
             ])
             shareRef.document(id).updateData([
-                "goodNumber": FieldValue.increment(Double(-1))
+                ShareRef.goodNumber.rawValue: FieldValue.increment(Double(-1))
             ]){ err in
                 if let _err = err {
                     print("Error updating good: \(_err)")
@@ -917,18 +957,77 @@ class FirebaseAPI: ObservableObject {
         }else{
             Manager.shared.goodList.append(id)
             userRef.updateData([
-                "goodList": FieldValue.arrayUnion([id])
+                UserRef.goodList.rawValue: FieldValue.arrayUnion([id])
             ])
             shareRef.document(id).updateData([
-                "goodNumber": FieldValue.increment(Double(1))
+                ShareRef.goodNumber.rawValue: FieldValue.increment(Double(1))
             ]){ err in
                 if let _err = err {
                     print("Error updating good: \(_err)")
-                }else{
-                    
                 }
             }
         }
     }
     
+    func updateUserName(rename: String) {
+        userRef.updateData([
+            UserRef.name.rawValue: rename
+        ]) { err in
+            if let _err = err {
+                print("Error updating user name: \(_err)")
+            }
+        }
+        
+    }
+    
+    
+    enum UserRef: String {
+        case goodList = "goodList"
+        case listOrder = "listOrder"
+        case name = "name"
+        case showAll = "showAll"
+        case followLimit = "followLimit"
+        case follow = "follow"
+        case follower = "follower"
+        
+        enum MusicListRef: String {
+            case musicName = "musicName"
+            case artistName = "artistName"
+            case musicImage = "musicImage"
+            case favorite = "favorite"
+            case lists = "lists"
+            case data = "data"
+            
+            enum MusicDataRef: String {
+                case time = "time"
+                case score = "score"
+                case key = "key"
+                case model = "model"
+                case comment = "comment"
+            }
+        }
+        
+        enum ListsRef: String {
+            case listImage = "listImage"
+            case listName = "listName"
+        }
+        
+        enum WannaListRef: String {
+            case musicName = "musicName"
+            case artistName = "artistName"
+            case musicImage = "musicImage"
+        }
+    }
+    
+    enum ShareRef: String {
+        case time = "time"
+        case musicName = "musicName"
+        case artistName = "artistName"
+        case musicImage = "musicImage"
+        case userName = "userName"
+        case content = "content"
+        case goodNumber = "goodNumber"
+        case category = "category"
+    }
 }
+//taiga da-isukidayo-

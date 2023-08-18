@@ -13,12 +13,12 @@ struct Function {
     private var impactFeedbackGenerator: UIImpactFeedbackGenerator?
     private var notificationFeedbackGenerator: UINotificationFeedbackGenerator?
     
-    func sort(sortKind: Int, updateList: [MusicList], completionHandler: @escaping ([MusicList]) -> Void) {
+    func sort(sortKind: String, updateList: [MusicList], completionHandler: @escaping ([MusicList]) -> Void) {
 
         var list = updateList
         switch sortKind {
         //日付（遅い）
-        case 0:
+        case "0":
             var a: [Date] = []
             for i in updateList {
                 let b = i.data
@@ -35,7 +35,7 @@ struct Function {
             print(0)
 
             //日付け（早い）
-        case 1:
+        case "1":
             var a: [Date] = []
             for i in updateList {
                 let b = i.data
@@ -51,7 +51,7 @@ struct Function {
             print(1)
 
             //得点（高い）
-        case 2:
+        case "2":
             var a: [Double] = []
             for i in updateList {
                 let b = i.data
@@ -66,7 +66,7 @@ struct Function {
             print(2)
 
             //得点（低い）
-        case 3:
+        case "3":
             var a: [Double] = []
             for i in updateList {
                 let b = i.data
@@ -81,19 +81,19 @@ struct Function {
             print(3)
 
             //五十音(早い）
-        case 4: list.sort(by: {$0.musicName < $1.musicName})
+        case "4": list.sort(by: {$0.musicName < $1.musicName})
             print(4)
 
             //五十音(遅い）
-        case 5: list.sort(by: {$1.musicName < $0.musicName})
+        case "5": list.sort(by: {$1.musicName < $0.musicName})
             print(5)
 
             //アーティスト（早い）
-        case 6: list.sort(by: {($0.artistName, $0.musicName) < ($1.artistName, $1.musicName)})
+        case "6": list.sort(by: {($0.artistName, $0.musicName) < ($1.artistName, $1.musicName)})
             print(6)
 
             //アーティスト（遅い）
-        case 7: list.sort(by: {($1.artistName, $0.musicName) < ($0.artistName, $1.musicName)})
+        case "7": list.sort(by: {($1.artistName, $0.musicName) < ($0.artistName, $1.musicName)})
             print(7)
 
         default: print("error sort")

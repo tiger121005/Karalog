@@ -9,11 +9,11 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    var time = ""
-    var score = ""
-    var key = ""
-    var model = ""
-    var comment = ""
+    var time: String = ""
+    var score: String = ""
+    var key: String = ""
+    var model: String = ""
+    var comment: String = ""
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!

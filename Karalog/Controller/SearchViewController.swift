@@ -26,7 +26,7 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         }
     }
     
-    var resultingText = ""
+    var resultingText: String = ""
     var requests = [VNRequest]()
     
     @IBOutlet var collectionView: UICollectionView!

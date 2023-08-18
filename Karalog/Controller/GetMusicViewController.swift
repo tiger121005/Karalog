@@ -23,8 +23,8 @@ class GetMusicViewController: UIViewController {
         }
     }
     
-    var fromList = false
-    var resultingText = ""
+    var fromList: Bool = false
+    var resultingText: String = ""
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!

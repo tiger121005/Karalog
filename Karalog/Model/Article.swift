@@ -57,7 +57,7 @@ public struct Post: Codable {
     let musicImage: Data
     let content: String
     let time: Timestamp
-    let userName: String
+    var userID: String
     var goodNumber: Int
     var category: [String]
     @DocumentID var id: String?
@@ -71,10 +71,28 @@ public struct SampleData: Identifiable {
 
 public struct User: Codable {
     let name: String
+    var goodList: [String]
+    var listOrder: [String]
+    var followLimit: Bool
+    var showAll: Bool
+    var follow: [String]
+    var follower: [String]
     @DocumentID var id: String?
 }
 
-public struct AnotherUser: Codable {
-    let follow: [User]
-    let follower: [User]
+enum UserDefaultsKey: String {
+    case userID = "userID"
+    case judgeSort = "judgeSort"
+    
+    func get() -> String? {
+        return UserDefaults.standard.string(forKey: self.rawValue)
+    }
+
+    func set(value: String) {
+        UserDefaults.standard.set(value, forKey: self.rawValue)
+    }
+
+    func remove() {
+        UserDefaults.standard.removeObject(forKey: self.rawValue)
+    }
 }

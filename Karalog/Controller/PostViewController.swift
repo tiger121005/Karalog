@@ -44,8 +44,8 @@ class PostViewController: UIViewController {
     func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
-            var text = ""
-            var newLine = false
+            var text: String = ""
+            var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
                     text += "\n#" + Material.shared.categoryList[i.row]

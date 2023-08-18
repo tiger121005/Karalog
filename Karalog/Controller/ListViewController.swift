@@ -9,16 +9,16 @@ import UIKit
 
 class ListViewController: UIViewController {
     
-    var listID = ""
+    var listID: String = ""
     var originalList: [MusicList] = []
     var tvList: [MusicList] = []
-    var judgeSort = 0
-    var allSelected = false
+    var judgeSort: String = "0"
+    var allSelected: Bool = false
     var idList: [String] = []
     
-    var selectedID = ""
-    var musicName = ""
-    var artistName = ""
+    var selectedID: String = ""
+    var musicName: String = ""
+    var artistName: String = ""
     var musicImage: Data!
     let sortList: [String] = ["追加順(遅)", "追加順(早)", "スコア順(高)", "スコア順(低)", "曲名順(早)", "曲名順(遅)", "アーティスト順(早)", "アーティスト順(遅)"]
     
@@ -207,80 +207,81 @@ class ListViewController: UIViewController {
             })
         ])
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
-            if judgeSort != 0 {
-                judgeSort = 0
+            if judgeSort != "0" {
+                judgeSort = "0"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 1
+                judgeSort = "1"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
-            if judgeSort != 2{
-                judgeSort = 2
+            if judgeSort != "2"{
+                judgeSort = "2"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 3
+                judgeSort = "3"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
-            if judgeSort != 4{
-                judgeSort = 4
+            if judgeSort != "4"{
+                judgeSort = "4"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 5
+                judgeSort = "5"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
             self.createMenu()
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
-            if judgeSort != 6{
-                judgeSort = 6
+            if judgeSort != "6"{
+                judgeSort = "6"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = 7
+                judgeSort = "7"
                 Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
-                UserDefaults.standard.set(judgeSort, forKey: "judgeSort2")
-                
+                UserDefaultsKey.judgeSort.set(value: judgeSort)
+
             }
             self.createMenu()
         })]
         
-        let sorts = UIMenu(title: "並び替え（" + sortList[UserDefaults.standard.integer(forKey: "judgeSort2")] + ")", children: subItems)
+        let sortNum: String! = UserDefaultsKey.judgeSort.get()
+        let sorts = UIMenu(title: "並び替え（" + sortList[Int(sortNum) ?? 0] + ")", children: subItems)
         
         //editBtn.showsMenuAsPrimaryAction = true
         editBtn.menu = UIMenu(title: "", children: [items, sorts])
@@ -331,6 +332,52 @@ extension ListViewController: UITableViewDataSource {
         cell.artistLabel?.text = tvList[indexPath.row].artistName
         let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
+        
+        if listID != "1" {
+            var list: [MusicList] = []
+            var a: [Double] = []
+            for i in tvList {
+                let b = i.data
+                var c: [Double] = []
+                for j in b {
+                    c.append(j.score)
+                }
+                a.append(c.max() ?? 0)
+            }
+            let d = a.indices.sorted{ a[$1] < a[$0]}
+            list = d.map{tvList[$0]}
+            
+            var n: Int!
+            //        let n = Int(ceil(Double(tvList.count / 10)))
+            if tvList.count < 10 {
+                n = 1
+            } else if tvList.count < 40 {
+                n = Int(ceil(Double(tvList.count / 10)))
+            } else {
+                n = Int(ceil(Double(tvList.count / 5)))
+            }
+            let m = n * 3
+            let high = list[n - 1].data.map{$0.score}.max() ?? 0
+            var medium: Double = 0.0
+            if tvList.count > 3 {
+                medium = list[m - 1].data.map{$0.score}.max() ?? 0
+            }
+            let scoreList = tvList[indexPath.row].data.map{$0.score}
+            let max = scoreList.max() ?? 0
+            cell.scoreLabel.text = String(format: "%.3f", max)
+            if max >= Double(high) {
+                cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+                cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
+            } else if max >= Double(medium) && tvList.count > 3 {
+                cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+                cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
+            } else {
+                cell.scoreLabel.textColor = UIColor.secondaryLabel
+                cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
+            }
+        } else {
+            cell.scoreLabel.isHidden = true
+        }
         
         cell.favoriteBtn.isHidden = true
         

@@ -11,17 +11,17 @@ class AddDetailViewController: UIViewController {
 
     var alertCtl: UIAlertController!
     var time: String!
-    var fromWanna = false
-    var musicName = ""
-    var artistName = ""
+    var fromWanna: Bool = false
+    var musicName: String = ""
+    var artistName: String = ""
     var musicImage: Data!
-    var musicID = ""
-    var wannaID = ""
-    var selectedMenuType = modelMenuType.未選択
+    var musicID: String = ""
+    var wannaID: String = ""
+    var selectedMenuType = ModelMenuType.未選択
     var sliderValue: Float = 0
-    var callView = true
+    var callView: Bool = true
     var scaleList: [UIView] = []
-    var post = false
+    var post: Bool = false
     var category: [String] = []
     var tapGesture: UITapGestureRecognizer!
     
@@ -81,21 +81,21 @@ class AddDetailViewController: UIViewController {
     func configureMenuButton() {
         var actions = [UIMenuElement]()
         // HIGH
-        actions.append(UIAction(title: modelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.未選択 ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.未選択 ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .未選択
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
         // MID
-        actions.append(UIAction(title: modelMenuType.DAM.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.DAM ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.DAM.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.DAM ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .DAM
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
         // LOW
-        actions.append(UIAction(title: modelMenuType.JOYSOUND.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.JOYSOUND ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.JOYSOUND.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.JOYSOUND ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .JOYSOUND
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
@@ -139,8 +139,8 @@ class AddDetailViewController: UIViewController {
     func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
-            var text = ""
-            var newLine = false
+            var text: String = ""
+            var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
                     text += "\n#" + Material.shared.categoryList[i.row]
@@ -162,19 +162,20 @@ class AddDetailViewController: UIViewController {
     
 
     @IBAction func editingChanged(_ sender: Any) {
-        if Double(scoreTF.text!) ?? 0 >= 100 {
-            scoreTF.text = String(Double(scoreTF.text!)! / 10)
-        }
+        
         
         guard let _scoreValue = scoreTF.text else { return }
         
-        let maxLength: Int = 6
-        
+        if Double(_scoreValue) ?? 0.0 > 100 {
+            scoreTF.text = String(Double(scoreTF.text!)! / 10)
+        }
         // textField内の文字数
-        let textFieldNumber = scoreTF.text?.count ?? 0
+        let textFieldNumber = _scoreValue.count
         
-        if textFieldNumber > maxLength {
-            scoreTF.text = String(_scoreValue.prefix(maxLength))
+        if textFieldNumber > 6 && Double(_scoreValue) ?? 0.0 != 100 {
+            scoreTF.text = String(_scoreValue.prefix(6))
+        } else if _scoreValue == "100.0000" {
+            scoreTF.text = String(_scoreValue.prefix(7))
         }
     }
     
@@ -234,7 +235,7 @@ class AddDetailViewController: UIViewController {
     }
     
     //機種設定
-    enum modelMenuType: String {
+    enum ModelMenuType: String {
         case 未選択 = "未選択"
         case DAM = "DAM"
         case JOYSOUND = "JOYSOUND"
@@ -263,16 +264,6 @@ class AddDetailViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-//        let screenHeight = UIScreen.main.bounds.height
-//        let safeAreaTop = self.view.safeAreaInsets.top
-//        let safeAreaBottom = self.view.safeAreaInsets.bottom
-//        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-//        // ナビゲーションバーの高さを取得する
-//        if checkBox.frame.maxY - screenHeight > 0 {
-//            scrollView.setContentOffset(CGPoint.init(x: 0, y: checkBox.frame.maxY - screenHeight), animated: true)
-//        }else{
-//            scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
-//        }
         tapGesture.isEnabled = false
     }
     
@@ -286,13 +277,6 @@ class AddDetailViewController: UIViewController {
 }
 
 extension AddDetailViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let _numCount = scoreTF.text else { return }
-        
-        if _numCount.count > 6 {
-            scoreTF.text = String(_numCount.prefix(6))
-        }
-    }
     
     //改行したら自動的にキーボードを非表示にする
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

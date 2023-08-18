@@ -13,7 +13,7 @@ protocol TableViewCell1Delegate {
 
 class TableViewCell1: UITableViewCell {
     
-    @IBOutlet var colorImage: UIImageView!
+    @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
     @IBOutlet var musicImage: UIImageView!
@@ -30,8 +30,7 @@ class TableViewCell1: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        colorImage.layer.shadowColor = UIColor.secondaryLabel.cgColor
-        colorImage.layer.shadowOffset = CGSize(width: 0, height: colorImage.frame.height*0.3)
+        scoreLabel.transform = CGAffineTransformMakeRotation(CGFloat.pi / 5)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

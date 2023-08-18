@@ -10,15 +10,15 @@ import Alamofire
 
 class AddMusicViewController: UIViewController {
     
-    var musicName = ""
-    var artistName = ""
+    var musicName: String = ""
+    var artistName: String = ""
     var musicImage: Data!
     var sliderValue: Float = 0
     var selectedMenuType = modelMenuType.未選択
     var alertCtl: UIAlertController!
-    var callView = true
+    var callView: Bool = true
     var scaleList: [UIView] = []
-    var post = false
+    var post: Bool = false
     var category: [String] = []
     var tapGesture: UITapGestureRecognizer!
     
@@ -148,8 +148,8 @@ class AddMusicViewController: UIViewController {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             
-            var text = ""
-            var newLine = false
+            var text: String = ""
+            var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
                     text += "\n#" + Material.shared.categoryList[i.row]
@@ -169,19 +169,19 @@ class AddMusicViewController: UIViewController {
     }
     
     @IBAction func editingChanged(_ sender: Any) {
-        if Double(scoreTF.text!) ?? 0 >= 100 {
-            scoreTF.text = String(Double(scoreTF.text!)! / 10)
-        }
         
         guard let _scoreValue = scoreTF.text else { return }
         
-        let maxLength: Int = 6
-        
+        if Double(_scoreValue) ?? 0.0 > 100 {
+            scoreTF.text = String(Double(scoreTF.text!)! / 10)
+        }
         // textField内の文字数
-        let textFieldNumber = scoreTF.text?.count ?? 0
+        let textFieldNumber = _scoreValue.count
         
-        if textFieldNumber > maxLength {
-            scoreTF.text = String(_scoreValue.prefix(maxLength))
+        if textFieldNumber > 6 && Double(_scoreValue) ?? 0.0 != 100 {
+            scoreTF.text = String(_scoreValue.prefix(6))
+        } else if scoreTF.text == "100.0000" {
+            scoreTF.text = String(_scoreValue.prefix(7))
         }
     }
     
@@ -289,13 +289,6 @@ class AddMusicViewController: UIViewController {
 }
 
 extension AddMusicViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let _numCount = scoreTF.text else { return }
-        
-        if _numCount.count > 6 {
-            scoreTF.text = String(_numCount.prefix(6))
-        }
-    }
     
     //改行したら自動的にキーボードを非表示にする
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -11,10 +11,10 @@ class ShareViewController: UIViewController {
     
     var shareList: [Post] = []
     var goodList: [Bool] = []
-    var sendWord = ""
+    var sendWord: String = ""
     var category: [String] = []
     var alertCtl: UIAlertController!
-    var searchViewHidden = true
+    var searchViewHidden: Bool = true
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -26,6 +26,8 @@ class ShareViewController: UIViewController {
     @IBOutlet var searchBtn: CustomButton!
     @IBOutlet var topView: UIView!
     @IBOutlet var searchViewTopConstraint: NSLayoutConstraint!
+    
+    let refreshCtl = UIRefreshControl()
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
         didSet{
@@ -52,6 +54,7 @@ class ShareViewController: UIViewController {
             self.collectionView.reloadData()
         })
         self.view.bringSubviewToFront(topView)
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,8 +70,7 @@ class ShareViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toProfile" {
             let nextView = segue.destination as! ProfileViewController
-            nextView.userName = UserDefaults.standard.string(forKey: "userName")
-            nextView.userID = UserDefaults.standard.string(forKey: "userID")
+            nextView.userID = UserDefaultsKey.userID.get()
             
         }
     }
@@ -92,14 +94,18 @@ class ShareViewController: UIViewController {
             return UICollectionViewCompositionalLayout(section: section)
         }()
         
+        collectionView.refreshControl = refreshCtl
+        refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
+        refreshCtl.addTarget(self, action: #selector(self.reload), for: UIControl.Event.valueChanged)
+        
         collectionView.collectionViewLayout = compositionalLayout
     }
     
     func setupCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
-            var text = ""
-            var newLine = false
+            var text: String = ""
+            var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
                     text += "\n#" + Material.shared.categoryList[i.row]
@@ -154,43 +160,41 @@ class ShareViewController: UIViewController {
         }
     }
     
-    func showSearchView() {
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
-            
-            self.searchView.center.y = self.searchView.frame.height/2 + (self.navigationController?.navigationBar.frame.maxY)!
-            
-            
-        }, completion: {(finished: Bool) in
-            
-        })
-        searchViewHidden = false
-        self.searchViewTopConstraint.constant = (self.navigationController?.navigationBar.frame.maxY)!
-    }
-    
-    func hideSearchView() {
-        
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       options: [.curveEaseOut],
-                       animations: {
-            
-            self.searchView.center.y -= self.searchView.frame.height
-            
-            if self.musicTF.isFirstResponder {
-                self.musicTF.resignFirstResponder()
-            }else if self.artistTF.isFirstResponder {
-                self.artistTF.resignFirstResponder()
-            }
-            
-        }, completion: {(finished: Bool) in
-            
-        })
-        searchViewHidden = true
-        self.searchViewTopConstraint.constant -= self.searchView.frame.height
-        
+    func switchSearchView() {
+        if searchViewHidden {
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: [.curveEaseOut],
+                           animations: {
+                
+                self.searchView.center.y = self.searchView.frame.height/2 + (self.navigationController?.navigationBar.frame.maxY)!
+                
+                
+            }, completion: {(finished: Bool) in
+                
+            })
+            searchViewHidden = false
+            self.searchViewTopConstraint.constant = (self.navigationController?.navigationBar.frame.maxY)!
+        } else {
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: [.curveEaseOut],
+                           animations: {
+                
+                self.searchView.center.y -= self.searchView.frame.height
+                
+                if self.musicTF.isFirstResponder {
+                    self.musicTF.resignFirstResponder()
+                }else if self.artistTF.isFirstResponder {
+                    self.artistTF.resignFirstResponder()
+                }
+                
+            }, completion: {(finished: Bool) in
+                
+            })
+            searchViewHidden = true
+            self.searchViewTopConstraint.constant -= self.searchView.frame.height
+        }
     }
     
     func showGoodNumber(n: Int) -> String {
@@ -214,11 +218,7 @@ class ShareViewController: UIViewController {
     }
     
     @IBAction func tapSearchViewBtn() {
-        if searchViewHidden == true {
-            showSearchView()
-        } else {
-            hideSearchView()
-        }
+        switchSearchView()
     }
     
     @IBAction func tapSearchBtn() {
@@ -226,7 +226,7 @@ class ShareViewController: UIViewController {
             self.shareList = list
             self.collectionView.reloadData()
         })
-        hideSearchView()
+        switchSearchView()
         tableView.isHidden = true
     }
     
@@ -239,10 +239,17 @@ class ShareViewController: UIViewController {
             self.shareList = list
             self.collectionView.reloadData()
         })
-        hideSearchView()
+        switchSearchView()
         tableView.isHidden = true
     }
     
+    @objc func reload() {
+        FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: []) { list in
+            self.shareList = list
+            self.collectionView.reloadData()
+            self.refreshCtl.endRefreshing()
+        }
+    }
 }
 
 extension ShareViewController: UICollectionViewDelegate {
@@ -264,11 +271,13 @@ extension ShareViewController: UICollectionViewDataSource {
         
         cell.musicName?.setTitle(shareList[indexPath.row].musicName, for: .normal)
         cell.artistName?.setTitle(shareList[indexPath.row].artistName, for: .normal)
-        let useImage = resize(image: (UIImage(data: shareList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal))!, width: 45)
+        let useImage = resize(image: (UIImage(data: shareList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal))!, width: 70)
+        
         cell.musicImage?.setImage(useImage, for: .normal)
         cell.content.text = shareList[indexPath.row].content
-        cell.userName.text = shareList[indexPath.row].userName
-        var a = ""
+        
+        cell.userName.text = shareList[indexPath.row].userID
+        var a: String = ""
         for i in shareList[indexPath.row].category {
             a += "#" + i
         }
@@ -305,15 +314,43 @@ extension ShareViewController: ShareCellDelegate {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
         FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
+        print(goodList[indexPath.row], "goodListBefore")
         if goodList[indexPath.row] {
             shareList[indexPath.row].goodNumber -= 1
+            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
             shareList[indexPath.row].goodNumber += 1
+            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
+        
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
         goodList[indexPath.row].toggle()
-        
+        print(goodList[indexPath.row], "goodListAfter")
         collectionView.reloadData()
+    }
+    
+    func tapMusic(indexpath indexPath: IndexPath) {
+        let selectedMusic = shareList[indexPath.row].musicName
+        FirebaseAPI.shared.searchPost(first: true, music: selectedMusic, artist: "", category: []) { list in
+            self.shareList = list
+            self.musicTF.text = selectedMusic
+            self.artistTF.text = ""
+            self.category = []
+            self.categoryLabel.text = ""
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func tapArtist(indexPath: IndexPath) {
+        let selectedArtist = shareList[indexPath.row].artistName
+        FirebaseAPI.shared.searchPost(first: true, music: "", artist: selectedArtist, category: []) { list in
+            self.shareList = list
+            self.musicTF.text = ""
+            self.artistTF.text = selectedArtist
+            self.category = []
+            self.categoryLabel.text = ""
+            self.collectionView.reloadData()
+        }
     }
 }
 

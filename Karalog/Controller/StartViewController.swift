@@ -17,14 +17,14 @@ class StartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if UserDefaults.standard.string(forKey: "userID") != nil {
+        let u: String! = UserDefaultsKey.userID.get()
+        if u != nil {
             self.performSegue(withIdentifier: "toTabBar", sender: nil)
-            if let _goodList = UserDefaults.standard.array(forKey: "goodList") as? [String] {
-                Manager.shared.goodList = _goodList
-            }else{
-                FirebaseAPI.shared.getGoodList()
-            }
-
+            
+            
+            
+            
+            
         } else {
             self.performSegue(withIdentifier: "toLogin", sender: nil)
         }
