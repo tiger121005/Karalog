@@ -2402,6 +2402,9 @@
                                 <color key="tintColor" name="imageColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system" title="過去の投稿を見る"/>
+                                <connections>
+                                    <action selector="tapToPastPost" destination="2rM-74-j8y" eventType="touchUpInside" id="cdx-vb-luj"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5mB-Cl-P9c">
                                 <rect key="frame" x="263" y="167" width="57" height="81"/>
@@ -2575,6 +2578,9 @@
                         <color key="backgroundColor" name="baseColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="Flh-nU-3NX"/>
+                    <connections>
+                        <outlet property="collectionView" destination="hAp-Ni-w7d" id="5hI-Hj-M7T"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U3U-g3-UO6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

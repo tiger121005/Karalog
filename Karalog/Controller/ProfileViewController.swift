@@ -43,6 +43,7 @@ class ProfileViewController: UIViewController {
         if segue.identifier == "toSelectedPost" {
             let nextView = segue.destination as! SelectedPostViewController
             nextView.kind = selectPostKind
+            nextView.userID = userID
         }
     }
     
@@ -127,6 +128,11 @@ class ProfileViewController: UIViewController {
     
     @IBAction func showMenuBtn() {
         switchMenu()
+    }
+    
+    @IBAction func tapToPastPost() {
+        selectPostKind = "past"
+        performSegue(withIdentifier: "toSelectedPost", sender: nil)
     }
     
     enum SettingShow: String {

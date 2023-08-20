@@ -1,0 +1,20 @@
+PODS:
+  - Alamofire (5.6.2)
+  - DZNEmptyDataSet (1.8.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - DZNEmptyDataSet
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - DZNEmptyDataSet
+
+SPEC CHECKSUMS:
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+
+PODFILE CHECKSUM: c4a32a013b6986c4c38fb334b425e851671f6524
+
+COCOAPODS: 1.12.0
