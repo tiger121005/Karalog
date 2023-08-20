@@ -23,8 +23,8 @@ class ProfileViewController: UIViewController {
     var followList: [String] = []
     var followerList: [String] = []
     var selectPostKind: String = "past"
-    var selectedSettingShow = SettingShow.全て
-    var selectedSettingFollow = SettingFollow.全て
+    var selectedSettingShow = SettingShow.全て.rawValue
+    var selectedSettingFollow = SettingFollow.全て.rawValue
     var menuHidden: Bool = true
     var outBtn: UIButton!
     
@@ -47,13 +47,32 @@ class ProfileViewController: UIViewController {
     }
     
     func setupView() {
-        FirebaseAPI.shared.getUserInformation(id: userID) { user in
-            self.userName = user.name
-            self.followList = user.follow
-            self.followerList = user.follower
+        Task {
+            let user = await FirebaseAPI.shared.getUserInformation(id: self.userID)
+            self.userName = user?.name
+            self.followList = user?.follow ?? []
+            self.followerList = user?.follower ?? []
             self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
             self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
             self.userNameLabel.text = self.userName
+            if let s = user?.showAll {
+                if s {
+                    self.selectedSettingShow = SettingShow.全て.rawValue
+                } else {
+                    self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                }
+            } else {
+                self.selectedSettingShow = SettingShow.フォロワー.rawValue
+            }
+            if let f = user?.followLimit {
+                if f {
+                    self.selectedSettingFollow = SettingFollow.認証.rawValue
+                } else {
+                    self.selectedSettingFollow = SettingFollow.全て.rawValue
+                }
+            } else {
+                self.selectedSettingFollow = SettingFollow.認証.rawValue
+            }
         }
         
         
@@ -158,11 +177,20 @@ extension ProfileViewController: UITableViewDelegate {
             let alert = UIAlertController(title: "公開制限", message: "", preferredStyle: .actionSheet)
             
             let all = UIAlertAction(title: SettingShow.全て.rawValue, style: .default) {_ in
-                self.selectedSettingShow = SettingShow.全て
+                if self.selectedSettingShow != SettingShow.全て.rawValue {
+                    self.selectedSettingShow = SettingShow.全て.rawValue
+                    FirebaseAPI.shared.updateShowAll(id: self.userID, newBool: true)
+                }
             }
             
             let follower = UIAlertAction(title: SettingShow.フォロワー.rawValue, style: .default) {_ in
-                self.selectedSettingShow = SettingShow.フォロワー
+                print(11111)
+                if self.selectedSettingShow != SettingShow.フォロワー.rawValue {
+                    print(22222)
+                    self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                    FirebaseAPI.shared.updateShowAll(id: self.userID, newBool: false)
+                }
+                
             }
             
             let cancel = UIAlertAction(title: "キャンセル", style: .cancel)
@@ -176,11 +204,19 @@ extension ProfileViewController: UITableViewDelegate {
             let alert = UIAlertController(title: "フォロー制限", message: "", preferredStyle: .actionSheet)
             
             let all = UIAlertAction(title: SettingFollow.全て.rawValue, style: .default) {_ in
-                self.selectedSettingFollow = SettingFollow.全て
+                if self.selectedSettingFollow != SettingFollow.全て.rawValue {
+                    self.selectedSettingFollow = SettingFollow.全て.rawValue
+                    print(5555, self.selectedSettingFollow)
+                    FirebaseAPI.shared.updateFollowLimit(id: self.userID, newBool: false)
+                }
             }
             
             let follower = UIAlertAction(title: SettingFollow.認証.rawValue, style: .default) {_ in
-                self.selectedSettingFollow = SettingFollow.認証
+                if self.selectedSettingFollow != SettingFollow.認証.rawValue {
+                    self.selectedSettingFollow = SettingFollow.認証.rawValue
+                    print(5555, self.selectedSettingFollow)
+                    FirebaseAPI.shared.updateFollowLimit(id: self.userID, newBool: true)
+                }
             }
             
             let cancel = UIAlertAction(title: "キャンセル", style: .cancel)
@@ -198,6 +234,8 @@ extension ProfileViewController: UITableViewDelegate {
             let delete = UIAlertAction(title: "ログアウト", style: .destructive) { (action) in
                 do {
                     try Auth.auth().signOut()
+                    UserDefaultsKey.userID.remove()
+                    self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
                 }
                 catch let error as NSError {
                     print(error)

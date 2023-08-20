@@ -10,12 +10,13 @@ import Firebase
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
+import Combine
 
 class FirebaseAPI: ObservableObject {
     
     static let shared = FirebaseAPI()
     var userID: String!
-    var database = Firestore.firestore()
+    var db = Firestore.firestore()
     var userRef: DocumentReference!
     var shareRef: CollectionReference!
     var musicRef: CollectionReference!
@@ -30,36 +31,37 @@ class FirebaseAPI: ObservableObject {
     init() {
         UserDefaultsKey.userID.set(value: "imiWSXSa9tNBwNZvCWdjJ0Tw0Gr2")
         userID = UserDefaultsKey.userID.get()
-        userRef = database.collection("user").document(userID!)
-        shareRef = database.collection("share")
+        userRef = db.collection("user").document(userID!)
+        shareRef = db.collection("share")
         musicRef = userRef.collection("musicList")
         listRef = userRef.collection("lists")
         wannaRef = userRef.collection("wannaList")
-        getUserInformation(id: userID) { user in
-            self.myInformation = user
+        Task {
+            myInformation = await getUserInformation(id: userID)
         }
     }
     
     //user情報を取得
-    func getUserInformation(id: String) async -> User {
-        
-        database.collection("user").document(id).getDocument { (document, err) in
-            var user: User!
-            if let _err = err {
-                print("error getting music: \(_err)")
-                return(self.emptyUser)
-            }else{
-                print(9999999, document)
-                do{
-                    user = try document?.data(as: User.self)
-                        print(111111, user)
-                }catch{
-                    print(error)
-                    print(878787878)
-                    user = self.emptyUser
+    func getUserInformation(id: String) async -> User? {
+        await withCheckedContinuation { continuation in
+            db.collection("user").document(id).getDocument { (document, err) in
+                if let _err = err {
+                    print("Error getting user information: \(_err)")
+                    continuation.resume(returning: nil)
+                } else {
+                    if let document, document.exists {
+                        do {
+                            let user = try document.data(as: User.self)
+                            continuation.resume(returning: user)
+                        } catch {
+                            continuation.resume(returning: nil)
+                            print("Error getting user information: \(err)")
+                        }
+                    } else {
+                        continuation.resume(returning: nil)
+                        print("Error getting user information: \(err)")
+                    }
                 }
-                
-                return(user)
             }
         }
     }
@@ -165,25 +167,80 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func getPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
-        
-        if first {
-            if music != "" {
-                if artist != "" {
-                    if category != [] {//all
-                        shareRef
+    func getPost(first: Bool, music: String, artist: String, category: [String]) async throws -> [Post]{
+        return await withCheckedContinuation { continuation in
+            var list: [Post] = []
+            if first {
+                if music != "" {
+                    if artist != "" {
+                        if category != [] {//all
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    
+                                    if let _err = err {
+                                        print("Error getting post: \(String(describing: _err))")
+                                        continuation.resume(throwing: _err as! Never)
+                                        
+                                    }else{
+                                        for document in collection!.documents {
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                            
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                    
+                                }
+                        } else {//music,artist
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    
+                                    if let _err = err {
+                                        print("Error getting post: \(String(describing: _err))")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        
+                                        for document in collection!.documents {
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                            
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                }
+                        }
+                    } else if category != [] {//music, category
+                        self.shareRef
                             .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
                             .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
                             .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.artistName.rawValue)
                             .order(by: ShareRef.time.rawValue, descending: true)
-                            .limit(to: getLimit)
+                            .limit(to: self.getLimit)
                             .getDocuments { (collection, err) in
-                                var list: [Post] = []
                                 if let _err = err {
                                     print("Error getting post: \(String(describing: _err))")
-                                    completionHandler([])
+                                    continuation.resume(throwing: _err as! Never)
                                 }else{
                                     
                                     for document in collection!.documents {
@@ -195,22 +252,20 @@ class FirebaseAPI: ObservableObject {
                                         
                                     }
                                     self.postDocuments = collection!.documents
-                                    completionHandler(list)
+                                    continuation.resume(returning: list)
                                 }
                             }
-                    } else {//music,artist
-                        shareRef
+                        
+                    } else {//music
+                        self.shareRef
                             .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
                             .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.artistName.rawValue)
                             .order(by: ShareRef.time.rawValue, descending: true)
-                            .limit(to: getLimit)
+                            .limit(to: self.getLimit)
                             .getDocuments { (collection, err) in
-                                var list: [Post] = []
                                 if let _err = err {
                                     print("Error getting post: \(String(describing: _err))")
-                                    completionHandler([])
+                                    continuation.resume(throwing: _err as! Never)
                                 }else{
                                     
                                     for document in collection!.documents {
@@ -222,390 +277,324 @@ class FirebaseAPI: ObservableObject {
                                         
                                     }
                                     self.postDocuments = collection!.documents
-                                    completionHandler(list)
+                                    continuation.resume(returning: list)
                                 }
                             }
                     }
-                } else if category != [] {//music, category
-                    shareRef
-                        .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                        .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                        .order(by: ShareRef.musicName.rawValue)
-                        .order(by: ShareRef.time.rawValue, descending: true)
-                        .limit(to: getLimit)
-                        .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err {
-                                print("Error getting post: \(String(describing: _err))")
-                                completionHandler([])
-                            }else{
-                                
-                                for document in collection!.documents {
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
+                } else {
+                    if artist != "" {
+                        if category != [] {//artist,category
+                            self.shareRef
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err {
+                                        print("Error getting post: \(String(describing: _err))")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        
+                                        for document in collection!.documents {
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                            
+                                        }
+                                        
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                        
+                                    }
+                                }
+                        } else {//artist
+                            self.shareRef
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err {
+                                        print("Error getting post: \(String(describing: _err))")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        
+                                        for document in collection!.documents {
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                            
+                                        }
+                                        
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                        
+                                    }
+                                }
+                        }
+                    } else if category != [] {//category
+                        self.shareRef
+                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: self.getLimit)
+                            .getDocuments { (collection, err) in
+                                if let _err = err {
+                                    print("Error getting post: \(String(describing: _err))")
+                                    continuation.resume(throwing: _err as! Never)
+                                }else{
+                                    
+                                    for document in collection!.documents {
+                                        do{
+                                            list.append(try document.data(as: Post.self))
+                                        }catch{
+                                            print(error)
+                                        }
+                                        
                                     }
                                     
+                                    self.postDocuments = collection!.documents
+                                    continuation.resume(returning: list)
                                 }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
                             }
-                        }
-                    
-                } else {//music
-                    shareRef
-                        .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                        .order(by: ShareRef.musicName.rawValue)
-                        .order(by: ShareRef.time.rawValue, descending: true)
-                        .limit(to: getLimit)
-                        .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err {
-                                print("Error getting post: \(String(describing: _err))")
-                                completionHandler([])
-                            }else{
-                                
-                                for document in collection!.documents {
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
+                    } else {//no
+                        self.shareRef
+                            .order(by: ShareRef.time.rawValue, descending: true)
+                            .limit(to: self.getLimit)
+                            .getDocuments { (collection, err) in
+                                if let _err = err {
+                                    print("Error getting post: \(String(describing: _err))")
+                                    continuation.resume(throwing: _err as! Never)
+                                }else{
+                                    for document in collection!.documents {
+                                        do{
+                                            list.append(try document.data(as: Post.self))
+                                            print(777, try document.data(as: Post.self))
+                                        }catch{
+                                            print(error)
+                                        }
+                                        
                                     }
-                                
+                                    
+                                    self.postDocuments = collection!.documents
+                                    continuation.resume(returning: list)
                                 }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
                             }
-                        }
+                    }
                 }
+                
             } else {
-                if artist != "" {
-                    if category != [] {//artist,category
-                        shareRef
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                                var list: [Post] = []
-                                if let _err = err {
-                                    print("Error getting post: \(String(describing: _err))")
-                                    completionHandler([])
-                                }else{
-                                    
-                                    for document in collection!.documents {
-                                        do{
-                                            list.append(try document.data(as: Post.self))
-                                        }catch{
-                                            print(error)
-                                        }
-                                        
-                                    }
-                                    
-                                    self.postDocuments = collection!.documents
-                                    completionHandler(list)
-                                    
-                                    
-                                }
-                            }
-                    } else {//artist
-                        shareRef
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                                var list: [Post] = []
-                                if let _err = err {
-                                    print("Error getting post: \(String(describing: _err))")
-                                    completionHandler([])
-                                }else{
-                                    
-                                    for document in collection!.documents {
-                                        do{
-                                            list.append(try document.data(as: Post.self))
-                                        }catch{
-                                            print(error)
-                                        }
-                                        
-                                    }
-                                    
-                                    self.postDocuments = collection!.documents
-                                    completionHandler(list)
-                                    
-                                    
-                                }
-                            }
-                    }
-                } else if category != [] {//category
-                    shareRef
-                        .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                        .order(by: ShareRef.time.rawValue, descending: true)
-                        .limit(to: getLimit)
-                        .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err {
-                                print("Error getting post: \(String(describing: _err))")
-                                completionHandler([])
-                            }else{
-                                
-                                for document in collection!.documents {
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                    
-                                }
-                                
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                                
-                                
-                            }
-                        }
-                } else {//no
-                    shareRef
-                        .order(by: ShareRef.time.rawValue, descending: true)
-                        .limit(to: getLimit)
-                        .getDocuments { (collection, err) in
-                        var list: [Post] = []
-                        if let _err = err {
-                            print("Error getting post: \(String(describing: _err))")
-                            completionHandler([])
-                        }else{
-                            for document in collection!.documents {
-                                do{
-                                    list.append(try document.data(as: Post.self))
-                                }catch{
-                                    print(error)
-                                }
-                                
-                            }
-                            
-                            self.postDocuments = collection!.documents
-                            completionHandler(list)
-                        }
-                    }
+                guard let _lastDocument = self.postDocuments.last else {
+                    continuation.resume(returning: [])
+                    return
                 }
-            }
-            
-        } else {
-            guard let _lastDocument = postDocuments.last else {
-                return
-            }
-            if music != "" {
-                if artist != "" {
-                    if category != [] { //all
-                        shareRef
-                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                            .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
+                if music != "" {
+                    if artist != "" {
+                        if category != [] { //all
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
                                     }
                                 }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
+                        } else { //music,artist
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                }
                         }
-                    } else { //music,artist
-                        shareRef
-                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
+                    } else {
+                        if category != [] { //music,category
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
                                     }
                                 }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
+                        } else { //music
+                            self.shareRef
+                                .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
+                                .order(by: ShareRef.musicName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                }
                         }
                     }
                 } else {
-                    if category != [] { //music,category
-                        shareRef
-                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                            .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
-                        }
-                    } else { //music
-                        shareRef
-                            .whereField(ShareRef.musicName.rawValue, isEqualTo: music)
-                            .order(by: ShareRef.musicName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
-                        }
-                    }
-                }
-            } else {
-                if artist != "" {
-                    if category != [] { //artist,category
-                        shareRef
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
-                        }
-                    } else { //artist
-                        shareRef
-                            .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
-                            .order(by: ShareRef.artistName.rawValue)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
-                        }
-                    }
-                } else {
-                    if category != [] { //category
-                        shareRef
-                            .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
-                            .order(by: ShareRef.time.rawValue, descending: true)
-                            .start(afterDocument: _lastDocument)
-                            .limit(to: getLimit)
-                            .getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
-                                    }catch{
-                                        print(error)
-                                    }
-                                }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
-                            }
-                        }
-                    } else { //no
-                        shareRef.order(by: ShareRef.time.rawValue, descending: true).start(afterDocument: _lastDocument).limit(to: getLimit).getDocuments { (collection, err) in
-                            var list: [Post] = []
-                            if let _err = err{
-                                print("Error getting post:\(_err)")
-                                completionHandler([])
-                            }else{
-                                for document in collection!.documents {
-                                    
-                                    do{
-                                        list.append(try document.data(as: Post.self))
+                    if artist != "" {
+                        if category != [] { //artist,category
+                            self.shareRef
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
                                         
-                                    }catch{
-                                        print(error)
                                     }
-                                    
                                 }
-                                self.postDocuments = collection!.documents
-                                completionHandler(list)
+                        } else { //artist
+                            self.shareRef
+                                .whereField(ShareRef.artistName.rawValue, isEqualTo: artist)
+                                .order(by: ShareRef.artistName.rawValue)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                }
+                        }
+                    } else {
+                        if category != [] { //category
+                            self.shareRef
+                                .whereField(ShareRef.category.rawValue, arrayContainsAny: category)
+                                .order(by: ShareRef.time.rawValue, descending: true)
+                                .start(afterDocument: _lastDocument)
+                                .limit(to: self.getLimit)
+                                .getDocuments { (collection, err) in
+                                    if let _err = err{
+                                        print("Error getting post:\(_err)")
+                                        continuation.resume(throwing: _err as! Never)
+                                    }else{
+                                        for document in collection!.documents {
+                                            
+                                            do{
+                                                list.append(try document.data(as: Post.self))
+                                            }catch{
+                                                print(error)
+                                            }
+                                        }
+                                        self.postDocuments = collection!.documents
+                                        continuation.resume(returning: list)
+                                    }
+                                }
+                        } else { //no
+                            self.shareRef.order(by: ShareRef.time.rawValue, descending: true).start(afterDocument: _lastDocument).limit(to: self.getLimit).getDocuments { (collection, err) in
+                                if let _err = err{
+                                    print("Error getting post:\(_err)")
+                                    continuation.resume(throwing: _err as! Never)
+                                }else{
+                                    for document in collection!.documents {
+                                        
+                                        do{
+                                            list.append(try document.data(as: Post.self))
+                                        }catch{
+                                            print(error)
+                                        }
+                                        
+                                    }
+                                    self.postDocuments = collection!.documents
+                                    continuation.resume(returning: list)
+                                }
                             }
                         }
                     }
@@ -614,42 +603,73 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func searchPost(first: Bool, music: String, artist: String, category: [String], completionHandler: @escaping ([Post]) -> Void) {
+    func searchPost(first: Bool, music: String, artist: String, category: [String]) async -> [Post]{
         
-        getPost(first: first, music: music, artist: artist, category: category) { list in
-            var a: [Post] = []
-            
-            await self.selectPost(post: list) { postOK in
-                
-                
+        return await withTaskGroup(of: [Post].self) { group in
+            group.addTask {
+                var list: [Post] = []
+                while list.count <= 5 {
+                    do {
+                        
+                        let gotList = try await self.getPost(first: first, music: music, artist: artist, category: category)
+                        
+                        if gotList.count == 0 {
+                            return []
+                        }
+                        print(444, gotList)
+                        
+                        list.append(contentsOf: await self.selectPost(post: gotList))
+                        
+                    } catch {
+                        print("Error getting post")
+                        
+                    }
+                }
+                return list
             }
+
+            var l: [Post] = []
+            for await post in group {
+                l.append(contentsOf: post)
+            }
+            return l
         }
     }
     
-    func selectPost(post: [Post], completionHandler: @escaping ([Post]) -> Void) async {
+    func selectPost(post: [Post]) async -> [Post] {
+        print(3333, post)
         var list: [Post] = []
-        for await p in post {
-            
+        for p in post {
+            print("here")
+            guard let user = await getUserInformation(id: p.userID) else {
+                print("continueeee")
+                continue
+            }
+            print(88888, user)
             var _post = p
-            _post.userID = await getUserInformation(id: p.userID).name
-            var show = await getUserInformation(id: p.userID).showAll
-            if self.myInformation.follow.first(where: {$0 == p.userID}) != nil && show {
+            _post.userID = user.name
+            var show = user.showAll
+            if self.myInformation.follow.first(where: {$0 == p.userID}) != nil {
                 show = true
-            } else if p.userID == self.userID && show {
+            } else if p.userID == self.userID {
                 show = true
+                print("userIDDDDDDD")
             }
             
             if show {
-                list.append(p)
+                list.append(_post)
             }
             
         }
-        completionHandler(list)
+        
+        print(9999, list)
+        return list
+        
     }
     
     func searchUserName(string: String, completionHandler: @escaping ([User]) -> Void) {
         var list: [User] = []
-        database.collection("user")
+        db.collection("user")
             .whereField(UserRef.name.rawValue, isEqualTo: string)
             .getDocuments { (collection, err) in
                 if let _err = err {
@@ -788,10 +808,15 @@ class FirebaseAPI: ObservableObject {
             ShareRef.artistName.rawValue: artistName,
             ShareRef.musicImage.rawValue: musicImage,
             ShareRef.content.rawValue: content,
-            ShareRef.userName.rawValue: UserDefaultsKey.userID.get()!,
+            ShareRef.userID.rawValue: UserDefaultsKey.userID.get()!,
             ShareRef.time.rawValue: time,
             ShareRef.goodNumber.rawValue: 0,
-            ShareRef.category.rawValue: category])
+            ShareRef.category.rawValue: category
+        ]) { err in
+            if let _err = err {
+                print("Error adding music: \(_err)")
+            }
+        }
     }
     
     
@@ -980,6 +1005,26 @@ class FirebaseAPI: ObservableObject {
         
     }
     
+    func updateShowAll(id: String, newBool: Bool) {
+        userRef.updateData([
+            UserRef.showAll.rawValue: newBool
+        ]) { err in
+            if let _err = err {
+                print("Error updating user showAll: \(_err)")
+            }
+        }
+    }
+    
+    func updateFollowLimit(id: String, newBool: Bool) {
+        userRef.updateData([
+            UserRef.followLimit.rawValue: newBool
+        ]) { err in
+            if let _err = err {
+                print("Error updating user followLimit: \(_err)")
+            }
+        }
+    }
+    
     
     enum UserRef: String {
         case goodList = "goodList"
@@ -1024,7 +1069,7 @@ class FirebaseAPI: ObservableObject {
         case musicName = "musicName"
         case artistName = "artistName"
         case musicImage = "musicImage"
-        case userName = "userName"
+        case userID = "userID"
         case content = "content"
         case goodNumber = "goodNumber"
         case category = "category"

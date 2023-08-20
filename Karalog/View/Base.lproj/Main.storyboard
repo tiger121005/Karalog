@@ -2132,7 +2132,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="DNR-fp-l4H">
-                                <rect key="frame" x="0.0" y="344" width="393" height="808"/>
+                                <rect key="frame" x="0.0" y="344" width="393" height="508"/>
                                 <color key="backgroundColor" name="baseColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gsa-J0-hfG">
                                     <size key="itemSize" width="392" height="190"/>
@@ -2351,7 +2351,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GNY-I5-Btj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1178" y="1858"/>
+            <point key="canvasLocation" x="1177.8625954198474" y="1857.7464788732395"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="bMT-kx-AKa">

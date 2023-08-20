@@ -72,13 +72,13 @@ extension AddFriendViewController: UISearchBarDelegate {
         }else{
             FirebaseAPI.shared.searchUserName(string: searchText) { list in
                 self.userList = list
-                
-                FirebaseAPI.shared.getUserInformation(id: searchText) { user in
-                    if user.id != "" {
+                Task {
+                    if let user = await FirebaseAPI.shared.getUserInformation(id: searchText) {
                         self.userList.insert(user, at: 0)
                     }
                     self.tableView.reloadData()
                 }
+                
             }
         }
         

@@ -49,10 +49,11 @@ class ShareViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: {list in
+        Task {
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
             self.collectionView.reloadData()
-        })
+        }
         self.view.bringSubviewToFront(topView)
         
     }
@@ -222,29 +223,34 @@ class ShareViewController: UIViewController {
     }
     
     @IBAction func tapSearchBtn() {
-        FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
+        Task { @MainActor in
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
             self.collectionView.reloadData()
-        })
-        switchSearchView()
-        tableView.isHidden = true
+            
+            switchSearchView()
+            tableView.isHidden = true
+        }
     }
     
     @IBAction func clear() {
-        musicTF.text = ""
-        artistTF.text = ""
-        category = []
-        categoryLabel.text = ""
-        FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [],  completionHandler: { list in
+        Task {
+            musicTF.text = ""
+            artistTF.text = ""
+            category = []
+            categoryLabel.text = ""
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [])
             self.shareList = list
             self.collectionView.reloadData()
-        })
-        switchSearchView()
-        tableView.isHidden = true
+            
+            switchSearchView()
+            tableView.isHidden = true
+        }
     }
     
     @objc func reload() {
-        FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: []) { list in
+        Task {
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [])
             self.shareList = list
             self.collectionView.reloadData()
             self.refreshCtl.endRefreshing()
@@ -299,12 +305,14 @@ extension ShareViewController: UICollectionViewDataSource {
 extension ShareViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        Task {
+            print(99999, indexPath.row, self.shareList.count)
         // スクロールが最下部に達したら次のページのデータを取得
-        if indexPath.item == FirebaseAPI.shared.postDocuments.count - 1 {
-            FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category, completionHandler: { list in
+            if indexPath.row == self.shareList.count - 1 {
+                let list = await FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
                 self.shareList.append(contentsOf: list)
                 collectionView.reloadData()
-            })
+            }
         }
     }
 }
@@ -330,8 +338,9 @@ extension ShareViewController: ShareCellDelegate {
     }
     
     func tapMusic(indexpath indexPath: IndexPath) {
-        let selectedMusic = shareList[indexPath.row].musicName
-        FirebaseAPI.shared.searchPost(first: true, music: selectedMusic, artist: "", category: []) { list in
+        Task {
+            let selectedMusic = shareList[indexPath.row].musicName
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: selectedMusic, artist: "", category: [])
             self.shareList = list
             self.musicTF.text = selectedMusic
             self.artistTF.text = ""
@@ -342,8 +351,9 @@ extension ShareViewController: ShareCellDelegate {
     }
     
     func tapArtist(indexPath: IndexPath) {
-        let selectedArtist = shareList[indexPath.row].artistName
-        FirebaseAPI.shared.searchPost(first: true, music: "", artist: selectedArtist, category: []) { list in
+        Task {
+            let selectedArtist = shareList[indexPath.row].artistName
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: selectedArtist, category: [])
             self.shareList = list
             self.musicTF.text = ""
             self.artistTF.text = selectedArtist
