@@ -13,8 +13,20 @@ struct Function {
     private var impactFeedbackGenerator: UIImpactFeedbackGenerator?
     private var notificationFeedbackGenerator: UINotificationFeedbackGenerator?
     
+    func login(first: Bool, user: User) {
+        Manager.shared.user = user
+        print(28273, Manager.shared.user)
+        FirebaseAPI.shared.setFirebase(userID: user.id!)
+        UserDefaultsKey.userID.set(value: user.id!)
+        if first {
+            Manager.shared.lists = Material.shared.initialListData
+        } else {
+            FirebaseAPI.shared.getList(completionHandler: {_ in})
+        }
+    }
+    
     func sort(sortKind: String, updateList: [MusicList], completionHandler: @escaping ([MusicList]) -> Void) {
-
+        
         var list = updateList
         switch sortKind {
         //日付（遅い）
@@ -30,11 +42,11 @@ struct Function {
                 
 
             }
-            let d = a.indices.sorted{ a[$1] < a[$0]}
-            list = d.map {updateList[$0]}
+            let d = a.indices.sorted{ a[$1] < a[$0] }
+            list = d.map { updateList[$0] }
             print(0)
 
-            //日付け（早い）
+        //日付け（早い）
         case "1":
             var a: [Date] = []
             for i in updateList {
@@ -50,7 +62,7 @@ struct Function {
             list = d.map{updateList[$0]}
             print(1)
 
-            //得点（高い）
+        //得点（高い）
         case "2":
             var a: [Double] = []
             for i in updateList {
@@ -65,7 +77,7 @@ struct Function {
             list = d.map{updateList[$0]}
             print(2)
 
-            //得点（低い）
+        //得点（低い）
         case "3":
             var a: [Double] = []
             for i in updateList {
@@ -80,19 +92,19 @@ struct Function {
             list = d.map{updateList[$0]}
             print(3)
 
-            //五十音(早い）
+        //五十音(早い）
         case "4": list.sort(by: {$0.musicName < $1.musicName})
             print(4)
 
-            //五十音(遅い）
+        //五十音(遅い）
         case "5": list.sort(by: {$1.musicName < $0.musicName})
             print(5)
 
-            //アーティスト（早い）
+        //アーティスト（早い）
         case "6": list.sort(by: {($0.artistName, $0.musicName) < ($1.artistName, $1.musicName)})
             print(6)
 
-            //アーティスト（遅い）
+        //アーティスト（遅い）
         case "7": list.sort(by: {($1.artistName, $0.musicName) < ($0.artistName, $1.musicName)})
             print(7)
 

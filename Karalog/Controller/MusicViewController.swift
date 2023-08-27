@@ -41,8 +41,6 @@ class MusicViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         judgeSort = UserDefaultsKey.judgeSort.get() ?? "0"
         setupTableView()
         setupSearchBar()
@@ -283,6 +281,7 @@ class MusicViewController: UIViewController {
     }
     
     func get() {
+        print("\(Manager.shared.user.id) is login!")
         FirebaseAPI.shared.getMusic(completionHandler: { musicList in
             self.tvList = musicList
             Function.shared.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: { list in

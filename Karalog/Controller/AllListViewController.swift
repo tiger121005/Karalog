@@ -23,7 +23,6 @@ class AllListViewController: UIViewController {
         super.viewDidLoad()
         
         setupCollectionView()
-        getList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,15 +58,9 @@ class AllListViewController: UIViewController {
         collectionView.addSubview(refreshCtl)
     }
     
-    func getList() {
-        FirebaseAPI.shared.getList() {_ in
-            self.collectionView.reloadData()
-        }
-    }
-    
     func saveListOrder() {
         if changeOrder {
-            FirebaseAPI.shared.listOrderUpdate(listOrder: Manager.shared.listOrder)
+            FirebaseAPI.shared.listOrderUpdate(listOrder: Manager.shared.user.listOrder)
             changeOrder = false
         }
     }
@@ -188,9 +181,9 @@ extension AllListViewController: UICollectionViewDropDelegate {
                         guard let _sourceIndexPath = item.sourceIndexPath else { return }
                         collectionView.performBatchUpdates({
                             let i = Manager.shared.lists.remove(at: _sourceIndexPath.row)
-                            let j = Manager.shared.listOrder.remove(at: _sourceIndexPath.row - 2)
+                            let j = Manager.shared.user.listOrder.remove(at: _sourceIndexPath.row - 2)
                             Manager.shared.lists.insert(i, at: destinationIndexPath.row)
-                            Manager.shared.listOrder.insert(j, at: destinationIndexPath.row - 2)
+                            Manager.shared.user.listOrder.insert(j, at: destinationIndexPath.row - 2)
                             collectionView.deleteItems(at: [_sourceIndexPath])
                             collectionView.insertItems(at: [destinationIndexPath])
                             changeOrder = true

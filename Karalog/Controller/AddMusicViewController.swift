@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 import Alamofire
 
 class AddMusicViewController: UIViewController {

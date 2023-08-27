@@ -73,11 +73,19 @@ public struct User: Codable {
     let name: String
     var goodList: [String]
     var listOrder: [String]
-    var followLimit: Bool
     var showAll: Bool
     var follow: [String]
     var follower: [String]
+    var request: [String]
+    var notice: [Notice]
     @DocumentID var id: String?
+}
+    
+public struct Notice: Codable {
+    let title: String
+    let content: String
+    var seen: Bool
+    let from: String
 }
 
 enum UserDefaultsKey: String {

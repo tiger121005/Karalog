@@ -24,33 +24,31 @@ class FirebaseAPI: ObservableObject {
     var wannaRef: CollectionReference!
     var postDocuments: [QueryDocumentSnapshot] = []
     var userPostDocuments: [QueryDocumentSnapshot] = []
-    var myInformation: User!
     
-    let emptyUser = User(name: "", goodList: [], listOrder: [], followLimit: true, showAll: false, follow: [], follower: [], id: "")
+    let emptyUser = User(name: "", goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [])
     let getLimit = 6
     
-    init() {
-        UserDefaultsKey.userID.set(value: "imiWSXSa9tNBwNZvCWdjJ0Tw0Gr2")
-        userID = UserDefaultsKey.userID.get()
-        userRef = db.collection("user").document(userID!)
+    func setFirebase(userID: String) {
+        self.userID = userID
+        userRef = db.collection("user").document(userID)
         shareRef = db.collection("share")
         musicRef = userRef.collection("musicList")
         listRef = userRef.collection("lists")
         wannaRef = userRef.collection("wannaList")
-        Task {
-            myInformation = await getUserInformation(id: userID)
-        }
+        
     }
     
     //user情報を取得
     func getUserInformation(id: String) async -> User? {
         await withCheckedContinuation { continuation in
+            print(78473, id)
             db.collection("user").document(id).getDocument { (document, err) in
                 if let _err = err {
                     print("Error getting user information: \(_err)")
                     continuation.resume(returning: nil)
                 } else {
                     if let document, document.exists {
+                        print(63729, document.data())
                         do {
                             let user = try document.data(as: User.self)
                             continuation.resume(returning: user)
@@ -89,11 +87,39 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    //他のユーザーの記録した曲を追加する
+    func getAnotherMusic(id: String) async -> [MusicList] {
+        await withCheckedContinuation { continuation in
+            db.collection("user").document(id).collection("musicList").getDocuments { (collection, err) in
+                if let _err = err {
+                    print("Error getting another music: \(_err)")
+                    continuation.resume(returning: [])
+                } else {
+                    var list: [MusicList] = []
+                    for document in collection!.documents {
+                        do {
+                            list.append(try document.data(as: MusicList.self))
+                        } catch {
+                            print(error)
+                        }
+                    }
+                    continuation.resume(returning: list)
+                }
+            }
+        }
+    }
+    
     //listsを取得
     func getList(completionHandler: @escaping (Any) -> Void) {
         userRef.getDocument() { (document, err) in
             if let _document = document, _document.exists{
-                Manager.shared.listOrder = _document.data()![UserRef.listOrder.rawValue] as? [String] ?? []
+                do {
+                    let user = try _document.data(as: User.self)
+                    Manager.shared.user.listOrder = user.listOrder
+                } catch {
+                    return
+                }
+                
                 print("getting listOrder")
                 
                 self.listRef.getDocuments() { (collection, err) in
@@ -111,7 +137,7 @@ class FirebaseAPI: ObservableObject {
                             }
                         }
                         var preList: [Lists] = []
-                        for i in Manager.shared.listOrder {
+                        for i in Manager.shared.user.listOrder {
                             preList.append(Manager.shared.lists.first(where: {$0.id!.contains(i)})!)
                         }
                         Manager.shared.lists = Material.shared.initialListData
@@ -156,18 +182,7 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func getGoodList() {
-        userRef.getDocument { (document, err) in
-            if let _err = err {
-                print("Error getting goodList: \(_err)")
-            }else{
-                if document?.data()![UserRef.goodList.rawValue] != nil {
-                    Manager.shared.goodList = document?.data()![UserRef.goodList.rawValue] as! [String]
-                }
-            }
-        }
-    }
-    
+    //検索条件に応じて投稿を取得する
     func getPost(first: Bool, music: String, artist: String, category: [String]) async throws -> [Post]{
         return await withCheckedContinuation { continuation in
             var list: [Post] = []
@@ -591,31 +606,42 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func searchPost(first: Bool, music: String, artist: String, category: [String]) async -> [Post]{
+    //shareViewCtlで呼び出される
+    func searchPost(first: Bool, music: String, artist: String, category: [String]) async -> [Post] {
         
         return await withTaskGroup(of: [Post].self) { group in
             group.addTask {
                 var list: [Post] = []
+                do {
+                    let gotList = try await self.getPost(first: first, music: music, artist: artist, category: category)
+                    if gotList.count == 0 {
+                        return[]
+                    }
+                    list.append(contentsOf: await self.selectPost(post: gotList))
+                } catch {
+                    print("Error getting post")
+                }
                 while list.count <= 5 {
                     do {
-                        
-                        let gotList = try await self.getPost(first: first, music: music, artist: artist, category: category)
-                        
+
+                        let gotList = try await self.getPost(first: false, music: music, artist: artist, category: category)
+
                         if gotList.count == 0 {
-                            return []
+                            return list
                         }
                         print(444, gotList)
-                        
+
                         list.append(contentsOf: await self.selectPost(post: gotList))
-                        
+
                     } catch {
                         print("Error getting post")
-                        
+
                     }
                 }
                 return list
             }
 
+            print(89389, group)
             var l: [Post] = []
             for await post in group {
                 l.append(contentsOf: post)
@@ -624,6 +650,7 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    //撮ってきた投稿の中から非表示の設定になっている投稿を弾き、userNameを取得する
     func selectPost(post: [Post]) async -> [Post] {
         print(3333, post)
         var list: [Post] = []
@@ -637,7 +664,8 @@ class FirebaseAPI: ObservableObject {
             var _post = p
             _post.userID = user.name
             var show = user.showAll
-            if self.myInformation.follow.first(where: {$0 == p.userID}) != nil {
+            print(22222, Manager.shared.user)
+            if Manager.shared.user.follow.first(where: {$0 == p.userID}) != nil {
                 show = true
             } else if p.userID == self.userID {
                 show = true
@@ -655,7 +683,8 @@ class FirebaseAPI: ObservableObject {
         
     }
     
-    func searchUserPost(first: Bool, id: String, completionHandler: @escaping ([Post]) -> Void) {
+    //一人のユーザーの投稿を検索する
+    func searchUserPost(first: Bool, id: String, name: String, completionHandler: @escaping ([Post]) -> Void) {
         var list: [Post] = []
         if first {
             shareRef
@@ -670,12 +699,15 @@ class FirebaseAPI: ObservableObject {
                         for document in collection!.documents {
                             
                             do{
-                                list.append(try document.data(as: Post.self))
+                                var a = try document.data(as: Post.self)
+                                a.userID = name
+                                list.append(a)
                             }catch{
                                 print(error)
                             }
                             
                         }
+                        
                         self.userPostDocuments = collection!.documents
                         completionHandler(list)
                     }
@@ -698,13 +730,15 @@ class FirebaseAPI: ObservableObject {
                         for document in collection!.documents {
                             
                             do{
-                                list.append(try document.data(as: Post.self))
-                                print(66666, try document.data(as: Post.self))
+                                var a = try document.data(as: Post.self)
+                                a.userID = name
+                                list.append(a)
                             }catch{
                                 print(error)
                             }
                             
                         }
+                        
                         self.postDocuments = collection!.documents
                         completionHandler(list)
                     }
@@ -713,34 +747,38 @@ class FirebaseAPI: ObservableObject {
         
     }
     
-    func searchGoodList(first: Bool, goodList: [String], completionHandler: @escaping ([Post]) -> Void) {
+    //いいねした投稿を検索する
+    func searchGoodList(goodList: Array<String>.SubSequence) async -> [Post] {
         var list: [Post] = []
-        if first {
-            for g in goodList {
-                shareRef.document(g).getDocument { (document, err) in
-                    if let _err = err {
-                        print("Error getting goodList: \(_err)")
-                        completionHandler([])
-                    } else {
-                        do {
-                            list.append(try document?.data(as: Post.self))
-                        } catch {
-                            print(error)
-                        }
+        
+        for g in goodList {
+            list.append(await getOnePost(id: g)!)
+        }
+        
+        return list
+    }
+    
+    //一つ、documentIDがわかっている投稿を取得する
+    func getOnePost(id: String) async -> Post? {
+        await withCheckedContinuation { continuation in
+            shareRef.document(id).getDocument { (document, err) in
+                if let _err = err {
+                    print("Error getting post: \(_err)")
+                    continuation.resume(returning: nil)
+                } else {
+                    do {
+                        let d = try document?.data(as: Post.self)
+                        continuation.resume(returning: d)
+                    } catch {
+                        print(err!)
+                        continuation.resume(returning: nil)
                     }
                 }
             }
         }
     }
     
-    func getOnePost(id: String) async -> Post {
-        await withCheckedContinuation { continuation in
-            shareRef.document(id).getDocument { (document, err) in
-                if let _err = 
-            }
-        }
-    }
-    
+    //他のユーザーを検索する時に呼び出される
     func searchUserName(string: String, completionHandler: @escaping ([User]) -> Void) {
         var list: [User] = []
         db.collection("user")
@@ -842,7 +880,7 @@ class FirebaseAPI: ObservableObject {
             UserRef.listOrder.rawValue: FieldValue.arrayUnion([ref.documentID])
         ])
         Manager.shared.lists.append(Lists(listName: listName, listImage: listImage, id: ref.documentID))
-        Manager.shared.listOrder.append(ref.documentID)
+        Manager.shared.user.listOrder.append(ref.documentID)
     }
     
     //wannaListを追加
@@ -893,7 +931,52 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    //フォローした時
+    func follow(followedUser: String) {
+        userRef.updateData([
+            UserRef.follow.rawValue: FieldValue.arrayUnion([followedUser])
+        ]) { err in
+            if let _err = err {
+                print("Error follow: \(_err)")
+            }
+        }
+        
+        db.collection("user").document(followedUser).updateData([
+            UserRef.follower.rawValue: FieldValue.arrayUnion([userID])
+        ]) { err in
+            if let _err = err {
+                print("Error follow: \(_err)")
+            }
+        }
+        Manager.shared.user.follow.append(followedUser)
+    }
     
+    func sendRequest(receiveUser: String) {
+        userRef.updateData([
+            UserRef.request.rawValue: FieldValue.arrayUnion([receiveUser])
+        ]) { err in
+            if let _err = err {
+                print("Error add request: \(_err)")
+            }
+        }
+        let notice = [
+            UserRef.NoticeRef.title.rawValue: "フォローリクエスト",
+            UserRef.NoticeRef.content.rawValue: "\(Manager.shared.user.name)さん（ユーザーID: \(userID)）からフォローリクエストが届きました",
+            UserRef.NoticeRef.seen.rawValue: false,
+            UserRef.NoticeRef.from.rawValue: receiveUser
+            
+        ] as [String : Any]
+        db.collection("user").document(receiveUser).updateData([
+            UserRef.notice.rawValue: FieldValue.arrayUnion([notice])
+        ]) { err in
+            if let _err = err {
+                print("Error send request: \(_err)")
+            }
+        }
+        
+        Manager.shared.user.request.append(receiveUser)
+        
+    }
     
     
     //musicListを削除
@@ -987,6 +1070,31 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    //フォローをはずした時
+    func deleteFollow(followedUser: String, indexPathRow: Int) {
+        userRef.updateData([
+            UserRef.follow.rawValue: FieldValue.arrayRemove([followedUser])
+        ]) { err in
+            if let _err = err {
+                print("Error remove follow: \(_err)")
+            }
+        }
+        
+        db.collection("user").document(followedUser).updateData([
+            UserRef.follower.rawValue: FieldValue.arrayRemove([userID])
+        ]) { err in
+            if let _err = err {
+                print("Error remove follow: \(_err)")
+            }
+        }
+        
+        Manager.shared.user.follow.remove(at: indexPathRow)
+    }
+    
+    func deleteRequest() {
+        
+    }
+    
     //favoriteを更新
     func favoriteUpdate(id: String, favorite: Bool, completionHandler: @escaping (Any) -> Void) {
         if favorite {
@@ -1031,15 +1139,16 @@ class FirebaseAPI: ObservableObject {
                 print("Error updating list order: \(_err)")
             }else{
                 print("list order successfully updated")
-                Manager.shared.listOrder = listOrder
+                Manager.shared.user.listOrder = listOrder
             }
         }
     }
     
+    //投稿のいいねボタンが押された時に呼び出される
     func goodUpdate(id: String, good: Bool) {
         if  good {
-            let num = Manager.shared.goodList.firstIndex(of: id)!
-            Manager.shared.goodList.remove(at: num)
+            let num = Manager.shared.user.goodList.firstIndex(of: id)!
+            Manager.shared.user.goodList.remove(at: num)
             userRef.updateData([
                 UserRef.goodList.rawValue: FieldValue.arrayRemove([id])
                 
@@ -1054,7 +1163,7 @@ class FirebaseAPI: ObservableObject {
                 }
             }
         }else{
-            Manager.shared.goodList.append(id)
+            Manager.shared.user.goodList.append(id)
             userRef.updateData([
                 UserRef.goodList.rawValue: FieldValue.arrayUnion([id])
             ])
@@ -1068,6 +1177,7 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
+    //ユーザー名の変更
     func updateUserName(rename: String) {
         userRef.updateData([
             UserRef.name.rawValue: rename
@@ -1079,6 +1189,7 @@ class FirebaseAPI: ObservableObject {
         
     }
     
+    //公開制限の変更
     func updateShowAll(id: String, newBool: Bool) {
         userRef.updateData([
             UserRef.showAll.rawValue: newBool
@@ -1089,15 +1200,6 @@ class FirebaseAPI: ObservableObject {
         }
     }
     
-    func updateFollowLimit(id: String, newBool: Bool) {
-        userRef.updateData([
-            UserRef.followLimit.rawValue: newBool
-        ]) { err in
-            if let _err = err {
-                print("Error updating user followLimit: \(_err)")
-            }
-        }
-    }
     
     
     enum UserRef: String {
@@ -1105,9 +1207,17 @@ class FirebaseAPI: ObservableObject {
         case listOrder = "listOrder"
         case name = "name"
         case showAll = "showAll"
-        case followLimit = "followLimit"
         case follow = "follow"
         case follower = "follower"
+        case request = "request"
+        case notice = "notice"
+        
+        enum NoticeRef: String {
+            case title = "title"
+            case content = "content"
+            case seen = "seen"
+            case from = "from"
+        }
         
         enum MusicListRef: String {
             case musicName = "musicName"

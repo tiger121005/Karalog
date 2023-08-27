@@ -27,25 +27,19 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         passwordTF.isSecureTextEntry = true
-
+        passwordTF.textContentType = .none
         
         let handle = Auth.auth().addStateDidChangeListener { auth, user in
             print("🇲🇪", auth)
             print("🇲🇱", user)
         }
-//        let facebookLoginBtn = FBLoginButton()
-//        facebookLoginBtn.center = view.center
-//        facebookLoginBtn.frame.origin.y = googleLoginView.frame.maxY + 20
-//        view.addSubview(facebookLoginBtn)
         
         if let _token = AccessToken.current,!_token.isExpired {
-                // User is logged in, do work such as go to next view controller.
+            // User is logged in, do work such as go to next view controller.
             UserDefaultsKey.userID.set(value: _token.userID)
         }
     }
     
-    
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //キーボード以外がタップされた時にキーボードを閉じる
         if (self.mailTF.isFirstResponder) {
@@ -68,7 +62,6 @@ class LoginViewController: UIViewController {
     }
     
     
-    
     @IBAction func tapLoginBtn() {
         guard let _mail = mailTF.text else {
             return
@@ -79,16 +72,21 @@ class LoginViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
             if let _user = result?.user {
-                UserDefaultsKey.userID.set(value: _user.uid)
-                self.performSegue(withIdentifier: "toTabBar", sender: nil)
+                Task {
+                    Function.shared.login(first: false, user: await FirebaseAPI.shared.getUserInformation(id: _user.uid)!)
+                    
+                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
+                }
             }else{
                 print("cannot find account:", err!)
+                
                 let dialog = UIAlertController(title: "アカウントが見つかりませんでした", message: err?.localizedDescription, preferredStyle: .alert)
                 dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(dialog, animated: true, completion: nil)
             }
         }
     }
+    
     //Google
     @IBAction func didTapSignInButton(_ sender: Any) {
         auth()
@@ -117,14 +115,44 @@ class LoginViewController: UIViewController {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                          accessToken: _user.accessToken.tokenString)
             Auth.auth().signIn(with: credential) { result, error in
+                
                 if let _user = result?.user {
-                    guard let _name = _user.displayName else {
-                        return
+                    
+                    Task {
+                        UserDefaultsKey.userID.set(value: _user.uid)
+                        
+                        //すでにアカウントがある場合
+                        if let _pastUserInformation = await FirebaseAPI.shared.getUserInformation(id: _user.uid) {
+                            Function.shared.login(first: false, user: _pastUserInformation)
+                            self.performSegue(withIdentifier: "toTabBar", sender: nil)
+                            return
+                        }
+                        guard let _name = _user.displayName else {
+                            return
+                        }
+                        
+                        //まだアカウントがない時
+                        self.db.collection("user").document(_user.uid).setData([
+                            "name": _name,
+                            "goodList": [],
+                            "listOrder": [],
+                            "showAll": false,
+                            "follow": [],
+                            "follower": [],
+                            "request": [],
+                            "notice": []
+                        ]) { err in
+                            if let _err = err {
+                                print("Error adding userName: \(_err)")
+                            }
+                        }
+                        Function.shared.login(first: true, user: User(name: _name, goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [], id: _user.uid))
+                        
+                        
+                        
+                        
+                        self.performSegue(withIdentifier: "toTabBar", sender: nil)
                     }
-                    self.db.collection("user").document(_user.uid).setData([
-                        "name": _name])
-                    UserDefaultsKey.userID.set(value: _user.uid)
-                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
                 }else {
                     print("google login error:", error!)
                 }

@@ -13,8 +13,6 @@ struct Manager {
     var musicList: [MusicList] = []
     
     var lists: [Lists] = []
-    
-    var listOrder: [String] = []
-    
-    var goodList: [String] = []
+        
+    var user: User!
 }

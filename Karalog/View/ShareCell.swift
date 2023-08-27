@@ -37,11 +37,19 @@ class ShareCell: UICollectionViewCell {
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor(named: "baseColor")?.cgColor
         
-        self.musicName.configuration = nil
-        self.artistName.configuration = nil
+        self.musicName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 20)
+            return outgoing
+        }
         
-        self.musicName.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        self.artistName.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        self.artistName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 18)
+            return outgoing
+        }
+        
+
         self.content.font = UIFont.systemFont(ofSize: 16)
         self.userName.font = UIFont.systemFont(ofSize: 14)
         self.goodNumLabel.font = UIFont.systemFont(ofSize: 14)

@@ -9,11 +9,13 @@ import UIKit
 
 class SelectedPostViewController: UIViewController, ShareCellDelegate {
     
-    
     var goodList: [Bool] = []
+    var remainingList: [String] = []
     var kind: String!
     var shareList: [Post] = []
     var userID: String!
+    var userName: String!
+    var finalContent: Bool = false
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -28,14 +30,22 @@ class SelectedPostViewController: UIViewController, ShareCellDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if kind == "past" {
-            FirebaseAPI.shared.searchUserPost(first: true, id: userID) { list in
+            FirebaseAPI.shared.searchUserPost(first: true, id: userID, name: userName) { list in
                 self.shareList = list
-                print(77677, list)
+                self.finalContent = false
                 self.collectionView.reloadData()
                 
             }
         } else if kind == "good" {
-            
+            Task {
+                remainingList = Manager.shared.user.goodList
+                let first6 = remainingList.prefix(6)
+                
+                remainingList.removeFirst(first6.count)
+                
+                self.shareList = await FirebaseAPI.shared.searchGoodList(goodList: first6)
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -107,8 +117,19 @@ class SelectedPostViewController: UIViewController, ShareCellDelegate {
 
     @objc func reload() {
         if kind == "past" {
-            FirebaseAPI.shared.searchUserPost(first: true, id: userID) { list in
+            FirebaseAPI.shared.searchUserPost(first: true, id: userID, name: userName) { list in
                 self.shareList = list
+                self.finalContent = false
+                self.collectionView.reloadData()
+                self.refreshCtl.endRefreshing()
+            }
+        } else if kind == "good" {
+            Task {
+                let first6 = remainingList.prefix(6)
+                
+                remainingList.removeFirst(first6.count)
+                
+                self.shareList = await FirebaseAPI.shared.searchGoodList(goodList: first6)
                 self.collectionView.reloadData()
                 self.refreshCtl.endRefreshing()
             }
@@ -145,7 +166,7 @@ extension SelectedPostViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
+        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             goodList.append(true)
         }else{
@@ -158,4 +179,40 @@ extension SelectedPostViewController: UICollectionViewDataSource {
     }
     
     
+}
+
+extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        Task {
+            print(99999, indexPath.row, self.shareList.count)
+            // スクロールが最下部に達したら次のページのデータを取得
+            if !finalContent {
+                if indexPath.row == self.shareList.count - 1 {
+                    if kind == "past" {
+                        FirebaseAPI.shared.searchUserPost(first: false, id: userID, name: userName) { list in
+                            if list.isEmpty {
+                                self.finalContent = true
+                                return
+                            }
+                            self.shareList.append(contentsOf: list)
+                            DispatchQueue.main.async {
+                                collectionView.reloadData()
+                            }
+                        }
+                    } else if kind == "good" {
+                        let first6 = remainingList.prefix(6)
+                        if first6.isEmpty {
+                            self.finalContent = true
+                            return
+                        }
+                        remainingList.removeFirst(first6.count)
+                        
+                        self.shareList.append(contentsOf: await FirebaseAPI.shared.searchGoodList(goodList: first6))
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        }
+    }
 }

@@ -15,6 +15,7 @@ class ShareViewController: UIViewController {
     var category: [String] = []
     var alertCtl: UIAlertController!
     var searchViewHidden: Bool = true
+    var finalContent: Bool = false
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -52,6 +53,7 @@ class ShareViewController: UIViewController {
         Task {
             let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
+            self.finalContent = false
             self.collectionView.reloadData()
         }
         self.view.bringSubviewToFront(topView)
@@ -98,7 +100,7 @@ class ShareViewController: UIViewController {
         collectionView.refreshControl = refreshCtl
         refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
         refreshCtl.addTarget(self, action: #selector(self.reload), for: UIControl.Event.valueChanged)
-        
+        collectionView.addSubview(refreshCtl)
         collectionView.collectionViewLayout = compositionalLayout
     }
     
@@ -223,11 +225,11 @@ class ShareViewController: UIViewController {
     }
     
     @IBAction func tapSearchBtn() {
-        Task { @MainActor in
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
+        Task {
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
             self.shareList = list
+            self.finalContent = false
             self.collectionView.reloadData()
-            
             switchSearchView()
             tableView.isHidden = true
         }
@@ -241,6 +243,7 @@ class ShareViewController: UIViewController {
             categoryLabel.text = ""
             let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [])
             self.shareList = list
+            self.finalContent = false
             self.collectionView.reloadData()
             
             switchSearchView()
@@ -250,8 +253,9 @@ class ShareViewController: UIViewController {
     
     @objc func reload() {
         Task {
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [])
+            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
             self.shareList = list
+            self.finalContent = false
             self.collectionView.reloadData()
             self.refreshCtl.endRefreshing()
         }
@@ -288,12 +292,28 @@ extension ShareViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
+        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            goodList.append(true)
+            if indexPath.row == 0 {
+                goodList = [true]
+            } else {
+                goodList.append(true)
+            }
+            print(true)
+            print(101010, goodList)
+            print(shareList[indexPath.row].musicName)
+            
         }else{
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
-            goodList.append(false)
+            if indexPath.row == 0 {
+                goodList = [false]
+            } else {
+                goodList.append(false)
+            }
+            print(false)
+            print(101010, goodList)
+            print(shareList[indexPath.row].musicName)
+            
         }
         cell.goodNumLabel.text = showGoodNumber(n:shareList[indexPath.row].goodNumber)
         
@@ -307,11 +327,21 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         Task {
             print(99999, indexPath.row, self.shareList.count)
-        // スクロールが最下部に達したら次のページのデータを取得
-            if indexPath.row == self.shareList.count - 1 {
-                let list = await FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
-                self.shareList.append(contentsOf: list)
-                collectionView.reloadData()
+            // スクロールが最下部に達したら次のページのデータを取得
+            if !finalContent {
+                if indexPath.row == self.shareList.count - 1 {
+                    
+                    let list = await FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
+                    if list.isEmpty {
+                        finalContent = true
+                        return
+                    }
+                    self.shareList.append(contentsOf: list)
+                    DispatchQueue.main.async {
+                        collectionView.reloadData()
+                    }
+                    
+                }
             }
         }
     }
@@ -321,6 +351,7 @@ extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
+        
         FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
         print(goodList[indexPath.row], "goodListBefore")
         if goodList[indexPath.row] {
@@ -346,6 +377,7 @@ extension ShareViewController: ShareCellDelegate {
             self.artistTF.text = ""
             self.category = []
             self.categoryLabel.text = ""
+            self.finalContent = false
             self.collectionView.reloadData()
         }
     }
@@ -359,6 +391,7 @@ extension ShareViewController: ShareCellDelegate {
             self.artistTF.text = selectedArtist
             self.category = []
             self.categoryLabel.text = ""
+            self.finalContent = false
             self.collectionView.reloadData()
         }
     }

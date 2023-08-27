@@ -8,6 +8,8 @@
 import UIKit
 
 class StartViewController: UIViewController {
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,12 +21,13 @@ class StartViewController: UIViewController {
         super.viewDidAppear(animated)
         let u: String! = UserDefaultsKey.userID.get()
         if u != nil {
-            self.performSegue(withIdentifier: "toTabBar", sender: nil)
-            
-            
-            
-            
-            
+            print(939384, u)
+            Task {
+                Manager.shared.user = await FirebaseAPI.shared.getUserInformation(id: u)
+                Function.shared.login(first: false, user: await FirebaseAPI.shared.getUserInformation(id: u)!)
+                
+                self.performSegue(withIdentifier: "toTabBar", sender: nil)
+            }
         } else {
             self.performSegue(withIdentifier: "toLogin", sender: nil)
         }
