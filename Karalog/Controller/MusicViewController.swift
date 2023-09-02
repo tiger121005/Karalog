@@ -86,10 +86,11 @@ class MusicViewController: UIViewController {
         searchBar.resignFirstResponder()
     }
     
+    // ステータスバーを黒く
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        // ステータスバーを黒く
-        return UIStatusBarStyle.lightContent;
+        return UIStatusBarStyle.lightContent
     }
+    
     
     func setupTableView() {
         tableView.dataSource = self
@@ -111,6 +112,8 @@ class MusicViewController: UIViewController {
     
     func setupSearchBar() {
         searchBar.delegate = self
+        
+        searchBar.keyboardAppearance = .dark
     }
     
     func setupBarItem() {
@@ -397,6 +400,7 @@ extension MusicViewController: UITableViewDataSource {
         let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
         
+        //最高得点
         let scoreList = tvList[indexPath.row].data.map{$0.score}
         let max = scoreList.max()
         cell.scoreLabel.text = String(format: "%.3f", max!)
@@ -407,15 +411,18 @@ extension MusicViewController: UITableViewDataSource {
             cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
         } else {
-            cell.scoreLabel.textColor = UIColor.secondaryLabel
+            cell.scoreLabel.textColor = .gray
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
         }
         
+        //お気に入りボタン
         if tvList[indexPath.row].favorite == false {
             cell.favoriteBtn?.setImage(UIImage(systemName: "star"), for: .normal)
         }else if tvList[indexPath.row].favorite == true {
             cell.favoriteBtn?.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
+        
+        
         return cell
     }
     

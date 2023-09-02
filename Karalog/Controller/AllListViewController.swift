@@ -117,7 +117,7 @@ extension AllListViewController: UICollectionViewDelegate {
                     //alert
                     let alert = UIAlertController(title: "削除", message: "”" + Manager.shared.lists[indexPath.row].listName + "”" + "を削除しますか", preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
-                        self.dismiss(animated: true, completion: nil)
+                        
                     }
                     
                     let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in

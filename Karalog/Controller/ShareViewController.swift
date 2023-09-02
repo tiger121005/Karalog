@@ -10,7 +10,6 @@ import UIKit
 class ShareViewController: UIViewController {
     
     var shareList: [Post] = []
-    var goodList: [Bool] = []
     var sendWord: String = ""
     var category: [String] = []
     var alertCtl: UIAlertController!
@@ -294,24 +293,12 @@ extension ShareViewController: UICollectionViewDataSource {
         cell.categoryLabel.text = a
         if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            if indexPath.row == 0 {
-                goodList = [true]
-            } else {
-                goodList.append(true)
-            }
-            print(true)
-            print(101010, goodList)
+            
             print(shareList[indexPath.row].musicName)
             
         }else{
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
-            if indexPath.row == 0 {
-                goodList = [false]
-            } else {
-                goodList.append(false)
-            }
-            print(false)
-            print(101010, goodList)
+            
             print(shareList[indexPath.row].musicName)
             
         }
@@ -330,20 +317,35 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
             // スクロールが最下部に達したら次のページのデータを取得
             if !finalContent {
                 if indexPath.row == self.shareList.count - 1 {
-                    
+
                     let list = await FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
                     if list.isEmpty {
                         finalContent = true
                         return
                     }
+                    let oldCount = self.shareList.count
                     self.shareList.append(contentsOf: list)
+                    let newCount = self.shareList.count
+                    let newIndexPaths = (oldCount..<newCount).map { IndexPath(item: $0, section: 0) }
                     DispatchQueue.main.async {
-                        collectionView.reloadData()
+                        collectionView.insertItems(at: newIndexPaths)
                     }
-                    
+
                 }
             }
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionFooter {
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "UICollectionReusableView に設定した Idenfier", for: indexPath as IndexPath)
+            // インジケータをぐるぐるさせる処理
+            // 次ページを読み込む処理
+
+            return reusableView
+        }
+
+        return UICollectionReusableView()
     }
 }
 
@@ -352,9 +354,16 @@ extension ShareViewController: ShareCellDelegate {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
         
-        FirebaseAPI.shared.goodUpdate(id: selectedID, good: goodList[indexPath.row])
-        print(goodList[indexPath.row], "goodListBefore")
-        if goodList[indexPath.row] {
+        var good: Bool!
+        if Manager.shared.user.goodList.first(where: { $0 == selectedID}) != nil {
+            good = true
+        } else {
+            good = false
+        }
+        
+        FirebaseAPI.shared.goodUpdate(id: selectedID, good: good)
+        
+        if good {
             shareList[indexPath.row].goodNumber -= 1
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
@@ -363,8 +372,7 @@ extension ShareViewController: ShareCellDelegate {
         }
         
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
-        goodList[indexPath.row].toggle()
-        print(goodList[indexPath.row], "goodListAfter")
+        
         collectionView.reloadData()
     }
     

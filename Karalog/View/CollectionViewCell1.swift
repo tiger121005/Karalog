@@ -19,6 +19,9 @@ class CollectionViewCell1: UICollectionViewCell {
         self.layer.cornerRadius = self.frame.width * 0.2
         self.layer.cornerCurve = .continuous
         
+        image.layer.cornerRadius = self.frame.width * 0.1
+        image.layer.cornerCurve = .continuous
+        
     }
 
 }

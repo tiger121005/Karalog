@@ -19,12 +19,16 @@ class StartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
+        
         let u: String! = UserDefaultsKey.userID.get()
         if u != nil {
-            print(939384, u)
             Task {
-                Manager.shared.user = await FirebaseAPI.shared.getUserInformation(id: u)
-                Function.shared.login(first: false, user: await FirebaseAPI.shared.getUserInformation(id: u)!)
+                guard let a = await FirebaseAPI.shared.getUserInformation(id: u) else {
+                    self.performSegue(withIdentifier: "toLogin", sender: nil)
+                    return
+                }
+                Function.shared.login(first: false, user: a)
                 
                 self.performSegue(withIdentifier: "toTabBar", sender: nil)
             }

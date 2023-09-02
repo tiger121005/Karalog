@@ -9,15 +9,23 @@ import UIKit
 
 class FollowerViewController: UIViewController {
     
-    var followerList: [User] = []
+    var followerList: [User] = [] {
+        didSet {
+            print("waa")
+        }
+    }
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!  {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        setupTableView()
     }
     
     
@@ -25,7 +33,7 @@ class FollowerViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        
+        tableView.reloadData()
     }
     
 

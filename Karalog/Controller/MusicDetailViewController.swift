@@ -178,7 +178,14 @@ extension MusicDetailViewController: UITableViewDataSource {
         let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
         cell.textLabel?.text = String(format: "%.3f", tvList[indexPath.row].score)//追加の際入力した文字を表示
+        cell.textLabel?.textColor = .white
         cell.detailTextLabel?.text = tvList[indexPath.row].time + "　　　キー:　" + String(tvList[indexPath.row].key) + "　　　機種:　" + tvList[indexPath.row].model
+        cell.detailTextLabel?.textColor = .white
+        
+        cell.backgroundColor = .black
+        var cellSelectedBgView = UIView()
+        cellSelectedBgView.backgroundColor = .gray
+        cell.selectedBackgroundView = cellSelectedBgView
         
         return cell
     }

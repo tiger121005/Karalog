@@ -1,20 +1,24 @@
 PODS:
-  - Alamofire (5.6.2)
+  - Alamofire (5.8.0)
+  - CropViewController (2.6.1)
   - DZNEmptyDataSet (1.8.1)
 
 DEPENDENCIES:
   - Alamofire
+  - CropViewController
   - DZNEmptyDataSet
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - CropViewController
     - DZNEmptyDataSet
 
 SPEC CHECKSUMS:
-  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  CropViewController: 58fb440f30dac788b129d2a1f24cffdcb102669c
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
 
-PODFILE CHECKSUM: c4a32a013b6986c4c38fb334b425e851671f6524
+PODFILE CHECKSUM: 0a6bd698c271a6731c2164e2b6521cd4934a6620
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1

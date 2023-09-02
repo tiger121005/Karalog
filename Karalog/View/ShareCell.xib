@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -28,15 +28,14 @@
                         <buttonConfiguration key="configuration" style="plain"/>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7tD-s4-apj">
-                        <rect key="frame" x="115" y="11" width="93.666666666666686" height="35"/>
+                        <rect key="frame" x="115" y="11" width="198" height="35"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="69.329999999999998" id="By3-CV-bcH"/>
                             <constraint firstAttribute="height" constant="35" id="tyk-KS-vk8"/>
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="music">
                             <fontDescription key="titleFontDescription" type="system" pointSize="27"/>
-                            <color key="baseForegroundColor" systemColor="labelColor"/>
+                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </buttonConfiguration>
                         <connections>
                             <action selector="touchMusicBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="CFN-Rh-Fgo"/>
@@ -48,7 +47,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="eZD-Z2-rIt"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjs-wK-aWj">
@@ -57,7 +56,7 @@
                             <constraint firstAttribute="height" constant="20.329999999999998" id="ed7-8g-NNn"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kRs-En-pbP">
@@ -80,7 +79,7 @@
                             <constraint firstAttribute="height" constant="21" id="DZl-DY-ngY"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8000万" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pOF-l0-wpl">
@@ -89,31 +88,31 @@
                             <constraint firstAttribute="width" constant="60" id="abQ-XU-z4U"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
-                        <rect key="frame" x="115" y="49" width="78.666666666666657" height="28"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-vB-0lA">
+                        <rect key="frame" x="115" y="50" width="198" height="28"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="slb-pR-lbp"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63" id="ta8-n5-OwY"/>
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="artist">
                             <fontDescription key="titleFontDescription" type="system" pointSize="22"/>
-                            <color key="baseForegroundColor" systemColor="labelColor"/>
+                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </buttonConfiguration>
                         <connections>
                             <action selector="touchArtistBtn:" destination="vyg-nl-THw" eventType="touchUpInside" id="nG5-S2-AFY"/>
                         </connections>
                     </button>
                 </subviews>
-                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="pjs-wK-aWj" secondAttribute="trailing" constant="16" id="0Sf-i5-f3S"/>
                     <constraint firstItem="pjs-wK-aWj" firstAttribute="centerY" secondItem="kRs-En-pbP" secondAttribute="centerY" id="587-gu-v3m"/>
                     <constraint firstAttribute="bottom" secondItem="5w3-QY-XaB" secondAttribute="bottom" constant="10" id="9JY-z3-9WX"/>
                     <constraint firstItem="5w3-QY-XaB" firstAttribute="top" secondItem="kRs-En-pbP" secondAttribute="bottom" constant="8" id="AVo-yz-QEV"/>
+                    <constraint firstAttribute="trailing" secondItem="7tD-s4-apj" secondAttribute="trailing" id="B1V-XZ-Zwn"/>
                     <constraint firstItem="YCy-vB-0lA" firstAttribute="top" secondItem="7tD-s4-apj" secondAttribute="bottom" constant="4" id="HIR-dt-UPk"/>
                     <constraint firstItem="oav-eW-QBO" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="Ib8-ac-bhE"/>
                     <constraint firstAttribute="trailing" secondItem="oav-eW-QBO" secondAttribute="trailing" constant="16" id="JYw-fA-K9u"/>
@@ -128,6 +127,7 @@
                     <constraint firstItem="pOF-l0-wpl" firstAttribute="leading" secondItem="kRs-En-pbP" secondAttribute="trailing" id="ebG-qS-8ER"/>
                     <constraint firstItem="oav-eW-QBO" firstAttribute="centerX" secondItem="mlS-9X-pL6" secondAttribute="centerX" id="iMa-HG-e10"/>
                     <constraint firstAttribute="trailing" secondItem="5w3-QY-XaB" secondAttribute="trailing" constant="16" id="j3t-bc-Z4h"/>
+                    <constraint firstAttribute="trailing" secondItem="YCy-vB-0lA" secondAttribute="trailing" id="kua-f3-Ykp"/>
                     <constraint firstItem="7tD-s4-apj" firstAttribute="top" secondItem="mlS-9X-pL6" secondAttribute="top" constant="11" id="r1d-Kd-T2v"/>
                     <constraint firstItem="pjs-wK-aWj" firstAttribute="leading" secondItem="pOF-l0-wpl" secondAttribute="trailing" constant="5" id="tCw-ml-3Zw"/>
                     <constraint firstItem="kRs-En-pbP" firstAttribute="leading" secondItem="mlS-9X-pL6" secondAttribute="leading" constant="16" id="xNC-tR-dFb"/>
@@ -154,17 +154,8 @@
         <namedColor name="imageColor">
             <color red="0.9882352941176471" green="0.47843137254901963" blue="0.14509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

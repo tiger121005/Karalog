@@ -9,6 +9,7 @@ target 'Karalog' do
 
   pod 'DZNEmptyDataSet'
   pod 'Alamofire'
+  pod 'CropViewController'
 
   target 'KaralogTests' do
     inherit! :search_paths

@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseCore
 import FirebaseFirestore
+import CropViewController
 
 class AddListViewController: UIViewController {
     
@@ -41,9 +42,19 @@ class AddListViewController: UIViewController {
     func setupInitialImage() {
         if (UIImage(systemName: "music.mic") != nil) {
             randomImage = Material.shared.listImages.randomElement()!
-            let image = UIImage(systemName: randomImage)
+            let image = UIImage(systemName: randomImage)?.withTintColor(UIColor(named: "imageColor")!)
+            let size = CGSize(width: listImage.frame.width, height: listImage.frame.height)
+            let renderer = UIGraphicsImageRenderer(size: size)
+            let newImage = renderer.image { context in
+                // 背景色を描画
+                UIColor.black.setFill()
+                context.fill(CGRect(origin: .zero, size: size))
+                
+                // SFSymbolを描画
+                image?.draw(in: CGRect(origin: .zero, size: size))
+            }
             
-            listImage.setBackgroundImage(image, for: .normal)
+            listImage.setBackgroundImage(newImage, for: .normal)
             listImage.imageView?.contentMode = .scaleAspectFill
         }else{
             print("値が入力されていません")
@@ -66,14 +77,15 @@ class AddListViewController: UIViewController {
             
             picker.allowsEditing = true
             present(picker, animated: true, completion: nil)
+            
         }
     }
     
     func addList() {
         let image = listImage.backgroundImage(for: .normal)
         var resizedImage: Data!
-        if let _image = UIImage(systemName: randomImage)?.withTintColor(UIColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)) {
-            resizedImage = _image.jpegData(compressionQuality: 1.0)
+        if Material.shared.listImages.contains(where: { $0 == randomImage}) {
+            resizedImage = resizedData(image: image!, maxSize: 1024, quality: 1.0)
             
         } else {
             resizedImage = resizedData(image: image!, maxSize: 1024, quality: 0.6)
@@ -125,5 +137,9 @@ extension AddListViewController: UIImagePickerControllerDelegate {
 }
 
 extension AddListViewController: UINavigationControllerDelegate {
+    
+}
+
+extension AddListViewController: CropViewControllerDelegate {
     
 }

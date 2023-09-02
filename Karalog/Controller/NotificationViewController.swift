@@ -12,6 +12,7 @@ class NotificationViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     var notificationList: [Notice] = []
+    var userID: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +31,15 @@ extension NotificationViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if notificationList[indexPath.row].title == "フォローリクエスト" {
-            let alert = UIAlertController(title: "フォローリクエスト", message: "\(notificationList[indexPath.row].from)からフォローリクエストを承認しますか", preferredStyle: .alert)
+            let alert = UIAlertController(title: "フォローリクエスト", message: "”\(notificationList[indexPath.row].from)”からフォローリクエストを承認しますか", preferredStyle: .alert)
             
             let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (action) in
                 
             }
             
             let approve = UIAlertAction(title: "承認", style: .default) { (action) in
-                
+                FirebaseAPI.shared.deleteRequest(notice: self.notificationList[indexPath.row])
+                FirebaseAPI.shared.follow(followUser: self.notificationList[indexPath.row].from, followedUser: self.userID)
             }
             
             alert.addAction(cancel)

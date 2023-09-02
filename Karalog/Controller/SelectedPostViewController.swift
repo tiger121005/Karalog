@@ -7,15 +7,16 @@
 
 import UIKit
 
-class SelectedPostViewController: UIViewController, ShareCellDelegate {
+class SelectedPostViewController: UIViewController {
     
-    var goodList: [Bool] = []
     var remainingList: [String] = []
     var kind: String!
     var shareList: [Post] = []
     var userID: String!
     var userName: String!
     var finalContent: Bool = false
+    
+    let goodList = Manager.shared.user.goodList
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -102,18 +103,6 @@ class SelectedPostViewController: UIViewController, ShareCellDelegate {
         return resizedImage!
     }
     
-    func reloadCell(indexPath: IndexPath) {
-        
-    }
-    
-    func tapMusic(indexpath: IndexPath) {
-        
-    }
-    
-    func tapArtist(indexPath: IndexPath) {
-        
-    }
-    
 
     @objc func reload() {
         if kind == "past" {
@@ -166,12 +155,13 @@ extension SelectedPostViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
+        if Manager.shared.user.goodList.contains(where: { id in id == shareList[indexPath.row].id! }) {
+//        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            goodList.append(true)
+            
         }else{
             cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
-            goodList.append(false)
+            
         }
         cell.goodNumLabel.text = showGoodNumber(n:shareList[indexPath.row].goodNumber)
         
@@ -214,5 +204,41 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
                 }
             }
         }
+    }
+}
+
+extension SelectedPostViewController: ShareCellDelegate {
+    func reloadCell(indexPath: IndexPath) {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
+        let selectedID = shareList[indexPath.row].id!
+        
+        var good: Bool!
+        if Manager.shared.user.goodList.first(where: { $0 == selectedID}) != nil {
+            good = true
+        } else {
+            good = false
+        }
+        
+        FirebaseAPI.shared.goodUpdate(id: selectedID, good: good)
+        
+        if good {
+            shareList[indexPath.row].goodNumber -= 1
+            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+        } else {
+            shareList[indexPath.row].goodNumber += 1
+            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        }
+        
+        cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
+        
+        collectionView.reloadData()
+    }
+    
+    func tapMusic(indexpath: IndexPath) {
+        
+    }
+    
+    func tapArtist(indexPath: IndexPath) {
+        
     }
 }

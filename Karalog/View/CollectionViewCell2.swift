@@ -17,7 +17,11 @@ class CollectionViewCell2: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.contentView.layer.cornerRadius = self.contentView.frame.width * 0.2
+        self.layer.cornerRadius = self.frame.width * 0.2
+        self.layer.cornerCurve = .continuous
+        
+        image.layer.cornerRadius = self.frame.width * 0.1
+        image.layer.cornerCurve = .continuous
     }
 
 }

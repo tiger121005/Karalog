@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
     var followSelected: String!
     
     let refreshCtl = UIRefreshControl()
-    let hamburgerMenuList = ["通知", "名前変更", "いいね", "QRコード", "公開制限", "ログアウト"]
+    let hamburgerMenuList = ["通知", "名前変更", "いいね", "公開制限", "ログアウト"]
     
     
     override func viewDidLoad() {
@@ -65,10 +65,12 @@ class ProfileViewController: UIViewController {
             let nextView = segue.destination as! FriendsViewController
             nextView.selected = followSelected
             nextView.follow = followList
+            print(46483, followerList)
             nextView.follower = followerList
         } else if segue.identifier == "toNotification" {
             let nextView = segue.destination as! NotificationViewController
             nextView.notificationList = notification
+            nextView.userID = userID
         }
     }
     
@@ -252,7 +254,7 @@ class ProfileViewController: UIViewController {
                 followBtn.setTitle("フォローする", for: .normal)
             } else {
                 if showAll {
-                    FirebaseAPI.shared.follow(followedUser: userID)
+                    FirebaseAPI.shared.follow(followUser: Manager.shared.user.id!, followedUser: userID)
                     followBtn.setTitle("フォローを外す", for: .normal)
                 } else {
                     FirebaseAPI.shared.sendRequest(receiveUser: userID)
@@ -369,39 +371,37 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
+            switchMenu()
             performSegue(withIdentifier: "toNotification", sender: nil)
             
         case 1:
             var textFieldOnAlert = UITextField()
 
-                let alert = UIAlertController(title: "変更後の名前を入力",
+            let alert = UIAlertController(title: "変更後の名前を入力",
                                                 message: nil,
                                                 preferredStyle: .alert)
-                alert.addTextField { textField in
-                    textFieldOnAlert = textField
-                    textFieldOnAlert.returnKeyType = .done
-                }
+            alert.addTextField { textField in
+                textFieldOnAlert = textField
+                textFieldOnAlert.returnKeyType = .done
+            }
 
-                let doneAction = UIAlertAction(title: "決定", style: .default) { _ in
-                    FirebaseAPI.shared.updateUserName(rename: textFieldOnAlert.text ?? "")
-                    self.userName = textFieldOnAlert.text
-                    self.userNameLabel.text = textFieldOnAlert.text
-                }
+            let doneAction = UIAlertAction(title: "決定", style: .default) { _ in
+                FirebaseAPI.shared.updateUserName(rename: textFieldOnAlert.text ?? "")
+                self.userName = textFieldOnAlert.text
+                self.userNameLabel.text = textFieldOnAlert.text
+            }
 
-                let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel)
-
+            let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel)
                 alert.addAction(doneAction)
                 alert.addAction(cancelAction)
                 present(alert, animated: true)
             
         case 2:
+            switchMenu()
             selectPostKind = "good"
             performSegue(withIdentifier: "toSelectedPost", sender: nil)
             
         case 3:
-            performSegue(withIdentifier: "toQR", sender: nil)
-            
-        case 4:
             let alert = UIAlertController(title: "公開制限", message: "", preferredStyle: .actionSheet)
             
             let all = UIAlertAction(title: SettingShow.全て.rawValue, style: .default) {_ in
@@ -428,7 +428,7 @@ extension ProfileViewController: UITableViewDelegate {
             alert.addAction(cancel)
             present(alert, animated: true)
             
-        case 5:
+        case 4:
             let alert = UIAlertController(title: "ログアウト", message: "”Karalog”からログアウトしますか？", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
                 
@@ -480,10 +480,10 @@ extension ProfileViewController: UITableViewDataSource {
         selectedView.backgroundColor = color
         cell.selectedBackgroundView = selectedView
         
-        if indexPath.row == 5 {
+        if indexPath.row == 4 {
             cell.textLabel?.textColor = UIColor.red
         } else  {
-            cell.textLabel?.textColor = UIColor.systemBackground
+            cell.textLabel?.textColor = UIColor.black
         }
         
         return cell

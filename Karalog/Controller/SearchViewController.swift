@@ -31,7 +31,6 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var textView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +39,7 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         setupSearchBar()
         
         
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        title = "検索"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,6 +70,8 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
     func setupSearchBar() {
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
+        
+        searchBar.keyboardAppearance = .dark
     }
     
     func getMusicArticles(text: String) {
@@ -99,72 +100,6 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
             }
         }
     }
-    
-    
-    
-//    @IBAction func textRecognition(_ sender: UIButton) {
-//        let documentCameraViewController = VNDocumentCameraViewController()
-//        documentCameraViewController.delegate = self
-//        present(documentCameraViewController, animated: true)
-//    }
-//
-//
-//
-//    func setupVision() {
-//        let textRecognitionRequest = VNRecognizeTextRequest { request, _ in
-//            guard let observations = request.results as? [VNRecognizedTextObservation] else {
-//                print("The observations are of an unexpected type.")
-//                return
-//            }
-//            // 解析結果の文字列を連結する
-//            let maximumCandidates = 1
-//            for observation in observations {
-//                guard let candidate = observation.topCandidates(maximumCandidates).first else { continue }
-//                self.resultingText += candidate.string + "\n"
-//                let box = observation.boundingBox // 位置のボックス
-//                let topCandidate = observation.topCandidates(1)
-//                if let recognizedText = topCandidate.first?.string { // 検出したテキスト
-//                    print(recognizedText)
-//                }
-//            }
-//        }
-//        // 文字認識のレベルを設定
-//        textRecognitionRequest.recognitionLevel = .accurate
-//        let request = VNRecognizeTextRequest()
-//        request.recognitionLanguages = ["ja-JP", "en-US", "fr-FR", "it-IT", "de-DE", "es-ES", "pt-BR", "zh-Hans", "zh-Hant"] // 言語を指定
-//        self.requests = [textRecognitionRequest]
-//    }
-//
-//
-//
-//    func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-//            controller.dismiss(animated: true)
-//
-//            // Dispatch queue to perform Vision requests.
-//            let textRecognitionWorkQueue = DispatchQueue(label: "TextRecognitionQueue",
-//                                                                 qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
-//            textRecognitionWorkQueue.async {
-//                self.resultingText = ""
-//                for pageIndex in 0 ..< scan.pageCount {
-//                    let image = scan.imageOfPage(at: pageIndex)
-//                    if let cgImage = image.cgImage {
-//                        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-//
-//                        do {
-//                            try requestHandler.perform(self.requests)
-//                        } catch {
-//                            print(error)
-//                        }
-//                    }
-//                }
-//                DispatchQueue.main.async(execute: {
-//                    print(self.resultingText)
-//                    // textViewに表示する
-//                    self.textView.text = self.resultingText
-//
-//                })
-//            }
-//        }
     
     
     
@@ -208,7 +143,7 @@ extension SearchViewController: UICollectionViewDataSource {
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 160, height: 200)
+        return CGSize(width: 170, height: 200)
     }
 }
 

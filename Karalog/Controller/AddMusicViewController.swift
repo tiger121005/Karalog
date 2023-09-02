@@ -47,6 +47,7 @@ class AddMusicViewController: UIViewController {
         setupKeyLabel()
         getTimingKeyboard()
         setupCategeoryView()
+        title = "曲を追加"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -84,6 +85,9 @@ class AddMusicViewController: UIViewController {
         artistTF.delegate = self
         musicTF.text = musicName
         artistTF.text = artistName
+        musicTF.keyboardAppearance = .dark
+        artistTF.keyboardAppearance = .dark
+        textView.keyboardAppearance = .dark
     }
     
     func configureMenuButton() {
@@ -332,6 +336,7 @@ extension AddMusicViewController: UITableViewDataSource {
         
         cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
         cell.selectionStyle = .none
+        cell.textLabel?.textColor = .white
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
         if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
@@ -339,6 +344,7 @@ extension AddMusicViewController: UITableViewDataSource {
         } else {
             cell.accessoryType = .none
         }
+        cell.backgroundColor = .black
         return cell
     }
     

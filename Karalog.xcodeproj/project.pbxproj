@@ -41,7 +41,6 @@
 		1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1990600A2A98DD7000037A0C /* FollowerViewController.swift */; };
 		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
 		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
-		19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D3029CC2C9E00B798A4 /* ViewController.swift */; };
 		19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3229CC2C9E00B798A4 /* Main.storyboard */; };
 		19A12D3629CC2C9F00B798A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3529CC2C9F00B798A4 /* Assets.xcassets */; };
 		19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */; };
@@ -64,7 +63,6 @@
 		19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7629CD95A200B798A4 /* MatchViewController.swift */; };
 		19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */; };
 		19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */; };
-		19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7E29CD960200B798A4 /* ChatViewController.swift */; };
 		19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8029CD964F00B798A4 /* LoginViewController.swift */; };
 		19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */; };
 		19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */; };
@@ -126,7 +124,6 @@
 		1990600A2A98DD7000037A0C /* FollowerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerViewController.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		19A12D3029CC2C9E00B798A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		19A12D3329CC2C9E00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		19A12D3529CC2C9F00B798A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		19A12D3829CC2C9F00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -150,7 +147,6 @@
 		19A12D7629CD95A200B798A4 /* MatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
 		19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationViewController.swift; sourceTree = "<group>"; };
 		19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeGroupViewController.swift; sourceTree = "<group>"; };
-		19A12D7E29CD960200B798A4 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		19A12D8029CD964F00B798A4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeAccountViewController.swift; sourceTree = "<group>"; };
 		19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
@@ -223,11 +219,9 @@
 				19A12D6A29CD94D500B798A4 /* AddListViewController.swift */,
 				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
 				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
-				19A12D3029CC2C9E00B798A4 /* ViewController.swift */,
 				19A12D7629CD95A200B798A4 /* MatchViewController.swift */,
 				19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */,
 				19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */,
-				19A12D7E29CD960200B798A4 /* ChatViewController.swift */,
 				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
 				192D26B42A1F98770058D739 /* PostViewController.swift */,
 				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
@@ -359,7 +353,7 @@
 				19A12D2529CC2C9E00B798A4 /* Sources */,
 				19A12D2629CC2C9E00B798A4 /* Frameworks */,
 				19A12D2729CC2C9E00B798A4 /* Resources */,
-				CA995D447BA67BFB762CA7EC /* [CP] Embed Pods Frameworks */,
+				6E1FF0874D4A3B3C11D39F4C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -407,7 +401,7 @@
 				19A12D4529CC2CA000B798A4 /* Sources */,
 				19A12D4629CC2CA000B798A4 /* Frameworks */,
 				19A12D4729CC2CA000B798A4 /* Resources */,
-				8110E69052B15D00938301DF /* [CP] Embed Pods Frameworks */,
+				1D66230B2048997D75C763A9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -454,7 +448,7 @@
 			packageReferences = (
 				1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
-				196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
 			);
 			productRefGroup = 19A12D2029CC2C9E00B798A4;
 			projectDirPath = "";
@@ -500,6 +494,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1D66230B2048997D75C763A9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4DC2946A9EEF79B4718921E6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -522,21 +533,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8110E69052B15D00938301DF /* [CP] Embed Pods Frameworks */ = {
+		6E1FF0874D4A3B3C11D39F4C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B13763599DAECABABBBDE1B2 /* [CP] Check Pods Manifest.lock */ = {
@@ -559,23 +570,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CA995D447BA67BFB762CA7EC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Karalog/Pods-Karalog-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D63FEE7E3725EEC2AE3C7C7F /* [CP] Check Pods Manifest.lock */ = {
@@ -629,14 +623,12 @@
 				19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */,
 				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
 				192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */,
-				19A12D7F29CD960200B798A4 /* ChatViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
 				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,
 				19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */,
 				199060092A98DD5E00037A0C /* FollowViewController.swift in Sources */,
 				192D26712A0543A80058D739 /* Function.swift in Sources */,
 				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
-				19A12D3129CC2C9E00B798A4 /* ViewController.swift in Sources */,
 				19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */,
 				1938FBC129D0641700245BB3 /* CollectionViewCell2.swift in Sources */,
 				1960CD2129FE30730065FF05 /* Manager.swift in Sources */,
@@ -843,7 +835,6 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -879,7 +870,6 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1035,7 +1025,7 @@
 				minimumVersion = 9.0.0;
 			};
 		};
-		196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -1073,17 +1063,17 @@
 		};
 		196D97382A66A3AC00A96892 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseAuth;
 		};
 		196D973A2A66A3AC00A96892 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseFirestore;
 		};
 		196D973C2A66A3AC00A96892 /* FirebaseFirestoreSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 196D97372A66A3AC00A96892 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

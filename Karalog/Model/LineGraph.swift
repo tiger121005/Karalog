@@ -29,104 +29,112 @@ struct LineMarkView: View {
             startPoint: UnitPoint(x: 0.49, y: 0),
             endPoint: UnitPoint(x: 0.51, y: 1)
         )
-        HStack{
-            ScrollViewReader { scrollProxy in
-                ScrollView(.horizontal) {
-                    ZStack {
-                        Chart() {
-                            ForEach(downToZero()) { data in
-                                AreaMark(
-                                    x: .value("Date", data.date),
-                                    y: .value("Score", data.score)
-                                )
-                                .foregroundStyle(gradient)
+        ZStack {
+            Color.black
+            HStack{
+                ScrollViewReader { scrollProxy in
+                    ScrollView(.horizontal) {
+                        ZStack {
+                            Chart() {
+                                ForEach(downToZero()) { data in
+                                    AreaMark(
+                                        x: .value("Date", data.date),
+                                        y: .value("Score", data.score)
+                                    )
+                                    .foregroundStyle(gradient)
+                                }
                             }
-                        }
-                        .frame(width: width())
-                        .chartYScale(domain: 0...shadowMaxRange())
-                        .padding(.top)
-                        .chartXAxis {
-                            AxisMarks(preset: .extended) { value in
-                                AxisGridLine()
-                                AxisValueLabel()
+                            .frame(width: width())
+                            .chartYScale(domain: 0...shadowMaxRange())
+                            .padding(.top)
+                            .chartXAxis {
+                                AxisMarks(preset: .extended) { value in
+                                    AxisGridLine()
+                                        
+                                    AxisValueLabel()
+                                }
                             }
-                        }
-                        .chartYAxis {
-                            AxisMarks(values: gridLineValues().map{$0 - minRange()}) { value in
-                                AxisGridLine()
+                            .chartYAxis {
+                                AxisMarks(values: gridLineValues().map{$0 - minRange()}) { value in
+                                    AxisGridLine()
+                                }
                             }
+                            
+                            
+                            
+                            Chart() {
+                                ForEach(sampleData) { data in
+                                    
+                                    LineMark(
+                                        x: .value("Date", data.date),
+                                        y: .value("Score", data.score)
+                                        
+                                    )
+                                    .lineStyle(StrokeStyle(lineWidth: 3))
+                                    .foregroundStyle(imageColor)
+                                    
+                                    PointMark(
+                                        x: .value("Date", data.date),
+                                        y: .value("Score", data.score)
+                                    )
+                                    .foregroundStyle(imageColor)
+                                    
+                                    //                            AreaMark(
+                                    //                                x: .value("Date", data.date),
+                                    //                                y: .value("Score", data.score)
+                                    //                            )
+                                    //                            .foregroundStyle(gradient)
+                                }
+                            }
+                            .id(1)
+                            .frame(width: width())
+                            .chartYScale(domain: minRange()...maxRange())
+                            .padding(.top)
+                            .chartXAxis {
+                                AxisMarks(preset: .extended) { value in
+                                    AxisGridLine()
+                                        .foregroundStyle(Color.gray)
+                                    AxisValueLabel()
+                                        .foregroundStyle(Color.gray)
+                                }
+                            }
+                            .chartYAxis {
+                                AxisMarks(values: gridLineValues()) {
+                                    AxisGridLine()
+                                        .foregroundStyle(Color.gray)
+                                }
+                                
+                            }
+                            
+                            
                         }
                         
-                        //                        Rectangle()
-                        //                            .fill(Color.black)
-                        //                            .frame(width: 22)
-                        
-                        
-                        Chart() {
-                            ForEach(sampleData) { data in
-                                
-                                LineMark(
-                                    x: .value("Date", data.date),
-                                    y: .value("Score", data.score)
-                                )
-                                .lineStyle(StrokeStyle(lineWidth: 3))
-                                .foregroundStyle(imageColor)
-                                
-                                PointMark(
-                                    x: .value("Date", data.date),
-                                    y: .value("Score", data.score)
-                                )
-                                .foregroundStyle(imageColor)
-                                
-                                //                            AreaMark(
-                                //                                x: .value("Date", data.date),
-                                //                                y: .value("Score", data.score)
-                                //                            )
-                                //                            .foregroundStyle(gradient)
-                            }
-                        }
-                        .id(1)
-                        .frame(width: width())
-                        .chartYScale(domain: minRange()...maxRange())
-                        .padding(.top)
-                        .chartXAxis {
-                            AxisMarks(preset: .extended) { value in
-                                AxisGridLine()
-                                AxisValueLabel()
-                            }
-                        }
-                        .chartYAxis {
-                            AxisMarks(values: gridLineValues()) {
-                                AxisGridLine()
-//                                AxisValueLabel()
-                            }
-                        }
+                        .onAppear{scrollProxy.scrollTo(1)}
                     }
-                    
-                    .onAppear{scrollProxy.scrollTo(1)}
                 }
-            }
-            Spacer().frame(width: 0)
-            VStack(spacing: 22) {
-
-                Text(String(gridLineValues().reversed()[0]))
-                    .font(Font.system(size: 10))
-                
-                
-                ForEach(1..<6) { i in
+                Spacer().frame(width: 0)
+                VStack(spacing: 22) {
                     
-                    
-                    
-                    
-                    Text(String(gridLineValues().reversed()[i]))
+                    Text(String(gridLineValues().reversed()[0]))
                         .font(Font.system(size: 10))
+                        .foregroundColor(Color.white)
+                    
+                    ForEach(1..<6) { i in
+                        
+                        
+                        
+                        
+                        Text(String(gridLineValues().reversed()[i]))
+                            .font(Font.system(size: 10))
+                            .foregroundColor(Color.white)
+                        
+                    }
                     
                 }
                 
             }
             
         }
-        
     }
     
     func maxRange() -> Double {

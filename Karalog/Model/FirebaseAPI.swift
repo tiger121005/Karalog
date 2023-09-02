@@ -12,6 +12,8 @@ import FirebaseCore
 import FirebaseFirestore
 import Combine
 
+let firebase = FirebaseAPI.shared
+
 class FirebaseAPI: ObservableObject {
     
     static let shared = FirebaseAPI()
@@ -752,7 +754,10 @@ class FirebaseAPI: ObservableObject {
         var list: [Post] = []
         
         for g in goodList {
-            list.append(await getOnePost(id: g)!)
+            guard var a = await getOnePost(id: g) else { continue }
+            guard let user = await getUserInformation(id: a.userID) else { continue }
+            a.userID = user.name
+            list.append(a)
         }
         
         return list
@@ -932,8 +937,8 @@ class FirebaseAPI: ObservableObject {
     }
     
     //フォローした時
-    func follow(followedUser: String) {
-        userRef.updateData([
+    func follow(followUser: String, followedUser: String) {
+        db.collection("user").document(followUser).updateData([
             UserRef.follow.rawValue: FieldValue.arrayUnion([followedUser])
         ]) { err in
             if let _err = err {
@@ -942,13 +947,17 @@ class FirebaseAPI: ObservableObject {
         }
         
         db.collection("user").document(followedUser).updateData([
-            UserRef.follower.rawValue: FieldValue.arrayUnion([userID])
+            UserRef.follower.rawValue: FieldValue.arrayUnion([followUser])
         ]) { err in
             if let _err = err {
                 print("Error follow: \(_err)")
             }
         }
-        Manager.shared.user.follow.append(followedUser)
+        if followUser == userID {
+            Manager.shared.user.follower.append(followedUser)
+        } else {
+            Manager.shared.user.follow.append(followUser)
+        }
     }
     
     func sendRequest(receiveUser: String) {
@@ -963,7 +972,7 @@ class FirebaseAPI: ObservableObject {
             UserRef.NoticeRef.title.rawValue: "フォローリクエスト",
             UserRef.NoticeRef.content.rawValue: "\(Manager.shared.user.name)さん（ユーザーID: \(userID)）からフォローリクエストが届きました",
             UserRef.NoticeRef.seen.rawValue: false,
-            UserRef.NoticeRef.from.rawValue: receiveUser
+            UserRef.NoticeRef.from.rawValue: userID
             
         ] as [String : Any]
         db.collection("user").document(receiveUser).updateData([
@@ -1091,8 +1100,26 @@ class FirebaseAPI: ObservableObject {
         Manager.shared.user.follow.remove(at: indexPathRow)
     }
     
-    func deleteRequest() {
+    func deleteRequest(notice: Notice) {
+        let a = [UserRef.NoticeRef.title.rawValue: notice.title,
+                 UserRef.NoticeRef.content.rawValue: notice.content,
+                 UserRef.NoticeRef.seen.rawValue: notice.seen,
+                 UserRef.NoticeRef.from.rawValue: notice.from] as [String : Any]
+        userRef.updateData([
+            UserRef.notice.rawValue: FieldValue.arrayRemove([a])
+        ]) { err in
+            if let _err = err {
+                print("Error remove notification: \(_err)")
+            }
+        }
         
+        db.collection("user").document(notice.from).updateData([
+            UserRef.request.rawValue: FieldValue.arrayRemove([userID])
+        ]) { err in
+            if let _err = err {
+                print("Error remove request: \(_err)")
+            }
+        }
     }
     
     //favoriteを更新

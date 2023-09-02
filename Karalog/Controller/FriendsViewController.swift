@@ -25,21 +25,29 @@ class FriendsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupPageView()
-        setupSegment()
-        get()
+        setup()
+        
+        
+        
     }
     
     func setupPageView() {
+        guard let followerViewController = storyboard?.instantiateViewController(withIdentifier: "follower") as? FollowerViewController else { return }
+        followerViewController.followerList = followerList
         
-        viewControllers.append(FollowerViewController())
-        viewControllers.append(FollowViewController())
+        guard let followViewController = storyboard?.instantiateViewController(withIdentifier: "follow") as? FollowViewController else { return }
+        followViewController.followList = followList
+        
+        viewControllers.append(followerViewController)
+        viewControllers.append(followViewController)
         
         print(7777, children.first)
         pageViewController = children.first as? UIPageViewController
-        pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: false, completion: nil)
-                
+        if selected == "follower" {
+            pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: false, completion: nil)
+        } else {
+            pageViewController.setViewControllers([viewControllers[1]], direction: .forward, animated: false, completion: nil)
+        }
         pageViewController.delegate = self
         pageViewController.dataSource = self
         
@@ -55,7 +63,7 @@ class FriendsViewController: UIViewController {
         
     }
     
-    func get() {
+    func setup() {
         Task {
             for user in follow {
                 
@@ -70,8 +78,11 @@ class FriendsViewController: UIViewController {
                 }
             }
             
-            
-            
+            print("")
+            print("---followerList")
+            print(followerList)
+            setupPageView()
+            setupSegment()
         }
     }
 
@@ -93,6 +104,9 @@ class FriendsViewController: UIViewController {
 
 extension FriendsViewController: UIPageViewControllerDelegate {
     
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        
+    }
 }
 
 extension FriendsViewController: UIPageViewControllerDataSource {
