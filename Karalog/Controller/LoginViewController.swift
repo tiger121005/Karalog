@@ -76,7 +76,7 @@ class LoginViewController: UIViewController {
             if let _user = result?.user {
                 Task {
                     Function.shared.login(first: false, user: await FirebaseAPI.shared.getUserInformation(id: _user.uid)!)
-                    
+                    UserDefaultsKey.judgeSort.set(value: "0")
                     self.performSegue(withIdentifier: "toTabBar", sender: nil)
                 }
             }else{
@@ -126,6 +126,7 @@ class LoginViewController: UIViewController {
                         //すでにアカウントがある場合
                         if let _pastUserInformation = await FirebaseAPI.shared.getUserInformation(id: _user.uid) {
                             Function.shared.login(first: false, user: _pastUserInformation)
+                            UserDefaultsKey.judgeSort.set(value: "0")
                             self.performSegue(withIdentifier: "toTabBar", sender: nil)
                             return
                         }
