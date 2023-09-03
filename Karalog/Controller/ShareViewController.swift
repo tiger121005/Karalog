@@ -28,6 +28,7 @@ class ShareViewController: UIViewController {
     @IBOutlet var searchViewTopConstraint: NSLayoutConstraint!
     
     let refreshCtl = UIRefreshControl()
+    var outBtn: UIButton!
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
         didSet{
@@ -45,6 +46,7 @@ class ShareViewController: UIViewController {
         setupTableView()
         setupSearchView()
         setupCollectionView()
+        title = "SHARE"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -138,6 +140,15 @@ class ShareViewController: UIViewController {
     func setupSearchView() {
         searchView.layer.cornerRadius = 15
         searchView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        //tableView表示時、関係ない部分を暗くする
+        let tapOutBtn = UIAction() {_ in
+            self.switchSearchView()
+        }
+        outBtn = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), primaryAction: tapOutBtn)
+        outBtn.backgroundColor = .black.withAlphaComponent(0.3)
+        self.view.addSubview(outBtn)
+        outBtn.isHidden = true
     }
     
     func resize(image: UIImage, width: Double) -> UIImage {
@@ -164,6 +175,7 @@ class ShareViewController: UIViewController {
     
     func switchSearchView() {
         if searchViewHidden {
+            self.view.bringSubviewToFront(searchView)
             UIView.animate(withDuration: 0.3,
                            delay: 0,
                            options: [.curveEaseOut],
@@ -197,6 +209,7 @@ class ShareViewController: UIViewController {
             searchViewHidden = true
             self.searchViewTopConstraint.constant -= self.searchView.frame.height
         }
+        outBtn.isHidden.toggle()
     }
     
     func showGoodNumber(n: Int) -> String {

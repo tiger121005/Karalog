@@ -60,9 +60,6 @@
 		19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7029CD955500B798A4 /* ProfileViewController.swift */; };
 		19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7229CD957600B798A4 /* NotificationViewController.swift */; };
 		19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7429CD958300B798A4 /* FriendsViewController.swift */; };
-		19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7629CD95A200B798A4 /* MatchViewController.swift */; };
-		19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */; };
-		19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */; };
 		19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8029CD964F00B798A4 /* LoginViewController.swift */; };
 		19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */; };
 		19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */; };
@@ -144,9 +141,6 @@
 		19A12D7029CD955500B798A4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		19A12D7229CD957600B798A4 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		19A12D7429CD958300B798A4 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
-		19A12D7629CD95A200B798A4 /* MatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
-		19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationViewController.swift; sourceTree = "<group>"; };
-		19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeGroupViewController.swift; sourceTree = "<group>"; };
 		19A12D8029CD964F00B798A4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeAccountViewController.swift; sourceTree = "<group>"; };
 		19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
@@ -219,9 +213,6 @@
 				19A12D6A29CD94D500B798A4 /* AddListViewController.swift */,
 				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
 				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
-				19A12D7629CD95A200B798A4 /* MatchViewController.swift */,
-				19A12D7A29CD95D400B798A4 /* CommunicationViewController.swift */,
-				19A12D7C29CD95EA00B798A4 /* MakeGroupViewController.swift */,
 				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
 				192D26B42A1F98770058D739 /* PostViewController.swift */,
 				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
@@ -608,7 +599,6 @@
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
 				197F7C6A2A83CAAE00F80C34 /* BorderLabel.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
-				19A12D7D29CD95EA00B798A4 /* MakeGroupViewController.swift in Sources */,
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
 				1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
@@ -620,7 +610,6 @@
 				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
 				192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */,
 				19A12D6F29CD94ED00B798A4 /* AddListMusicViewController.swift in Sources */,
-				19A12D7729CD95A200B798A4 /* MatchViewController.swift in Sources */,
 				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
 				192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
@@ -634,7 +623,6 @@
 				1960CD2129FE30730065FF05 /* Manager.swift in Sources */,
 				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
 				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
-				19A12D7B29CD95D400B798A4 /* CommunicationViewController.swift in Sources */,
 				19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */,
 				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
 				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,

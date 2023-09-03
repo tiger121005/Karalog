@@ -38,6 +38,7 @@ class ProfileViewController: UIViewController {
     var menuHidden: Bool = true
     var outBtn: UIButton!
     var followSelected: String!
+    var fromFriends = false
     
     let refreshCtl = UIRefreshControl()
     let hamburgerMenuList = ["通知", "名前変更", "いいね", "公開制限", "ログアウト"]
@@ -46,6 +47,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        title = "プロフィール"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +67,6 @@ class ProfileViewController: UIViewController {
             let nextView = segue.destination as! FriendsViewController
             nextView.selected = followSelected
             nextView.follow = followList
-            print(46483, followerList)
             nextView.follower = followerList
         } else if segue.identifier == "toNotification" {
             let nextView = segue.destination as! NotificationViewController
@@ -76,26 +77,29 @@ class ProfileViewController: UIViewController {
     
     func setupView() {
         Task {
-            let user = await FirebaseAPI.shared.getUserInformation(id: self.userID)
-            self.userName = user?.name
-            self.followList = user?.follow ?? []
-            self.followerList = user?.follower ?? []
-            self.showAll = user?.showAll
-            self.notification = user?.notice ?? []
-            self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
-            self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
-            self.userNameLabel.text = self.userName
-            if let s = user?.showAll {
-                if s {
-                    self.selectedSettingShow = SettingShow.全て.rawValue
+            if !fromFriends {
+                let user = await FirebaseAPI.shared.getUserInformation(id: self.userID)
+                self.userName = user?.name
+                self.followList = user?.follow ?? []
+                self.followerList = user?.follower ?? []
+                self.showAll = user?.showAll
+                self.notification = user?.notice ?? []
+                
+                if let s = user?.showAll {
+                    if s {
+                        self.selectedSettingShow = SettingShow.全て.rawValue
+                    } else {
+                        self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                    }
                 } else {
                     self.selectedSettingShow = SettingShow.フォロワー.rawValue
                 }
-            } else {
-                self.selectedSettingShow = SettingShow.フォロワー.rawValue
             }
+            self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
+            self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
+            self.userNameLabel.text = self.userName
             if userID != Manager.shared.user.id {
-                if !showAll && Manager.shared.user.follow.first(where: { $0 == userID}) == nil {
+                if !showAll && !Manager.shared.user.follow.contains(where: { $0 == userID}) {
                     bestView.isHidden = true
                     followNumBtn.isEnabled = false
                     followerNumBtn.isEnabled = false
@@ -118,9 +122,9 @@ class ProfileViewController: UIViewController {
         if userID == Manager.shared.user.id {
             followBtn.setTitle("友達を見つける", for: .normal)
         } else {
-            if Manager.shared.user.follow.first(where: {$0 == userID}) != nil {
+            if Manager.shared.user.follow.contains(where: {$0 == userID}) {
                 followBtn.setTitle("フォローを外す", for: .normal)
-            } else if Manager.shared.user.request.first(where: {$0 == userID}) != nil{
+            } else if Manager.shared.user.request.contains(where: {$0 == userID}) {
                 followBtn.setTitle("リクエスト中", for: .normal)
             } else {
                 followBtn.setTitle("フォローする", for: .normal)
@@ -193,16 +197,13 @@ class ProfileViewController: UIViewController {
                 for i in 1...a.count - 1 {
                     if bestScore == a[i] {
                         if list[i].data.count > best!.data.count {
-                            print(11111, list[i].musicName)
                             best = list[i]
                         } else if list[i].data.count == best?.data.count && list[i].data.last!.time > best!.data.last!.time{
-                            print(22222, list[i].musicName)
                             best = list[i]
                         }
                     }
                 }
             }
-            print(a)
             musicLabel.text = best?.musicName
             artistLabel.text = best?.artistName
             let useImage = UIImage(data: best!.musicImage)?.withRenderingMode(.alwaysOriginal)
@@ -250,13 +251,34 @@ class ProfileViewController: UIViewController {
             performSegue(withIdentifier: "toAddFriend", sender: nil)
         } else {
             if let _i = Manager.shared.user.follow.firstIndex(where: {$0 == userID}) {
+                //deleteFollow
                 FirebaseAPI.shared.deleteFollow(followedUser: userID, indexPathRow: _i)
+                if !showAll {
+                    bestView.isHidden = true
+                    followNumBtn.isEnabled = false
+                    followerNumBtn.isEnabled = false
+                    showPast.isHidden = true
+                }
+                if let i = followerList.firstIndex(where: {$0 == Manager.shared.user.id}) {
+                    followerList.remove(at: i)
+                    followerNumBtn.setTitle(String(followerList.count), for: .normal)
+                }
+                followBtn.setTitle("フォローする", for: .normal)
+            } else if Manager.shared.user.request.contains(where: {$0 == userID}) {
+                //deleteRequest
+                let notice = Notice(title: "フォローリクエスト",
+                                    content: "\(Manager.shared.user.name)さん（ユーザーID: \(String(Manager.shared.user.id!))）からフォローリクエストが届きました",
+                                    seen: false,
+                                    from: Manager.shared.user.id!)
+                FirebaseAPI.shared.cancelRequest(notice: notice, receiveUser: userID)
                 followBtn.setTitle("フォローする", for: .normal)
             } else {
                 if showAll {
+                    //follow
                     FirebaseAPI.shared.follow(followUser: Manager.shared.user.id!, followedUser: userID)
                     followBtn.setTitle("フォローを外す", for: .normal)
                 } else {
+                    //sendRequest
                     FirebaseAPI.shared.sendRequest(receiveUser: userID)
                     followBtn.setTitle("リクエスト中", for: .normal)
                     
@@ -287,6 +309,11 @@ class ProfileViewController: UIViewController {
     @objc func reload() {
         Task {
             let user = await FirebaseAPI.shared.getUserInformation(id: self.userID)
+            if Manager.shared.user.id == userID {
+                Manager.shared.user = user
+            } else {
+                Manager.shared.user = await FirebaseAPI.shared.getUserInformation(id: Manager.shared.user.id!)
+            }
             self.userName = user?.name
             self.followList = user?.follow ?? []
             self.followerList = user?.follower ?? []
@@ -301,6 +328,35 @@ class ProfileViewController: UIViewController {
                 }
             } else {
                 self.selectedSettingShow = SettingShow.フォロワー.rawValue
+            }
+            
+            //followBtnの名前の設定
+            if userID == Manager.shared.user.id {
+                followBtn.setTitle("友達を見つける", for: .normal)
+            } else {
+                if Manager.shared.user.follow.contains(where: {$0 == userID}) {
+                    followBtn.setTitle("フォローを外す", for: .normal)
+                } else if Manager.shared.user.request.contains(where: {$0 == userID}) {
+                    followBtn.setTitle("リクエスト中", for: .normal)
+                } else {
+                    
+                    followBtn.setTitle("フォローする", for: .normal)
+                }
+            }
+            
+            //表示設定
+            if userID != Manager.shared.user.id {
+                if !showAll && !Manager.shared.user.follow.contains(where: { $0 == userID}) {
+                    bestView.isHidden = true
+                    followNumBtn.isEnabled = false
+                    followerNumBtn.isEnabled = false
+                    showPast.isHidden = true
+                } else {
+                    bestView.isHidden = false
+                    followerNumBtn.isEnabled = true
+                    followNumBtn.isEnabled = true
+                    showPast.isHidden = false
+                }
             }
             
             //bestView
@@ -330,16 +386,13 @@ class ProfileViewController: UIViewController {
                 for i in 1...a.count - 1 {
                     if bestScore == a[i] {
                         if list[i].data.count > best!.data.count {
-                            print(11111, list[i].musicName)
                             best = list[i]
                         } else if list[i].data.count == best?.data.count && list[i].data.last!.time > best!.data.last!.time{
-                            print(22222, list[i].musicName)
                             best = list[i]
                         }
                     }
                 }
             }
-            print(a)
             musicLabel.text = best?.musicName
             artistLabel.text = best?.artistName
             let useImage = UIImage(data: best!.musicImage)?.withRenderingMode(.alwaysOriginal)
@@ -353,16 +406,7 @@ class ProfileViewController: UIViewController {
         
     }
     
-    enum SettingShow: String {
-        case 全て = "全て"
-        case フォロワー = "フォロワーのみ"
-        
-    }
     
-    enum SettingFollow: String {
-        case 全て = "全て"
-        case 認証 = "認証"
-    }
 
 }
 
@@ -412,9 +456,7 @@ extension ProfileViewController: UITableViewDelegate {
             }
             
             let follower = UIAlertAction(title: SettingShow.フォロワー.rawValue, style: .default) {_ in
-                print(11111)
                 if self.selectedSettingShow != SettingShow.フォロワー.rawValue {
-                    print(22222)
                     self.selectedSettingShow = SettingShow.フォロワー.rawValue
                     FirebaseAPI.shared.updateShowAll(id: self.userID, newBool: false)
                 }

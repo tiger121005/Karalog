@@ -10,6 +10,7 @@ import UIKit
 class ListViewController: UIViewController {
     
     var listID: String = ""
+    var listName: String = ""
     var originalList: [MusicList] = []
     var tvList: [MusicList] = []
     var judgeSort: String = "0"
@@ -82,6 +83,7 @@ class ListViewController: UIViewController {
         } else if segue.identifier == "toMusicDetail" {
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicID = selectedID
+            nextView.musicName = musicName
         } else if segue.identifier == "toAddWanna" {
             let nextView = segue.destination as! GetMusicViewController
             nextView.fromList = true
@@ -116,6 +118,7 @@ class ListViewController: UIViewController {
     func setupSearchBar() {
         searchBar.delegate = self
     }
+    
     
     func setupBarButtonItem() {
         let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"), handler: { [self]_ in
@@ -177,6 +180,8 @@ class ListViewController: UIViewController {
         selectBtn.isHidden = true
         doneBtn.isHidden = true
         allSelectBtn.isHidden = true
+        
+        title = listName
     }
     
     
@@ -426,12 +431,13 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedID = tvList[indexPath.row].id!
+        musicName = tvList[indexPath.row].musicName
         if listID == "1" && isEditing == false {
-            musicName = tvList[indexPath.row].musicName
             artistName = tvList[indexPath.row].artistName
             musicImage = tvList[indexPath.row].musicImage
             performSegue(withIdentifier: "toAddDetail", sender: nil)
         } else if isEditing == false{
+            
             performSegue(withIdentifier: "toMusicDetail", sender: nil)
         }
             

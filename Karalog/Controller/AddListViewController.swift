@@ -26,7 +26,7 @@ class AddListViewController: UIViewController {
         
         setupTextField()
         setupInitialImage()
-        
+        title = "リストを追加"
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

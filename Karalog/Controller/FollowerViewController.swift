@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol FollowerDelegate {
+    func selectedFollowerCell(indexPath: IndexPath)
+}
+
 class FollowerViewController: UIViewController {
+    
+    var delegate: FollowerDelegate?
     
     var followerList: [User] = [] {
         didSet {
@@ -33,6 +39,7 @@ class FollowerViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        
         tableView.reloadData()
     }
     
@@ -56,4 +63,7 @@ extension FollowerViewController: UITableViewDataSource {
 
 extension FollowerViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.selectedFollowerCell(indexPath: indexPath)
+    }
 }

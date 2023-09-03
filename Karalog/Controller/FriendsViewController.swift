@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class FriendsViewController: UIViewController {
     
     var followList: [User] = []
@@ -14,6 +15,7 @@ class FriendsViewController: UIViewController {
     var selected: String!
     var follow: [String] = []
     var follower: [String] = []
+    var selectedUser: User!
     
     var pageViewController: UIPageViewController!
     var viewControllers = [UIViewController]()
@@ -27,21 +29,42 @@ class FriendsViewController: UIViewController {
         super.viewDidLoad()
         setup()
         
-        
-        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toProfile" {
+            let nextView = segue.destination as! ProfileViewController
+            nextView.userID = selectedUser.id
+            nextView.userName = selectedUser?.name
+            nextView.followList = selectedUser?.follow ?? []
+            nextView.followerList = selectedUser?.follower ?? []
+            nextView.showAll = selectedUser?.showAll
+            nextView.notification = selectedUser?.notice ?? []
+            
+            if let s = selectedUser?.showAll {
+                if s {
+                    nextView.selectedSettingShow = SettingShow.全て.rawValue
+                } else {
+                    nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
+                }
+            } else {
+                nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
+            }
+        }
     }
     
     func setupPageView() {
         guard let followerViewController = storyboard?.instantiateViewController(withIdentifier: "follower") as? FollowerViewController else { return }
         followerViewController.followerList = followerList
+        followerViewController.delegate = self
         
         guard let followViewController = storyboard?.instantiateViewController(withIdentifier: "follow") as? FollowViewController else { return }
         followViewController.followList = followList
+        followViewController.delegate = self
         
         viewControllers.append(followerViewController)
         viewControllers.append(followViewController)
         
-        print(7777, children.first)
         pageViewController = children.first as? UIPageViewController
         if selected == "follower" {
             pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: false, completion: nil)
@@ -65,6 +88,8 @@ class FriendsViewController: UIViewController {
     
     func setup() {
         Task {
+            
+            
             for user in follow {
                 
                 if let a = await FirebaseAPI.shared.getUserInformation(id: user) {
@@ -100,6 +125,7 @@ class FriendsViewController: UIViewController {
        }
         
     }
+    
 }
 
 extension FriendsViewController: UIPageViewControllerDelegate {
@@ -134,4 +160,18 @@ extension FriendsViewController: UIPageViewControllerDataSource {
         }
     }
     
+}
+
+extension FriendsViewController: FollowerDelegate {
+    func selectedFollowerCell(indexPath: IndexPath) {
+        selectedUser = followerList[indexPath.row]
+        performSegue(withIdentifier: "toProfile", sender: nil)
+    }
+}
+
+extension FriendsViewController: FollowDelegate {
+    func selectedFollowCell(indexPath: IndexPath) {
+        selectedUser = followList[indexPath.row]
+        performSegue(withIdentifier: "toProfile", sender: nil)
+    }
 }

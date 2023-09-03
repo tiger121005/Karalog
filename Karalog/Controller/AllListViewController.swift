@@ -12,6 +12,7 @@ class AllListViewController: UIViewController {
     
     var index: Int = 0
     var listID: String = ""
+    var listName: String = ""
     var changeOrder: Bool = false
     
     let refreshCtl = UIRefreshControl()
@@ -23,6 +24,7 @@ class AllListViewController: UIViewController {
         super.viewDidLoad()
         
         setupCollectionView()
+        title = "LIST"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,6 +40,7 @@ class AllListViewController: UIViewController {
             let nextView = segue.destination as! ListViewController
             
             nextView.listID = listID
+            nextView.listName = listName
         } else if segue.identifier == "toAddList" {
             let nextView = segue.destination as! AddListViewController
             
@@ -89,7 +92,7 @@ extension AllListViewController: UICollectionViewDelegate {
         } else {
             listID = Manager.shared.lists[indexPath.row].id!
         }
-        
+        listName = Manager.shared.lists[indexPath.row].listName
         performSegue(withIdentifier: "toList", sender: nil)
     }
     

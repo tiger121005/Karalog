@@ -19,7 +19,7 @@ class StartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
+        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
         
         let u: String! = UserDefaultsKey.userID.get()
         if u != nil {

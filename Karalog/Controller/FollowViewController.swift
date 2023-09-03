@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol FollowDelegate {
+    func selectedFollowCell(indexPath: IndexPath)
+}
+
 class FollowViewController: UIViewController {
     
+    var delegate: FollowDelegate?
     var followList: [User] = []
         
     @IBOutlet var tableView: UITableView! {
@@ -32,9 +37,7 @@ class FollowViewController: UIViewController {
     
 }
 
-extension FollowViewController: UITableViewDelegate {
-    
-}
+
 
 extension FollowViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,4 +52,11 @@ extension FollowViewController: UITableViewDataSource {
     }
     
     
+}
+
+extension FollowViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.selectedFollowCell(indexPath: indexPath)
+    }
 }

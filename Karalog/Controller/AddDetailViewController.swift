@@ -48,7 +48,7 @@ class AddDetailViewController: UIViewController {
         getTimingKeyboard()
         setupKeyboard()
         setupCategoryView()
-        
+        title = "記録を追加"
     }
     
     override func viewDidAppear(_ animated: Bool) {

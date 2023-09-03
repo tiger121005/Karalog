@@ -26,6 +26,11 @@ class SelectedPostViewController: UIViewController {
         super.viewDidLoad()
         
         setupCollectionView()
+        if kind == "good" {
+            title = "いいね"
+        } else {
+            title = "過去の投稿"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -175,7 +180,6 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         Task {
-            print(99999, indexPath.row, self.shareList.count)
             // スクロールが最下部に達したら次のページのデータを取得
             if !finalContent {
                 if indexPath.row == self.shareList.count - 1 {

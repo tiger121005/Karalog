@@ -40,6 +40,10 @@ extension NotificationViewController: UITableViewDelegate {
             let approve = UIAlertAction(title: "承認", style: .default) { (action) in
                 FirebaseAPI.shared.deleteRequest(notice: self.notificationList[indexPath.row])
                 FirebaseAPI.shared.follow(followUser: self.notificationList[indexPath.row].from, followedUser: self.userID)
+                Manager.shared.user.request.remove(at: indexPath.row)
+                self.notificationList.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .fade)
+                
             }
             
             alert.addAction(cancel)

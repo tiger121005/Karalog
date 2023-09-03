@@ -33,7 +33,7 @@ class MusicDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        navigationItem.title = musicName
+        title = musicName
     }
     
     override func viewWillAppear(_ animated: Bool) {

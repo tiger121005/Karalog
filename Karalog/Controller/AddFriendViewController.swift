@@ -21,6 +21,7 @@ class AddFriendViewController: UIViewController {
         
         setupTableView()
         setupSearchBar()
+        title = "友達を見つける"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,7 +59,10 @@ extension AddFriendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.textLabel?.text = userList[indexPath.row].name
+        cell.textLabel?.textColor = .white
         cell.detailTextLabel?.text = userList[indexPath.row].id
+        cell.detailTextLabel?.textColor = .white
+        cell.backgroundColor = .black
         return cell
     }
 }

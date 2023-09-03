@@ -24,7 +24,7 @@ class AddListMusicViewController: UIViewController {
 
         setupTableView()
         searchBar.delegate = self
-        
+        title = "リストに追加"
     }
     
     func setupTableView() {
@@ -32,6 +32,7 @@ class AddListMusicViewController: UIViewController {
         tableView.delegate = self
         tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
         
+        tableView.rowHeight = 70
         tableView.keyboardDismissMode = .onDrag
         tableView.allowsMultipleSelection = true
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -105,10 +106,52 @@ extension AddListMusicViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell1", for: indexPath) as! TableViewCell1
         
+        var list: [MusicList] = []
+        var a: [Double] = []
+        for i in tvList {
+            let b = i.data
+            var c: [Double] = []
+            for j in b {
+                c.append(j.score)
+            }
+            a.append(c.max()!)
+        }
+        let d = a.indices.sorted{ a[$1] < a[$0]}
+        list = d.map{tvList[$0]}
+        
+        var n: Int!
+        if tvList.count < 10 {
+            n = 1
+        } else if tvList.count < 40 {
+            n = Int(ceil(Double(tvList.count / 10)))
+        } else {
+            n = Int(ceil(Double(tvList.count / 5)))
+        }
+        let m = n * 3
+        let high = list[n - 1].data.map{$0.score}.max()!
+        var medium: Double = 0.0
+        if tvList.count > 3 {
+            medium = list[m - 1].data.map{$0.score}.max()!
+        }   
+        
         cell.musicLabel?.text = tvList[indexPath.row].musicName
         cell.artistLabel?.text = tvList[indexPath.row].artistName
         let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
+        
+        let scoreList = tvList[indexPath.row].data.map{$0.score}
+        let max = scoreList.max()
+        cell.scoreLabel.text = String(format: "%.3f", max!)
+        if max! >= Double(high) {
+            cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        } else if max! >= Double(medium) && tvList.count > 3 {
+            cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
+        } else {
+            cell.scoreLabel.textColor = .gray
+            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        }
         
         cell.favoriteBtn.isHidden = true
         cell.selectionStyle = .default

@@ -104,3 +104,14 @@ enum UserDefaultsKey: String {
         UserDefaults.standard.removeObject(forKey: self.rawValue)
     }
 }
+
+enum SettingShow: String {
+    case 全て = "全て"
+    case フォロワー = "フォロワーのみ"
+    
+}
+
+enum SettingFollow: String {
+    case 全て = "全て"
+    case 認証 = "認証"
+}

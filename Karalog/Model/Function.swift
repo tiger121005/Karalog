@@ -15,11 +15,11 @@ struct Function {
     
     func login(first: Bool, user: User) {
         Manager.shared.user = user
-        print(28273, Manager.shared.user)
         FirebaseAPI.shared.setFirebase(userID: user.id!)
         UserDefaultsKey.userID.set(value: user.id!)
         if first {
             Manager.shared.lists = Material.shared.initialListData
+            UserDefaultsKey.judgeSort.set(value: "0")
         } else {
             FirebaseAPI.shared.getList(completionHandler: {_ in})
         }

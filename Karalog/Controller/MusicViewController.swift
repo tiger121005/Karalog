@@ -45,9 +45,9 @@ class MusicViewController: UIViewController {
         setupTableView()
         setupSearchBar()
         setupBarItem()
-        
         createMenu()
         get()
+        title = "HOME"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -172,8 +172,8 @@ class MusicViewController: UIViewController {
         doneBtn.isHidden = true
         allSelectBtn.isHidden = true
         
-        title = "HOME"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+        
+        
     }
     
     func createMenu() {
@@ -276,7 +276,6 @@ class MusicViewController: UIViewController {
         })]
         
         let sortNum: String! = UserDefaultsKey.judgeSort.get() ?? "0"
-        print(sortNum)
         let sorts = UIMenu(title: "並び替え（" + sortList[Int(sortNum)!] + ")", children: subItems)
         
         //editBtn.showsMenuAsPrimaryAction = true
@@ -377,7 +376,6 @@ extension MusicViewController: UITableViewDataSource {
         list = d.map{tvList[$0]}
         
         var n: Int!
-//        let n = Int(ceil(Double(tvList.count / 10)))
         if tvList.count < 10 {
             n = 1
         } else if tvList.count < 40 {

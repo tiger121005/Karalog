@@ -43,14 +43,12 @@ class FirebaseAPI: ObservableObject {
     //user情報を取得
     func getUserInformation(id: String) async -> User? {
         await withCheckedContinuation { continuation in
-            print(78473, id)
             db.collection("user").document(id).getDocument { (document, err) in
                 if let _err = err {
                     print("Error getting user information: \(_err)")
                     continuation.resume(returning: nil)
                 } else {
                     if let document, document.exists {
-                        print(63729, document.data())
                         do {
                             let user = try document.data(as: User.self)
                             continuation.resume(returning: user)
@@ -72,7 +70,7 @@ class FirebaseAPI: ObservableObject {
         
         musicRef.getDocuments { (collection, err) in
             if let _err = err {
-                print("error getting music: \(_err)")
+                print("Error getting music: \(_err)")
                 completionHandler([])
             }else{
                 Manager.shared.musicList = []
@@ -383,7 +381,6 @@ class FirebaseAPI: ObservableObject {
                                     for document in collection!.documents {
                                         do{
                                             list.append(try document.data(as: Post.self))
-                                            print(777, try document.data(as: Post.self))
                                         }catch{
                                             print(error)
                                         }
@@ -631,7 +628,6 @@ class FirebaseAPI: ObservableObject {
                         if gotList.count == 0 {
                             return list
                         }
-                        print(444, gotList)
 
                         list.append(contentsOf: await self.selectPost(post: gotList))
 
@@ -643,7 +639,6 @@ class FirebaseAPI: ObservableObject {
                 return list
             }
 
-            print(89389, group)
             var l: [Post] = []
             for await post in group {
                 l.append(contentsOf: post)
@@ -654,7 +649,6 @@ class FirebaseAPI: ObservableObject {
     
     //撮ってきた投稿の中から非表示の設定になっている投稿を弾き、userNameを取得する
     func selectPost(post: [Post]) async -> [Post] {
-        print(3333, post)
         var list: [Post] = []
         for p in post {
             print("here")
@@ -662,16 +656,13 @@ class FirebaseAPI: ObservableObject {
                 print("continueeee")
                 continue
             }
-            print(88888, user)
             var _post = p
             _post.userID = user.name
             var show = user.showAll
-            print(22222, Manager.shared.user)
             if Manager.shared.user.follow.first(where: {$0 == p.userID}) != nil {
                 show = true
             } else if p.userID == self.userID {
                 show = true
-                print("userIDDDDDDD")
             }
             
             if show {
@@ -680,7 +671,6 @@ class FirebaseAPI: ObservableObject {
             
         }
         
-        print(9999, list)
         return list
         
     }
@@ -811,7 +801,7 @@ class FirebaseAPI: ObservableObject {
                           UserRef.MusicListRef.MusicDataRef.key.rawValue: key,
                           UserRef.MusicListRef.MusicDataRef.model.rawValue: model,
                           UserRef.MusicListRef.MusicDataRef.comment.rawValue: comment] as [String : Any]
-        musicRef.addDocument(data: [
+        let ref = musicRef.addDocument(data: [
             UserRef.MusicListRef.musicName.rawValue: musicName,
             UserRef.MusicListRef.artistName.rawValue: artistName,
             UserRef.MusicListRef.musicImage.rawValue: musicImage,
@@ -823,21 +813,22 @@ class FirebaseAPI: ObservableObject {
                 print("Error adding music: \(_err)")
             }else{
                 print("music added")
-                Manager.shared.musicList.append(MusicList(musicName: musicName,
-                                                          artistName: artistName,
-                                                          musicImage: musicImage,
-                                                          favorite: false,
-                                                          lists: [],
-                                                          data: [MusicData(time: time,
-                                                                           score: score,
-                                                                           key: key,
-                                                                           model: model,
-                                                                           comment: comment)],
-                                                          id: self.musicRef.document().documentID))
+                
                 
                 completionHandler(true)
             }
         }
+        Manager.shared.musicList.append(MusicList(musicName: musicName,
+                                                  artistName: artistName,
+                                                  musicImage: musicImage,
+                                                  favorite: false,
+                                                  lists: [],
+                                                  data: [MusicData(time: time,
+                                                                   score: score,
+                                                                   key: key,
+                                                                   model: model,
+                                                                   comment: comment)],
+                                                  id: ref.documentID))
     }
     
     //musicDataを追加
@@ -968,9 +959,10 @@ class FirebaseAPI: ObservableObject {
                 print("Error add request: \(_err)")
             }
         }
+        
         let notice = [
             UserRef.NoticeRef.title.rawValue: "フォローリクエスト",
-            UserRef.NoticeRef.content.rawValue: "\(Manager.shared.user.name)さん（ユーザーID: \(userID)）からフォローリクエストが届きました",
+            UserRef.NoticeRef.content.rawValue: "\(Manager.shared.user.name)さん（ユーザーID: \(String(userID))）からフォローリクエストが届きました",
             UserRef.NoticeRef.seen.rawValue: false,
             UserRef.NoticeRef.from.rawValue: userID
             
@@ -1120,6 +1112,33 @@ class FirebaseAPI: ObservableObject {
                 print("Error remove request: \(_err)")
             }
         }
+        
+        
+    }
+    
+    func cancelRequest(notice: Notice, receiveUser: String) {
+        let a = [UserRef.NoticeRef.title.rawValue: notice.title,
+                 UserRef.NoticeRef.content.rawValue: notice.content,
+                 UserRef.NoticeRef.seen.rawValue: notice.seen,
+                 UserRef.NoticeRef.from.rawValue: notice.from] as [String : Any]
+        db.collection("user").document(receiveUser).updateData([
+            UserRef.notice.rawValue: FieldValue.arrayRemove([a])
+        ]) { err in
+            if let _err = err {
+                print("Error remove notification: \(_err)")
+            }
+        }
+        
+        userRef.updateData([
+            UserRef.request.rawValue: FieldValue.arrayRemove([receiveUser])
+        ]) { err in
+            if let _err = err {
+                print("Error remove request: \(_err)")
+            }
+        }
+        
+        let i = Manager.shared.user.request.firstIndex(where: {$0 == receiveUser})!
+        Manager.shared.user.request.remove(at: i)
     }
     
     //favoriteを更新
