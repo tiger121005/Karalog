@@ -659,7 +659,7 @@ class FirebaseAPI: ObservableObject {
             var _post = p
             _post.userID = user.name
             var show = user.showAll
-            if Manager.shared.user.follow.first(where: {$0 == p.userID}) != nil {
+            if Manager.shared.user.follow.contains(where: {$0 == p.userID}) {
                 show = true
             } else if p.userID == self.userID {
                 show = true

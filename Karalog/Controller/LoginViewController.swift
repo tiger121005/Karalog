@@ -26,6 +26,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mailTF.delegate = self
+        passwordTF.delegate = self
         passwordTF.isSecureTextEntry = true
         passwordTF.textContentType = .none
         
@@ -162,8 +164,10 @@ class LoginViewController: UIViewController {
     private func login(credential: AuthCredential) {
         print("ログイン完了")
     }
-    
-    //改行したら自動的にキーボードを非表示にする
+
+}
+
+extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if textField == mailTF {
@@ -171,9 +175,4 @@ class LoginViewController: UIViewController {
         }
         return true
     }
-    
-    func layout() {
-        
-    }
-
 }

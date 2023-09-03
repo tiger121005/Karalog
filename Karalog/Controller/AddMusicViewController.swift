@@ -83,6 +83,7 @@ class AddMusicViewController: UIViewController {
     func setupTextField() {
         musicTF.delegate = self
         artistTF.delegate = self
+        scoreTF.delegate = self
         musicTF.text = musicName
         artistTF.text = artistName
         musicTF.keyboardAppearance = .dark
@@ -283,22 +284,13 @@ class AddMusicViewController: UIViewController {
     @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
         if textView.isFirstResponder {
             self.textView.resignFirstResponder()
-        }else if scoreTF.isFirstResponder {
+        } else if scoreTF.isFirstResponder {
             self.scoreTF.resignFirstResponder()
         } else if musicTF.isFirstResponder {
             self.musicTF.resignFirstResponder()
         } else if artistTF.isFirstResponder {
             self.artistTF.resignFirstResponder()
         }
-    }
-}
-
-extension AddMusicViewController: UITextFieldDelegate {
-    
-    //改行したら自動的にキーボードを非表示にする
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        scoreTF.resignFirstResponder()
-        return true
     }
 }
 
@@ -354,5 +346,17 @@ extension UIScrollView {
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.next?.touchesBegan(touches, with: event)
         
+    }
+}
+
+extension AddMusicViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        if textField == musicTF {
+            artistTF.becomeFirstResponder()
+        } else if textField == artistTF {
+            scoreTF.becomeFirstResponder()
+        }
+        return true
     }
 }

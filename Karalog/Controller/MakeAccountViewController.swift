@@ -19,6 +19,30 @@ class MakeAccountViewController: UIViewController {
     @IBOutlet var nameTF: UITextField!
     @IBOutlet var lookPasswordBtn: UIButton!
     @IBOutlet var signUpBtn: CustomButton!
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        mailTF.delegate = self
+        passwordTF.delegate = self
+        nameTF.delegate = self
+        passwordTF.isSecureTextEntry = true
+        passwordTF.textContentType = .password
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //キーボード以外がタップされた時にキーボードを閉じる
+        if (self.mailTF.isFirstResponder) {
+            self.mailTF.resignFirstResponder()
+        }else if (self.passwordTF.isFirstResponder) {
+            self.passwordTF.resignFirstResponder()
+        }else if (self.nameTF.isFirstResponder) {
+            self.nameTF.resignFirstResponder()
+        }
+            
+    }
+    
     @IBAction func lookPassword() {
         if passwordTF.isSecureTextEntry == true {
             passwordTF.isSecureTextEntry = false
@@ -69,27 +93,12 @@ class MakeAccountViewController: UIViewController {
             }
         })
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        passwordTF.isSecureTextEntry = true
-        passwordTF.textContentType = .password
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.mailTF.isFirstResponder) {
-            self.mailTF.resignFirstResponder()
-        }else if (self.passwordTF.isFirstResponder) {
-            self.passwordTF.resignFirstResponder()
-        }else if (self.nameTF.isFirstResponder) {
-            self.nameTF.resignFirstResponder()
-        }
-            
-    }
     
-    //改行したら自動的にキーボードを非表示にする
+
+}
+
+extension MakeAccountViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // 今フォーカスが当たっているテキストボックスからフォーカスを外す
         textField.resignFirstResponder()
@@ -101,6 +110,4 @@ class MakeAccountViewController: UIViewController {
         
         return true
     }
-    
-
 }

@@ -14,6 +14,7 @@ class PostViewController: UIViewController {
     var musicImage: Data!
     var category: [String] = []
     var alertCtl: UIAlertController!
+    var tapGesture: UITapGestureRecognizer!
     
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
@@ -29,6 +30,8 @@ class PostViewController: UIViewController {
 
         setUpMusic()
         setupTableView()
+        setupKeyboard()
+        getTimingKeyboard()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -72,6 +75,18 @@ class PostViewController: UIViewController {
         tableView.allowsMultipleSelection = true
     }
     
+    func getTimingKeyboard() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
+        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setupKeyboard() {
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
+        self.view.addGestureRecognizer(tapGesture)
+        tapGesture.isEnabled = false
+    }
+    
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()
     }
@@ -86,6 +101,24 @@ class PostViewController: UIViewController {
     func tapOutTableView () {
         if tableView.isHidden == false {
             tableView.isHidden = true
+        }
+    }
+    
+    // キーボード表示通知の際の処理
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        tapGesture.isEnabled = true
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        if textView.isFirstResponder {
+            tapGesture.isEnabled = false
+        }
+    }
+    
+    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
+        if textView.isFirstResponder {
+            self.textView.resignFirstResponder()
         }
     }
     

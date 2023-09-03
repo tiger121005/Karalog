@@ -113,7 +113,6 @@ class MusicViewController: UIViewController {
     func setupSearchBar() {
         searchBar.delegate = self
         
-        searchBar.keyboardAppearance = .dark
     }
     
     func setupBarItem() {
@@ -335,10 +334,6 @@ class MusicViewController: UIViewController {
         }
     }
     
-    //改行したら自動的にキーボードを非表示にする
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
 }
 
 extension UIImage {
@@ -530,5 +525,10 @@ extension MusicViewController: UISearchBarDelegate {
             }
         }
         tableView.reloadData()
+    }
+    
+    //改行したら自動的にキーボードを非表示にする
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

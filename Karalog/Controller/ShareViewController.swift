@@ -138,6 +138,10 @@ class ShareViewController: UIViewController {
     }
     
     func setupSearchView() {
+        
+        musicTF.delegate = self
+        artistTF.delegate = self
+        
         searchView.layer.cornerRadius = 15
         searchView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
@@ -304,7 +308,7 @@ extension ShareViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
+        if Manager.shared.user.goodList.contains(where: {$0.contains(shareList[indexPath.row].id!)}) {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             
             print(shareList[indexPath.row].musicName)
@@ -368,7 +372,7 @@ extension ShareViewController: ShareCellDelegate {
         let selectedID = shareList[indexPath.row].id!
         
         var good: Bool!
-        if Manager.shared.user.goodList.first(where: { $0 == selectedID}) != nil {
+        if Manager.shared.user.goodList.contains(where: { $0 == selectedID}) {
             good = true
         } else {
             good = false
@@ -463,4 +467,14 @@ extension ShareViewController: UITableViewDataSource {
         return cell
     }
     
+}
+
+extension ShareViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        if textField == musicTF {
+            artistTF.becomeFirstResponder()
+        }
+        return true
+    }
 }

@@ -161,7 +161,6 @@ extension SelectedPostViewController: UICollectionViewDataSource {
         }
         cell.categoryLabel.text = a
         if Manager.shared.user.goodList.contains(where: { id in id == shareList[indexPath.row].id! }) {
-//        if Manager.shared.user.goodList.first(where: {$0.contains(shareList[indexPath.row].id!)}) != nil {
             cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             
         }else{
@@ -217,7 +216,7 @@ extension SelectedPostViewController: ShareCellDelegate {
         let selectedID = shareList[indexPath.row].id!
         
         var good: Bool!
-        if Manager.shared.user.goodList.first(where: { $0 == selectedID}) != nil {
+        if Manager.shared.user.goodList.contains(where: { $0 == selectedID}) {
             good = true
         } else {
             good = false

@@ -35,6 +35,7 @@ class AddFriendViewController: UIViewController {
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
     }
     
     func setupSearchBar() {
@@ -86,5 +87,9 @@ extension AddFriendViewController: UISearchBarDelegate {
             }
         }
         
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

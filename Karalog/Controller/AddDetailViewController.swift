@@ -42,7 +42,6 @@ class AddDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupTextField()
         configureMenuButton()
         setupKeyLabel()
         getTimingKeyboard()
@@ -73,10 +72,6 @@ class AddDetailViewController: UIViewController {
             }
             callView = false
         }
-    }
-    
-    func setupTextField() {
-        scoreTF.delegate = self
     }
     
     func configureMenuButton() {
@@ -271,18 +266,9 @@ class AddDetailViewController: UIViewController {
     @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
         if textView.isFirstResponder {
             self.textView.resignFirstResponder()
-        }else if scoreTF.isFirstResponder {
+        } else if scoreTF.isFirstResponder {
             self.scoreTF.resignFirstResponder()
         }
-    }
-}
-
-extension AddDetailViewController: UITextFieldDelegate {
-    
-    //改行したら自動的にキーボードを非表示にする
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        scoreTF.resignFirstResponder()
-        return true
     }
 }
 
