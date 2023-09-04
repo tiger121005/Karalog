@@ -945,9 +945,9 @@ class FirebaseAPI: ObservableObject {
             }
         }
         if followUser == userID {
-            Manager.shared.user.follower.append(followedUser)
+            Manager.shared.user.follow.append(followedUser)
         } else {
-            Manager.shared.user.follow.append(followUser)
+            Manager.shared.user.follower.append(followUser)
         }
     }
     

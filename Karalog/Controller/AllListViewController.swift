@@ -153,9 +153,10 @@ extension AllListViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
         cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
         cell.label.text = Manager.shared.lists[indexPath.row].listName
-        if cell.image.image == UIImage(systemName: "music.mic"){
-            
-        }
+        
+        var selectedBgView = UIView()
+        selectedBgView.backgroundColor = .gray
+        cell.selectedBackgroundView = selectedBgView
         
         return cell
     }

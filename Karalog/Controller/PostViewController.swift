@@ -35,7 +35,13 @@ class PostViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        tapOutTableView()
+        let touch: UITouch = touches.first!
+        let location: CGPoint = touch.location(in: self.view)
+        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
+            tapOutTableView()
+        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
+            tapOutTableView()
+        }
         textView.resignFirstResponder()
     }
     

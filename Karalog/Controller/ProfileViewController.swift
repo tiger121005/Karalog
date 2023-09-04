@@ -11,6 +11,7 @@ import FirebaseAuth
 class ProfileViewController: UIViewController {
     
     @IBOutlet var userNameLabel: UILabel!
+    @IBOutlet var userIDLabel: UILabel!
     @IBOutlet var followBtn: UIButton!
     @IBOutlet var followNumBtn: UIButton!
     @IBOutlet var followerNumBtn: UIButton!
@@ -98,6 +99,7 @@ class ProfileViewController: UIViewController {
             self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
             self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
             self.userNameLabel.text = self.userName
+            self.userIDLabel.text = "ユーザーID: " + userID
             if userID != Manager.shared.user.id {
                 if !showAll && !Manager.shared.user.follow.contains(where: { $0 == userID}) {
                     bestView.isHidden = true
@@ -276,6 +278,8 @@ class ProfileViewController: UIViewController {
                 if showAll {
                     //follow
                     FirebaseAPI.shared.follow(followUser: Manager.shared.user.id!, followedUser: userID)
+                    followerList.append(Manager.shared.user.id!)
+                    followerNumBtn.setTitle(String(followerList.count), for: .normal)
                     followBtn.setTitle("フォローを外す", for: .normal)
                 } else {
                     //sendRequest
@@ -413,6 +417,7 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
             switchMenu()

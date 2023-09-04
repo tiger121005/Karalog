@@ -415,6 +415,11 @@ extension MusicViewController: UITableViewDataSource {
             cell.favoriteBtn?.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         
+        cell.backgroundColor = .clear
+        
+        var selectedBgView = UIView()
+        selectedBgView.backgroundColor = .gray
+        cell.selectedBackgroundView = selectedBgView
         
         return cell
     }
@@ -453,6 +458,7 @@ extension MusicViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+        tableView.deselectRow(at: indexPath, animated: true)
         musicID = tvList[indexPath.row].id
         if isEditing == false {
             musicData = tvList[indexPath.row].data

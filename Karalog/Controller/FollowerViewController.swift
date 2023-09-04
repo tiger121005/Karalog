@@ -15,11 +15,7 @@ class FollowerViewController: UIViewController {
     
     var delegate: FollowerDelegate?
     
-    var followerList: [User] = [] {
-        didSet {
-            print("waa")
-        }
-    }
+    var followerList: [User] = []
     
     @IBOutlet var tableView: UITableView!  {
         didSet {

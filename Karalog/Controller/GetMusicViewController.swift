@@ -98,7 +98,8 @@ class GetMusicViewController: UIViewController {
 
 extension GetMusicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("🇯🇵", fromList)
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
         if fromList {
             FirebaseAPI.shared.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
                                         artistName: musicInfoModel[indexPath.row].artistName,
@@ -137,6 +138,11 @@ extension GetMusicViewController: UICollectionViewDataSource {
             cell.image?.image = image
             
         }
+        
+        var selectedBgView = UIView()
+        selectedBgView.backgroundColor = .gray
+        cell.selectedBackgroundView = selectedBgView
+        
         return cell
     }
 }

@@ -108,6 +108,8 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
         musicName = musicInfoModel[indexPath.row].trackName
         artistName = musicInfoModel[indexPath.row].artistName
         musicImage = musicInfoModel[indexPath.row].artworkUrl100
@@ -136,6 +138,10 @@ extension SearchViewController: UICollectionViewDataSource {
             cell.image?.image = image
             
         }
+        
+        var selectedBgView = UIView()
+        selectedBgView.backgroundColor = .gray
+        cell.selectedBackgroundView = selectedBgView
         
         return cell
     }
