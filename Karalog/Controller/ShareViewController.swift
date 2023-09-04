@@ -61,7 +61,7 @@ class ShareViewController: UIViewController {
         
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch = touches.first!
         let location: CGPoint = touch.location(in: self.view)
         if location.x < tableView.frame.minX || location.y < tableView.frame.minY {

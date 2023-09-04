@@ -34,17 +34,6 @@ class PostViewController: UIViewController {
         getTimingKeyboard()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let location: CGPoint = touch.location(in: self.view)
-        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
-            tapOutTableView()
-        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
-            tapOutTableView()
-        }
-        textView.resignFirstResponder()
-    }
-    
     func setUpMusic() {
         musicLabel.text = musicName
         artistLabel.text = artistName
@@ -114,6 +103,7 @@ class PostViewController: UIViewController {
     @objc func keyboardWillShow(_ notification: Notification) {
         
         tapGesture.isEnabled = true
+        tableView.isHidden = true
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
