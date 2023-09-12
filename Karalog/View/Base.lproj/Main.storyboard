@@ -143,8 +143,8 @@
                                     <constraint firstAttribute="height" constant="40" id="cRJ-6C-ozd"/>
                                 </constraints>
                                 <connections>
+                                    <action selector="didTapGoogleSignInButton:" destination="UBO-Si-eBr" eventType="touchUpInside" id="fzr-lE-avT"/>
                                     <action selector="didTapSignInButton:" destination="41G-Ha-5Zb" eventType="touchUpInside" id="EcY-mB-y69"/>
-                                    <action selector="didTapSignInButton:" destination="UBO-Si-eBr" eventType="touchUpInside" id="r3v-Q1-hf7"/>
                                 </connections>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Karalog" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFk-oi-HBc">
