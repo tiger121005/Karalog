@@ -122,7 +122,7 @@ extension AddListMusicViewController: UITableViewDelegate {
 
 extension AddListMusicViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        manager.musicList.count
+         tvList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -130,6 +130,7 @@ extension AddListMusicViewController: UITableViewDataSource {
         
         var list: [MusicList] = []
         var a: [Double] = []
+        
         for i in tvList {
             let b = i.data
             var c: [Double] = []
