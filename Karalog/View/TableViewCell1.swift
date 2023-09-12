@@ -7,11 +7,22 @@
 
 import UIKit
 
+
+//MARK: - TableViewCell1Delegate
+
 protocol TableViewCell1Delegate {
     func reloadCell(indexPath: IndexPath)
 }
 
+
+//MARK: - TableViewCell1
+
 class TableViewCell1: UITableViewCell {
+    
+    var delegate: TableViewCell1Delegate?
+    var indexPath: IndexPath!
+    
+    //MARK: - UI objects
     
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var musicLabel: UILabel!
@@ -20,13 +31,7 @@ class TableViewCell1: UITableViewCell {
     @IBOutlet var favoriteBtn: UIButton!
     
     
-    var delegate: TableViewCell1Delegate?
-    var indexPath: IndexPath!
-    
-    @IBAction func touchFavoriteBtn(_ sender: Any) {
-
-        delegate?.reloadCell(indexPath: indexPath)
-    }
+    //MARK: - TableViewCell methods
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,6 +41,15 @@ class TableViewCell1: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
+        
+    }
+    
+    
+    //MARK: - UI interaction
+    
+    @IBAction func touchFavoriteBtn(_ sender: Any) {
+
+        delegate?.reloadCell(indexPath: indexPath)
         
     }
     

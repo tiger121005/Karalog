@@ -8,6 +8,8 @@
 import UIKit
 
 
+//MARK: - FriendsViewController
+
 class FriendsViewController: UIViewController {
     
     var followList: [User] = []
@@ -16,14 +18,17 @@ class FriendsViewController: UIViewController {
     var follow: [String] = []
     var follower: [String] = []
     var selectedUser: User!
-    
-    var pageViewController: UIPageViewController!
-    var viewControllers = [UIViewController]()
-    
     let idArray = ["follower", "follow"]
     
     
+    //MARK: - UI objects
+    
     @IBOutlet var segmentedCtl: UISegmentedControl!
+    var pageViewController: UIPageViewController!
+    var viewControllers = [UIViewController]()
+    
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +57,9 @@ class FriendsViewController: UIViewController {
             }
         }
     }
+    
+    
+    //MARK: - Setup
     
     func setupPageView() {
         guard let followerViewController = storyboard?.instantiateViewController(withIdentifier: "follower") as? FollowerViewController else { return }
@@ -92,13 +100,13 @@ class FriendsViewController: UIViewController {
             
             for user in follow {
                 
-                if let a = await FirebaseAPI.shared.getUserInformation(id: user) {
+                if let a = await userFB.getUserInformation(id: user) {
                     followList.append(a)
                 }
             }
             
             for user in follower {
-                if let a = await FirebaseAPI.shared.getUserInformation(id: user) {
+                if let a = await userFB.getUserInformation(id: user) {
                     followerList.append(a)
                 }
             }
@@ -110,6 +118,9 @@ class FriendsViewController: UIViewController {
             setupSegment()
         }
     }
+    
+    
+    //MARK: - Objective - C
 
     @objc func segmentChanged(segmentCtl: UISegmentedControl) {
        let index = segmentCtl.selectedSegmentIndex
@@ -128,12 +139,18 @@ class FriendsViewController: UIViewController {
     
 }
 
+
+//MARK: - UIPageViewControllerDelegate
+
 extension FriendsViewController: UIPageViewControllerDelegate {
     
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         
     }
 }
+
+
+//MARK: - UIPageViewControllerDataSource
 
 extension FriendsViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -162,12 +179,18 @@ extension FriendsViewController: UIPageViewControllerDataSource {
     
 }
 
+
+//MARK: - FollowerDelegate
+
 extension FriendsViewController: FollowerDelegate {
     func selectedFollowerCell(indexPath: IndexPath) {
         selectedUser = followerList[indexPath.row]
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
 }
+
+
+//MARK: - FollowDelegate
 
 extension FriendsViewController: FollowDelegate {
     func selectedFollowCell(indexPath: IndexPath) {

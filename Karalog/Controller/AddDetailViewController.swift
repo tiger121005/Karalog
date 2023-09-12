@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import Foundation
+
+
+//MARK: - AddDetailViewController
 
 class AddDetailViewController: UIViewController {
 
@@ -26,6 +28,9 @@ class AddDetailViewController: UIViewController {
     var category: [String] = []
     var tapGesture: UITapGestureRecognizer!
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var customSlider: CustomSliderView!
     @IBOutlet var keyLabel: UILabel!
@@ -39,11 +44,15 @@ class AddDetailViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     
+    //MARK: - View Controller methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         configureMenuButton()
         setupKeyLabel()
+        setupTableView()
         getTimingKeyboard()
         setupKeyboard()
         setupCategoryView()
@@ -52,27 +61,13 @@ class AddDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if callView {
-            scaleList = []
-            for i in 0...14 {
-                let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
-                
-                if i <= 7 {
-                    view.backgroundColor = UIColor(named: "imageColor")
-                } else {
-                    view.backgroundColor = UIColor.label
-                }
-                view.layer.cornerRadius = 3
-                
-                customSlider.slider.addSubview(view)
-                
-                customSlider.bringSubviewToFront(customSlider.slider)
-                
-                scaleList.append(view)
-            }
-            callView = false
-        }
+        setupSlider()
     }
+    
+    
+    //MARK: - Setup
+    
+    
     
     func configureMenuButton() {
         var actions = [UIMenuElement]()
@@ -113,6 +108,13 @@ class AddDetailViewController: UIViewController {
         keyLabel.clipsToBounds = true
     }
     
+    func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.allowsMultipleSelection = true
+        tableView.layer.cornerRadius = 5
+    }
+    
     func getTimingKeyboard() {
         let notification = NotificationCenter.default
         notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -126,13 +128,11 @@ class AddDetailViewController: UIViewController {
     }
     
     func setupCategoryView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.allowsMultipleSelection = true
+        
         categoryView.isHidden = true
     }
     
-    func setupCategory() {
+    func setCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text: String = ""
@@ -155,7 +155,31 @@ class AddDetailViewController: UIViewController {
         }
     }
     
+    func setupSlider() {
+        if callView {
+            scaleList = []
+            for i in 0...14 {
+                let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
+                
+                if i <= 7 {
+                    view.backgroundColor = UIColor.imageColor
+                } else {
+                    view.backgroundColor = UIColor.label
+                }
+                view.layer.cornerRadius = 3
+                
+                customSlider.slider.addSubview(view)
+                
+                customSlider.bringSubviewToFront(customSlider.slider)
+                
+                scaleList.append(view)
+            }
+            callView = false
+        }
+    }
     
+    
+    //MARK: - UI interaction
 
     @IBAction func editingChanged(_ sender: Any) {
         
@@ -184,11 +208,11 @@ class AddDetailViewController: UIViewController {
         }
         customSlider.slider.setValue(preValue, animated: false)
         if preValue != sliderValue {
-            Function.shared.playImpact(type: .impact(.light))
+            function.playImpact(type: .impact(.light))
             sliderValue = preValue
             for i in 0...scaleList.count - 1 {
                 if i  <= Int(sliderValue) + 7 {
-                    scaleList[i].backgroundColor = UIColor(named: "imageColor")
+                    scaleList[i].backgroundColor = UIColor.imageColor
                 } else {
                     scaleList[i].backgroundColor = UIColor.label
                 }
@@ -200,7 +224,7 @@ class AddDetailViewController: UIViewController {
         if Double(scoreTF.text!) != nil {
             if post {
                 let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: category)
+                postFB.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: category)
             }
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
@@ -208,11 +232,12 @@ class AddDetailViewController: UIViewController {
             time = df.string(from: Date())
             
             if fromWanna {
-                FirebaseAPI.shared.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text, completionHandler: {_ in})
+                musicFB.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text, completionHandler: {_ in})
                 
-                FirebaseAPI.shared.deleteWanna(wannaID: wannaID)
+                listFB.deleteWanna(wannaID: wannaID)
             }else{
-                FirebaseAPI.shared.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+                musicFB.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
+                fromAddDetail = true
             }
             self.navigationController?.popViewController(animated: true)
         }else{
@@ -230,12 +255,8 @@ class AddDetailViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
-    //機種設定
-    enum ModelMenuType: String {
-        case 未選択 = "未選択"
-        case DAM = "DAM"
-        case JOYSOUND = "JOYSOUND"
-    }
+    
+    //MARK: - Objective - C
     
     //textViewを開いたときにViewを上にずらして隠れないようにする
     // キーボード表示通知の際の処理
@@ -272,12 +293,15 @@ class AddDetailViewController: UIViewController {
     }
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension AddDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setupCategory()
+            setCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -292,9 +316,12 @@ extension AddDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setupCategory()
+        setCategory()
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension AddDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

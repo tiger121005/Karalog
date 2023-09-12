@@ -7,14 +7,23 @@
 
 import UIKit
 
+
+//MARK: - AddFriendsViewController
+
 class AddFriendViewController: UIViewController {
-    
-    @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var tableView: UITableView!
     
     var userList: [User] = []
     var userName: String!
     var userID: String!
+    
+    
+    //MARK: - UI objects
+    
+    @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var tableView: UITableView!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +41,9 @@ class AddFriendViewController: UIViewController {
         }
     }
     
+    
+    //MARK: - Setup
+    
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -44,6 +56,9 @@ class AddFriendViewController: UIViewController {
     
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension AddFriendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         userName = userList[indexPath.row].name
@@ -51,6 +66,9 @@ extension AddFriendViewController: UITableViewDelegate {
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension AddFriendViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,6 +86,9 @@ extension AddFriendViewController: UITableViewDataSource {
     }
 }
 
+
+//MARK: - UISearchBarDelegate
+
 extension AddFriendViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         userList = []
@@ -75,10 +96,10 @@ extension AddFriendViewController: UISearchBarDelegate {
         if searchText == "" {
             userList = []
         }else{
-            FirebaseAPI.shared.searchUserName(string: searchText) { list in
+            userFB.searchUserName(string: searchText) { list in
                 self.userList = list
                 Task {
-                    if let user = await FirebaseAPI.shared.getUserInformation(id: searchText) {
+                    if let user = await userFB.getUserInformation(id: searchText) {
                         self.userList.insert(user, at: 0)
                     }
                     self.tableView.reloadData()

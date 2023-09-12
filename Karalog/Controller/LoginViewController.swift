@@ -13,9 +13,15 @@ import FirebaseFirestore
 import GoogleSignIn
 import FacebookLogin
 
+
+//MARK: - LoginViewController
+
 class LoginViewController: UIViewController {
     
     let db = Firestore.firestore()
+    
+    
+    // MARK: - UI objects
 
     @IBOutlet var mailTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
@@ -23,78 +29,51 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginBtn: CustomButton!
     @IBOutlet var googleLoginView: UIView!
     
+    
+    //MARK: - View Controller methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupTF()
+        setupUserID()
+//        let handle = Auth.auth().addStateDidChangeListener { auth, user in
+//            print("🇲🇪", auth)
+//            print("🇲🇱", user)
+//        }
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+            closeKeyboard()
+    }
+    
+    
+    //MARK: - Setup
+    
+    func setupTF() {
         mailTF.delegate = self
         passwordTF.delegate = self
         passwordTF.isSecureTextEntry = true
         passwordTF.textContentType = .none
-        
-        let handle = Auth.auth().addStateDidChangeListener { auth, user in
-            print("🇲🇪", auth)
-            print("🇲🇱", user)
-        }
-        
+    }
+    
+    func setupUserID() {
         if let _token = AccessToken.current,!_token.isExpired {
             // User is logged in, do work such as go to next view controller.
             UserDefaultsKey.userID.set(value: _token.userID)
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    func closeKeyboard() {
         //キーボード以外がタップされた時にキーボードを閉じる
         if (self.mailTF.isFirstResponder) {
             self.mailTF.resignFirstResponder()
         }else if (self.passwordTF.isFirstResponder) {
             self.passwordTF.resignFirstResponder()
         }
-            
     }
-    
-    //メール
-    @IBAction func lookPassword() {
-        if passwordTF.isSecureTextEntry == true {
-            passwordTF.isSecureTextEntry = false
-            lookPasswordBtn.setImage(UIImage(systemName: "eye"), for: .normal)
-        }else{
-            passwordTF.isSecureTextEntry = true
-            lookPasswordBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        }
-    }
-    
-    
-    @IBAction func tapLoginBtn() {
-        guard let _mail = mailTF.text else {
-            return
-        }
-        guard let _password = passwordTF.text else {
-            return
-        }
-        
-        Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
-            if let _user = result?.user {
-                Task {
-                    Function.shared.login(first: false, user: await FirebaseAPI.shared.getUserInformation(id: _user.uid)!)
-                    UserDefaultsKey.judgeSort.set(value: "0")
-                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
-                }
-            }else{
-                print("cannot find account:", err!)
-                
-                let dialog = UIAlertController(title: "アカウントが見つかりませんでした", message: err?.localizedDescription, preferredStyle: .alert)
-                dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(dialog, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    //Google
-    @IBAction func didTapSignInButton(_ sender: Any) {
-        auth()
-    }
-    
-    
     
     private func auth() {
         guard let _clientID = FirebaseApp.app()?.options.clientID else { return }
@@ -121,38 +100,7 @@ class LoginViewController: UIViewController {
                 if let _user = result?.user {
                     
                     Task {
-                        UserDefaultsKey.userID.set(value: _user.uid)
-                        
-                        //すでにアカウントがある場合
-                        if let _pastUserInformation = await FirebaseAPI.shared.getUserInformation(id: _user.uid) {
-                            Function.shared.login(first: false, user: _pastUserInformation)
-                            UserDefaultsKey.judgeSort.set(value: "0")
-                            self.performSegue(withIdentifier: "toTabBar", sender: nil)
-                            return
-                        }
-                        guard let _name = _user.displayName else {
-                            return
-                        }
-                        
-                        //まだアカウントがない時
-                        self.db.collection("user").document(_user.uid).setData([
-                            "name": _name,
-                            "goodList": [],
-                            "listOrder": [],
-                            "showAll": false,
-                            "follow": [],
-                            "follower": [],
-                            "request": [],
-                            "notice": []
-                        ]) { err in
-                            if let _err = err {
-                                print("Error adding userName: \(_err)")
-                            }
-                        }
-                        Function.shared.login(first: true, user: User(name: _name, goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [], id: _user.uid))
-                        
-                        
-                        
+                        await self.set(uid: _user.uid, userName: _user.displayName)
                         
                         self.performSegue(withIdentifier: "toTabBar", sender: nil)
                     }
@@ -165,8 +113,90 @@ class LoginViewController: UIViewController {
     private func login(credential: AuthCredential) {
         print("ログイン完了")
     }
-
+    
+    func set(uid: String, userName: String?) async {
+        UserDefaultsKey.userID.set(value: uid)
+        //すでにアカウントがある場合
+        if let _pastUserInformation = await userFB.getUserInformation(id: uid) {
+            function.login(first: false, user: _pastUserInformation)
+            UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+            self.performSegue(withIdentifier: "toTabBar", sender: nil)
+            return
+        }
+        
+        guard let _name = userName else { return }
+        
+        //まだアカウントがない時
+        self.db.collection("user").document(uid).setData([
+            "name": _name,
+            "goodList": [],
+            "listOrder": [],
+            "showAll": false,
+            "follow": [],
+            "follower": [],
+            "request": [],
+            "notice": []
+        ]) { err in
+            if let _err = err {
+                print("Error adding userName: \(_err)")
+            }
+        }
+        function.login(first: true, user: User(name: _name, goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [], id: uid))
+        
+    }
+    
+    
+    // MARK: UI interaction
+    
+    //メール
+    @IBAction func lookPassword() {
+        if passwordTF.isSecureTextEntry == true {
+            passwordTF.isSecureTextEntry = false
+            lookPasswordBtn.setImage(UIImage.eye, for: .normal)
+        }else{
+            passwordTF.isSecureTextEntry = true
+            lookPasswordBtn.setImage(UIImage.eyeSlash, for: .normal)
+        }
+    }
+    
+    
+    @IBAction func tapLoginBtn() {
+        guard let _mail = mailTF.text else {
+            return
+        }
+        guard let _password = passwordTF.text else {
+            return
+        }
+        
+        Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
+            if let _user = result?.user {
+                Task {
+                    function.login(first: false, user: await userFB.getUserInformation(id: _user.uid)!)
+                    UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
+                }
+            }else{
+                print("cannot find account:", err!)
+                
+                let dialog = UIAlertController(title: "アカウントが見つかりませんでした", message: err?.localizedDescription, preferredStyle: .alert)
+                dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(dialog, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    //Google
+    @IBAction func didTapGoogleSignInButton(_ sender: Any) {
+        auth()
+    }
+    
+    
+    
+    
 }
+
+
+//MARK: - UITextFieldDelegate
 
 extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

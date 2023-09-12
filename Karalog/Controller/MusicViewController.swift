@@ -8,6 +8,11 @@
 import UIKit
 import DZNEmptyDataSet
 
+var fromAdd = false
+
+
+// MARK: MusicViewController
+
 class MusicViewController: UIViewController {
     
     //曲名,アーティスト名が入る
@@ -29,6 +34,8 @@ class MusicViewController: UIViewController {
     let sortList: [String] = ["追加順(遅)", "追加順(早)", "スコア順(高)", "スコア順(低)", "曲名順(早)", "曲名順(遅)", "アーティスト順(早)", "アーティスト順(遅)"]
     
     
+    //MARK: - UI objects
+    
     @IBOutlet var tableView: UITableView!
     @IBOutlet var editBtn: UIBarButtonItem!
     @IBOutlet var addBtn: UIBarButtonItem!
@@ -37,11 +44,15 @@ class MusicViewController: UIViewController {
     var doneBtn: UIBarButtonItem!
     var allSelectBtn: UIBarButtonItem!
     let refreshCtl = UIRefreshControl()
+    var addAlert: UIAlertController!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        judgeSort = UserDefaultsKey.judgeSort.get() ?? "0"
+        judgeSort = UserDefaultsKey.judgeSort.get() ?? Sort.追加順（遅）.rawValue
         setupTableView()
         setupSearchBar()
         setupBarItem()
@@ -52,11 +63,13 @@ class MusicViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        Function.shared.sort(sortKind: judgeSort, updateList: Manager.shared.musicList, completionHandler: {list in
-            self.tvList = list
-            self.tableView.reloadData()
-        })
+        setData()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMessage()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -92,6 +105,8 @@ class MusicViewController: UIViewController {
     }
     
     
+    //MARK: - Setup
+    
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -106,8 +121,8 @@ class MusicViewController: UIViewController {
         refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
         tableView.addSubview(refreshCtl)
         
-        tableView.emptyDataSetDelegate = self
         tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
     }
     
     func setupSearchBar() {
@@ -116,7 +131,7 @@ class MusicViewController: UIViewController {
     }
     
     func setupBarItem() {
-        let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"), handler: { [self]_ in
+        let delete = UIAction(title: "削除", image: UIImage.trash, handler: { [self]_ in
             if self.tableView.indexPathsForSelectedRows != nil {
                 let indexPathList = self.tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
                 let alert = UIAlertController(title: "削除", message: String(indexPathList.count) + "個の曲のデータを削除します", preferredStyle: .alert)
@@ -129,7 +144,7 @@ class MusicViewController: UIViewController {
                         idList.append(tvList[i.row].id!)
                     }
                     for i in 0...indexPathList.count - 1 {
-                        FirebaseAPI.shared.deleteMusic(id: idList[i], completionHandler: {_ in
+                        musicFB.deleteMusic(id: idList[i], completionHandler: {_ in
                             self.tvList.remove(at: indexPathList[i].row)
                             self.tableView.reloadData()
                         })
@@ -148,7 +163,7 @@ class MusicViewController: UIViewController {
                 present(alert, animated: true)
             }
         })
-        let addToList = UIAction(title: "リストに追加", image: UIImage(systemName: "folder"), handler: { [self]_ in
+        let addToList = UIAction(title: "リストに追加", image: UIImage.folder, handler: { [self]_ in
             if self.tableView.indexPathForSelectedRow != nil {
                 performSegue(withIdentifier: "toAddToList", sender: nil)
             }else{
@@ -161,7 +176,7 @@ class MusicViewController: UIViewController {
             }
         })
         let selectMenu = UIMenu(title: "", children: [delete, addToList])
-        selectBtn = UIBarButtonItem(title: "", image: UIImage(systemName: "ellipsis.circle"), menu: selectMenu)
+        selectBtn = UIBarButtonItem(title: "", image: UIImage.ellipsisCircle, menu: selectMenu)
         
         allSelectBtn = UIBarButtonItem(title: "全て選択", style: .plain, target: self, action: #selector(tapAllSelectBtn(_:)))
         doneBtn = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(tapDoneBtn(_:)))
@@ -177,7 +192,7 @@ class MusicViewController: UIViewController {
     
     func createMenu() {
         let items = UIMenu(title: "", options: .displayInline, children: [
-            UIAction(title: "選択", image: UIImage(systemName: "pencil"), handler: { _ in
+            UIAction(title: "選択", image: UIImage.pencil, handler: { _ in
                 self.editBtn.isHidden = true
                 self.addBtn.isHidden = true
                 self.selectBtn.isHidden = false
@@ -201,16 +216,16 @@ class MusicViewController: UIViewController {
             })
         ])
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
-            if judgeSort != "0" {
-                judgeSort = "0"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.追加順（遅）.rawValue {
+                judgeSort = Sort.追加順（遅）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "1"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.追加順（早）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -219,16 +234,16 @@ class MusicViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
-            if judgeSort != "2"{
-                judgeSort = "2"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.得点（高）.rawValue{
+                judgeSort = Sort.得点（高）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "3"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.得点（低）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -237,16 +252,16 @@ class MusicViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
-            if judgeSort != "4"{
-                judgeSort = "4"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.曲名順（降）.rawValue{
+                judgeSort = Sort.曲名順（降）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "5"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.曲名順（昇）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -255,16 +270,16 @@ class MusicViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
-            if judgeSort != "6"{
-                judgeSort = "6"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.アーティスト順（降）.rawValue{
+                judgeSort = Sort.アーティスト順（降）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "7"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.アーティスト順（昇）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -274,26 +289,43 @@ class MusicViewController: UIViewController {
             self.createMenu()
         })]
         
-        let sortNum: String! = UserDefaultsKey.judgeSort.get() ?? "0"
-        let sorts = UIMenu(title: "並び替え（" + sortList[Int(sortNum)!] + ")", children: subItems)
+        let sorts = UIMenu(title: "並び替え（" + judgeSort + ")", children: subItems)
         
-        //editBtn.showsMenuAsPrimaryAction = true
         editBtn.menu = UIMenu(title: "", children: [items, sorts])
     }
     
     func get() {
-        print("\(Manager.shared.user.id) is login!")
-        FirebaseAPI.shared.getMusic(completionHandler: { musicList in
+        print("\(manager.user.id) is login!")
+        musicFB.getMusic(completionHandler: { musicList in
             self.tvList = musicList
-            Function.shared.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: { list in
+            function.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: { list in
                 self.tvList = list
                 
             })
             self.tableView.reloadData()
         })
         
-        
     }
+    
+    func setData() {
+        function.sort(sortKind: judgeSort, updateList: manager.musicList, completionHandler: {list in
+            self.tvList = list
+            self.tableView.reloadData()
+        })
+    }
+    
+    func showMessage() {
+        print("fromAdd: ", fromAdd)
+        if fromAdd {
+            addAlert = UIAlertController(title: "追加しました", message: "", preferredStyle: .alert)
+            present(addAlert, animated: true, completion: nil)
+            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
+            fromAdd = false
+        }
+    }
+    
+    
+    //MARK: - Objective - C
     
     @objc func tapDoneBtn(_ sender: UIBarButtonItem) {
         self.editBtn.isHidden = false
@@ -327,24 +359,21 @@ class MusicViewController: UIViewController {
     }
     
     @objc func reload() {
-        FirebaseAPI.shared.getMusic() { list in
+        musicFB.getMusic() { list in
             self.tvList = list
             self.searchBar.text = ""
             self.refreshCtl.endRefreshing()
         }
     }
     
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
+    }
+    
 }
 
-extension UIImage {
-    func resized(toWidth width: CGFloat) -> UIImage? {
-        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
-        defer { UIGraphicsEndImageContext() }
-        draw(in: CGRect(origin: .zero, size: canvasSize))
-        return UIGraphicsGetImageFromCurrentImageContext()
-    }
-}
+
+//MARK: - UITableViewDataSource
 
 extension MusicViewController: UITableViewDataSource {
     //セクション数
@@ -362,9 +391,7 @@ extension MusicViewController: UITableViewDataSource {
         for i in tvList {
             let b = i.data
             var c: [Double] = []
-            for j in b {
-                c.append(j.score)
-            }
+            c += b.map{$0.score}
             a.append(c.max()!)
         }
         let d = a.indices.sorted{ a[$1] < a[$0]}
@@ -398,10 +425,10 @@ extension MusicViewController: UITableViewDataSource {
         let max = scoreList.max()
         cell.scoreLabel.text = String(format: "%.3f", max!)
         if max! >= Double(high) {
-            cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+            cell.scoreLabel.textColor = UIColor.imageColor
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
         } else if max! >= Double(medium) && tvList.count > 3 {
-            cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+            cell.scoreLabel.textColor = UIColor.subImageColor
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
         } else {
             cell.scoreLabel.textColor = .gray
@@ -410,9 +437,9 @@ extension MusicViewController: UITableViewDataSource {
         
         //お気に入りボタン
         if tvList[indexPath.row].favorite == false {
-            cell.favoriteBtn?.setImage(UIImage(systemName: "star"), for: .normal)
+            cell.favoriteBtn?.setImage(UIImage.star, for: .normal)
         }else if tvList[indexPath.row].favorite == true {
-            cell.favoriteBtn?.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            cell.favoriteBtn?.setImage(UIImage.starFill, for: .normal)
         }
         
         cell.backgroundColor = .clear
@@ -433,7 +460,7 @@ extension MusicViewController: UITableViewDataSource {
             }
             let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
                 self.selectedID = self.tvList[indexPath.row].id!
-                FirebaseAPI.shared.deleteMusic(id: self.selectedID, completionHandler: {_ in
+                musicFB.deleteMusic(id: self.selectedID, completionHandler: {_ in
                     self.tvList.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .fade)
                 })
@@ -448,6 +475,9 @@ extension MusicViewController: UITableViewDataSource {
         }
     }
 }
+
+
+//MARK: - UITableViewDelegate
 
 extension MusicViewController: UITableViewDelegate {
     
@@ -490,10 +520,13 @@ extension MusicViewController: UITableViewDelegate {
     
 }
 
+
+//MARK: - TableViewCell1Delegate
+
 extension MusicViewController: TableViewCell1Delegate {
     func reloadCell(indexPath: IndexPath) {
         selectedID = tvList[indexPath.row].id!
-        FirebaseAPI.shared.favoriteUpdate(id: selectedID, favorite: tvList[indexPath.row].favorite, completionHandler: {_ in
+        musicFB.favoriteUpdate(id: selectedID, favorite: tvList[indexPath.row].favorite, completionHandler: {_ in
             self.tvList[indexPath.row].favorite.toggle()
             self.tableView.reloadData()
         })
@@ -501,28 +534,37 @@ extension MusicViewController: TableViewCell1Delegate {
     }
 }
 
-extension MusicViewController: DZNEmptyDataSetSource {
-    
-}
 
-extension MusicViewController: DZNEmptyDataSetDelegate {
+//MARK: - DZNEmptyDataSetSource
+
+extension MusicViewController: DZNEmptyDataSetSource {
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
         return NSAttributedString(string: "曲のデータがありません")
     }
     
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return Material.shared.mic.resized(toWidth: 250)
+        return UIImage.KaralogImage.resized(toWidth: 250)
     }
 }
+
+
+//MARK: - DZNEmptyDataSetDelegate
+
+extension MusicViewController: DZNEmptyDataSetDelegate {
+    
+}
+
+
+//MARK: - UISearchBarDelegate
 
 extension MusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         tvList = []
         print(searchText)
         if searchText == "" {
-            tvList = Manager.shared.musicList
+            tvList = manager.musicList
         }else{
-            for d in Manager.shared.musicList {
+            for d in manager.musicList {
                 if d.musicName.contains(searchText) {
                     tvList.append(d)
                 }else if d.artistName.contains(searchText) {

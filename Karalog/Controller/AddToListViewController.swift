@@ -7,11 +7,20 @@
 
 import UIKit
 
+
+//MARK: - AddToListViewController
+
 class AddToListViewController: UIViewController {
     
     var idList: [String] = []
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var collectionView: UICollectionView!
+    
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +28,9 @@ class AddToListViewController: UIViewController {
         setupCollectionView()
         checkIdListData()
     }
+    
+    
+    //MARK: - Setup
 
     func setupCollectionView() {
         collectionView.delegate = self
@@ -28,16 +40,22 @@ class AddToListViewController: UIViewController {
 
     func checkIdListData() {
         
-        FirebaseAPI.shared.getList(completionHandler: {_ in
+        listFB.getList(completionHandler: {_ in
             self.collectionView.reloadData()
         })
         
     }
     
+    
+    // MARK: UI interaction
+    
     @IBAction func cancel() {
         self.dismiss(animated: true)
     }
 }
+
+
+//MARK: - UICollectionViewDelegate
 
 extension AddToListViewController: UICollectionViewDelegate {
     
@@ -45,11 +63,11 @@ extension AddToListViewController: UICollectionViewDelegate {
         
         if indexPath.row == 0 {
             for id in idList {
-                FirebaseAPI.shared.favoriteUpdate(id: id, favorite: true, completionHandler: { _ in})
+                musicFB.favoriteUpdate(id: id, favorite: true, completionHandler: { _ in})
             }
         } else {
             for id in idList {
-                FirebaseAPI.shared.addMusicToList(musicID: id, listID: Manager.shared.lists[indexPath.row + 1].id!)
+                musicFB.addMusicToList(musicID: id, listID: manager.lists[indexPath.row + 1].id!)
             }
         }
         self.dismiss(animated: true)
@@ -57,21 +75,28 @@ extension AddToListViewController: UICollectionViewDelegate {
     }
 }
 
+
+//MARK: - UICollectionViewDataSource
+
 extension AddToListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Manager.shared.lists.count - 1
+        manager.lists.count - 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        var a: [Lists] = Manager.shared.lists
+        var a: [Lists] = manager.lists
         a.remove(at: 1)
         cell.image.image = UIImage(data: a[indexPath.row].listImage)!
         cell.label.text = a[indexPath.row].listName
         return cell
     }
 }
+
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension AddToListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 160, height: 170)

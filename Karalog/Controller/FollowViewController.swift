@@ -7,26 +7,41 @@
 
 import UIKit
 
+
+//MARK: - FollowDelegate
+
 protocol FollowDelegate {
     func selectedFollowCell(indexPath: IndexPath)
 }
+
+
+//MARK: - FollowViewController
 
 class FollowViewController: UIViewController {
     
     var delegate: FollowDelegate?
     var followList: [User] = []
+    
+    
+    //MARK: - UI objects
         
     @IBOutlet var tableView: UITableView! {
         didSet {
             tableView.reloadData()
         }
     }
+    
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupTableView()
     }
+    
+    
+    //MARK: - Setup
     
     func setupTableView() {
         tableView.delegate = self
@@ -38,6 +53,7 @@ class FollowViewController: UIViewController {
 }
 
 
+//MARK: - UITableViewDataSource
 
 extension FollowViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,9 +70,13 @@ extension FollowViewController: UITableViewDataSource {
     
 }
 
+
+//MARK: - UITableviewDelegate
+
 extension FollowViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.selectedFollowCell(indexPath: indexPath)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }

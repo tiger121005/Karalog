@@ -10,16 +10,24 @@ import FirebaseCore
 import FirebaseFirestore
 import CropViewController
 
+
+//MARK: - AddListViewContoller
+
 class AddListViewController: UIViewController {
     
     var listRef: CollectionReference!
     var addID: String = ""
     var randomImage: String = ""
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var listImage: UIButton!
     @IBOutlet var listTF: UITextField!
     @IBOutlet var addBtn: CustomButton!
     
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,38 +43,31 @@ class AddListViewController: UIViewController {
             
     }
     
+    
+    //MARK: - Setup
+    
     func setupTextField() {
         listTF.delegate = self
     }
     
     func setupInitialImage() {
-        if (UIImage(systemName: "music.mic") != nil) {
-            randomImage = Material.shared.listImages.randomElement()!
-            let image = UIImage(systemName: randomImage)?.withTintColor(UIColor(named: "imageColor")!)
-            let size = CGSize(width: listImage.frame.width, height: listImage.frame.height)
-            let renderer = UIGraphicsImageRenderer(size: size)
-            let newImage = renderer.image { context in
-                // 背景色を描画
-                UIColor.black.setFill()
-                context.fill(CGRect(origin: .zero, size: size))
-                
-                // SFSymbolを描画
-                image?.draw(in: CGRect(origin: .zero, size: size))
-            }
+        
+        randomImage = Material.shared.listImages.randomElement()!
+        let image = UIImage(systemName: randomImage)?.withTintColor(UIColor.imageColor)
+        let size = CGSize(width: listImage.frame.width, height: listImage.frame.height)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let newImage = renderer.image { context in
+            // 背景色を描画
+            UIColor.black.setFill()
+            context.fill(CGRect(origin: .zero, size: size))
             
-            listImage.setBackgroundImage(newImage, for: .normal)
-            listImage.imageView?.contentMode = .scaleAspectFill
-        }else{
-            print("値が入力されていません")
+            // SFSymbolを描画
+            image?.draw(in: CGRect(origin: .zero, size: size))
         }
-    }
-    
-    @IBAction func tapChangeImage() {
-        changeImage()
-    }
-    
-    @IBAction func addListBtn() {
-        addList()
+        
+        listImage.setImage(newImage, for: .normal)
+        listImage.imageView?.contentMode = .scaleAspectFill
+        
     }
 
     func changeImage() {
@@ -82,7 +83,7 @@ class AddListViewController: UIViewController {
     }
     
     func addList() {
-        let image = listImage.backgroundImage(for: .normal)
+        let image = listImage.image(for: .normal)
         var resizedImage: Data!
         if Material.shared.listImages.contains(where: { $0 == randomImage}) {
             resizedImage = resizedData(image: image!, maxSize: 1024, quality: 1.0)
@@ -92,7 +93,8 @@ class AddListViewController: UIViewController {
             
         }
         
-        FirebaseAPI.shared.addList(listName: listTF.text!, listImage: resizedImage!)
+        listFB.addList(listName: listTF.text!, listImage: resizedImage!)
+        fromAddList = true
         
         self.navigationController?.popViewController(animated: true)
     }
@@ -113,7 +115,21 @@ class AddListViewController: UIViewController {
         return resizedImage?.jpegData(compressionQuality: quality)
         
     }
+    
+    
+    //MARK: - UI interaction
+    
+    @IBAction func tapChangeImage() {
+        changeImage()
+    }
+    
+    @IBAction func addListBtn() {
+        addList()
+    }
 }
+
+
+//MARK: - UITextFieldDelegate
 
 extension AddListViewController: UITextFieldDelegate {
     //改行したら自動的にキーボードを非表示にする
@@ -123,23 +139,57 @@ extension AddListViewController: UITextFieldDelegate {
     }
 }
 
+
+//MARK: - UIIMagePickerControllerDelegate
+
 extension AddListViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         //ImagePickerで取得してきた画像をimageViewにセット
         if let _image = info[.originalImage] as? UIImage {
-            listImage.setBackgroundImage(_image, for: .normal)
-            listImage.imageView?.contentMode = .scaleAspectFill
-            randomImage = ""
+            dismiss(animated: true)
+            //画像をlistImageに切り抜く
+            let cropViewController = CropViewController(croppingStyle: .default, image: _image)
+            cropViewController.delegate = self
+            // アスペクト比を固定（変更不可）に設定
+            cropViewController.aspectRatioLockEnabled = true
+            // アスペクト比をプリセットする
+            cropViewController.aspectRatioPreset = .presetSquare
+            // アスペクト比選択ボタンを非表示にする
+            cropViewController.aspectRatioPickerButtonHidden = true
+            // リセットボタンを非表示にする アスペクト比の指定ができなくなるため
+            cropViewController.resetButtonHidden = true
+
+            present(cropViewController, animated: true)
+            
+            
+        } else {
+            //ImagePickerを閉じる
+            dismiss(animated: true)
         }
-        //ImagePickerを閉じる
-        dismiss(animated: true)
     }
 }
+
+
+//MARK: - UINavigationControllerDelegate
 
 extension AddListViewController: UINavigationControllerDelegate {
     
 }
 
+
+//MARK: - CropViewControllerDelegate
+
 extension AddListViewController: CropViewControllerDelegate {
+    //トリミング済みの画像を設定する
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        listImage.setImage(image, for: .normal)
+        listImage.contentMode = .scaleAspectFill
+        randomImage = ""
+        cropViewController.dismiss(animated: true, completion: nil)
+    }
     
+    //キャンセルボタンが押された場合
+    func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
+        cropViewController.dismiss(animated: true, completion: nil)
+    }
 }

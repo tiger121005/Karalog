@@ -33,12 +33,15 @@
 		1972C61F2AA4CA7500D64C2E /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C61E2AA4CA7500D64C2E /* FacebookCore */; };
 		1972C6212AA4CA7500D64C2E /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C6202AA4CA7500D64C2E /* FacebookLogin */; };
 		1972C6232AA4CA7500D64C2E /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C6222AA4CA7500D64C2E /* FacebookShare */; };
-		197F7C6A2A83CAAE00F80C34 /* BorderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C692A83CAAE00F80C34 /* BorderLabel.swift */; };
 		197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */; };
 		197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */; };
 		1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1980AAC12A60DE0900FA93A1 /* CheckBox.swift */; };
 		199060092A98DD5E00037A0C /* FollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199060082A98DD5E00037A0C /* FollowViewController.swift */; };
 		1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1990600A2A98DD7000037A0C /* FollowerViewController.swift */; };
+		199668842AAD9EE10003D295 /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199668832AAD9EE10003D295 /* PostFirebase.swift */; };
+		199668862AADA3600003D295 /* UserFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199668852AADA3600003D295 /* UserFirebase.swift */; };
+		199668882AADA38D0003D295 /* MusicFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199668872AADA38D0003D295 /* MusicFirebase.swift */; };
+		1996688A2AADA3C50003D295 /* ListFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199668892AADA3C50003D295 /* ListFirebase.swift */; };
 		19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */; };
 		19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */; };
 		19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19A12D3229CC2C9E00B798A4 /* Main.storyboard */; };
@@ -66,9 +69,11 @@
 		19A12D8729CF465900B798A4 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8629CF465900B798A4 /* Article.swift */; };
 		19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D363FE2A3DB1AF0046DA9A /* Slider.swift */; };
 		19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D364022A3DB24A0046DA9A /* CustomSliderView.swift */; };
+		19D619172AAB21B100C7B868 /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 19D619162AAB21B100C7B868 /* QRCode */; };
 		19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */; };
 		19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */; };
 		19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B4872A59B44D008C8DB3 /* LineGraph.swift */; };
+		19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EAE28D2AAA20DE00173632 /* QRViewController.swift */; };
 		60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */; };
 		C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */; };
 /* End PBXBuildFile section */
@@ -113,12 +118,15 @@
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		196D97352A66A02B00A96892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		197F7C692A83CAAE00F80C34 /* BorderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderLabel.swift; sourceTree = "<group>"; };
 		197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizeLabel.swift; sourceTree = "<group>"; };
 		197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPostViewController.swift; sourceTree = "<group>"; };
 		1980AAC12A60DE0900FA93A1 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		199060082A98DD5E00037A0C /* FollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewController.swift; sourceTree = "<group>"; };
 		1990600A2A98DD7000037A0C /* FollowerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerViewController.swift; sourceTree = "<group>"; };
+		199668832AAD9EE10003D295 /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
+		199668852AADA3600003D295 /* UserFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFirebase.swift; sourceTree = "<group>"; };
+		199668872AADA38D0003D295 /* MusicFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicFirebase.swift; sourceTree = "<group>"; };
+		199668892AADA3C50003D295 /* ListFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFirebase.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		19A12D3329CC2C9E00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -150,6 +158,7 @@
 		19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		19E8B4872A59B44D008C8DB3 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
+		19EAE28D2AAA20DE00173632 /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog_KaralogUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog-KaralogUITests.release.xcconfig"; path = "Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.release.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +174,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19D619172AAB21B100C7B868 /* QRCode in Frameworks */,
 				1972C6212AA4CA7500D64C2E /* FacebookLogin in Frameworks */,
 				1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */,
 				1972C6232AA4CA7500D64C2E /* FacebookShare in Frameworks */,
@@ -222,6 +232,7 @@
 				1990600A2A98DD7000037A0C /* FollowerViewController.swift */,
 				199060082A98DD5E00037A0C /* FollowViewController.swift */,
 				19A12D7229CD957600B798A4 /* NotificationViewController.swift */,
+				19EAE28D2AAA20DE00173632 /* QRViewController.swift */,
 				192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */,
 			);
 			path = Controller;
@@ -233,12 +244,15 @@
 				19A12D8629CF465900B798A4 /* Article.swift */,
 				1960CD2229FE7B250065FF05 /* Material.swift */,
 				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
+				199668852AADA3600003D295 /* UserFirebase.swift */,
+				199668872AADA38D0003D295 /* MusicFirebase.swift */,
+				199668892AADA3C50003D295 /* ListFirebase.swift */,
+				199668832AAD9EE10003D295 /* PostFirebase.swift */,
 				192D26702A0543A80058D739 /* Function.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
 				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
 				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
 				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
-				197F7C692A83CAAE00F80C34 /* BorderLabel.swift */,
 				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
 				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
 				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
@@ -360,6 +374,7 @@
 				1961E2312AA4D5E80000FAF0 /* FirebaseAuth */,
 				1961E2332AA4D5E80000FAF0 /* FirebaseFirestore */,
 				1961E2352AA4D5E80000FAF0 /* FirebaseFirestoreSwift */,
+				19D619162AAB21B100C7B868 /* QRCode */,
 			);
 			productName = Karalog;
 			productReference = 19019BF729E189CD00315AFD /* Karalog.app */;
@@ -440,6 +455,7 @@
 				1938FBC529D0741300245BB3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				1961E2302AA4D5E80000FAF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				19D619152AAB21B100C7B868 /* XCRemoteSwiftPackageReference "qrcode" */,
 			);
 			productRefGroup = 19A12D2029CC2C9E00B798A4;
 			projectDirPath = "";
@@ -597,11 +613,11 @@
 				19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */,
 				19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */,
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
-				197F7C6A2A83CAAE00F80C34 /* BorderLabel.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
 				1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
+				19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */,
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
 				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
@@ -609,6 +625,7 @@
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
 				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
 				192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */,
+				199668862AADA3600003D295 /* UserFirebase.swift in Sources */,
 				19A12D6F29CD94ED00B798A4 /* AddListMusicViewController.swift in Sources */,
 				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
 				192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */,
@@ -629,11 +646,14 @@
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
 				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
 				19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */,
+				1996688A2AADA3C50003D295 /* ListFirebase.swift in Sources */,
 				1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */,
 				1960CD2329FE7B250065FF05 /* Material.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
 				197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */,
+				199668842AAD9EE10003D295 /* PostFirebase.swift in Sources */,
+				199668882AADA38D0003D295 /* MusicFirebase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,7 +843,6 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -859,7 +878,6 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1025,6 +1043,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		19D619152AAB21B100C7B868 /* XCRemoteSwiftPackageReference "qrcode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dagronf/qrcode.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 16.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1067,6 +1093,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookShare;
+		};
+		19D619162AAB21B100C7B868 /* QRCode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19D619152AAB21B100C7B868 /* XCRemoteSwiftPackageReference "qrcode" */;
+			productName = QRCode;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

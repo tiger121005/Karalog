@@ -7,14 +7,21 @@
 
 import UIKit
 
+var fromPost = false
+
+
+//MARK: - ShareViewController
+
 class ShareViewController: UIViewController {
     
     var shareList: [Post] = []
     var sendWord: String = ""
     var category: [String] = []
-    var alertCtl: UIAlertController!
     var searchViewHidden: Bool = true
     var finalContent: Bool = false
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var collectionViewFlowLayout: UICollectionViewFlowLayout!
@@ -24,12 +31,7 @@ class ShareViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet var categoryLabel: UILabel!
     @IBOutlet var searchBtn: CustomButton!
-    @IBOutlet var topView: UIView!
     @IBOutlet var searchViewTopConstraint: NSLayoutConstraint!
-    
-    let refreshCtl = UIRefreshControl()
-    var outBtn: UIButton!
-    
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
         didSet{
             flowLayout.minimumLineSpacing = 1
@@ -39,6 +41,13 @@ class ShareViewController: UIViewController {
             flowLayout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         }
     }
+    var alertCtl: UIAlertController!
+    var addAlert: UIAlertController!
+    let refreshCtl = UIRefreshControl()
+    var outBtn: UIButton!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,24 +60,19 @@ class ShareViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        Task {
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
-            self.shareList = list
-            self.finalContent = false
-            self.collectionView.reloadData()
-        }
-        self.view.bringSubviewToFront(topView)
         
+        setData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMessage()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let location: CGPoint = touch.location(in: self.view)
-        if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
-            tapOutTableView()
-        }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
-            tapOutTableView()
-        }
+        
+        closeTableView(touch: touches.first)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -78,6 +82,9 @@ class ShareViewController: UIViewController {
             
         }
     }
+    
+    
+    //MARK: - Setup
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -105,7 +112,7 @@ class ShareViewController: UIViewController {
         collectionView.collectionViewLayout = compositionalLayout
     }
     
-    func setupCategory() {
+    func setCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text: String = ""
@@ -142,6 +149,8 @@ class ShareViewController: UIViewController {
         musicTF.delegate = self
         artistTF.delegate = self
         
+        categoryLabel.layer.cornerRadius = 5
+        
         searchView.layer.cornerRadius = 15
         searchView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
@@ -153,6 +162,15 @@ class ShareViewController: UIViewController {
         outBtn.backgroundColor = .black.withAlphaComponent(0.3)
         self.view.addSubview(outBtn)
         outBtn.isHidden = true
+    }
+    
+    func setData() {
+        Task {
+            let list = await postFB.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
+            self.shareList = list
+            self.finalContent = false
+            self.collectionView.reloadData()
+        }
     }
     
     func resize(image: UIImage, width: Double) -> UIImage {
@@ -228,6 +246,31 @@ class ShareViewController: UIViewController {
         }
     }
     
+    func showMessage() {
+        print("post: ", fromPost)
+        if fromPost {
+            
+            addAlert = UIAlertController(title: "投稿しました", message: "", preferredStyle: .alert)
+            present(addAlert, animated: true, completion: nil)
+            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
+            fromPost = false
+        }
+    }
+    
+    func closeTableView(touch: UITouch?) {
+        if let _touch = touch {
+            let location: CGPoint = _touch.location(in: self.view)
+            if location.x < tableView.frame.minX || location.y < tableView.frame.minY {
+                tapOutTableView()
+            }else if location.x > tableView.frame.maxX || location.y > tableView.frame.maxY {
+                tapOutTableView()
+            }
+        }
+    }
+    
+    
+    //MARK: - UI interaction
+    
     @IBAction func toProfile() {
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
@@ -242,7 +285,7 @@ class ShareViewController: UIViewController {
     
     @IBAction func tapSearchBtn() {
         Task {
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
+            let list = await postFB.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
             self.shareList = list
             self.finalContent = false
             self.collectionView.reloadData()
@@ -257,7 +300,7 @@ class ShareViewController: UIViewController {
             artistTF.text = ""
             category = []
             categoryLabel.text = ""
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: "", category: [])
+            let list = await postFB.searchPost(first: true, music: "", artist: "", category: [])
             self.shareList = list
             self.finalContent = false
             self.collectionView.reloadData()
@@ -267,9 +310,16 @@ class ShareViewController: UIViewController {
         }
     }
     
+    
+    //MARK: - Objective - C
+    
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
+    }
+    
     @objc func reload() {
         Task {
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
+            let list = await postFB.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
             self.shareList = list
             self.finalContent = false
             self.collectionView.reloadData()
@@ -278,9 +328,15 @@ class ShareViewController: UIViewController {
     }
 }
 
+
+//MARK: - UICollectionViewDelegate
+
 extension ShareViewController: UICollectionViewDelegate {
     
 }
+
+
+//MARK: - UICollectionViewDataSource
 
 extension ShareViewController: UICollectionViewDataSource {
     
@@ -308,13 +364,13 @@ extension ShareViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.user.goodList.contains(where: {$0.contains(shareList[indexPath.row].id!)}) {
-            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        if manager.user.goodList.contains(where: {$0.contains(shareList[indexPath.row].id!)}) {
+            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
             
             print(shareList[indexPath.row].musicName)
             
         }else{
-            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heart, for: .normal)
             
             print(shareList[indexPath.row].musicName)
             
@@ -326,6 +382,9 @@ extension ShareViewController: UICollectionViewDataSource {
     
 }
 
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension ShareViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -335,7 +394,7 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
             if !finalContent {
                 if indexPath.row == self.shareList.count - 1 {
 
-                    let list = await FirebaseAPI.shared.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
+                    let list = await postFB.searchPost(first: false, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
                     if list.isEmpty {
                         finalContent = true
                         return
@@ -366,26 +425,29 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
+//MARK: - ShareCellDelegate
+
 extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
         
         var good: Bool!
-        if Manager.shared.user.goodList.contains(where: { $0 == selectedID}) {
+        if manager.user.goodList.contains(where: { $0 == selectedID}) {
             good = true
         } else {
             good = false
         }
         
-        FirebaseAPI.shared.goodUpdate(id: selectedID, good: good)
+        postFB.goodUpdate(id: selectedID, good: good)
         
         if good {
             shareList[indexPath.row].goodNumber -= 1
-            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heart, for: .normal)
         } else {
             shareList[indexPath.row].goodNumber += 1
-            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
         }
         
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
@@ -394,9 +456,14 @@ extension ShareViewController: ShareCellDelegate {
     }
     
     func tapMusic(indexpath indexPath: IndexPath) {
+        let selectedMusic = shareList[indexPath.row].musicName
+        //変わっていることをわかるようにする
+        shareList = []
+        collectionView.reloadData()
+        
         Task {
-            let selectedMusic = shareList[indexPath.row].musicName
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: selectedMusic, artist: "", category: [])
+            
+            let list = await postFB.searchPost(first: true, music: selectedMusic, artist: "", category: [])
             self.shareList = list
             self.musicTF.text = selectedMusic
             self.artistTF.text = ""
@@ -408,9 +475,13 @@ extension ShareViewController: ShareCellDelegate {
     }
     
     func tapArtist(indexPath: IndexPath) {
+        let selectedArtist = shareList[indexPath.row].artistName
+        //変わっていることをわかるようにする
+        shareList = []
+        collectionView.reloadData()
         Task {
-            let selectedArtist = shareList[indexPath.row].artistName
-            let list = await FirebaseAPI.shared.searchPost(first: true, music: "", artist: selectedArtist, category: [])
+            
+            let list = await postFB.searchPost(first: true, music: "", artist: selectedArtist, category: [])
             self.shareList = list
             self.musicTF.text = ""
             self.artistTF.text = selectedArtist
@@ -422,12 +493,15 @@ extension ShareViewController: ShareCellDelegate {
     }
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension ShareViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setupCategory()
+            setCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -442,9 +516,12 @@ extension ShareViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setupCategory()
+        setCategory()
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension ShareViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -468,6 +545,9 @@ extension ShareViewController: UITableViewDataSource {
     }
     
 }
+
+
+//MARK: - UITextFieldDelegate
 
 extension ShareViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

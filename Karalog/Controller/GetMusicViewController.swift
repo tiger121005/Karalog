@@ -6,9 +6,11 @@
 //
 
 import UIKit
-
 import Alamofire
 import Dispatch
+
+
+//MARK: - GetMusicViewContoller
 
 class GetMusicViewController: UIViewController {
     
@@ -22,12 +24,17 @@ class GetMusicViewController: UIViewController {
         didSet {
         }
     }
-    
     var fromList: Bool = false
     var resultingText: String = ""
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +60,9 @@ class GetMusicViewController: UIViewController {
         self.searchBar.resignFirstResponder()
         
     }
+    
+    
+    //MARK: - Setup
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -96,12 +106,15 @@ class GetMusicViewController: UIViewController {
   
 }
 
+
+//MARK: - UICollectionVeiwDelegate
+
 extension GetMusicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
         if fromList {
-            FirebaseAPI.shared.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
+            listFB.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
                                         artistName: musicInfoModel[indexPath.row].artistName,
                                         musicImage: try! Data(contentsOf: URL(string: musicInfoModel[indexPath.row].artworkUrl100)!))
             
@@ -117,6 +130,9 @@ extension GetMusicViewController: UICollectionViewDelegate {
         }
     }
 }
+
+
+//MARK: - UICollectionViewDataSource
 
 extension GetMusicViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -139,7 +155,7 @@ extension GetMusicViewController: UICollectionViewDataSource {
             
         }
         
-        var selectedBgView = UIView()
+        let selectedBgView = UIView()
         selectedBgView.backgroundColor = .gray
         cell.selectedBackgroundView = selectedBgView
         
@@ -147,11 +163,17 @@ extension GetMusicViewController: UICollectionViewDataSource {
     }
 }
 
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension GetMusicViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 160, height: 200)
     }
 }
+
+
+//MARK: - UISearchBarDelegate
 
 extension GetMusicViewController: UISearchBarDelegate {
     //searchBarに値が入力されるごとに呼び出される変数

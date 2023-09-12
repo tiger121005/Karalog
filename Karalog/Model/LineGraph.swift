@@ -9,6 +9,8 @@ import SwiftUI
 import Charts
 
 
+//MARK: - LineMarkView
+
 struct LineMarkView: View {
     var sampleData: [SampleData] = []
     var max: Double = 0.0
@@ -35,6 +37,10 @@ struct LineMarkView: View {
                 ScrollViewReader { scrollProxy in
                     ScrollView(.horizontal) {
                         ZStack {
+                            
+                            
+                            //MARK: - Chart
+                            
                             Chart() {
                                 ForEach(downToZero()) { data in
                                     AreaMark(
@@ -115,6 +121,9 @@ struct LineMarkView: View {
                 Spacer().frame(width: 0)
                 VStack(spacing: 22) {
                     
+                    
+                    //MARK: - ScaleLabel
+                    
                     Text(String(gridLineValues().reversed()[0]))
                         .font(Font.system(size: 10))
                         .foregroundColor(Color.white)
@@ -136,6 +145,9 @@ struct LineMarkView: View {
             
         }
     }
+    
+    
+    //MARK: - Setup
     
     func maxRange() -> Double {
         var x: Double!

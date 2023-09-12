@@ -7,6 +7,11 @@
 
 import Foundation
 
+var manager = Manager.shared
+
+
+//MARK: Manager
+
 struct Manager {
     static var shared = Manager()
     

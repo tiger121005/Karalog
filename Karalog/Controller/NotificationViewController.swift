@@ -7,12 +7,20 @@
 
 import UIKit
 
+
+//MARK: - NotificationViewController
+
 class NotificationViewController: UIViewController {
-    
-    @IBOutlet var tableView: UITableView!
     
     var notificationList: [Notice] = []
     var userID: String!
+    
+    //MARK: - UI objects
+    
+    @IBOutlet var tableView: UITableView!
+    
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,12 +28,18 @@ class NotificationViewController: UIViewController {
         setupTableView()
     }
     
+    
+    //MARK: - Setup
+    
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
     }
     
 }
+
+
+//MARK: - UITableViewDelegate
 
 extension NotificationViewController: UITableViewDelegate {
     
@@ -38,9 +52,9 @@ extension NotificationViewController: UITableViewDelegate {
             }
             
             let approve = UIAlertAction(title: "承認", style: .default) { (action) in
-                FirebaseAPI.shared.deleteRequest(notice: self.notificationList[indexPath.row])
-                FirebaseAPI.shared.follow(followUser: self.notificationList[indexPath.row].from, followedUser: self.userID)
-                Manager.shared.user.request.remove(at: indexPath.row)
+                userFB.deleteRequest(notice: self.notificationList[indexPath.row])
+                userFB.follow(followUser: self.notificationList[indexPath.row].from, followedUser: self.userID)
+                manager.user.request.remove(at: indexPath.row)
                 self.notificationList.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .fade)
                 
@@ -52,6 +66,9 @@ extension NotificationViewController: UITableViewDelegate {
         }
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension NotificationViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

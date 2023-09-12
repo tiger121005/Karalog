@@ -7,13 +7,18 @@
 
 import UIKit
 
+var fromAddListMusic = false
+
+
+//MARK: - ListViewController
+
 class ListViewController: UIViewController {
     
     var listID: String = ""
     var listName: String = ""
     var originalList: [MusicList] = []
     var tvList: [MusicList] = []
-    var judgeSort: String = "0"
+    var judgeSort: String = Sort.追加順（遅）.rawValue
     var allSelected: Bool = false
     var idList: [String] = []
     
@@ -23,6 +28,9 @@ class ListViewController: UIViewController {
     var musicImage: Data!
     let sortList: [String] = ["追加順(遅)", "追加順(早)", "スコア順(高)", "スコア順(低)", "曲名順(早)", "曲名順(遅)", "アーティスト順(早)", "アーティスト順(遅)"]
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var editBtn: UIBarButtonItem!
@@ -30,14 +38,10 @@ class ListViewController: UIViewController {
     var selectBtn: UIBarButtonItem!
     var doneBtn: UIBarButtonItem!
     var allSelectBtn: UIBarButtonItem!
+    var addAlert: UIAlertController!
     
-    @IBAction func tapAdd() {
-        if listID == "1" {
-            performSegue(withIdentifier: "toAddWanna", sender: nil)
-        } else {
-            performSegue(withIdentifier: "toAddListMusic", sender: nil)
-        }
-    }
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,30 +55,18 @@ class ListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tvList = []
-        originalList = []
-        
-        if listID == "0" {
-            tvList = Manager.shared.musicList.filter {$0.favorite == true}
-            originalList = tvList
-            tableView.reloadData()
-        } else if listID == "1" {
-            FirebaseAPI.shared.getWanna(completionHandler: {wannaList in
-                self.originalList = wannaList
-                self.tvList = self.originalList
-                self.tableView.reloadData()
-            })
-        } else {
-            tvList = Manager.shared.musicList.filter {$0.lists.contains(listID)}
-            originalList = tvList
-            tableView.reloadData()
-        }
+        setData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMessage()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toAddListMusic" {
             let nextView = segue.destination as! AddListMusicViewController
-            if listID == "0" {
+            if listID == "favorite" {
                 nextView.fromFav = true
             } else {
                 nextView.fromFav = false
@@ -106,6 +98,9 @@ class ListViewController: UIViewController {
         }
     }
     
+    
+    //MARK: - Setup
+    
     func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -121,7 +116,7 @@ class ListViewController: UIViewController {
     
     
     func setupBarButtonItem() {
-        let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"), handler: { [self]_ in
+        let delete = UIAction(title: "削除", image: UIImage.trash, handler: { [self]_ in
             if self.tableView.indexPathsForSelectedRows != nil {
                 let indexPathList = self.tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
                 let alert = UIAlertController(title: "削除", message: String(indexPathList.count) + "個の曲のデータをリストから削除します", preferredStyle: .alert)
@@ -133,20 +128,20 @@ class ListViewController: UIViewController {
                     for i in indexPathList {
                         idList.append(tvList[i.row].id!)
                     }
-                    if listID == "0" {
+                    if listID == "favorite" {
                         for i in 0...indexPathList.count - 1 {
-                            FirebaseAPI.shared.favoriteUpdate(id: idList[i], favorite: true, completionHandler: {_ in
+                            musicFB.favoriteUpdate(id: idList[i], favorite: true, completionHandler: {_ in
                                 self.tvList.remove(at: indexPathList[i].row)
                             })
                         }
-                    }else if listID == "1" {
+                    }else if listID == "wanna" {
                         for i in 0...indexPathList.count - 1 {
-                            FirebaseAPI.shared.deleteWanna(wannaID: idList[i])
+                            listFB.deleteWanna(wannaID: idList[i])
                             self.tvList.remove(at: indexPathList[i].row)
                         }
                     }else{
                         for i in 0...indexPathList.count - 1 {
-                            FirebaseAPI.shared.deleteMusicFromList(selectedID: idList[i], listID: listID, completionHandler: {_ in
+                            musicFB.deleteMusicFromList(selectedID: idList[i], listID: listID, completionHandler: {_ in
                                 self.tvList.remove(at: indexPathList[i].row)
                                 
                             })
@@ -166,11 +161,11 @@ class ListViewController: UIViewController {
                 present(alert, animated: true)
             }
         })
-        let addToList = UIAction(title: "リストに追加", image: UIImage(systemName: "folder"), handler: { [self]_ in
+        let addToList = UIAction(title: "リストに追加", image: UIImage.folder, handler: { [self]_ in
             performSegue(withIdentifier: "toAddToList", sender: nil)
         })
         let selectMenu = UIMenu(title: "", children: [delete, addToList])
-        selectBtn = UIBarButtonItem(title: "", image: UIImage(systemName: "ellipsis.circle"), menu: selectMenu)
+        selectBtn = UIBarButtonItem(title: "", image: UIImage.ellipsisCircle, menu: selectMenu)
         
         allSelectBtn = UIBarButtonItem(title: "全て選択", style: .plain, target: self, action: #selector(tapAllSelectBtn(_:)))
         doneBtn = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(tapDoneBtn(_:)))
@@ -187,7 +182,7 @@ class ListViewController: UIViewController {
     
     func createMenu() {
         let items = UIMenu(title: "", options: .displayInline, children: [
-            UIAction(title: "選択", image: UIImage(systemName: "pencil"), handler: { _ in
+            UIAction(title: "選択", image: UIImage.pencil, handler: { _ in
                 self.editBtn.isHidden = true
                 self.addBtn.isHidden = true
                 self.selectBtn.isHidden = false
@@ -212,16 +207,16 @@ class ListViewController: UIViewController {
             })
         ])
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
-            if judgeSort != "0" {
-                judgeSort = "0"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.追加順（遅）.rawValue {
+                judgeSort = Sort.追加順（遅）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "1"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.追加順（遅）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -230,16 +225,16 @@ class ListViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
-            if judgeSort != "2"{
-                judgeSort = "2"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.得点（高）.rawValue {
+                judgeSort = Sort.得点（高）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "3"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.得点（低）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -248,16 +243,16 @@ class ListViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
-            if judgeSort != "4"{
-                judgeSort = "4"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.曲名順（降）.rawValue{
+                judgeSort = Sort.曲名順（降）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "5"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.曲名順（昇）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -266,16 +261,16 @@ class ListViewController: UIViewController {
             self.createMenu()
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
-            if judgeSort != "6"{
-                judgeSort = "6"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+            if judgeSort != Sort.アーティスト順（降）.rawValue {
+                judgeSort = Sort.アーティスト順（降）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
             }else{
-                judgeSort = "7"
-                Function.shared.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
+                judgeSort = Sort.アーティスト順（昇）.rawValue
+                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
                     self.tvList = list
                     self.tableView.reloadData()
                 })
@@ -285,11 +280,59 @@ class ListViewController: UIViewController {
             self.createMenu()
         })]
         
-        let sortNum: String! = UserDefaultsKey.judgeSort.get()
-        let sorts = UIMenu(title: "並び替え（" + sortList[Int(sortNum) ?? 0] + ")", children: subItems)
+        let sorts = UIMenu(title: "並び替え（" + judgeSort + ")", children: subItems)
         
         //editBtn.showsMenuAsPrimaryAction = true
         editBtn.menu = UIMenu(title: "", children: [items, sorts])
+    }
+    
+    func setData() {
+        tvList = []
+        originalList = []
+        
+        if listID == "favorite" {
+            tvList = manager.musicList.filter {$0.favorite == true}
+            originalList = tvList
+            tableView.reloadData()
+        } else if listID == "wanna" {
+            listFB.getWanna(completionHandler: {wannaList in
+                self.originalList = wannaList
+                self.tvList = self.originalList
+                self.tableView.reloadData()
+            })
+        } else {
+            tvList = manager.musicList.filter {$0.lists.contains(listID)}
+            originalList = tvList
+            tableView.reloadData()
+        }
+    }
+    
+    func showMessage() {
+        
+        if fromAddListMusic {
+            addAlert = UIAlertController(title: "追加しました", message: "", preferredStyle: .alert)
+            present(addAlert, animated: true, completion: nil)
+            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
+            fromAddListMusic = false
+        }
+    }
+    
+    
+    //MARK: - UI interaction
+    
+    @IBAction func tapAdd() {
+        if listID == "1" {
+            performSegue(withIdentifier: "toAddWanna", sender: nil)
+        } else {
+            performSegue(withIdentifier: "toAddListMusic", sender: nil)
+        }
+    }
+    
+    
+    //MARK: - Objective - C
+    
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
     }
     
     @objc func tapDoneBtn(_ sender: UIBarButtonItem) {
@@ -324,6 +367,9 @@ class ListViewController: UIViewController {
     }
     
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -371,10 +417,10 @@ extension ListViewController: UITableViewDataSource {
             let max = scoreList.max() ?? 0
             cell.scoreLabel.text = String(format: "%.3f", max)
             if max >= Double(high) {
-                cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+                cell.scoreLabel.textColor = UIColor.imageColor
                 cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
             } else if max >= Double(medium) && tvList.count > 3 {
-                cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+                cell.scoreLabel.textColor = UIColor.subImageColor
                 cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
             } else {
                 cell.scoreLabel.textColor = UIColor.secondaryLabel
@@ -397,17 +443,17 @@ extension ListViewController: UITableViewDataSource {
             }
             let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
                 let selectedID = self.tvList[indexPath.row].id
-                if self.listID == "0" {
-                    FirebaseAPI.shared.favoriteUpdate(id: selectedID!, favorite: true, completionHandler: {_ in
+                if self.listID == "favorite" {
+                    musicFB.favoriteUpdate(id: selectedID!, favorite: true, completionHandler: {_ in
                         self.tvList.remove(at: indexPath.row)
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     })
-                }else if self.listID == "1" {
-                    FirebaseAPI.shared.deleteWanna(wannaID: selectedID!)
+                }else if self.listID == "wanna" {
+                    listFB.deleteWanna(wannaID: selectedID!)
                     self.tvList.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .fade)
                 }else{
-                    FirebaseAPI.shared.deleteMusicFromList(selectedID: selectedID!, listID: self.listID, completionHandler: {_ in
+                    musicFB.deleteMusicFromList(selectedID: selectedID!, listID: self.listID, completionHandler: {_ in
                         self.tvList.remove(at: indexPath.row)
                         self.tableView.deleteRows(at: [indexPath], with: .fade)
                     })
@@ -422,6 +468,9 @@ extension ListViewController: UITableViewDataSource {
         
     }
 }
+
+
+//MARK: - UITableVIewDelegate
 
 extension ListViewController: UITableViewDelegate {
     //削除のラベルを変更
@@ -443,6 +492,9 @@ extension ListViewController: UITableViewDelegate {
             
     }
 }
+
+
+//MARK: - UISearchBarDelegate
 
 extension ListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

@@ -10,11 +10,17 @@ import FirebaseCore
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 
+
+//MARK: - ITunesData
+
 struct ITunesData: Codable {
     
     var resultCount: Int
     var results: [MusicInfoModel]
 }
+
+
+//MARK: - MusicInfoModel
 
 struct MusicInfoModel: Codable {
     var artistName: String
@@ -28,6 +34,9 @@ struct MusicInfoModel: Codable {
     }
 }
 
+
+//MARK: - MusicList
+
 public struct MusicList: Codable {
     let musicName: String
     let artistName: String
@@ -38,6 +47,9 @@ public struct MusicList: Codable {
     @DocumentID var id: String?
 }
 
+
+//MARK: - MusicData
+
 public struct MusicData: Codable {
     let time: String
     let score: Double
@@ -46,11 +58,17 @@ public struct MusicData: Codable {
     let comment: String
 }
 
+
+//MARK: - Lists
+
 public struct Lists: Codable {
     let listName: String
     let listImage: Data
     @DocumentID var id: String?
 }
+
+
+//MARK: - Post
 
 public struct Post: Codable {
     let musicName: String
@@ -64,11 +82,17 @@ public struct Post: Codable {
     @DocumentID var id: String?
 }
 
+
+//MARK: - SampleData
+
 public struct SampleData: Identifiable {
     public var id: String { date }
     let date: String
     let score: Double
 }
+
+
+//MARK: - User
 
 public struct User: Codable {
     let name: String
@@ -81,6 +105,9 @@ public struct User: Codable {
     var notice: [Notice]
     @DocumentID var id: String?
 }
+
+
+//MARK: - Notice
     
 public struct Notice: Codable {
     let title: String
@@ -88,6 +115,9 @@ public struct Notice: Codable {
     var seen: Bool
     let from: String
 }
+
+
+//MARK: - UserDefaultsKey
 
 enum UserDefaultsKey: String {
     case userID = "userID"
@@ -106,13 +136,5 @@ enum UserDefaultsKey: String {
     }
 }
 
-enum SettingShow: String {
-    case 全て = "全て"
-    case フォロワー = "フォロワーのみ"
-    
-}
 
-enum SettingFollow: String {
-    case 全て = "全て"
-    case 認証 = "認証"
-}
+

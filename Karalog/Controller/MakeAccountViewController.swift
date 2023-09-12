@@ -10,9 +10,15 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
 
+
+//MARK: - MakeAccountViewController
+
 class MakeAccountViewController: UIViewController {
     
     let db = Firestore.firestore()
+    
+    
+    // MARK: - UI objects
     
     @IBOutlet var mailTF: UITextField!
     @IBOutlet var passwordTF: UITextField!
@@ -21,17 +27,31 @@ class MakeAccountViewController: UIViewController {
     @IBOutlet var signUpBtn: CustomButton!
     
 
+    //MARK: - View Controller methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupTF()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+            closeKeyboard()
+    }
+    
+    
+    //MARK: - Setup
+    
+    func setupTF() {
         mailTF.delegate = self
         passwordTF.delegate = self
         nameTF.delegate = self
         passwordTF.isSecureTextEntry = true
         passwordTF.textContentType = .password
     }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+    func closeKeyboard() {
         //キーボード以外がタップされた時にキーボードを閉じる
         if (self.mailTF.isFirstResponder) {
             self.mailTF.resignFirstResponder()
@@ -40,16 +60,46 @@ class MakeAccountViewController: UIViewController {
         }else if (self.nameTF.isFirstResponder) {
             self.nameTF.resignFirstResponder()
         }
-            
     }
+    
+    func set(uid: String, name: String) {
+        UserDefaultsKey.userID.set(value: uid)
+        self.db.collection("user").document(uid).setData([
+            "name": name,
+            "goodList": [],
+            "listOrder": [],
+            "showAll": false,
+            "follow": [],
+            "follower": [],
+            "request": [],
+            "notice": []
+        ], completion: { err in
+            if let _err = err {
+                print("cannot create account")
+                let dialog = UIAlertController(title: "新規登録失敗", message: _err.localizedDescription, preferredStyle: .alert)
+                dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(dialog, animated: true, completion: nil)
+            }else{
+                print("creating account succeeded")
+                let nextView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
+                nextView.modalPresentationStyle = .fullScreen
+                function.login(first: true, user: User(name: name, goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [], id: uid))
+                
+                self.present(nextView, animated: true, completion: nil)
+                    
+            }
+        })
+    }
+    
+    // MARK: UI interaction
     
     @IBAction func lookPassword() {
         if passwordTF.isSecureTextEntry == true {
             passwordTF.isSecureTextEntry = false
-            lookPasswordBtn.setImage(UIImage(systemName: "eye"), for: .normal)
+            lookPasswordBtn.setImage(UIImage.eye, for: .normal)
         }else{
             passwordTF.isSecureTextEntry = true
-            lookPasswordBtn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            lookPasswordBtn.setImage(UIImage.eyeSlash, for: .normal)
         }
     }
     
@@ -59,32 +109,8 @@ class MakeAccountViewController: UIViewController {
         guard let name = nameTF.text else { return }
         Auth.auth().createUser(withEmail: _mail, password: password, completion: { (result, error) in
             if let _user = result?.user {
-                UserDefaultsKey.userID.set(value: _user.uid)
-                self.db.collection("user").document(_user.uid).setData([
-                    "name": name,
-                    "goodList": [],
-                    "listOrder": [],
-                    "showAll": false,
-                    "follow": [],
-                    "follower": [],
-                    "request": [],
-                    "notice": []
-                ], completion: { err in
-                    if err != nil {
-                        print("cannot create account")
-                        let dialog = UIAlertController(title: "新規登録失敗", message: error?.localizedDescription, preferredStyle: .alert)
-                        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                        self.present(dialog, animated: true, completion: nil)
-                    }else{
-                        print("creating account succeeded")
-                        let nextView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
-                        nextView.modalPresentationStyle = .fullScreen
-                        Function.shared.login(first: true, user: User(name: name, goodList: [], listOrder: [], showAll: false, follow: [], follower: [], request: [], notice: [], id: _user.uid))
-                        
-                        self.present(nextView, animated: true, completion: nil)
-                            
-                    }
-                })
+                self.set(uid: _user.uid, name: name)
+                
             }else{
                 print("cannot create acount")
                 let dialog = UIAlertController(title: "新規登録失敗", message: error?.localizedDescription, preferredStyle: .alert)
@@ -96,6 +122,9 @@ class MakeAccountViewController: UIViewController {
     
 
 }
+
+
+//MARK: - UITextFieldDelegate
 
 extension MakeAccountViewController: UITextFieldDelegate {
     

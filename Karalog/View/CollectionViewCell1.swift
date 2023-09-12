@@ -7,11 +7,20 @@
 
 import UIKit
 
+
+//MARK: - CollectionViewCell1
+
 class CollectionViewCell1: UICollectionViewCell {
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var image: UIImageView!
     @IBOutlet var label: UILabel!
     @IBOutlet var background: UILabel!
+    
+    
+    //MARK: - CollectionViewCell methods
     
     override func awakeFromNib() {
         super.awakeFromNib()

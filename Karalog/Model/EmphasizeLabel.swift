@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//MARK: - EmphasizeLabel
+
 class EmphasizeLabel: UILabel {
 
     var shadowColorForCustom: UIColor = .clear

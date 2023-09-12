@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import Foundation
-import Alamofire
+
+
+//MARK: - AddMusicViewController
 
 class AddMusicViewController: UIViewController {
     
@@ -15,13 +16,16 @@ class AddMusicViewController: UIViewController {
     var artistName: String = ""
     var musicImage: Data!
     var sliderValue: Float = 0
-    var selectedMenuType = modelMenuType.未選択
+    var selectedMenuType = ModelMenuType.未選択
     var alertCtl: UIAlertController!
     var callView: Bool = true
     var scaleList: [UIView] = []
     var post: Bool = false
     var category: [String] = []
     var tapGesture: UITapGestureRecognizer!
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var musicTF: UITextField!
@@ -35,8 +39,10 @@ class AddMusicViewController: UIViewController {
     @IBOutlet var checkBox: UIView!
     @IBOutlet var categoryView: UIView!
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var addCategoryBtn: UIButton!
     @IBOutlet var categoryLabel: UILabel!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,34 +52,17 @@ class AddMusicViewController: UIViewController {
         configureMenuButton()
         setupKeyLabel()
         getTimingKeyboard()
-        setupCategeoryView()
+        setupCategoryView()
         title = "曲を追加"
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if callView {
-            scaleList = []
-            for i in 0...14 {
-                print(customSlider.slider.bounds.width)
-                let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
-                
-                if i <= 7 {
-                    view.backgroundColor = UIColor(named: "imageColor")
-                } else {
-                    view.backgroundColor = UIColor.label
-                }
-                view.layer.cornerRadius = 3
-                
-                customSlider.slider.addSubview(view)
-                
-                customSlider.bringSubviewToFront(customSlider.slider)
-                
-                scaleList.append(view)
-            }
-            callView = false
-        }
+        setupSlider()
     }
+    
+    
+    //MARK: - Setup
     
     func setupScroll() {
         scrollView.delegate = self
@@ -84,8 +73,16 @@ class AddMusicViewController: UIViewController {
         musicTF.delegate = self
         artistTF.delegate = self
         scoreTF.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.allowsMultipleSelection = true
+        
+        tableView.rowHeight = 44
+        textView.layer.cornerRadius = 5
+        
         musicTF.text = musicName
         artistTF.text = artistName
+        
         musicTF.keyboardAppearance = .dark
         artistTF.keyboardAppearance = .dark
         textView.keyboardAppearance = .dark
@@ -94,21 +91,21 @@ class AddMusicViewController: UIViewController {
     func configureMenuButton() {
         var actions = [UIMenuElement]()
         // HIGH
-        actions.append(UIAction(title: modelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.未選択 ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.未選択 ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .未選択
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
         // MID
-        actions.append(UIAction(title: modelMenuType.DAM.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.DAM ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.DAM.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.DAM ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .DAM
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
         // LOW
-        actions.append(UIAction(title: modelMenuType.JOYSOUND.rawValue, image: nil, state: self.selectedMenuType == modelMenuType.JOYSOUND ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.JOYSOUND.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.JOYSOUND ? .on : .off,
                                 handler: { (_) in
                                     self.selectedMenuType = .JOYSOUND
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
@@ -142,15 +139,12 @@ class AddMusicViewController: UIViewController {
         tapGesture.isEnabled = false
     }
     
-    func setupCategeoryView() {
+    func setupCategoryView() {
         categoryView.isHidden = true
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.allowsMultipleSelection = true
-        tableView.rowHeight = 44
+        categoryLabel.layer.cornerRadius = 5
     }
     
-    func setupCategory() {
+    func setCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             
@@ -173,6 +167,34 @@ class AddMusicViewController: UIViewController {
             category = []
         }
     }
+    
+    
+    func setupSlider() {
+        if callView {
+            scaleList = []
+            for i in 0...14 {
+                print(customSlider.slider.bounds.width)
+                let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
+                
+                if i <= 7 {
+                    view.backgroundColor = UIColor.imageColor
+                } else {
+                    view.backgroundColor = UIColor.label
+                }
+                view.layer.cornerRadius = 3
+                
+                customSlider.slider.addSubview(view)
+                
+                customSlider.bringSubviewToFront(customSlider.slider)
+                
+                scaleList.append(view)
+            }
+            callView = false
+        }
+    }
+    
+    
+    //MARK: - UI interaction
     
     @IBAction func editingChanged(_ sender: Any) {
         
@@ -200,11 +222,11 @@ class AddMusicViewController: UIViewController {
         }
         customSlider.slider.setValue(preValue, animated: false)
         if preValue != sliderValue {
-            Function.shared.playImpact(type: .impact(.light))
+            function.playImpact(type: .impact(.light))
             sliderValue = preValue
             for i in 0...scaleList.count - 1 {
                 if i  <= Int(sliderValue) + 7 {
-                    scaleList[i].backgroundColor = UIColor(named: "imageColor")
+                    scaleList[i].backgroundColor = UIColor.imageColor
                 } else {
                     scaleList[i].backgroundColor = UIColor.label
                 }
@@ -217,25 +239,46 @@ class AddMusicViewController: UIViewController {
         if Double(scoreTF.text!) != nil {
             if post {
                 let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                FirebaseAPI.shared.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: category)
+                postFB.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: category)
             }
+            
+            
+            
+                
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
             df.timeZone = TimeZone.current
             let time = df.string(from: Date())
-            FirebaseAPI.shared.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
-                //2画面前に戻る
-                let screenIndex = self.navigationController!.viewControllers.count - 3
-                self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
-            })
             
-        }else{
-            func alert(title: String, message: String) {
-                alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
-                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                present(alertCtl, animated: true)
+            let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text! && $0.artistName == artistTF.text!}
+            if !filterMusic.isEmpty {
+                guard let id = filterMusic.first?.id else {
+                    let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+                    let ok = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(ok)
+                    present(alert, animated: true, completion: nil)
+                    return
+                }
+                musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+            } else {
+                musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                    
+                })
+                
             }
-            alert(title: "入力ミス", message: "値がうまく入力されていません")
+            //追加されたことを知らせる
+            fromAdd = true
+            
+            //2画面前に戻る
+            let screenIndex = self.navigationController!.viewControllers.count - 3
+            self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
+        }else{
+            
+            alertCtl = UIAlertController(title: "入力ミス", message: "値がうまく入力されていません", preferredStyle: .alert)
+            alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alertCtl, animated: true, completion: nil)
+            
+            
         }
         
     }
@@ -245,12 +288,8 @@ class AddMusicViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
-    //機種設定
-    enum modelMenuType: String {
-        case 未選択 = "未選択"
-        case DAM = "DAM"
-        case JOYSOUND = "JOYSOUND"
-    }
+    
+    //MARK: - Objective - C
     
     //textViewを開いたときにViewを上にずらして隠れないようにする
     // キーボード表示通知の際の処理
@@ -294,12 +333,15 @@ class AddMusicViewController: UIViewController {
     }
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension AddMusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setupCategory()
+            setCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -314,9 +356,12 @@ extension AddMusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setupCategory()
+        setCategory()
     }
 }
+
+
+//MARK UITableViewDataSource
 
 extension AddMusicViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -342,12 +387,8 @@ extension AddMusicViewController: UITableViewDataSource {
     
 }
 
-extension UIScrollView {
-    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.next?.touchesBegan(touches, with: event)
-        
-    }
-}
+
+//MARK: - UITextFieldDelegate
 
 extension AddMusicViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

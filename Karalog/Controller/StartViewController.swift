@@ -7,9 +7,13 @@
 
 import UIKit
 
+
+//MARK: - StartViewController
+
 class StartViewController: UIViewController {
     
     
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,19 +23,34 @@ class StartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
         
-        let u: String! = UserDefaultsKey.userID.get()
-        if u != nil {
+        setupDarkMode()
+        judgeSegue()
+        UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+        
+    }
+    
+    
+    //MARK: - Setup
+    
+    func setupDarkMode() {
+        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+    }
+    
+    func judgeSegue() {
+        //userIDが保存されていた場合
+        if let u: String = UserDefaultsKey.userID.get(){
             Task {
-                guard let a = await FirebaseAPI.shared.getUserInformation(id: u) else {
+                print("userID: ", u)
+                guard let a = await userFB.getUserInformation(id: u) else {
                     self.performSegue(withIdentifier: "toLogin", sender: nil)
                     return
                 }
-                Function.shared.login(first: false, user: a)
+                function.login(first: false, user: a)
                 
                 self.performSegue(withIdentifier: "toTabBar", sender: nil)
             }
+            //保存されていない場合
         } else {
             self.performSegue(withIdentifier: "toLogin", sender: nil)
         }

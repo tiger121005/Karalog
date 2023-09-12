@@ -7,14 +7,19 @@
 
 import UIKit
 
+
+//MARK: - PostViewController
+
 class PostViewController: UIViewController {
     
     var musicName: String = ""
     var artistName: String = ""
     var musicImage: Data!
     var category: [String] = []
-    var alertCtl: UIAlertController!
     var tapGesture: UITapGestureRecognizer!
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
@@ -23,7 +28,10 @@ class PostViewController: UIViewController {
     @IBOutlet var categoryLabel: UILabel!
     @IBOutlet var textView: UITextView!
     @IBOutlet var postBtn: CustomButton!
+    var alertCtl: UIAlertController!
     
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +42,15 @@ class PostViewController: UIViewController {
         getTimingKeyboard()
     }
     
+    
+    //MARK: - Setup
+    
     func setUpMusic() {
         musicLabel.text = musicName
         artistLabel.text = artistName
     }
     
-    func setupCategory() {
+    func setCategory() {
         categoryLabel.numberOfLines = 0
         if let _indexPathList = self.tableView.indexPathsForSelectedRows {
             var text: String = ""
@@ -68,6 +79,9 @@ class PostViewController: UIViewController {
         tableView.rowHeight = 44
         tableView.isHidden = true
         tableView.allowsMultipleSelection = true
+        tableView.layer.cornerRadius = 5
+        
+        categoryLabel.layer.cornerRadius = 5
     }
     
     func getTimingKeyboard() {
@@ -82,22 +96,29 @@ class PostViewController: UIViewController {
         tapGesture.isEnabled = false
     }
     
+    func tapOutTableView () {
+        if tableView.isHidden == false {
+            tableView.isHidden = true
+        }
+    }
+    
+    
+    //MARK: - UI interaction
+    
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()
     }
 
     @IBAction func tapPost() {
         
-        FirebaseAPI.shared.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: textView.text, category: category)
+        postFB.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: textView.text, category: category)
+        fromPost = true
         let screenIndex = navigationController!.viewControllers.count - 3
         self.navigationController?.popToViewController(navigationController!.viewControllers[screenIndex], animated: true)
     }
     
-    func tapOutTableView () {
-        if tableView.isHidden == false {
-            tableView.isHidden = true
-        }
-    }
+    
+    //MARK: - Objective - C
     
     // キーボード表示通知の際の処理
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -120,12 +141,15 @@ class PostViewController: UIViewController {
     
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension PostViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if tableView.indexPathsForSelectedRows!.count <= 5 {
             cell?.accessoryType = .checkmark
-            setupCategory()
+            setCategory()
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -140,9 +164,12 @@ extension PostViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at:indexPath)
         cell?.accessoryType = .none
-        setupCategory()
+        setCategory()
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension PostViewController: UITableViewDataSource {
     

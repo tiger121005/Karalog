@@ -6,12 +6,13 @@
 //
 
 import UIKit
-
 import Alamofire
 import Dispatch
-
 import Vision
 import VisionKit
+
+
+//MARK: - SearchViewControler
 
 class SearchViewController: UIViewController, VNDocumentCameraViewControllerDelegate {
     
@@ -29,8 +30,14 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
     var resultingText: String = ""
     var requests = [VNRequest]()
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,8 +54,11 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
             let nextView = segue.destination as! AddMusicViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
-            nextView.musicImage = try! Data(contentsOf: URL(string: musicImage)!)
-            
+            do {
+                nextView.musicImage = try Data(contentsOf: URL(string: musicImage)!)
+            } catch {
+                print("Error")
+            }
         }
     }
     
@@ -58,6 +68,9 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         
             
     }
+    
+    
+    //MARK: - Setup
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -105,6 +118,9 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
     
 }
 
+
+//MARK: - UICollectionViewDelegate
+
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -117,6 +133,9 @@ extension SearchViewController: UICollectionViewDelegate {
         performSegue(withIdentifier: "toAddMusic", sender: nil)
     }
 }
+
+
+//MARK: - UICollectionViewDataSource
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -133,13 +152,17 @@ extension SearchViewController: UICollectionViewDataSource {
         let req = NSURLRequest(url:url! as URL)
 
         NSURLConnection.sendAsynchronousRequest(req as URLRequest, queue:OperationQueue.main){(res, data, err) in
-            let image = UIImage(data:data!)
-            // 画像に対する処理 (UcellのUIImageViewに表示する等)
-            cell.image?.image = image
+            if let _err = err {
+                print(_err)
+            } else if let _data = data {
+                let image = UIImage(data:data!)
+                // 画像に対する処理 (UcellのUIImageViewに表示する等)
+                cell.image?.image = image
+            }
             
         }
         
-        var selectedBgView = UIView()
+        let selectedBgView = UIView()
         selectedBgView.backgroundColor = .gray
         cell.selectedBackgroundView = selectedBgView
         
@@ -147,11 +170,17 @@ extension SearchViewController: UICollectionViewDataSource {
     }
 }
 
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 170, height: 200)
     }
 }
+
+
+//MARK: - UISearchBarDelegate
 
 extension SearchViewController: UISearchBarDelegate {
     //searchBarに値が入力されるごとに呼び出される変数

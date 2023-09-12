@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//MARK: - CostomButton
+
 class CustomButton: UIButton {
 //storyboardでviewを生成する時
     required init(coder aDecorder: NSCoder) {
@@ -16,7 +19,7 @@ class CustomButton: UIButton {
         self.layer.shadowOpacity = 0.7
         self.layer.shadowRadius = 3
         self.layer.shadowColor = UIColor(named: "imagedShadowColor")?.cgColor
-        self.backgroundColor = UIColor(named: "imageColor")
+        self.backgroundColor = UIColor.imageColor
         self.layer.shadowOffset = CGSize(width: 0, height: self.frame.height*0.03)
         
     }
@@ -28,7 +31,7 @@ class CustomButton: UIButton {
 //        self.layer.shadowOpacity = 0.7
 //        self.layer.shadowRadius = 3
 //        self.layer.shadowColor = UIColor(named: "imageShadowColor")?.cgColor
-//        self.backgroundColor = UIColor(named: "imageColor")
+//        self.backgroundColor = UIColor.imageColor
 //    }
     
 }

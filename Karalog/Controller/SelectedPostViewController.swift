@@ -6,6 +6,10 @@
 //
 
 import UIKit
+import DZNEmptyDataSet
+
+
+//MARK: - SelectedPostViewController
 
 class SelectedPostViewController: UIViewController {
     
@@ -15,50 +19,38 @@ class SelectedPostViewController: UIViewController {
     var userID: String!
     var userName: String!
     var finalContent: Bool = false
+    let goodList = manager.user.goodList
     
-    let goodList = Manager.shared.user.goodList
+    
+    //MARK: - UI objects
     
     @IBOutlet var collectionView: UICollectionView!
-    
     let refreshCtl = UIRefreshControl()
+    
+    
+    //MARK: - View Controller methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupCollectionView()
-        if kind == "good" {
-            title = "いいね"
-        } else {
-            title = "過去の投稿"
-        }
+        setupTitle()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        if kind == "past" {
-            FirebaseAPI.shared.searchUserPost(first: true, id: userID, name: userName) { list in
-                self.shareList = list
-                self.finalContent = false
-                self.collectionView.reloadData()
-                
-            }
-        } else if kind == "good" {
-            Task {
-                remainingList = Manager.shared.user.goodList
-                let first6 = remainingList.prefix(6)
-                
-                remainingList.removeFirst(first6.count)
-                
-                self.shareList = await FirebaseAPI.shared.searchGoodList(goodList: first6)
-                self.collectionView.reloadData()
-            }
-        }
+        setData()
     }
+    
+    
+    //MARK: - Setup
     
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UINib(nibName: "ShareCell", bundle: nil), forCellWithReuseIdentifier: "shareCell")
+        collectionView.emptyDataSetSource = self
+        collectionView.emptyDataSetDelegate = self
         
         let compositionalLayout: UICollectionViewCompositionalLayout = {
             //.estimateを使うと、AutoLayoutが優先されるから、そこの値は適当でいい
@@ -78,6 +70,35 @@ class SelectedPostViewController: UIViewController {
         refreshCtl.addTarget(self, action: #selector(self.reload), for: UIControl.Event.valueChanged)
         
         collectionView.collectionViewLayout = compositionalLayout
+    }
+    
+    func setupTitle() {
+        if kind == "good" {
+            title = "いいね"
+        } else {
+            title = "過去の投稿"
+        }
+    }
+    
+    func setData() {
+        if kind == "past" {
+            postFB.searchUserPost(first: true, id: userID, name: userName) { list in
+                self.shareList = list
+                self.finalContent = false
+                self.collectionView.reloadData()
+                
+            }
+        } else if kind == "good" {
+            Task {
+                remainingList = manager.user.goodList
+                let first6 = remainingList.prefix(6)
+                
+                remainingList.removeFirst(first6.count)
+                
+                self.shareList = await postFB.searchGoodList(goodList: first6)
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     func showGoodNumber(n: Int) -> String {
@@ -108,10 +129,12 @@ class SelectedPostViewController: UIViewController {
         return resizedImage!
     }
     
+    
+    //MARK: - Objective - C
 
     @objc func reload() {
         if kind == "past" {
-            FirebaseAPI.shared.searchUserPost(first: true, id: userID, name: userName) { list in
+            postFB.searchUserPost(first: true, id: userID, name: userName) { list in
                 self.shareList = list
                 self.finalContent = false
                 self.collectionView.reloadData()
@@ -123,7 +146,7 @@ class SelectedPostViewController: UIViewController {
                 
                 remainingList.removeFirst(first6.count)
                 
-                self.shareList = await FirebaseAPI.shared.searchGoodList(goodList: first6)
+                self.shareList = await postFB.searchGoodList(goodList: first6)
                 self.collectionView.reloadData()
                 self.refreshCtl.endRefreshing()
             }
@@ -131,9 +154,15 @@ class SelectedPostViewController: UIViewController {
     }
 }
 
+
+//MARK: - UICollectionViewDelegate
+
 extension SelectedPostViewController: UICollectionViewDelegate {
     
 }
+
+
+//MARK: - UICollectionViewDataSource
 
 extension SelectedPostViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -160,11 +189,11 @@ extension SelectedPostViewController: UICollectionViewDataSource {
             a += "#" + i
         }
         cell.categoryLabel.text = a
-        if Manager.shared.user.goodList.contains(where: { id in id == shareList[indexPath.row].id! }) {
-            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        if manager.user.goodList.contains(where: { id in id == shareList[indexPath.row].id! }) {
+            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
             
         }else{
-            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heart, for: .normal)
             
         }
         cell.goodNumLabel.text = showGoodNumber(n:shareList[indexPath.row].goodNumber)
@@ -175,6 +204,9 @@ extension SelectedPostViewController: UICollectionViewDataSource {
     
 }
 
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -183,7 +215,7 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
             if !finalContent {
                 if indexPath.row == self.shareList.count - 1 {
                     if kind == "past" {
-                        FirebaseAPI.shared.searchUserPost(first: false, id: userID, name: userName) { list in
+                        postFB.searchUserPost(first: false, id: userID, name: userName) { list in
                             if list.isEmpty {
                                 self.finalContent = true
                                 return
@@ -201,7 +233,7 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
                         }
                         remainingList.removeFirst(first6.count)
                         
-                        self.shareList.append(contentsOf: await FirebaseAPI.shared.searchGoodList(goodList: first6))
+                        self.shareList.append(contentsOf: await postFB.searchGoodList(goodList: first6))
                         self.collectionView.reloadData()
                     }
                 }
@@ -210,26 +242,29 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
+//MARK: - ShareCellDelegate
+
 extension SelectedPostViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
         let selectedID = shareList[indexPath.row].id!
         
         var good: Bool!
-        if Manager.shared.user.goodList.contains(where: { $0 == selectedID}) {
+        if manager.user.goodList.contains(where: { $0 == selectedID}) {
             good = true
         } else {
             good = false
         }
         
-        FirebaseAPI.shared.goodUpdate(id: selectedID, good: good)
+        postFB.goodUpdate(id: selectedID, good: good)
         
         if good {
             shareList[indexPath.row].goodNumber -= 1
-            cell.goodBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heart, for: .normal)
         } else {
             shareList[indexPath.row].goodNumber += 1
-            cell.goodBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
         }
         
         cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
@@ -244,4 +279,24 @@ extension SelectedPostViewController: ShareCellDelegate {
     func tapArtist(indexPath: IndexPath) {
         
     }
+}
+
+
+//MARK: - DZNEmptyDataSetSource
+
+extension SelectedPostViewController: DZNEmptyDataSetSource {
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        return NSAttributedString("データがありません")
+    }
+    
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
+        return UIImage.KaralogImage.resized(toWidth: 250)
+    }
+}
+
+
+//MARK: - DZNEmptyDataSetDelegate
+
+extension SelectedPostViewController: DZNEmptyDataSetDelegate {
+    
 }

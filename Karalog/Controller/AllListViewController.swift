@@ -8,6 +8,11 @@
 import UIKit
 import FirebaseCore
 
+var fromAddList = false
+
+
+//MARK: - AllListViewController
+
 class AllListViewController: UIViewController {
     
     var index: Int = 0
@@ -15,10 +20,15 @@ class AllListViewController: UIViewController {
     var listName: String = ""
     var changeOrder: Bool = false
     
-    let refreshCtl = UIRefreshControl()
+    
+    //MARK: - UI objects
     
     @IBOutlet var collectionView: UICollectionView!
+    let refreshCtl = UIRefreshControl()
+    var addAlert: UIAlertController!
     
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +39,11 @@ class AllListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         reloadList()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMessage()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,6 +62,9 @@ class AllListViewController: UIViewController {
         } 
     }
     
+    
+    //MARK: - Setup
+    
     func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -63,7 +81,7 @@ class AllListViewController: UIViewController {
     
     func saveListOrder() {
         if changeOrder {
-            FirebaseAPI.shared.listOrderUpdate(listOrder: Manager.shared.user.listOrder)
+            listFB.listOrderUpdate(listOrder: manager.user.listOrder)
             changeOrder = false
         }
     }
@@ -72,8 +90,11 @@ class AllListViewController: UIViewController {
         collectionView.reloadData()
     }
     
+    
+    //MARK: - Objective - C
+    
     @objc func reload() {
-        FirebaseAPI.shared.getList() {_ in
+        listFB.getList() {_ in
             self.collectionView.reloadData()
             self.refreshCtl.endRefreshing()
         }
@@ -82,17 +103,20 @@ class AllListViewController: UIViewController {
     
 }
 
+
+//MARK: - UICollectionViewDelegate
+
 extension AllListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.row == 0 {
-            listID = "0"
+            listID = "favorite"
         } else if indexPath.row == 1 {
-            listID = "1"
+            listID = "wanna"
         } else {
-            listID = Manager.shared.lists[indexPath.row].id!
+            listID = manager.lists[indexPath.row].id!
         }
-        listName = Manager.shared.lists[indexPath.row].listName
+        listName = manager.lists[indexPath.row].listName
         performSegue(withIdentifier: "toList", sender: nil)
     }
     
@@ -101,7 +125,7 @@ extension AllListViewController: UICollectionViewDelegate {
         indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         // ②メニューの定義
         let actionProvider: ([UIMenuElement]) -> UIMenu? = { _ in
-            let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in
+            let delete = UIAction(title: "削除", image: UIImage.trash, attributes: .destructive) { _ in
                 if indexPath.row == 0{
                     let alert = UIAlertController(title: "できません", message: "｢お気に入り｣は削除できません", preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "OK", style: .default) { (action) in
@@ -118,13 +142,13 @@ extension AllListViewController: UICollectionViewDelegate {
                     self.present(alert, animated: true, completion: nil)
                 }else{
                     //alert
-                    let alert = UIAlertController(title: "削除", message: "”" + Manager.shared.lists[indexPath.row].listName + "”" + "を削除しますか", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "削除", message: "”" + manager.lists[indexPath.row].listName + "”" + "を削除しますか", preferredStyle: .alert)
                     let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
                         
                     }
                     
                     let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
-                        FirebaseAPI.shared.deleteList(indexPath: indexPath, completionHandler: {_  in
+                        listFB.deleteList(indexPath: indexPath, completionHandler: {_  in
                             self.collectionView.reloadData()
                         })
                         
@@ -142,17 +166,34 @@ extension AllListViewController: UICollectionViewDelegate {
                                           previewProvider: nil,
                                           actionProvider: actionProvider)
     }
+    
+    func showMessage() {
+        
+        if fromAddList {
+            addAlert = UIAlertController(title: "追加しました", message: "", preferredStyle: .alert)
+            present(addAlert, animated: true, completion: nil)
+            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
+            fromAddList = false
+        }
+    }
+    
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
+    }
 }
+
+
+//MARK: - UICollectionViewControllerDataSource
 
 extension AllListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Manager.shared.lists.count
+        manager.lists.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
-        cell.image.image = UIImage(data: Manager.shared.lists[indexPath.row].listImage)!
-        cell.label.text = Manager.shared.lists[indexPath.row].listName
+        cell.image.image = UIImage(data: manager.lists[indexPath.row].listImage)!
+        cell.label.text = manager.lists[indexPath.row].listName
         
         var selectedBgView = UIView()
         selectedBgView.backgroundColor = .gray
@@ -162,11 +203,17 @@ extension AllListViewController: UICollectionViewDataSource {
     }
 }
 
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension AllListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 160, height: 170)
     }
 }
+
+
+//MARK: - UICollectionViewDropDelegate
 
 extension AllListViewController: UICollectionViewDropDelegate {
     //並び替え
@@ -184,10 +231,10 @@ extension AllListViewController: UICollectionViewDropDelegate {
                     coordinator.items.forEach { item in
                         guard let _sourceIndexPath = item.sourceIndexPath else { return }
                         collectionView.performBatchUpdates({
-                            let i = Manager.shared.lists.remove(at: _sourceIndexPath.row)
-                            let j = Manager.shared.user.listOrder.remove(at: _sourceIndexPath.row - 2)
-                            Manager.shared.lists.insert(i, at: destinationIndexPath.row)
-                            Manager.shared.user.listOrder.insert(j, at: destinationIndexPath.row - 2)
+                            let i = manager.lists.remove(at: _sourceIndexPath.row)
+                            let j = manager.user.listOrder.remove(at: _sourceIndexPath.row - 2)
+                            manager.lists.insert(i, at: destinationIndexPath.row)
+                            manager.user.listOrder.insert(j, at: destinationIndexPath.row - 2)
                             collectionView.deleteItems(at: [_sourceIndexPath])
                             collectionView.insertItems(at: [destinationIndexPath])
                             changeOrder = true
@@ -222,10 +269,13 @@ extension AllListViewController: UICollectionViewDropDelegate {
     }
 }
 
+
+//MARK: - UICollectionViewDragDelegate
+
 extension AllListViewController: UICollectionViewDragDelegate {
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         if indexPath.row <= 1 { return [] }
-        let itemIdentifier = Manager.shared.lists[indexPath.item].id! as String
+        let itemIdentifier = manager.lists[indexPath.item].id! as String
         let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]

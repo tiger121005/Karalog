@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//MARK: - AddListMusicViewController
+
 class AddListMusicViewController: UIViewController {
     
     var tvList: [MusicList] = []
@@ -14,10 +17,15 @@ class AddListMusicViewController: UIViewController {
     var idList: [String] = []
     var listID: String = ""
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var addBtn: UIBarButtonItem!
     
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +34,9 @@ class AddListMusicViewController: UIViewController {
         searchBar.delegate = self
         title = "リストに追加"
     }
+    
+    
+    //MARK: - Setup
     
     func setupTableView() {
         tableView.dataSource = self
@@ -38,8 +49,11 @@ class AddListMusicViewController: UIViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.isEditing = true
         
-        tvList = Manager.shared.musicList
+        tvList = manager.musicList
     }
+    
+    
+    //MARK: - UI interaction
     
     @IBAction func add() {
         if self.tableView.indexPathsForSelectedRows != nil {
@@ -58,14 +72,16 @@ class AddListMusicViewController: UIViewController {
                 if fromFav == false {
                     
                     for i in 0...indexPathList.count - 1 {
-                        FirebaseAPI.shared.addMusicToList(musicID: idList[i], listID: listID)
+                        musicFB.addMusicToList(musicID: idList[i], listID: listID)
                     }
                 } else {
                     for i in 0...indexPathList.count - 1 {
-                        FirebaseAPI.shared.favoriteUpdate(id: idList[i], favorite: false, completionHandler: {_ in })
+                        musicFB.favoriteUpdate(id: idList[i], favorite: false, completionHandler: {_ in })
                         
                     }
                 }
+                fromAddListMusic = true
+                navigationController?.popViewController(animated: true)
                 
             }
             alert.addAction(cancel)
@@ -84,6 +100,9 @@ class AddListMusicViewController: UIViewController {
 
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension AddListMusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 選択されたセルを取得する
@@ -98,9 +117,12 @@ extension AddListMusicViewController: UITableViewDelegate {
     }
 }
 
+
+//MARK: - UITableViewDataSource
+
 extension AddListMusicViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Manager.shared.musicList.count
+        manager.musicList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -143,10 +165,10 @@ extension AddListMusicViewController: UITableViewDataSource {
         let max = scoreList.max()
         cell.scoreLabel.text = String(format: "%.3f", max!)
         if max! >= Double(high) {
-            cell.scoreLabel.textColor = UIColor(named: "imageColor")!
+            cell.scoreLabel.textColor = UIColor.imageColor
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
         } else if max! >= Double(medium) && tvList.count > 3 {
-            cell.scoreLabel.textColor = UIColor(named: "subImageColor")!
+            cell.scoreLabel.textColor = UIColor.subImageColor
             cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
         } else {
             cell.scoreLabel.textColor = .gray
@@ -160,13 +182,16 @@ extension AddListMusicViewController: UITableViewDataSource {
     }
 }
 
+
+//MARK: - UISearchBarDelegate
+
 extension AddListMusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         tvList = []
         if searchText == "" {
-            tvList = Manager.shared.musicList
+            tvList = manager.musicList
         }else{
-            for d in Manager.shared.musicList {
+            for d in manager.musicList {
                 if d.musicName.contains(searchText) {
                     tvList.append(d)
                 }else if d.artistName.contains(searchText) {

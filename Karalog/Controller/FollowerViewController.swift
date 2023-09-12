@@ -7,15 +7,24 @@
 
 import UIKit
 
+
+//MARK: - FollowerDelegate
+
 protocol FollowerDelegate {
     func selectedFollowerCell(indexPath: IndexPath)
 }
+
+
+//MARK: - FollowerViewController
 
 class FollowerViewController: UIViewController {
     
     var delegate: FollowerDelegate?
     
     var followerList: [User] = []
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var tableView: UITableView!  {
         didSet {
@@ -24,12 +33,16 @@ class FollowerViewController: UIViewController {
     }
     
     
+    //MARK: - View Controller methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupTableView()
     }
     
+    
+    //MARK: - Setup
     
     func setupTableView() {
         tableView.delegate = self
@@ -41,6 +54,9 @@ class FollowerViewController: UIViewController {
     
 
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension FollowerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,9 +73,13 @@ extension FollowerViewController: UITableViewDataSource {
     
 }
 
+
+//MARK: - UITableViewDelegate
+
 extension FollowerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.selectedFollowerCell(indexPath: indexPath)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }

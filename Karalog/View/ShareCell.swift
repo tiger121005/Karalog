@@ -7,16 +7,25 @@
 
 import UIKit
 
+
+// MARK: ShareCellDelegate
+
 protocol ShareCellDelegate {
     func reloadCell(indexPath: IndexPath)
     func tapMusic(indexpath: IndexPath)
     func tapArtist(indexPath: IndexPath)
 }
 
+
+// MARK: ShareCell
+
 class ShareCell: UICollectionViewCell {
     
     var delegate: ShareCellDelegate?
     var indexPath: IndexPath!
+    
+    
+    //MARK: - UI objects
     
     @IBOutlet var musicImage: UIButton!
     @IBOutlet var musicName: UIButton!
@@ -26,6 +35,9 @@ class ShareCell: UICollectionViewCell {
     @IBOutlet var userName: UILabel!
     @IBOutlet var categoryLabel: UILabel!
     @IBOutlet var goodNumLabel: UILabel!
+    
+    
+    //CollectionView methods
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +47,7 @@ class ShareCell: UICollectionViewCell {
         self.layer.cornerCurve = .continuous
         
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor(named: "baseColor")?.cgColor
+        self.layer.borderColor = UIColor.baseColor.cgColor
         
         self.musicName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -62,6 +74,9 @@ class ShareCell: UICollectionViewCell {
         self.artistName.contentHorizontalAlignment = .left
         
     }
+    
+    
+    //MARK: - UI interaction
     
     @IBAction func touchGoodBtn(_ sender: Any) {
         delegate?.reloadCell(indexPath: indexPath)

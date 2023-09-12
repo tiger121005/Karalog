@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//MARK: - DetailViewController
+
 class DetailViewController: UIViewController {
 
     var time: String = ""
@@ -15,6 +18,9 @@ class DetailViewController: UIViewController {
     var model: String = ""
     var comment: String = ""
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var keyLabel: UILabel!
@@ -22,10 +28,15 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var commentLabel: UILabel!
     
     
+    //MARK: - View Controller methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
+    
+    
+    //MARK: - Setup
     
     func setup() {
         dateLabel.text = time

@@ -9,6 +9,11 @@ import UIKit
 import SwiftUI
 import DZNEmptyDataSet
 
+var fromAddDetail = false
+
+
+//MARK: - MusicDetailViewController
+
 class MusicDetailViewController: UIViewController {
     
     var musicName: String = ""
@@ -19,6 +24,7 @@ class MusicDetailViewController: UIViewController {
     var musicID: String = ""
     var max: Double = 0.0
     var min: Double = 0.0
+    
     //次の画面に渡す値
     var time: String = ""
     var score: String = ""
@@ -26,9 +32,16 @@ class MusicDetailViewController: UIViewController {
     var model: String = ""
     var comment: String = ""
     
+    
+    //MARK: - UI objects
+    
     @IBOutlet var bestLabel: EmphasizeLabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var graphView: UIView!
+    var addAlert: UIAlertController!
+    
+    
+    //MARK: - View Controller methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +54,11 @@ class MusicDetailViewController: UIViewController {
         
         getData()
         setupGraphAndLabel()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showMessage()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,17 +78,19 @@ class MusicDetailViewController: UIViewController {
         }
     }
     
+    
+    //MARK: - Setup
+    
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 50
-        
-        self.tableView.emptyDataSetSource = self
-        self.tableView.emptyDataSetDelegate = self
+        tableView.emptyDataSetSource = self
+        tableView.emptyDataSetDelegate = self
     }
     
     func getData() {
-        tvList = Manager.shared.musicList.first(where: {$0.id == musicID})!.data
+        tvList = manager.musicList.first(where: {$0.id == musicID})!.data
         tvList.reverse()
         tableView.reloadData()
     }
@@ -111,44 +131,39 @@ class MusicDetailViewController: UIViewController {
         vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
         vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
         
-//        leftTopEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
-//        leftBottomEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
-//        rightTopEmphasize.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/14)
-//        rightBottomEmphasize.transform = CGAffineTransform(rotationAngle: CGFloat.pi/14)
-//        for i in emphasize {
-//            if max >= 95.0 {
-//                i.backgroundColor = .red
-//            } else if max >= 90 {
-//                i.backgroundColor = .orange
-//            } else if max >= 85 {
-//                i.backgroundColor = .yellow
-//            } else if max >= 80 {
-//                i.backgroundColor = .green
-//            } else if max >= 75 {
-//                i.backgroundColor = .cyan
-//            } else if max >= 70 {
-//                i.backgroundColor = .blue
-//            } else {
-//                i.backgroundColor = .purple
-//            }
-//
-//        }
-        
-//        bestLabel.strokeColor = UIColor(named: "imageColor")!
-//        bestLabel.strokeSize = 3.0
-        bestLabel.textColor = UIColor(named: "imageColor")!
-        bestLabel.shadowColorForCustom = (UIColor(named: "subImageColor")?.withAlphaComponent(0.8))!
+        bestLabel.textColor = UIColor.imageColor
+        bestLabel.shadowColorForCustom = UIColor.subImageColor.withAlphaComponent(0.8)
         bestLabel.shadowOffsetForCustom = CGSize(width: 2, height: 2)
         
     }
     
     func xTitle(data: String) -> String {
         
-        let d = Function.shared.dateFromString(string: data, format: "yy年MM月dd日HH:mm")
-        let s = Function.shared.stringFromDate(date: d, format: "MM/dd")
+        let d = function.dateFromString(string: data, format: "yy年MM月dd日HH:mm")
+        let s = function.stringFromDate(date: d, format: "MM/dd")
         return s
     }
+    
+    func showMessage() {
+        
+        if fromAddDetail {
+            addAlert = UIAlertController(title: "追加しました", message: "", preferredStyle: .alert)
+            present(addAlert, animated: true, completion: nil)
+            Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
+            fromAddDetail = false
+        }
+    }
+    
+    
+    //MARK: - Objective - C
+    
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
+    }
 }
+
+
+//MARK: - UITableViewDelegate
 
 extension MusicDetailViewController: UITableViewDelegate {
     //セルが選択されたとき
@@ -168,6 +183,9 @@ extension MusicDetailViewController: UITableViewDelegate {
         return "削除"
     }
 }
+
+
+//MARK: - UITableViewDataSource
 
 extension MusicDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -204,7 +222,7 @@ extension MusicDetailViewController: UITableViewDataSource {
                 let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
                     let a = self.tvList[indexPath.row]
                     self.tvList.remove(at: indexPath.row)
-                    FirebaseAPI.shared.deleteMusicDetail(musicID: self.musicID, data: a, completionHandler: {_ in
+                    musicFB.deleteMusicDetail(musicID: self.musicID, data: a, completionHandler: {_ in
                         
                         tableView.deleteRows(at: [indexPath], with: .fade)
                         self.setupGraphAndLabel()
@@ -221,6 +239,9 @@ extension MusicDetailViewController: UITableViewDataSource {
     }
 }
 
+
+//MARK: - DZNEmptyDataSource
+
 extension MusicDetailViewController: DZNEmptyDataSetSource {
     //tableViewが空の時(テキスト)
     func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
@@ -229,10 +250,14 @@ extension MusicDetailViewController: DZNEmptyDataSetSource {
     
     //tableViewが空の時(画像)
     func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return Material.shared.mic.resized(toWidth: 250)
+        return UIImage.KaralogImage.resized(toWidth: 250)
     }
 }
+
+
+//MARK: - DZNEmptyDataSetDelegate
 
 extension MusicDetailViewController: DZNEmptyDataSetDelegate {
     
 }
+

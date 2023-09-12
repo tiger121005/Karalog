@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//MARK: - CheckBox
+
 class CheckBox: UIButton {
 
     let checkedImage = UIImage(systemName: "arrowshape.turn.up.right.fill")
@@ -16,7 +19,7 @@ class CheckBox: UIButton {
         didSet{
             if isChecked == true {
                 self.setImage(checkedImage, for: .normal)
-                self.tintColor = UIColor(named: "imageColor")
+                self.tintColor = UIColor.imageColor
                 
             } else {
                 self.setImage(uncheckedImage, for: .normal)
@@ -30,11 +33,14 @@ class CheckBox: UIButton {
         super.init(coder: aDecorder)!
         self.setImage(uncheckedImage, for: .normal)
         self.layer.borderWidth = 1.0
-        self.layer.borderColor = UIColor(named: "imageColor")?.cgColor
+        self.layer.borderColor = UIColor.imageColor.cgColor
         self.layer.cornerRadius = self.frame.height*0.2
         self.tintColor = UIColor.separator
         addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
     }
+    
+    
+    //MARK: - Objective - C
 
     @objc func buttonClicked(sender: UIButton) {
         if sender == self {
