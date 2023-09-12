@@ -31,6 +31,7 @@ class PostFirebase: ObservableObject {
     
     func setupPostFB(userID: String) {
         self.userID = userID
+        userRef = db.collection("user").document(userID)
         shareRef = db.collection("share")
         
     }
