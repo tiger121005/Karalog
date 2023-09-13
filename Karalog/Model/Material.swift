@@ -250,6 +250,10 @@ extension UIImage {
         return UIImage(systemName: "circle.inset.filled")!
     }
     
+    static var multiply: UIImage {
+        return UIImage(systemName: "multiply")!
+    }
+    
     static var pencil: UIImage {
         return UIImage(systemName: "pencil")!
     }

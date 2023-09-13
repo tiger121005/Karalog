@@ -794,7 +794,13 @@
                             <constraint firstItem="HMT-pH-eEb" firstAttribute="top" secondItem="n2f-Z8-23d" secondAttribute="top" id="xrE-gJ-TWK"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="FrM-1h-Bmb"/>
+                    <navigationItem key="navigationItem" id="FrM-1h-Bmb">
+                        <barButtonItem key="rightBarButtonItem" image="photo" catalog="system" id="3rx-Wv-L2h">
+                            <connections>
+                                <action selector="switchImage" destination="Te1-Gg-05Z" id="Zs6-k7-LxL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <size key="freeformSize" width="393" height="1234"/>
                     <connections>
                         <outlet property="addBtn" destination="zs3-4n-Jt6" id="2q7-S8-MjD"/>
@@ -803,6 +809,7 @@
                         <outlet property="categoryView" destination="XQs-AE-ma8" id="JG1-cB-P8i"/>
                         <outlet property="checkBox" destination="TFZ-Tk-LCM" id="WJr-c8-ztN"/>
                         <outlet property="customSlider" destination="vnh-kc-ciY" id="DFA-Ah-N9D"/>
+                        <outlet property="imageBtn" destination="3rx-Wv-L2h" id="oJg-9F-x8g"/>
                         <outlet property="keyLabel" destination="DfU-0N-OVr" id="kUr-rb-UAF"/>
                         <outlet property="modelBtn" destination="ts3-p1-vgZ" id="MgL-Iw-V66"/>
                         <outlet property="musicTF" destination="1kH-b4-FTm" id="yqx-Je-0d1"/>
@@ -3110,6 +3117,7 @@
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
+        <image name="photo" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="baseColor">
             <color red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

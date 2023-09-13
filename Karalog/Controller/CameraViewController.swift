@@ -116,7 +116,10 @@ class CameraViewController: UIViewController {
     //MARK: - Setup
     
     func setupCameraBtn() {
-        cameraBtn.setImage(UIImage.circleInsetFilled.withTintColor(UIColor.imageColor), for: .normal)
+        var btnImage = UIImage.circleInsetFilled.withTintColor(UIColor.imageColor)
+        btnImage = btnImage.resized(toWidth: 100)!
+        cameraBtn.setImage(btnImage, for: .normal)
+        cameraBtn.backgroundColor = .clear
         cameraBtn.layer.cornerRadius = cameraBtn.frame.height * 0.5
         
     }

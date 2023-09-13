@@ -46,7 +46,11 @@ class AddMusicViewController: UIViewController {
     @IBOutlet var categoryView: UIView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var categoryLabel: UILabel!
+    @IBOutlet var imageBtn: UIBarButtonItem!
     
+    var backView = UIView()
+    var imageView = UIImageView()
+    var closeBtn = UIButton()
     
     //MARK: - View Controller methods
     
@@ -58,12 +62,19 @@ class AddMusicViewController: UIViewController {
         setupKeyLabel()
         setupCategoryView()
         setupView()
+        setupImageBtn()
+        setupImage()
         title = "曲を追加"
+    }
+    
+    override func viewWillLayoutSubviews() {
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupSlider()
+        showAlert()
     }
     
     
@@ -190,7 +201,7 @@ class AddMusicViewController: UIViewController {
         if callView {
             scaleList = []
             for i in 0...14 {
-                print(customSlider.slider.bounds.width)
+                
                 let view = UIView(frame: CGRect(x: CGFloat((customSlider.slider.bounds.width - 31) * CGFloat(i) / 14) + 12.5, y: customSlider.slider.frame.maxY, width: 6, height: 6))
                 
                 if i <= 7 {
@@ -208,6 +219,63 @@ class AddMusicViewController: UIViewController {
             }
             callView = false
         }
+    }
+    
+    func showAlert() {
+        if let image {
+            let alert = UIAlertController(title: "入力された値を確認してください", message: "上の写真マークから撮影した画像を見返すことができます", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(ok)
+            present(alert, animated: true)
+        }
+    }
+    
+    func setupImageBtn() {
+        if image == nil {
+            imageBtn.isHidden = true
+        }
+    }
+    
+    func setupImage() {
+        let viewWidth = view.frame.width
+        let viewHeight = view.frame.height
+        backView = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
+        backView.backgroundColor = .black.withAlphaComponent(0.4)
+        
+        let imageAspect = image.size.height / image.size.width
+        let areaHeight = (tabBarController?.tabBar.frame.minY)! - (navigationController?.navigationBar.frame.maxY)!
+        let areaCenter = (navigationController?.navigationBar.frame.maxY)! + (areaHeight / 2)
+        var imageViewWidth = viewWidth - 80
+        var imageViewHeight = imageViewWidth * imageAspect
+        var imageViewX: CGFloat = 40
+        if imageViewHeight > areaHeight - 120 {
+            imageViewHeight = areaHeight - 120
+            imageViewWidth = imageViewHeight / imageAspect
+            imageViewX = (viewWidth / 2) - (imageViewWidth / 2)
+        }
+        
+        let imageViewY = areaCenter - (imageViewHeight / 2)
+        
+        imageView = UIImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewWidth, height: imageViewHeight))
+        imageView.image = image
+        
+        closeBtn = UIButton(frame: CGRect(x: viewWidth - 90, y: imageViewY - 60, width: 60, height: 60))
+        closeBtn.addAction(UIAction {_ in
+            self.backView.isHidden = true
+            self.imageView.isHidden = true
+            self.closeBtn.isHidden = true
+        }, for: .touchUpInside)
+        var btnImage = UIImage.multiply.withTintColor(UIColor.imageColor)
+        btnImage = btnImage.resized(toWidth: 60)!
+        closeBtn.setImage(btnImage, for: .normal)
+        
+        view.addSubview(backView)
+        view.addSubview(imageView)
+        view.addSubview(closeBtn)
+        
+        backView.isHidden = true
+        imageView.isHidden = true
+        closeBtn.isHidden = true
     }
     
     //撮影した画像を機種ごとに分類する
@@ -277,10 +345,10 @@ class AddMusicViewController: UIViewController {
             
             guard let results = request.results as? [VNRecognizedObjectObservation] else { return }
             
-//            var musicBox: CGRect!
-//            var artistBox: CGRect!
-//            var scoreBox: CGRect!
-//            var commentBox: CGRect!
+            var musicText: String!
+            var artistText: String!
+            var scoreText: String!
+            var commentText: String!
             print("results: ", results)
             for result in results {
                 //やってみてから調整
@@ -296,7 +364,6 @@ class AddMusicViewController: UIViewController {
                     
                     self.getString(cgImage: trimedImage) { results in
                         var musicY: CGFloat!
-                        var musicText: String!
                         for visionRequest in results {
                             if var musicY {
                                 if visionRequest.boundingBox.minY < musicY {
@@ -317,43 +384,98 @@ class AddMusicViewController: UIViewController {
                 case Objects.artist.rawValue:
                     
                     guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
-                    self.getString(cgImage: trimedImage) { observations in
-                        var texts: [String] = []
-                        for observation in observations {
-                            let candidates = observation.topCandidates(5)
-                            for candidate in candidates {
-                                print("artist: ", candidate.string)
+                    self.getString(cgImage: trimedImage) { results in
+                        
+                        var artistY: CGFloat!
+                        for visionRequest in results {
+                            if var artistY {
+                                if visionRequest.boundingBox.minY < artistY {
+                                    artistY = visionRequest.boundingBox.minY
+                                    artistText = visionRequest.topCandidates(1).first?.string
+                                }
+                            } else {
+                                artistY = visionRequest.boundingBox.minY
+                                artistText = visionRequest.topCandidates(1).first?.string
                             }
-                            texts.append(candidates.first!.string)
+                            
+                            
                         }
+                        
+                        self.artistTF.text = artistText
                         
                     }
                     
                 case Objects.score.rawValue:
 
                     guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
-                    self.getString(cgImage: trimedImage) { observations in
-                        var texts: [String] = []
-                        for observation in observations {
-                            let candidates = observation.topCandidates(5)
-                            for candidate in candidates {
-                                print("score: ", candidate.string)
+                    self.getString(cgImage: trimedImage) { results in
+                        var scoreMaxHeight: CGFloat!
+                        var largeText: String!
+                        var scoreSecondHeight: CGFloat!
+                        var smallText: String!
+                        for visionRequest in results {
+                            
+                            
+                            if var scoreMaxHeight {
+                                
+                                if visionRequest.boundingBox.height > scoreMaxHeight {
+                                    
+                                    scoreSecondHeight = scoreMaxHeight
+                                    smallText = largeText
+                                    scoreMaxHeight = visionRequest.boundingBox.height
+                                    largeText = visionRequest.topCandidates(1).first?.string
+                                    
+                                } else if visionRequest.boundingBox.height > scoreSecondHeight {
+                                    
+                                    scoreSecondHeight = visionRequest.boundingBox.height
+                                    smallText = visionRequest.topCandidates(1).first?.string
+                                    
+                                }
+                            } else {
+                                
+                                scoreMaxHeight = visionRequest.boundingBox.height
+                                largeText = visionRequest.topCandidates(1).first?.string
+                                
                             }
-                            texts.append(candidates.first!.string)
+                            
+                            guard let largeScore = Double(largeText) else { return }
+                            
+                            if largeText.count >= 6 {
+                                if largeText.last == "点" {
+                                    largeText = String(largeText.dropLast())
+                                }
+                                scoreText = largeText
+                                
+                            } else {
+                                
+                                if largeText.last == "." {
+                                    largeText = String(largeText.dropLast())
+                                }
+                                if smallText.first == "." {
+                                    smallText = String(smallText.dropFirst())
+                                }
+                                if smallText.last == "点" {
+                                    smallText = String(smallText.dropLast())
+                                }
+                                scoreText = largeText + "." + smallText
+                                
+                            }
+                            
                         }
+                        
+                        self.scoreTF.text = scoreText
                     }
                     
                 case Objects.comment.rawValue:
                     guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
-                    self.getString(cgImage: trimedImage) { observations in
-                        var texts: [String] = []
-                        for observation in observations {
-                            let candidates = observation.topCandidates(5)
-                            for candidate in candidates {
-                                print("comment: ", candidate.string)
-                            }
-                            texts.append(candidates.first!.string)
+                    self.getString(cgImage: trimedImage) { results in
+                        for visionRequest in results {
+                            
+                            commentText += visionRequest.topCandidates(1).first!.string
+                            
                         }
+                        
+                        self.textView.text = commentText
                     }
                     
                 default:
@@ -497,6 +619,14 @@ class AddMusicViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
+    
+    @IBAction func switchImage() {
+        
+        backView.isHidden.toggle()
+        imageView.isHidden.toggle()
+        closeBtn.isHidden.toggle()
+        
+    }
     
 }
 
