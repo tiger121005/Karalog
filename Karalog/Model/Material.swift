@@ -178,6 +178,26 @@ enum ShareRef: String {
 }
 
 
+//Model
+
+enum Model: String {
+    case DAMAI = "DAM精密採点AI"
+    case DAMDXG = "DAM精密採点DX-G"
+    case JOYnew = "JOY新"
+    case JOYold = "JOY旧"
+}
+
+
+//Objects
+
+enum Objects: String {
+    case music = "music"
+    case artist = "artist"
+    case score = "score"
+    case comment = "comment"
+}
+
+
 //MARK: - UIColor
 
 extension UIColor {
@@ -224,6 +244,10 @@ extension UIImage {
     
     static var ellipsisCircle: UIImage {
         return UIImage(systemName: "ellipsis.circle")!
+    }
+    
+    static var circleInsetFilled: UIImage {
+        return UIImage(systemName: "circle.inset.filled")!
     }
     
     static var pencil: UIImage {

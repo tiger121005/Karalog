@@ -55,6 +55,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        
         title = "プロフィール"
     }
     
@@ -119,7 +120,7 @@ class ProfileViewController: UIViewController {
             self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
             self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
             self.userNameLabel.text = self.userName
-            self.userIDLabel.text = "ユーザーID: " + userID
+            self.userIDLabel.text = "ID: " + userID
             if userID != manager.user.id {
                 if !showAll && !manager.user.follow.contains(where: { $0 == userID}) {
                     bestView.isHidden = true
@@ -189,6 +190,10 @@ class ProfileViewController: UIViewController {
         gradient.endPoint = CGPoint(x: 0, y: 1)
         gradient.drawsAsynchronously = true
         bestView.layer.insertSublayer(gradient, at: 0)
+        
+        bestView.layer.cornerRadius = 20
+        bestView.layer.cornerCurve = .continuous
+        bestView.clipsToBounds = true
         
         Task {
             

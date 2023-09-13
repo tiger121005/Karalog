@@ -35,10 +35,7 @@ class MakeAccountViewController: UIViewController {
         setupTF()
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-            closeKeyboard()
-    }
+    
     
     
     //MARK: - Setup
@@ -51,16 +48,6 @@ class MakeAccountViewController: UIViewController {
         passwordTF.textContentType = .password
     }
     
-    func closeKeyboard() {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.mailTF.isFirstResponder) {
-            self.mailTF.resignFirstResponder()
-        }else if (self.passwordTF.isFirstResponder) {
-            self.passwordTF.resignFirstResponder()
-        }else if (self.nameTF.isFirstResponder) {
-            self.nameTF.resignFirstResponder()
-        }
-    }
     
     func set(uid: String, name: String) {
         UserDefaultsKey.userID.set(value: uid)

@@ -37,12 +37,13 @@ class AddListViewController: UIViewController {
         title = "リストを追加"
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        self.listTF.resignFirstResponder()
-            
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard let presentationController = presentationController else {
+            return
+        }
+        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
     }
-    
     
     //MARK: - Setup
     

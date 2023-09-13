@@ -23,12 +23,19 @@
 		1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */; };
 		1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC629D0741300245BB3 /* GoogleSignIn */; };
 		1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC829D0741300245BB3 /* GoogleSignInSwift */; };
-		1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */; };
 		1960CD2129FE30730065FF05 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2029FE30730065FF05 /* Manager.swift */; };
 		1960CD2329FE7B250065FF05 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2229FE7B250065FF05 /* Material.swift */; };
 		1961E2322AA4D5E80000FAF0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1961E2312AA4D5E80000FAF0 /* FirebaseAuth */; };
 		1961E2342AA4D5E80000FAF0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 1961E2332AA4D5E80000FAF0 /* FirebaseFirestore */; };
 		1961E2362AA4D5E80000FAF0 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1961E2352AA4D5E80000FAF0 /* FirebaseFirestoreSwift */; };
+		196415162AB08E7000A7808C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 196415152AB08E7000A7808C /* IQKeyboardManagerSwift */; };
+		196415182AB19B8300A7808C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196415172AB19B8300A7808C /* CameraViewController.swift */; };
+		1964151A2AB19CBC00A7808C /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196415192AB19CBC00A7808C /* VideoView.swift */; };
+		1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */; };
+		1964151E2AB1AD4500A7808C /* Detect_JOY-new.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */; };
+		196415202AB1AD5500A7808C /* Detect_DAM-AI.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */; };
+		196415222AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */; };
+		196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */; };
 		196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 196D97352A66A02B00A96892 /* GoogleService-Info.plist */; };
 		1972C61F2AA4CA7500D64C2E /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C61E2AA4CA7500D64C2E /* FacebookCore */; };
 		1972C6212AA4CA7500D64C2E /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C6202AA4CA7500D64C2E /* FacebookLogin */; };
@@ -114,9 +121,15 @@
 		1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell2.swift; sourceTree = "<group>"; };
 		1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell2.xib; sourceTree = "<group>"; };
 		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
-		1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		196415172AB19B8300A7808C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		196415192AB19CBC00A7808C /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = KaraokeClassifier.mlmodel; sourceTree = "<group>"; };
+		1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_JOY-new.mlmodel"; sourceTree = "<group>"; };
+		1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_DAM-AI.mlmodel"; sourceTree = "<group>"; };
+		196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_DAM-DX-G.mlmodel"; sourceTree = "<group>"; };
+		196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Detect_JOY_old.mlmodel; sourceTree = "<group>"; };
 		196D97352A66A02B00A96892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizeLabel.swift; sourceTree = "<group>"; };
 		197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPostViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +196,7 @@
 				1961E2342AA4D5E80000FAF0 /* FirebaseFirestore in Frameworks */,
 				1961E2322AA4D5E80000FAF0 /* FirebaseAuth in Frameworks */,
 				0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */,
+				196415162AB08E7000A7808C /* IQKeyboardManagerSwift in Frameworks */,
 				1961E2362AA4D5E80000FAF0 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +229,7 @@
 				19A12D5C29CD941200B798A4 /* MusicViewController.swift */,
 				1938FBB929D045B900245BB3 /* AddToListViewController.swift */,
 				19A12D6029CD945100B798A4 /* SearchViewController.swift */,
+				196415172AB19B8300A7808C /* CameraViewController.swift */,
 				19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */,
 				19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */,
 				19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */,
@@ -243,7 +258,6 @@
 			children = (
 				19A12D8629CF465900B798A4 /* Article.swift */,
 				1960CD2229FE7B250065FF05 /* Material.swift */,
-				1960CD1E29FE0F6E0065FF05 /* FirebaseAPI.swift */,
 				199668852AADA3600003D295 /* UserFirebase.swift */,
 				199668872AADA38D0003D295 /* MusicFirebase.swift */,
 				199668892AADA3C50003D295 /* ListFirebase.swift */,
@@ -251,11 +265,12 @@
 				192D26702A0543A80058D739 /* Function.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
 				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
-				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
-				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
-				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
-				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
 				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
+				1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */,
+				1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */,
+				196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */,
+				1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */,
+				196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -272,6 +287,11 @@
 				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
 				192D26B02A1F1C140058D739 /* ShareCell.swift */,
 				192D26B12A1F1C140058D739 /* ShareCell.xib */,
+				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
+				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
+				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
+				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
+				196415192AB19CBC00A7808C /* VideoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -375,6 +395,7 @@
 				1961E2332AA4D5E80000FAF0 /* FirebaseFirestore */,
 				1961E2352AA4D5E80000FAF0 /* FirebaseFirestoreSwift */,
 				19D619162AAB21B100C7B868 /* QRCode */,
+				196415152AB08E7000A7808C /* IQKeyboardManagerSwift */,
 			);
 			productName = Karalog;
 			productReference = 19019BF729E189CD00315AFD /* Karalog.app */;
@@ -456,6 +477,7 @@
 				1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				1961E2302AA4D5E80000FAF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				19D619152AAB21B100C7B868 /* XCRemoteSwiftPackageReference "qrcode" */,
+				196415142AB08E7000A7808C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = 19A12D2029CC2C9E00B798A4;
 			projectDirPath = "";
@@ -611,6 +633,7 @@
 				19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */,
 				19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */,
 				19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */,
+				196415182AB19B8300A7808C /* CameraViewController.swift in Sources */,
 				19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */,
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
@@ -619,7 +642,9 @@
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
 				19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */,
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
+				196415222AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel in Sources */,
 				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
+				196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
 				197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */,
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
@@ -630,7 +655,6 @@
 				19A12D8129CD964F00B798A4 /* LoginViewController.swift in Sources */,
 				192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */,
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
-				1960CD1F29FE0F6E0065FF05 /* FirebaseAPI.swift in Sources */,
 				19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */,
 				199060092A98DD5E00037A0C /* FollowViewController.swift in Sources */,
 				192D26712A0543A80058D739 /* Function.swift in Sources */,
@@ -644,13 +668,17 @@
 				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
 				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
+				1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */,
 				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
 				19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */,
 				1996688A2AADA3C50003D295 /* ListFirebase.swift in Sources */,
 				1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */,
+				1964151A2AB19CBC00A7808C /* VideoView.swift in Sources */,
+				1964151E2AB1AD4500A7808C /* Detect_JOY-new.mlmodel in Sources */,
 				1960CD2329FE7B250065FF05 /* Material.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
+				196415202AB1AD5500A7808C /* Detect_DAM-AI.mlmodel in Sources */,
 				197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */,
 				199668842AAD9EE10003D295 /* PostFirebase.swift in Sources */,
 				199668882AADA38D0003D295 /* MusicFirebase.swift in Sources */,
@@ -1043,6 +1071,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		196415142AB08E7000A7808C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 		19D619152AAB21B100C7B868 /* XCRemoteSwiftPackageReference "qrcode" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dagronf/qrcode.git";
@@ -1078,6 +1114,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1961E2302AA4D5E80000FAF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		196415152AB08E7000A7808C /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 196415142AB08E7000A7808C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 		1972C61E2AA4CA7500D64C2E /* FacebookCore */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -150,8 +150,10 @@ class ShareViewController: UIViewController {
         artistTF.delegate = self
         
         categoryLabel.layer.cornerRadius = 5
+        categoryLabel.layer.cornerCurve = .continuous
         
         searchView.layer.cornerRadius = 15
+        searchView.layer.cornerCurve = .continuous
         searchView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
         //tableView表示時、関係ない部分を暗くする

@@ -58,7 +58,7 @@ class AllListViewController: UIViewController {
             nextView.listName = listName
         } else if segue.identifier == "toAddList" {
             let nextView = segue.destination as! AddListViewController
-            
+            nextView.presentationController?.delegate = self
         } 
     }
     
@@ -279,5 +279,15 @@ extension AllListViewController: UICollectionViewDragDelegate {
         let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
+    }
+}
+
+
+//MARK: - UIAdaptivePresentationControllerDelegate
+
+extension AllListViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        reloadList()
+        showMessage()
     }
 }

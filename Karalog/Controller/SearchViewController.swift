@@ -62,13 +62,6 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        self.searchBar.resignFirstResponder()
-        
-            
-    }
-    
     
     //MARK: - Setup
     

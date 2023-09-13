@@ -38,8 +38,6 @@ class PostViewController: UIViewController {
 
         setUpMusic()
         setupTableView()
-        setupKeyboard()
-        getTimingKeyboard()
     }
     
     
@@ -80,20 +78,10 @@ class PostViewController: UIViewController {
         tableView.isHidden = true
         tableView.allowsMultipleSelection = true
         tableView.layer.cornerRadius = 5
+        tableView.layer.cornerCurve = .continuous
         
         categoryLabel.layer.cornerRadius = 5
-    }
-    
-    func getTimingKeyboard() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setupKeyboard() {
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
-        self.view.addGestureRecognizer(tapGesture)
-        tapGesture.isEnabled = false
+        categoryLabel.layer.cornerCurve = .continuous
     }
     
     func tapOutTableView () {
@@ -118,26 +106,6 @@ class PostViewController: UIViewController {
     }
     
     
-    //MARK: - Objective - C
-    
-    // キーボード表示通知の際の処理
-    @objc func keyboardWillShow(_ notification: Notification) {
-        
-        tapGesture.isEnabled = true
-        tableView.isHidden = true
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        if textView.isFirstResponder {
-            tapGesture.isEnabled = false
-        }
-    }
-    
-    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
-        if textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        }
-    }
     
 }
 

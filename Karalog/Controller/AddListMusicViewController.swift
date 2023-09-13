@@ -22,7 +22,7 @@ class AddListMusicViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var addBtn: UIBarButtonItem!
+    @IBOutlet var addBtn: UIButton!
     
     
     //MARK: - View Controller methods

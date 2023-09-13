@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
 import FacebookCore
+import IQKeyboardManagerSwift
 
 
 @main
@@ -21,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        // ライブラリ有効化
+        IQKeyboardManager.shared.enable = true
+        // 外側をタップしたときにキーボードを閉じる
+        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         
         return true
     }

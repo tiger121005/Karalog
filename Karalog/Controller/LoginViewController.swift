@@ -44,11 +44,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-            closeKeyboard()
-    }
-    
     
     //MARK: - Setup
     
@@ -66,14 +61,6 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func closeKeyboard() {
-        //キーボード以外がタップされた時にキーボードを閉じる
-        if (self.mailTF.isFirstResponder) {
-            self.mailTF.resignFirstResponder()
-        }else if (self.passwordTF.isFirstResponder) {
-            self.passwordTF.resignFirstResponder()
-        }
-    }
     
     private func auth() {
         guard let _clientID = FirebaseApp.app()?.options.clientID else { return }

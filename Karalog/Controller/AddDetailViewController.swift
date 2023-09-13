@@ -26,7 +26,6 @@ class AddDetailViewController: UIViewController {
     var scaleList: [UIView] = []
     var post: Bool = false
     var category: [String] = []
-    var tapGesture: UITapGestureRecognizer!
     
     
     //MARK: - UI objects
@@ -49,12 +48,9 @@ class AddDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        configureMenuButton()
+        setupModelButton()
         setupKeyLabel()
         setupTableView()
-        getTimingKeyboard()
-        setupKeyboard()
         setupCategoryView()
         title = "記録を追加"
     }
@@ -64,10 +60,26 @@ class AddDetailViewController: UIViewController {
         setupSlider()
     }
     
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+        guard let presentationController = presentationController else {
+            return
+        }
+        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
+    }
+    
     
     //MARK: - Setup
     
-    
+    func setupModelButton() {
+        modelBtn.layer.cornerRadius = modelBtn.frame.height * 0.5
+        modelBtn.layer.cornerCurve = .continuous
+        modelBtn.layer.borderColor = UIColor.imageColor.cgColor
+        modelBtn.layer.borderWidth = 2
+        modelBtn.tintColor = UIColor.imageColor
+        modelBtn.backgroundColor = .clear
+        configureMenuButton()
+    }
     
     func configureMenuButton() {
         var actions = [UIMenuElement]()
@@ -105,6 +117,7 @@ class AddDetailViewController: UIViewController {
         keyLabel.layer.borderColor = CGColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)
         keyLabel.layer.borderWidth = 2
         keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
+        keyLabel.layer.cornerCurve = .continuous
         keyLabel.clipsToBounds = true
     }
     
@@ -113,18 +126,7 @@ class AddDetailViewController: UIViewController {
         tableView.delegate = self
         tableView.allowsMultipleSelection = true
         tableView.layer.cornerRadius = 5
-    }
-    
-    func getTimingKeyboard() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    func setupKeyboard() {
-         tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
-        self.view.addGestureRecognizer(tapGesture)
-        tapGesture.isEnabled = false
+        tableView.layer.cornerCurve = .continuous
     }
     
     func setupCategoryView() {
@@ -239,7 +241,7 @@ class AddDetailViewController: UIViewController {
                 musicFB.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
                 fromAddDetail = true
             }
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -255,42 +257,6 @@ class AddDetailViewController: UIViewController {
         categoryView.isHidden.toggle()
     }
     
-    
-    //MARK: - Objective - C
-    
-    //textViewを開いたときにViewを上にずらして隠れないようにする
-    // キーボード表示通知の際の処理
-    @objc func keyboardWillShow(_ notification: Notification) {
-        // キーボード、画面全体、textFieldのsizeを取得
-        let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        guard let _keyboardHeight = rect?.size.height else { return }
-        
-        let screenHeight = UIScreen.main.bounds.height
-        let safeAreaTop = self.view.safeAreaInsets.top
-        let safeAreaBottom = self.view.safeAreaInsets.bottom
-        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-        let scrollPosition = scrollView.contentOffset.y
-        let keyboardPositionY = safeAreaHeight + safeAreaBottom - _keyboardHeight
-        print(keyboardPositionY)
-            
-        if keyboardPositionY + scrollPosition <= textView.frame.maxY && textView.isFirstResponder {
-            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.maxY - keyboardPositionY + 10), animated: true)
-        }
-        
-        tapGesture.isEnabled = true
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        tapGesture.isEnabled = false
-    }
-    
-    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
-        if textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        } else if scoreTF.isFirstResponder {
-            self.scoreTF.resignFirstResponder()
-        }
-    }
 }
 
 

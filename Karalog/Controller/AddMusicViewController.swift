@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import Vision
+import CoreML
 
 
 //MARK: - AddMusicViewController
 
 class AddMusicViewController: UIViewController {
     
+    var image: UIImage!
     var musicName: String = ""
     var artistName: String = ""
     var musicImage: Data!
@@ -22,7 +25,10 @@ class AddMusicViewController: UIViewController {
     var scaleList: [UIView] = []
     var post: Bool = false
     var category: [String] = []
-    var tapGesture: UITapGestureRecognizer!
+    
+    let config = MLModelConfiguration()
+    var requestModel: VNCoreMLRequest!
+    var requestDetectModel: VNCoreMLRequest!
     
     
     //MARK: - UI objects
@@ -46,13 +52,12 @@ class AddMusicViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupKeyboard()
         setupScroll()
         setupTextField()
-        configureMenuButton()
+        setupModelButton()
         setupKeyLabel()
-        getTimingKeyboard()
         setupCategoryView()
+        setupView()
         title = "曲を追加"
     }
     
@@ -63,6 +68,13 @@ class AddMusicViewController: UIViewController {
     
     
     //MARK: - Setup
+    
+    func setupView() {
+        if let image {
+            
+            classifyModel()
+        }
+    }
     
     func setupScroll() {
         scrollView.delegate = self
@@ -79,6 +91,7 @@ class AddMusicViewController: UIViewController {
         
         tableView.rowHeight = 44
         textView.layer.cornerRadius = 5
+        textView.layer.cornerCurve = .continuous
         
         musicTF.text = musicName
         artistTF.text = artistName
@@ -88,7 +101,18 @@ class AddMusicViewController: UIViewController {
         textView.keyboardAppearance = .dark
     }
     
+    func setupModelButton() {
+        modelBtn.layer.cornerRadius = modelBtn.frame.height * 0.5
+        modelBtn.layer.cornerCurve = .continuous
+        modelBtn.layer.borderColor = UIColor.imageColor.cgColor
+        modelBtn.layer.borderWidth = 2
+        modelBtn.tintColor = UIColor.imageColor
+        modelBtn.backgroundColor = .clear
+        configureMenuButton()
+    }
+    
     func configureMenuButton() {
+        
         var actions = [UIMenuElement]()
         // HIGH
         actions.append(UIAction(title: ModelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.未選択 ? .on : .off,
@@ -124,24 +148,17 @@ class AddMusicViewController: UIViewController {
         keyLabel.layer.borderColor = CGColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)
         keyLabel.layer.borderWidth = 2
         keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
+        keyLabel.layer.cornerCurve = .continuous
         keyLabel.clipsToBounds = true
     }
     
-    func getTimingKeyboard() {
-        let notification = NotificationCenter.default
-        notification.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification,object: nil)
-        notification.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
     
-    func setupKeyboard() {
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:)))
-        self.view.addGestureRecognizer(tapGesture)
-        tapGesture.isEnabled = false
-    }
+    
     
     func setupCategoryView() {
         categoryView.isHidden = true
         categoryLabel.layer.cornerRadius = 5
+        categoryLabel.layer.cornerCurve = .continuous
     }
     
     func setCategory() {
@@ -191,6 +208,198 @@ class AddMusicViewController: UIViewController {
             }
             callView = false
         }
+    }
+    
+    //撮影した画像を機種ごとに分類する
+    func classifyModel() {
+        
+        let model = try? VNCoreMLModel(for: KaraokeClassifier(configuration: config).model)
+        
+        requestModel = VNCoreMLRequest(model: model!) { (request, error) in
+            if let _error = error {
+                
+                print("Error: \(_error)")
+                return
+            }
+            
+            
+            guard let _results = request.results as? [VNClassificationObservation], let _firstObservation = _results.first else {
+                return
+            }
+            let predictModel = _firstObservation.identifier
+//            DispatchQueue.main.async {
+//                self.addFrame(model: _firstObservation.identifier)
+//            }
+            self.branchImage(kind: predictModel)
+        }
+        if let cgImage = image.cgImage {
+            // imageRequestHanderにimageをセット
+            let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
+            // imageRequestHandlerにrequestをセットし、実行
+            try? imageRequestHandler.perform([requestModel])
+        }
+    }
+    
+    //機種によって分類する
+    func branchImage(kind: String) {
+        var mlModel: MLModel!
+        switch kind {
+        case Model.DAMAI.rawValue:
+            mlModel = try? Detect_DAM_AI(configuration: config).model
+            self.selectedMenuType = .DAM
+            self.configureMenuButton()
+        case Model.DAMDXG.rawValue:
+            mlModel = try? Detect_DAM_DX_G(configuration: config).model
+            self.selectedMenuType = .DAM
+            self.configureMenuButton()
+        case Model.JOYnew.rawValue:
+            mlModel = try? Detect_JOY_new(configuration: config).model
+            self.selectedMenuType = .JOYSOUND
+            self.configureMenuButton()
+        case Model.JOYold.rawValue:
+            mlModel = try? Detect_JOY_old(configuration: config).model
+            self.selectedMenuType = .JOYSOUND
+            self.configureMenuButton()
+        default:
+            return
+        }
+        detectString(mlModel: mlModel)
+    }
+    
+    //得点などの記録の位置を取得し、文字認識をしてデータを取り込む
+    func detectString(mlModel: MLModel) {
+        guard let model = try? VNCoreMLModel(for: mlModel) else { return }
+        requestDetectModel = VNCoreMLRequest(model: model) { (request, error) in
+            if let _error = error {
+                print("Error: \(_error)")
+                return
+            }
+            
+            guard let results = request.results as? [VNRecognizedObjectObservation] else { return }
+            
+//            var musicBox: CGRect!
+//            var artistBox: CGRect!
+//            var scoreBox: CGRect!
+//            var commentBox: CGRect!
+            print("results: ", results)
+            for result in results {
+                //やってみてから調整
+                // ラベル名。「labels」の０番目（例えば”Car”の信頼度が一番高い。１番目（例えば”Truck”）の信頼度が次に高い。
+                let label:String = result.labels.first!.identifier
+                
+                print("model label: ", label)
+                // "Car"
+                switch label {
+                case Objects.music.rawValue:
+
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    
+                    self.getString(cgImage: trimedImage) { results in
+                        var musicY: CGFloat!
+                        var musicText: String!
+                        for visionRequest in results {
+                            if var musicY {
+                                if visionRequest.boundingBox.minY < musicY {
+                                    musicY = visionRequest.boundingBox.minY
+                                    musicText = visionRequest.topCandidates(1).first?.string
+                                }
+                            } else {
+                                musicY = visionRequest.boundingBox.minY
+                                musicText = visionRequest.topCandidates(1).first?.string
+                            }
+                            
+                            
+                        }
+                        
+                        self.musicTF.text = musicText
+                    }
+                    
+                case Objects.artist.rawValue:
+                    
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    self.getString(cgImage: trimedImage) { observations in
+                        var texts: [String] = []
+                        for observation in observations {
+                            let candidates = observation.topCandidates(5)
+                            for candidate in candidates {
+                                print("artist: ", candidate.string)
+                            }
+                            texts.append(candidates.first!.string)
+                        }
+                        
+                    }
+                    
+                case Objects.score.rawValue:
+
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    self.getString(cgImage: trimedImage) { observations in
+                        var texts: [String] = []
+                        for observation in observations {
+                            let candidates = observation.topCandidates(5)
+                            for candidate in candidates {
+                                print("score: ", candidate.string)
+                            }
+                            texts.append(candidates.first!.string)
+                        }
+                    }
+                    
+                case Objects.comment.rawValue:
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    self.getString(cgImage: trimedImage) { observations in
+                        var texts: [String] = []
+                        for observation in observations {
+                            let candidates = observation.topCandidates(5)
+                            for candidate in candidates {
+                                print("comment: ", candidate.string)
+                            }
+                            texts.append(candidates.first!.string)
+                        }
+                    }
+                    
+                default:
+                    break
+                    
+                }
+//                let confidence = result.confidence // labelの信頼度
+//                print(confidence)
+//                // 0.8664
+//
+//                let boundingBox = result.boundingBox // 認識された物体の境界ボックス
+//                print(boundingBox)
+                // (0.4403754696249962, 0.3421999216079712, 0.12934787571430206, 0.38909912109375)
+                //* Core Imageと同じで右下が原点
+            }
+            
+        }
+        
+        if let cgImage = image.cgImage {
+            // imageRequestHanderにimageをセット
+            let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
+            // imageRequestHandlerにrequestをセットし、実行
+            try? imageRequestHandler.perform([requestDetectModel])
+        }
+        
+        
+        
+    }
+
+    func trimmingImage(trimmingArea: CGRect) -> UIImage {
+        let imgRef = image.cgImage?.cropping(to: trimmingArea)
+        let trimImage = UIImage(cgImage: imgRef!, scale: image.scale, orientation: image.imageOrientation)
+        return trimImage
+    }
+    
+    //文字認識を行う
+    func getString(cgImage: CGImage, completionHandler: @escaping([VNRecognizedTextObservation]) -> Void) {
+        let request = VNRecognizeTextRequest { (request, error) in
+            guard let _results = request.results as? [VNRecognizedTextObservation] else { return }
+            completionHandler(_results)
+            
+        }
+
+        request.recognitionLanguages = ["ja-JP", "en_US"]
+        let handler = VNImageRequestHandler(cgImage: cgImage)
+        try? handler.perform([request])
     }
     
     
@@ -289,48 +498,6 @@ class AddMusicViewController: UIViewController {
     }
     
     
-    //MARK: - Objective - C
-    
-    //textViewを開いたときにViewを上にずらして隠れないようにする
-    // キーボード表示通知の際の処理
-    @objc func keyboardWillShow(_ notification: Notification) {
-        // キーボード、画面全体、textFieldのsizeを取得
-        let rect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        guard let _keyboardHeight = rect?.size.height else { return }
-        
-        let screenHeight = UIScreen.main.bounds.height
-        let safeAreaTop = self.view.safeAreaInsets.top
-        let safeAreaBottom = self.view.safeAreaInsets.bottom
-        let safeAreaHeight = screenHeight - safeAreaBottom - safeAreaTop
-        let scrollPosition = scrollView.contentOffset.y
-        let keyboardPositionY = safeAreaHeight + safeAreaBottom - _keyboardHeight
-        print(keyboardPositionY)
-            
-        if keyboardPositionY + scrollPosition <= textView.frame.maxY && textView.isFirstResponder {
-            scrollView.setContentOffset(CGPoint.init(x: 0, y: textView.frame.maxY - keyboardPositionY + 10), animated: true)
-        }
-        tapGesture.isEnabled = true
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        if musicTF.isFirstResponder || artistTF.isFirstResponder {
-            tapGesture.isEnabled = false
-        } else if scoreTF.isFirstResponder || textView.isFirstResponder {
-            tapGesture.isEnabled = false
-        }
-    }
-    
-    @objc func closeKeyboard(_ sender : UITapGestureRecognizer) {
-        if textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        } else if scoreTF.isFirstResponder {
-            self.scoreTF.resignFirstResponder()
-        } else if musicTF.isFirstResponder {
-            self.musicTF.resignFirstResponder()
-        } else if artistTF.isFirstResponder {
-            self.artistTF.resignFirstResponder()
-        }
-    }
 }
 
 

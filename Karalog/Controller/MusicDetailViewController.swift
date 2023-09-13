@@ -56,15 +56,12 @@ class MusicDetailViewController: UIViewController {
         setupGraphAndLabel()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showMessage()
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
             let nextView = segue.destination as! DetailViewController
             nextView.time = time
+            nextView.musicName = musicName
+            nextView.artistName = artistName
             nextView.score = score
             nextView.key = key
             nextView.model = model
@@ -75,6 +72,8 @@ class MusicDetailViewController: UIViewController {
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = musicImage
+            nextView.presentationController?.delegate = self
+            
         }
     }
     
@@ -261,3 +260,13 @@ extension MusicDetailViewController: DZNEmptyDataSetDelegate {
     
 }
 
+
+//MARK: - UIAdaptivePresentationControllerDelegate
+
+extension MusicDetailViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        getData()
+        showMessage()
+        setupGraphAndLabel()
+    }
+}
