@@ -141,12 +141,12 @@ class AddDetailViewController: UIViewController {
             var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
-                    text += "\n#" + Material.shared.categoryList[i.row]
-                    category.append(Material.shared.categoryList[i.row])
+                    text += "\n#" + material.categoryList[i.row]
+                    category.append(material.categoryList[i.row])
                 }else {
-                    text = "#" + Material.shared.categoryList[i.row]
+                    text = "#" + material.categoryList[i.row]
                     newLine = true
-                    category = [Material.shared.categoryList[i.row]]
+                    category = [material.categoryList[i.row]]
                     
                 }
             }
@@ -291,13 +291,13 @@ extension AddDetailViewController: UITableViewDelegate {
 
 extension AddDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Material.shared.categoryList.count
+        return material.categoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         
-        cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
+        cell.textLabel?.text = material.categoryList[indexPath.row]
         cell.selectionStyle = .none
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows

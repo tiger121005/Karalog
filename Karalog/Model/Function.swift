@@ -22,7 +22,7 @@ struct Function {
         userFB.setupFirebase(userID: user.id!)
         UserDefaultsKey.userID.set(value: user.id!)
         if first {
-            manager.lists = Material.shared.initialListData
+            manager.lists = material.initialListData()
             UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
         } else {
             listFB.getList(completionHandler: {_ in})
@@ -50,18 +50,7 @@ struct Function {
 
         case Sort.追加順（早）.rawValue:
             list = updateList.reversed()
-//            var a: [Date] = []
-//            for i in updateList {
-//                let b = i.data
-//                var c: [Date] = []
-//                for j in b {
-//                    c.append(dateFromString(string: j.time, format: "yy年MM月dd日HH:mm"))
-//                }
-//                a.append(c.min()!)
-//
-//            }
-//            let d = a.indices.sorted{ a[$0] < a[$1]}
-//            list = d.map{updateList[$0]}
+
 
         case Sort.得点（高）.rawValue:
             var a: [Double] = []
@@ -78,17 +67,7 @@ struct Function {
 
         case Sort.得点（低）.rawValue:
             list = updateList.reversed()
-//            var a: [Double] = []
-//            for i in updateList {
-//                let b = i.data
-//                var c: [Double] = []
-//                for j in b {
-//                    c.append(j.score)
-//                }
-//                a.append(c.max()!)
-//            }
-//            let d = a.indices.sorted{ a[$0] < a[$1]}
-//            list = d.map{updateList[$0]}
+
 
         case Sort.曲名順（昇）.rawValue:
             list = updateList.sorted(by: {$0.musicName < $1.musicName})

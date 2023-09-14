@@ -9,13 +9,41 @@ import UIKit
 
 
 //MARK: - Material
+let material = Material.shared
 
 struct Material {
     static var shared = Material()
     
-    let initialListData: [Lists] = [Lists(listName: "お気に入り",
-                                          listImage: UIImage.checkmarkSealFill.withTintColor(UIColor(red: 0.93, green: 0.47, blue: 0.18, alpha: 1.0)).pngData()!, id: "favorite"),
-                                    Lists(listName: "歌いたい", listImage: UIImage.lassoAndSparkles.withTintColor(UIColor(red: 0.93, green: 0.43, blue: 0.18, alpha: 1.0)).pngData()!, id: "wanna")]
+    
+    func initialListData() -> [Lists] {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 300, height: 300))
+        var checkImage = UIImage.checkmarkSealFill.withTintColor(UIColor.imageColor)
+        checkImage = checkImage.resized(toWidth: 300)!
+        
+        let newCheck = renderer.image { context in
+            // 背景色を描画
+            UIColor.black.setFill()
+            context.fill(CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
+            
+            // SFSymbolを描画
+            checkImage.draw(in: CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
+        }
+        let checkData = newCheck.jpegData(compressionQuality: 1.0)!
+        
+        var lassoImage = UIImage.lassoAndSparkles.withTintColor(UIColor.imageColor)
+        lassoImage = lassoImage.resized(toWidth: 300)!
+        let newLasso = renderer.image { context in
+            UIColor.black.setFill()
+            context.fill(CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
+            lassoImage.draw(in: CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
+        }
+        let lassoData = newLasso.jpegData(compressionQuality: 1.0)!
+        
+        return [Lists(listName: "お気に入り", listImage: checkData, id: "favorite"),
+                Lists(listName: "歌いたい", listImage: lassoData, id: "wanna")]
+    }
+    
+   
                                     
     
     let listImages = ["music.mic",
@@ -225,6 +253,25 @@ extension UIImage {
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()
     }
+    
+//    func rotatedBy(degree: CGFloat) -> UIImage {
+//            let radian = degree * CGFloat.pi / 180
+//            var rotatedRect = CGRect(origin: .zero, size: self.size)
+//            
+//            rotatedRect = rotatedRect.applying(CGAffineTransform(rotationAngle: radian))
+//            
+//            UIGraphicsBeginImageContext(rotatedRect.size)
+//            let context = UIGraphicsGetCurrentContext()!
+//            context.translateBy(x: rotatedRect.size.width / 2, y: rotatedRect.size.height / 2)
+//            context.scaleBy(x: 1.0, y: -1.0)
+//
+//            context.rotate(by: radian)
+//            context.draw(self.cgImage!, in: CGRect(x: -(self.size.width / 2), y: -(self.size.height / 2), width: self.size.height, height: self.size.width))
+//
+//            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()!
+//            UIGraphicsEndImageContext()
+//            return rotatedImage
+//        }
     
     static var eye: UIImage {
         return UIImage(systemName: "eye")!

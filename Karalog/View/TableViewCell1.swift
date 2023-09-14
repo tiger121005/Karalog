@@ -35,6 +35,9 @@ class TableViewCell1: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        musicImage.layer.cornerRadius = musicImage.frame.height * 0.1
+        musicImage.clipsToBounds = true
+        
         scoreLabel.transform = CGAffineTransformMakeRotation(CGFloat.pi / 5)
     }
 

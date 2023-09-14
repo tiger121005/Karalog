@@ -65,7 +65,7 @@ class ListFirebase: ObservableObject {
                         for i in manager.user.listOrder {
                             preList.append(manager.lists.first(where: {$0.id!.contains(i)})!)
                         }
-                        manager.lists = Material.shared.initialListData
+                        manager.lists = material.initialListData()
                         manager.lists += preList
                         print(manager.lists)
                         completionHandler(true)

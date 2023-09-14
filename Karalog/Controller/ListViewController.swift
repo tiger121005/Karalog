@@ -72,6 +72,7 @@ class ListViewController: UIViewController {
                 nextView.fromFav = false
                 nextView.listID = listID
             }
+            nextView.presentationController?.delegate = self
         } else if segue.identifier == "toMusicDetail" {
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicID = selectedID
@@ -321,7 +322,7 @@ class ListViewController: UIViewController {
     //MARK: - UI interaction
     
     @IBAction func tapAdd() {
-        if listID == "1" {
+        if listID == "wanna" {
             performSegue(withIdentifier: "toAddWanna", sender: nil)
         } else {
             performSegue(withIdentifier: "toAddListMusic", sender: nil)
@@ -399,7 +400,6 @@ extension ListViewController: UITableViewDataSource {
             list = d.map{tvList[$0]}
             
             var n: Int!
-            //        let n = Int(ceil(Double(tvList.count / 10)))
             if tvList.count < 10 {
                 n = 1
             } else if tvList.count < 40 {
@@ -430,7 +430,7 @@ extension ListViewController: UITableViewDataSource {
             cell.scoreLabel.isHidden = true
         }
         
-        cell.favoriteBtn.isHidden = true
+        
         
         return cell
     }
@@ -515,5 +515,15 @@ extension ListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+
+//MARK: - UIAdaptivePresentationControllerDelegate
+
+extension ListViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        showMessage()
+        tableView.reloadData()
     }
 }

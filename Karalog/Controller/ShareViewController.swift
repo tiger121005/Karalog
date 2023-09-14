@@ -75,14 +75,6 @@ class ShareViewController: UIViewController {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toProfile" {
-            let nextView = segue.destination as! ProfileViewController
-            nextView.userID = UserDefaultsKey.userID.get()
-            
-        }
-    }
-    
     
     //MARK: - Setup
     
@@ -119,12 +111,12 @@ class ShareViewController: UIViewController {
             var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
-                    text += "\n#" + Material.shared.categoryList[i.row]
-                    category.append(Material.shared.categoryList[i.row])
+                    text += "\n#" + material.categoryList[i.row]
+                    category.append(material.categoryList[i.row])
                 }else {
-                    text = "#" + Material.shared.categoryList[i.row]
+                    text = "#" + material.categoryList[i.row]
                     newLine = true
-                    category = [Material.shared.categoryList[i.row]]
+                    category = [material.categoryList[i.row]]
                     
                 }
             }
@@ -354,7 +346,20 @@ extension ShareViewController: UICollectionViewDataSource {
         cell.indexPath = indexPath
         
         cell.musicName?.setTitle(shareList[indexPath.row].musicName, for: .normal)
+//        cell.musicName.sizeToFit()
         cell.artistName?.setTitle(shareList[indexPath.row].artistName, for: .normal)
+//        cell.artistName.sizeToFit()
+//
+//        let topMusicBorder = CALayer()
+//        topMusicBorder.frame = CGRect (x: 0, y: cell.musicName.frame.height, width: cell.musicName.frame.width, height: 1)
+//        topMusicBorder.backgroundColor = UIColor.imageColor.cgColor
+//        cell.musicName.layer.addSublayer(topMusicBorder)
+//
+//        let topArtistBorder = CALayer()
+//        topArtistBorder.frame = CGRect (x: 0, y: cell.artistName.frame.height, width: cell.artistName.frame.width, height: 1)
+//        topArtistBorder.backgroundColor = UIColor.imageColor.cgColor
+//        cell.artistName.layer.addSublayer(topArtistBorder)
+        
         let useImage = resize(image: (UIImage(data: shareList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal))!, width: 70)
         
         cell.musicImage?.setImage(useImage, for: .normal)
@@ -362,10 +367,13 @@ extension ShareViewController: UICollectionViewDataSource {
         
         cell.userName.text = shareList[indexPath.row].userID
         var a: String = ""
+        
+        cell.categoryLabel.isHidden = false
         for i in shareList[indexPath.row].category {
             a += "#" + i
         }
         cell.categoryLabel.text = a
+        
         if manager.user.goodList.contains(where: {$0.contains(shareList[indexPath.row].id!)}) {
             cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
             
@@ -527,13 +535,13 @@ extension ShareViewController: UITableViewDelegate {
 
 extension ShareViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Material.shared.categoryList.count
+        material.categoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         
-        cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
+        cell.textLabel?.text = material.categoryList[indexPath.row]
         cell.selectionStyle = .none
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows

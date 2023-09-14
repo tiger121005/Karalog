@@ -53,7 +53,10 @@ class AddListViewController: UIViewController {
     
     func setupInitialImage() {
         
-        randomImage = Material.shared.listImages.randomElement()!
+        listImage.layer.cornerRadius = listImage.frame.width * 0.1
+        listImage.clipsToBounds = true
+        
+        randomImage = material.listImages.randomElement()!
         let image = UIImage(systemName: randomImage)?.withTintColor(UIColor.imageColor)
         let size = CGSize(width: listImage.frame.width, height: listImage.frame.height)
         let renderer = UIGraphicsImageRenderer(size: size)
@@ -86,7 +89,7 @@ class AddListViewController: UIViewController {
     func addList() {
         let image = listImage.image(for: .normal)
         var resizedImage: Data!
-        if Material.shared.listImages.contains(where: { $0 == randomImage}) {
+        if material.listImages.contains(where: { $0 == randomImage}) {
             resizedImage = resizedData(image: image!, maxSize: 1024, quality: 1.0)
             
         } else {
@@ -97,7 +100,7 @@ class AddListViewController: UIViewController {
         listFB.addList(listName: listTF.text!, listImage: resizedImage!)
         fromAddList = true
         
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
     
     
@@ -145,9 +148,9 @@ extension AddListViewController: UITextFieldDelegate {
 
 extension AddListViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        //ImagePickerで取得してきた画像をimageViewにセット
+        //ImagePickerで取得してきた画像をcropにセット
         if let _image = info[.originalImage] as? UIImage {
-            dismiss(animated: true)
+            picker.dismiss(animated: true)
             //画像をlistImageに切り抜く
             let cropViewController = CropViewController(croppingStyle: .default, image: _image)
             cropViewController.delegate = self
@@ -165,7 +168,7 @@ extension AddListViewController: UIImagePickerControllerDelegate {
             
         } else {
             //ImagePickerを閉じる
-            dismiss(animated: true)
+            picker.dismiss(animated: true)
         }
     }
 }

@@ -43,11 +43,14 @@ class ShareCell: UICollectionViewCell {
         super.awakeFromNib()
         content.numberOfLines = 0
         
-        self.layer.cornerRadius = self.frame.width * 0.05
+        self.layer.cornerRadius = self.frame.width * 0.07
         self.layer.cornerCurve = .continuous
         
-        self.layer.borderWidth = 1
+        self.layer.borderWidth = 5
         self.layer.borderColor = UIColor.baseColor.cgColor
+        
+        musicImage.layer.cornerRadius = musicImage.frame.height * 0.1
+        musicImage.clipsToBounds = true
         
         self.musicName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming

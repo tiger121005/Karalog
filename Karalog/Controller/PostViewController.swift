@@ -38,10 +38,17 @@ class PostViewController: UIViewController {
 
         setUpMusic()
         setupTableView()
+        setupView()
     }
     
     
     //MARK: - Setup
+    
+    func setupView() {
+        categoryLabel.layer.cornerRadius = 5
+        categoryLabel.clipsToBounds = true
+        textView.layer.cornerRadius = 5
+    }
     
     func setUpMusic() {
         musicLabel.text = musicName
@@ -55,12 +62,12 @@ class PostViewController: UIViewController {
             var newLine: Bool = false
             for i in _indexPathList {
                 if newLine {
-                    text += "\n#" + Material.shared.categoryList[i.row]
-                    category.append(Material.shared.categoryList[i.row])
+                    text += "\n#" + material.categoryList[i.row]
+                    category.append(material.categoryList[i.row])
                 }else {
-                    text = "#" + Material.shared.categoryList[i.row]
+                    text = "#" + material.categoryList[i.row]
                     newLine = true
-                    category = [Material.shared.categoryList[i.row]]
+                    category = [material.categoryList[i.row]]
                     
                 }
             }
@@ -142,13 +149,13 @@ extension PostViewController: UITableViewDelegate {
 extension PostViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Material.shared.categoryList.count
+        material.categoryList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         
-        cell.textLabel?.text = Material.shared.categoryList[indexPath.row]
+        cell.textLabel?.text = material.categoryList[indexPath.row]
         cell.selectionStyle = .none
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows

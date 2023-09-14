@@ -34,19 +34,27 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userIDLabel: UILabel!
+    @IBOutlet var nameView: UIView!
+    
     @IBOutlet var followBtn: UIButton!
     @IBOutlet var followNumBtn: UIButton!
     @IBOutlet var followerNumBtn: UIButton!
+    @IBOutlet var followView: UIView!
+    
     @IBOutlet var showPast: UIButton!
+    
     @IBOutlet var tableView: UITableView!
     @IBOutlet var tableViewLeftConstraint: NSLayoutConstraint!
+    
     @IBOutlet var bestView: UIView!
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
     @IBOutlet var musicImage: UIImageView!
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var scrollView: UIScrollView!
+    
     @IBOutlet var menuBtn: UIBarButtonItem!
+    
     let refreshCtl = UIRefreshControl()
     
     
@@ -55,7 +63,8 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        
+        setupFollowView()
+        setupNameView()
         title = "プロフィール"
     }
     
@@ -90,7 +99,39 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Setup
     
+    func setupNameView() {
+        nameView.layer.cornerRadius = nameView.frame.height * 0.1
+        nameView.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
+        nameView.layer.shadowColor = UIColor.black.cgColor
+        nameView.layer.shadowOpacity = 0.8
+        nameView.layer.shadowRadius = 5
+    }
+    
+    func setupFollowView() {
+        followView.layer.cornerRadius = followView.frame.height * 0.1
+        
+        self.followNumBtn.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 25)
+            return outgoing
+        }
+        
+        self.followerNumBtn.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 25)
+            return outgoing
+        }
+        
+        followView.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
+        followView.layer.shadowColor = UIColor.black.cgColor
+        followView.layer.shadowOpacity = 0.8
+        followView.layer.shadowRadius = 5
+    }
+    
     func setupView() {
+        if userID == nil {
+            userID = manager.user.id
+        }
         Task {
             if !fromFriends {
                 guard let user = await userFB.getUserInformation(id: self.userID) else {
@@ -137,7 +178,7 @@ class ProfileViewController: UIViewController {
             self.switchMenu()
         }
         outBtn = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), primaryAction: tapOutBtn)
-        outBtn.backgroundColor = .black.withAlphaComponent(0.3)
+        outBtn.backgroundColor = .black.withAlphaComponent(0.5)
         self.view.addSubview(outBtn)
         outBtn.isHidden = true
         
@@ -194,6 +235,9 @@ class ProfileViewController: UIViewController {
         bestView.layer.cornerRadius = 20
         bestView.layer.cornerCurve = .continuous
         bestView.clipsToBounds = true
+        
+        musicImage.layer.cornerRadius = musicImage.frame.width * 0.1
+        musicImage.clipsToBounds = true
         
         Task {
             
@@ -417,7 +461,7 @@ class ProfileViewController: UIViewController {
             list = c.map{musicList[$0]}
             var best = list.first
             let bestScore = a.first
-            if a.count > 0 {
+            if a.count > 1 {
                 for i in 1...a.count - 1 {
                     if bestScore == a[i] {
                         if list[i].data.count > best!.data.count {
@@ -554,23 +598,23 @@ extension ProfileViewController: UITableViewDataSource {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         
         cell.textLabel?.text = hamburgerMenuList[indexPath.row]
-        cell.backgroundColor = UIColor.subImageColor
-        var selectedView = UIView()
-        var color: UIColor = UIColor.subImageColor
-        var hue : CGFloat = 0
-        var saturation : CGFloat = 0
-        var brightness : CGFloat = 0
-        var alpha : CGFloat = 0
-        if color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
-             color = UIColor(hue: hue, saturation: saturation, brightness: brightness * 0.9, alpha: alpha)
-        }
-        selectedView.backgroundColor = color
-        cell.selectedBackgroundView = selectedView
+        cell.backgroundColor = UIColor.baseColor
+//        var selectedView = UIView()
+//        var color: UIColor = UIColor.subImageColor
+//        var hue : CGFloat = 0
+//        var saturation : CGFloat = 0
+//        var brightness : CGFloat = 0
+//        var alpha : CGFloat = 0
+//        if color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
+//             color = UIColor(hue: hue, saturation: saturation, brightness: brightness * 0.9, alpha: alpha)
+//        }
+//        selectedView.backgroundColor = color
+//        cell.selectedBackgroundView = selectedView
         
         if indexPath.row == 5 {
             cell.textLabel?.textColor = UIColor.red
         } else  {
-            cell.textLabel?.textColor = UIColor.black
+            cell.textLabel?.textColor = UIColor.white
         }
         
         return cell

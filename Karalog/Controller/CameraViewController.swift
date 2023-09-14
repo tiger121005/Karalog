@@ -78,6 +78,16 @@ class CameraViewController: UIViewController {
         setupCameraBtn()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.global(qos: .background).async{
+            self.captureSession.startRunning()
+        }
+    }
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
     
     //viewのサイズが変更されようとしているタイミング
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -88,6 +98,7 @@ class CameraViewController: UIViewController {
         if deviceOrientation.isPortrait || deviceOrientation.isLandscape {
             currentOrientation = deviceOrientation
         }
+        print("currentOrientation", currentOrientation)
         
         // Handle device orientation in the preview layer.
         if let videoPreviewLayerConnection = previewView.videoPreviewLayer.connection {
@@ -194,7 +205,6 @@ class CameraViewController: UIViewController {
             captureSession.addOutput(photoOutput)
         }
         
-        captureSession.startRunning()
     }
     
     private func setupPinchGestureReconizer() {
@@ -307,8 +317,13 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             image = UIImage(data: imageData)
-            // 写真ライブラリに画像を保存
-//            UIImageWriteToSavedPhotosAlbum(uiImage!, nil,nil,nil)
+            print(image.imageOrientation.rawValue)
+            print(UIDevice.current.orientation.rawValue)
+            print(currentOrientation.rawValue)
+            
+//            image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .up)
+
+            
             self.performSegue(withIdentifier: "toAddMusic", sender: nil)
         }
     }
