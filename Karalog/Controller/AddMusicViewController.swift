@@ -8,6 +8,7 @@
 import UIKit
 import Vision
 import CoreML
+import Alamofire
 
 
 //MARK: - AddMusicViewController
@@ -23,12 +24,14 @@ class AddMusicViewController: UIViewController {
     var alertCtl: UIAlertController!
     var callView: Bool = true
     var scaleList: [UIView] = []
-    var post: Bool = false
+    var postEnable: Bool = false
     var category: [String] = []
     
     let config = MLModelConfiguration()
     var requestModel: VNCoreMLRequest!
     var requestDetectModel: VNCoreMLRequest!
+    
+    let decoder: JSONDecoder = JSONDecoder()
     
     
     //MARK: - UI objects
@@ -64,6 +67,14 @@ class AddMusicViewController: UIViewController {
         setupView()
         setupImageBtn()
         setupImage()
+        
+        Task {
+            addBtn.isEnabled = false
+            addBtn.backgroundColor = UIColor.gray
+            await setMusicImage()
+            addBtn.isEnabled = true
+            addBtn.backgroundColor = UIColor.imageColor
+        }
         title = "曲を追加"
     }
     
@@ -237,46 +248,124 @@ class AddMusicViewController: UIViewController {
     }
     
     func setupImage() {
-        let viewWidth = view.frame.width
-        let viewHeight = view.frame.height
-        backView = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
-        backView.backgroundColor = .black.withAlphaComponent(0.4)
+        if let image {
+            let viewWidth = view.frame.width
+            let viewHeight = view.frame.height
+            backView = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
+            backView.backgroundColor = .black.withAlphaComponent(0.4)
+            
+            let imageAspect = image.size.height / image.size.width
+            let areaHeight = (tabBarController?.tabBar.frame.minY)! - (navigationController?.navigationBar.frame.maxY)!
+            let areaCenter = (navigationController?.navigationBar.frame.maxY)! + (areaHeight / 2)
+            var imageViewWidth = viewWidth - 80
+            var imageViewHeight = imageViewWidth * imageAspect
+            var imageViewX: CGFloat = 40
+            if imageViewHeight > areaHeight - 120 {
+                imageViewHeight = areaHeight - 120
+                imageViewWidth = imageViewHeight / imageAspect
+                imageViewX = (viewWidth / 2) - (imageViewWidth / 2)
+            }
+            
+            let imageViewY = areaCenter - (imageViewHeight / 2)
+            
+            imageView = UIImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewWidth, height: imageViewHeight))
+            imageView.image = image
+            
+            closeBtn = UIButton(frame: CGRect(x: viewWidth - 90, y: imageViewY - 60, width: 60, height: 60))
+            closeBtn.addAction(UIAction {_ in
+                self.backView.isHidden = true
+                self.imageView.isHidden = true
+                self.closeBtn.isHidden = true
+            }, for: .touchUpInside)
+            var btnImage = UIImage.multiply.withTintColor(UIColor.imageColor)
+            btnImage = btnImage.resized(toWidth: 60)!
+            closeBtn.setImage(btnImage, for: .normal)
+            
+            view.addSubview(backView)
+            view.addSubview(imageView)
+            view.addSubview(closeBtn)
+            
+            backView.isHidden = true
+            imageView.isHidden = true
+            closeBtn.isHidden = true
+        }
+    }
+    
+    func setMusicImage() async {
+        Task {
+            if let musicImageData = await getMusicImage() {
+                await stringToData(string: musicImageData)
+            } else if musicImage == nil {
+                print("no image")
+                musicImage = UIImage.musicNote.withTintColor(UIColor.imageColor).jpegData(compressionQuality: 1.0)
+            } else {
+                print("have image")
+            }
+        }
+    }
+    
+    
+    
+    func getMusicImage() async -> String? {
+        await withCheckedContinuation { continuation in
+            if musicImage == nil {
+                //日本語をパソコン言語になおす
+                let parameters = ["term": (musicTF.text ?? "") + "　" + (artistTF.text ?? ""), "country": "jp", "limit": "14"]
+                //termが検索キーワード　countryが国　limitが数の上限
+                //parameterを使ってsearch以降の文を書いている
+                AF.request("https://itunes.apple.com/search", parameters: parameters).responseData { response in
+                    //if文みたいなやつ,この場合response.resultがsuccessの時とfailureの時で場合分けをしている
+                    switch response.result {
+                    case .success:
+                        //doはエラーが出なかった場合 catchはエラーが出たとき
+                        do {
+                            let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: response.data!)
+                            
+                            let musicImageData = iTunesData.results.first?.artworkUrl100
+                            
+                            
+                            continuation.resume(returning: musicImageData)
+                        } catch {
+                            print("デコードに失敗しました")
+                            continuation.resume(returning: nil)
+                        }
+                    case .failure(let error):
+                        print("error", error)
+                        continuation.resume(returning: nil)
+                    }
+                }
+            } else {
+                continuation.resume(returning: nil)
+            }
+        }
+    }
+    
+    func stringToData(string: String) async {
+        print("in func")
         
-        let imageAspect = image.size.height / image.size.width
-        let areaHeight = (tabBarController?.tabBar.frame.minY)! - (navigationController?.navigationBar.frame.maxY)!
-        let areaCenter = (navigationController?.navigationBar.frame.maxY)! + (areaHeight / 2)
-        var imageViewWidth = viewWidth - 80
-        var imageViewHeight = imageViewWidth * imageAspect
-        var imageViewX: CGFloat = 40
-        if imageViewHeight > areaHeight - 120 {
-            imageViewHeight = areaHeight - 120
-            imageViewWidth = imageViewHeight / imageAspect
-            imageViewX = (viewWidth / 2) - (imageViewWidth / 2)
+        // URLSessionを作成
+        let session = URLSession.shared
+        print("after let session")
+        // リクエストを作成
+        if let imageUrl = URL(string: string) {
+            print("after if let")
+            
+            Task {
+                let (data, _) = try await session.data(from: imageUrl)
+                
+                print("after await")
+                
+                self.musicImage = data
+                print("add music")
+            }
+            
+        } else if musicImage == nil {
+            musicImage = UIImage.musicNote.withTintColor(UIColor.imageColor).jpegData(compressionQuality: 1.0)
+            print("add music")
         }
         
-        let imageViewY = areaCenter - (imageViewHeight / 2)
-        
-        imageView = UIImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewWidth, height: imageViewHeight))
-        imageView.image = image
-        
-        closeBtn = UIButton(frame: CGRect(x: viewWidth - 90, y: imageViewY - 60, width: 60, height: 60))
-        closeBtn.addAction(UIAction {_ in
-            self.backView.isHidden = true
-            self.imageView.isHidden = true
-            self.closeBtn.isHidden = true
-        }, for: .touchUpInside)
-        var btnImage = UIImage.multiply.withTintColor(UIColor.imageColor)
-        btnImage = btnImage.resized(toWidth: 60)!
-        closeBtn.setImage(btnImage, for: .normal)
-        
-        view.addSubview(backView)
-        view.addSubview(imageView)
-        view.addSubview(closeBtn)
-        
-        backView.isHidden = true
-        imageView.isHidden = true
-        closeBtn.isHidden = true
     }
+    
     
     //撮影した画像を機種ごとに分類する
     func classifyModel() {
@@ -359,12 +448,18 @@ class AddMusicViewController: UIViewController {
                 // "Car"
                 switch label {
                 case Objects.music.rawValue:
+                    
 
-                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
+                        print("error music trimed")
+                        return
+                        
+                    }
                     
                     self.getString(cgImage: trimedImage) { results in
                         var musicY: CGFloat!
                         for visionRequest in results {
+                            print("music", visionRequest.topCandidates(1).first?.string)
                             if var musicY {
                                 if visionRequest.boundingBox.minY < musicY {
                                     musicY = visionRequest.boundingBox.minY
@@ -383,11 +478,17 @@ class AddMusicViewController: UIViewController {
                     
                 case Objects.artist.rawValue:
                     
-                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
+                        print("error artist trimed")
+                        return
+                        
+                    }
                     self.getString(cgImage: trimedImage) { results in
                         
                         var artistY: CGFloat!
                         for visionRequest in results {
+                            print("artist", visionRequest.topCandidates(1).first?.string)
                             if var artistY {
                                 if visionRequest.boundingBox.minY < artistY {
                                     artistY = visionRequest.boundingBox.minY
@@ -406,15 +507,20 @@ class AddMusicViewController: UIViewController {
                     }
                     
                 case Objects.score.rawValue:
+                    
 
-                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
+                        print("error score trimed")
+                        return
+                        
+                    }
+                    
                     self.getString(cgImage: trimedImage) { results in
                         var scoreMaxHeight: CGFloat!
                         var largeText: String!
                         var scoreSecondHeight: CGFloat!
                         var smallText: String!
                         for visionRequest in results {
-                            
                             
                             if var scoreMaxHeight {
                                 
@@ -451,14 +557,15 @@ class AddMusicViewController: UIViewController {
                                 if largeText.last == "." {
                                     largeText = String(largeText.dropLast())
                                 }
-                                if smallText.first == "." {
-                                    smallText = String(smallText.dropFirst())
+                                if var smallText {
+                                    if smallText.first == "." {
+                                        smallText = String(smallText.dropFirst())
+                                    }
+                                    if smallText.last == "点" {
+                                        smallText = String(smallText.dropLast())
+                                    }
+                                    scoreText = largeText + "." + smallText
                                 }
-                                if smallText.last == "点" {
-                                    smallText = String(smallText.dropLast())
-                                }
-                                scoreText = largeText + "." + smallText
-                                
                             }
                             
                         }
@@ -467,12 +574,23 @@ class AddMusicViewController: UIViewController {
                     }
                     
                 case Objects.comment.rawValue:
-                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else { return }
+                    
+                    
+                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
+                        print("error comment trimed")
+                        return
+                        
+                    }
+                    
                     self.getString(cgImage: trimedImage) { results in
+                        var first = true
                         for visionRequest in results {
-                            
-                            commentText += visionRequest.topCandidates(1).first!.string
-                            
+                            if first {
+                                commentText = visionRequest.topCandidates(1).first?.string
+                            } else {
+                                print("comment", visionRequest.topCandidates(1).first?.string)
+                                commentText += visionRequest.topCandidates(1).first!.string
+                            }
                         }
                         
                         self.textView.text = commentText
@@ -506,22 +624,77 @@ class AddMusicViewController: UIViewController {
     }
 
     func trimmingImage(trimmingArea: CGRect) -> UIImage {
-        let imgRef = image.cgImage?.cropping(to: trimmingArea)
+        let cgImage = image.cgImage!
+        
+        let imgRef = cgImage.cropping(to: CGRect(x: image.size.height - (trimmingArea.maxY * image.size.height),
+                                                 y: image.size.width - (trimmingArea.maxY * image.size.width),
+                                                 width: trimmingArea.width * image.size.height,
+                                                 height: trimmingArea.height * image.size.width))
         let trimImage = UIImage(cgImage: imgRef!, scale: image.scale, orientation: image.imageOrientation)
+        
+        
         return trimImage
+        
     }
     
     //文字認識を行う
     func getString(cgImage: CGImage, completionHandler: @escaping([VNRecognizedTextObservation]) -> Void) {
         let request = VNRecognizeTextRequest { (request, error) in
-            guard let _results = request.results as? [VNRecognizedTextObservation] else { return }
+            guard let _results = request.results as? [VNRecognizedTextObservation] else {
+                print("error get string")
+                return
+                
+            }
             completionHandler(_results)
-            
+            print(_results)
         }
 
         request.recognitionLanguages = ["ja-JP", "en_US"]
         let handler = VNImageRequestHandler(cgImage: cgImage)
         try? handler.perform([request])
+    }
+    
+    func post() {
+        if postEnable {
+            let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
+            postFB.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: category)
+        }
+    }
+    
+    
+    func add() {
+        
+        let df = DateFormatter()
+        df.dateFormat = "yy年MM月dd日HH:mm"
+        df.timeZone = TimeZone.current
+        let time = df.string(from: Date())
+        
+        let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text! && $0.artistName == artistTF.text!}
+        if !filterMusic.isEmpty {
+            guard let id = filterMusic.first?.id else {
+                let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default)
+                alert.addAction(ok)
+                present(alert, animated: true, completion: nil)
+                return
+            }
+            musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+        } else {
+            musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                
+            })
+            
+        }
+        //追加されたことを知らせる
+        fromAdd = true
+        
+        //2画面前に戻る
+        DispatchQueue.main.async {
+            let screenIndex = self.navigationController!.viewControllers.count - 3
+            self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
+        }
+        
+        
     }
     
     
@@ -565,45 +738,19 @@ class AddMusicViewController: UIViewController {
         }
     }
     
-    @IBAction func tapAddBtn(_ sender: Any) {
-        
-        if Double(scoreTF.text!) != nil {
-            if post {
-                let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                postFB.post(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, content: content, category: category)
-            }
-            
-            
-            
-                
-            let df = DateFormatter()
-            df.dateFormat = "yy年MM月dd日HH:mm"
-            df.timeZone = TimeZone.current
-            let time = df.string(from: Date())
-            
-            let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text! && $0.artistName == artistTF.text!}
-            if !filterMusic.isEmpty {
-                guard let id = filterMusic.first?.id else {
-                    let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
-                    let ok = UIAlertAction(title: "OK", style: .default)
-                    alert.addAction(ok)
-                    present(alert, animated: true, completion: nil)
-                    return
+    @IBAction func tapAddBtn(_ sender: UIButton) {
+        if musicTF.text != "" && artistTF.text != "" {
+            if scoreTF != nil && Double(scoreTF.text!) != nil {
+                Task {
+                    await add()
+                    post()
                 }
-                musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
             } else {
-                musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
-                    
-                })
-                
+                alertCtl = UIAlertController(title: "入力ミス", message: "スコアがうまく入力されていません", preferredStyle: .alert)
+                alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alertCtl, animated: true, completion: nil)
             }
-            //追加されたことを知らせる
-            fromAdd = true
-            
-            //2画面前に戻る
-            let screenIndex = self.navigationController!.viewControllers.count - 3
-            self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
-        }else{
+        } else {
             
             alertCtl = UIAlertController(title: "入力ミス", message: "値がうまく入力されていません", preferredStyle: .alert)
             alertCtl.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -611,11 +758,10 @@ class AddMusicViewController: UIViewController {
             
             
         }
-        
     }
     
     @IBAction func tapCheckBox() {
-        post.toggle()
+        postEnable.toggle()
         categoryView.isHidden.toggle()
     }
     

@@ -17,7 +17,7 @@ struct Material {
     
     func initialListData() -> [Lists] {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 300, height: 300))
-        var checkImage = UIImage.checkmarkSealFill.withTintColor(UIColor.imageColor)
+        var checkImage = UIImage.starFill.withTintColor(UIColor.imageColor)
         checkImage = checkImage.resized(toWidth: 300)!
         
         let newCheck = renderer.image { context in
@@ -254,24 +254,24 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
     
-//    func rotatedBy(degree: CGFloat) -> UIImage {
-//            let radian = degree * CGFloat.pi / 180
-//            var rotatedRect = CGRect(origin: .zero, size: self.size)
-//            
-//            rotatedRect = rotatedRect.applying(CGAffineTransform(rotationAngle: radian))
-//            
-//            UIGraphicsBeginImageContext(rotatedRect.size)
-//            let context = UIGraphicsGetCurrentContext()!
-//            context.translateBy(x: rotatedRect.size.width / 2, y: rotatedRect.size.height / 2)
-//            context.scaleBy(x: 1.0, y: -1.0)
-//
-//            context.rotate(by: radian)
-//            context.draw(self.cgImage!, in: CGRect(x: -(self.size.width / 2), y: -(self.size.height / 2), width: self.size.height, height: self.size.width))
-//
-//            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()!
-//            UIGraphicsEndImageContext()
-//            return rotatedImage
-//        }
+    func rotatedBy(degree: CGFloat) -> UIImage {
+            let radian = degree * CGFloat.pi / 180
+            var rotatedRect = CGRect(origin: .zero, size: self.size)
+            
+            rotatedRect = rotatedRect.applying(CGAffineTransform(rotationAngle: radian))
+            
+            UIGraphicsBeginImageContext(rotatedRect.size)
+            let context = UIGraphicsGetCurrentContext()!
+            context.translateBy(x: rotatedRect.size.width / 2, y: rotatedRect.size.height / 2)
+            context.scaleBy(x: 1.0, y: -1.0)
+
+            context.rotate(by: radian)
+            context.draw(self.cgImage!, in: CGRect(x: -(self.size.width / 2), y: -(self.size.height / 2), width: self.size.width, height: self.size.height))
+
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()!
+            UIGraphicsEndImageContext()
+            return rotatedImage
+        }
     
     static var eye: UIImage {
         return UIImage(systemName: "eye")!
@@ -331,6 +331,10 @@ extension UIImage {
     
     static var musicMicCircleFill: UIImage {
         return UIImage(systemName: "music.mic.circle.fill")!
+    }
+    
+    static var musicNote: UIImage {
+        return UIImage(systemName: "music.note")!
     }
     
     static var KaralogQRImage: UIImage {

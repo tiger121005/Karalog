@@ -72,7 +72,6 @@ class MusicDetailViewController: UIViewController {
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = musicImage
-            nextView.presentationController?.delegate = self
             
         }
     }
@@ -200,7 +199,7 @@ extension MusicDetailViewController: UITableViewDataSource {
         cell.detailTextLabel?.textColor = .white
         
         cell.backgroundColor = .black
-        var cellSelectedBgView = UIView()
+        let cellSelectedBgView = UIView()
         cellSelectedBgView.backgroundColor = .gray
         cell.selectedBackgroundView = cellSelectedBgView
         
@@ -260,13 +259,3 @@ extension MusicDetailViewController: DZNEmptyDataSetDelegate {
     
 }
 
-
-//MARK: - UIAdaptivePresentationControllerDelegate
-
-extension MusicDetailViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        getData()
-        showMessage()
-        setupGraphAndLabel()
-    }
-}

@@ -58,6 +58,8 @@ class CameraViewController: UIViewController {
     @IBOutlet var previewView: VideoView!
     @IBOutlet var cameraBtn: UIButton!
     
+    var addAlert: UIAlertController!
+    
     
     //MARK: - View Controller methods
 
@@ -82,6 +84,11 @@ class CameraViewController: UIViewController {
         DispatchQueue.global(qos: .background).async{
             self.captureSession.startRunning()
         }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+            showAlert()
     }
     
     override var shouldAutorotate: Bool {
@@ -125,6 +132,14 @@ class CameraViewController: UIViewController {
     
     
     //MARK: - Setup
+    
+    func showAlert() {
+        addAlert = UIAlertController(title: "充電の穴を右側にするように\nデバイスを横に傾けて\n撮影してください", message: "", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default)
+        addAlert.addAction(ok)
+        present(addAlert, animated: true)
+        
+    }
     
     func setupCameraBtn() {
         var btnImage = UIImage.circleInsetFilled.withTintColor(UIColor.imageColor)
@@ -306,6 +321,10 @@ class CameraViewController: UIViewController {
             print("Failed to change zoom factor")
         }
     }
+    
+    @objc func hideAlert() {
+        addAlert.dismiss(animated: true)
+    }
 
 }
 
@@ -317,12 +336,6 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             image = UIImage(data: imageData)
-            print(image.imageOrientation.rawValue)
-            print(UIDevice.current.orientation.rawValue)
-            print(currentOrientation.rawValue)
-            
-//            image = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .up)
-
             
             self.performSegue(withIdentifier: "toAddMusic", sender: nil)
         }

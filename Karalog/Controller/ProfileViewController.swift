@@ -65,7 +65,7 @@ class ProfileViewController: UIViewController {
         setupTableView()
         setupFollowView()
         setupNameView()
-        title = "プロフィール"
+        title = "PROFILE"
     }
     
     override func viewWillAppear(_ animated: Bool) {

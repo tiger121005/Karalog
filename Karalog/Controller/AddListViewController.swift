@@ -37,14 +37,6 @@ class AddListViewController: UIViewController {
         title = "リストを追加"
     }
     
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        guard let presentationController = presentationController else {
-            return
-        }
-        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
-    }
-    
     //MARK: - Setup
     
     func setupTextField() {
@@ -58,7 +50,7 @@ class AddListViewController: UIViewController {
         
         randomImage = material.listImages.randomElement()!
         let image = UIImage(systemName: randomImage)?.withTintColor(UIColor.imageColor)
-        let size = CGSize(width: listImage.frame.width, height: listImage.frame.height)
+        let size = CGSize(width: listImage.frame.width, height: listImage.frame.height + 3)
         let renderer = UIGraphicsImageRenderer(size: size)
         let newImage = renderer.image { context in
             // 背景色を描画
@@ -100,7 +92,7 @@ class AddListViewController: UIViewController {
         listFB.addList(listName: listTF.text!, listImage: resizedImage!)
         fromAddList = true
         
-        self.dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     

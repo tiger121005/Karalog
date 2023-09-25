@@ -72,7 +72,6 @@ class ListViewController: UIViewController {
                 nextView.fromFav = false
                 nextView.listID = listID
             }
-            nextView.presentationController?.delegate = self
         } else if segue.identifier == "toMusicDetail" {
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicID = selectedID
@@ -519,11 +518,3 @@ extension ListViewController: UISearchBarDelegate {
 }
 
 
-//MARK: - UIAdaptivePresentationControllerDelegate
-
-extension ListViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        showMessage()
-        tableView.reloadData()
-    }
-}

@@ -23,6 +23,7 @@
 		1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */; };
 		1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC629D0741300245BB3 /* GoogleSignIn */; };
 		1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC829D0741300245BB3 /* GoogleSignInSwift */; };
+		19426CC62AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */; };
 		1960CD2129FE30730065FF05 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2029FE30730065FF05 /* Manager.swift */; };
 		1960CD2329FE7B250065FF05 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2229FE7B250065FF05 /* Material.swift */; };
 		1961E2322AA4D5E80000FAF0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1961E2312AA4D5E80000FAF0 /* FirebaseAuth */; };
@@ -34,7 +35,6 @@
 		1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */; };
 		1964151E2AB1AD4500A7808C /* Detect_JOY-new.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */; };
 		196415202AB1AD5500A7808C /* Detect_DAM-AI.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */; };
-		196415222AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */; };
 		196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */; };
 		196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 196D97352A66A02B00A96892 /* GoogleService-Info.plist */; };
 		1972C61F2AA4CA7500D64C2E /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C61E2AA4CA7500D64C2E /* FacebookCore */; };
@@ -121,6 +121,7 @@
 		1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell2.swift; sourceTree = "<group>"; };
 		1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell2.xib; sourceTree = "<group>"; };
 		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
+		19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "Detect_DAM_DX-G.mlmodel"; path = "../../../../Downloads/Detect_DAM_DX-G.mlmodel"; sourceTree = "<group>"; };
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		196415172AB19B8300A7808C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -128,7 +129,6 @@
 		1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = KaraokeClassifier.mlmodel; sourceTree = "<group>"; };
 		1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_JOY-new.mlmodel"; sourceTree = "<group>"; };
 		1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_DAM-AI.mlmodel"; sourceTree = "<group>"; };
-		196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_DAM-DX-G.mlmodel"; sourceTree = "<group>"; };
 		196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Detect_JOY_old.mlmodel; sourceTree = "<group>"; };
 		196D97352A66A02B00A96892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizeLabel.swift; sourceTree = "<group>"; };
@@ -268,7 +268,7 @@
 				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
 				1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */,
 				1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */,
-				196415212AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel */,
+				19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */,
 				1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */,
 				196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */,
 			);
@@ -642,7 +642,6 @@
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
 				19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */,
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
-				196415222AB1AD6300A7808C /* Detect_DAM-DX-G.mlmodel in Sources */,
 				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
 				196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
@@ -661,6 +660,7 @@
 				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
 				19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */,
 				1938FBC129D0641700245BB3 /* CollectionViewCell2.swift in Sources */,
+				19426CC62AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel in Sources */,
 				1960CD2129FE30730065FF05 /* Manager.swift in Sources */,
 				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
 				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
@@ -860,25 +860,26 @@
 				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs to access the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.Karalog;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.Karalog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -895,25 +896,26 @@
 				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs to access the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.Karalog;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.Karalog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

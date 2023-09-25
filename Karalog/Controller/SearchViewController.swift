@@ -54,10 +54,40 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
             let nextView = segue.destination as! AddMusicViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
-            do {
-                nextView.musicImage = try Data(contentsOf: URL(string: musicImage)!)
-            } catch {
-                print("Error")
+//            do {
+//                nextView.musicImage = try Data(contentsOf: URL(string: musicImage)!)
+//            } catch {
+//                print("Error")
+//            }
+            
+            // URLSessionを作成
+            let session = URLSession.shared
+                
+            // リクエストを作成
+            if let imageUrl = URL(string: musicImage) {
+                let request = URLRequest(url: imageUrl)
+                    
+                // リクエストを非同期で実行
+                let task = session.dataTask(with: request) { (data, response, error) in
+                    if let error = error {
+                        print("エラー: \(error.localizedDescription)")
+                        return
+                    }
+                        
+                    if let data {
+                        
+                        nextView.musicImage = data
+//                        // 画像を使用してUIの更新などを行う
+//                        DispatchQueue.main.async {
+//                            // このブロック内でUIの更新を行う
+//                            // 例: UIImageViewに画像を設定する
+//                            nextView.musicImage = UIImageView(image: image)
+//                            // 画像を表示するなどの処理を行う
+//                        }
+                    }
+                }
+                // タスクを開始
+                task.resume()
             }
         }
     }

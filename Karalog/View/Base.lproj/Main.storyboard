@@ -829,7 +829,7 @@
             <objects>
                 <viewController storyboardIdentifier="addDetail" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7HZ-IO-hqs" customClass="AddDetailViewController" customModule="Karalog" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nko-xA-L7q">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="1138"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="1148"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ggk-Qj-po5">
@@ -1349,7 +1349,7 @@
                     <navigationItem key="navigationItem" id="Ilb-UP-I1Z">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="1wE-GR-wCV">
                             <connections>
-                                <segue destination="7HZ-IO-hqs" kind="modal" identifier="toAddDetail" id="qcR-nH-NSM"/>
+                                <segue destination="7HZ-IO-hqs" kind="show" identifier="toAddDetail" id="qcR-nH-NSM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1679,11 +1679,11 @@
             <objects>
                 <viewController id="nOS-Ry-knr" customClass="AddListViewController" customModule="Karalog" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4M4-os-i3k">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4n-nr-Jrb">
-                                <rect key="frame" x="60" y="132.99999999999997" width="273" height="272.33333333333326"/>
+                                <rect key="frame" x="60" y="176.99999999999997" width="273" height="272.33333333333326"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="z4n-nr-Jrb" secondAttribute="height" multiplier="333:332" id="2gG-aI-TtI"/>
                                 </constraints>
@@ -1694,7 +1694,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PvQ-nD-P47">
-                                <rect key="frame" x="30" y="69" width="333" height="34"/>
+                                <rect key="frame" x="30" y="113" width="333" height="34"/>
                                 <color key="backgroundColor" name="textFieldColor"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1705,13 +1705,13 @@
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="リスト名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91Y-DG-gSq">
-                                <rect key="frame" x="30" y="40" width="70" height="21"/>
+                                <rect key="frame" x="30" y="84" width="70" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x7X-zM-U5i" customClass="CustomButton" customModule="Karalog" customModuleProvider="target">
-                                <rect key="frame" x="100" y="440.33333333333331" width="193" height="50"/>
+                                <rect key="frame" x="100" y="484.33333333333331" width="193" height="49.999999999999943"/>
                                 <color key="backgroundColor" name="imageColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="193" id="4Dd-BE-MUj"/>
@@ -1758,11 +1758,11 @@
             <objects>
                 <viewController id="YE3-ZG-H1b" customClass="AddListMusicViewController" customModule="Karalog" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3TI-YB-fiz">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" barStyle="black" placeholder="曲名、アーティスト名を入力" translatesAutoresizingMaskIntoConstraints="NO" id="Sze-LJ-mAH">
-                                <rect key="frame" x="0.0" y="50" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="44" width="393" height="56"/>
                                 <color key="backgroundColor" name="baseColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="3Co-4c-Uxr"/>
@@ -1772,7 +1772,7 @@
                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rBY-ZD-hDv">
-                                <rect key="frame" x="0.0" y="106" width="393" height="687"/>
+                                <rect key="frame" x="0.0" y="100" width="393" height="654"/>
                                 <color key="backgroundColor" name="baseColor"/>
                                 <color key="sectionIndexBackgroundColor" name="baseColor"/>
                                 <prototypes>
@@ -1787,40 +1787,26 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxf-0b-nht">
-                                <rect key="frame" x="287" y="20" width="90" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="90" id="46G-dC-XmD"/>
-                                    <constraint firstAttribute="height" constant="30" id="CfT-dd-o3a"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="追加">
-                                    <color key="baseForegroundColor" name="imageColor"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="add" destination="YE3-ZG-H1b" eventType="touchUpInside" id="Gt0-B7-GCT"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fL8-Dz-mQr"/>
                         <color key="backgroundColor" name="baseColor"/>
                         <constraints>
                             <constraint firstItem="Sze-LJ-mAH" firstAttribute="leading" secondItem="3TI-YB-fiz" secondAttribute="leading" id="CwF-Jn-gPd"/>
-                            <constraint firstItem="fL8-Dz-mQr" firstAttribute="trailing" secondItem="Vxf-0b-nht" secondAttribute="trailing" constant="16" id="PpJ-7v-8Iv"/>
                             <constraint firstItem="rBY-ZD-hDv" firstAttribute="leading" secondItem="fL8-Dz-mQr" secondAttribute="leading" id="a3G-O3-atq"/>
                             <constraint firstItem="rBY-ZD-hDv" firstAttribute="bottom" secondItem="fL8-Dz-mQr" secondAttribute="bottom" id="cN5-Yh-NO9"/>
                             <constraint firstItem="Sze-LJ-mAH" firstAttribute="trailing" secondItem="fL8-Dz-mQr" secondAttribute="trailing" id="dHJ-KV-kdb"/>
-                            <constraint firstItem="Sze-LJ-mAH" firstAttribute="top" secondItem="Vxf-0b-nht" secondAttribute="bottom" id="tGD-BF-4jh"/>
+                            <constraint firstItem="Sze-LJ-mAH" firstAttribute="top" secondItem="fL8-Dz-mQr" secondAttribute="top" id="n83-IV-tEi"/>
                             <constraint firstItem="rBY-ZD-hDv" firstAttribute="top" secondItem="Sze-LJ-mAH" secondAttribute="bottom" id="tvy-1Y-Hro"/>
-                            <constraint firstItem="Vxf-0b-nht" firstAttribute="top" secondItem="fL8-Dz-mQr" secondAttribute="top" constant="20" id="wME-i9-1gr"/>
                             <constraint firstItem="rBY-ZD-hDv" firstAttribute="trailing" secondItem="fL8-Dz-mQr" secondAttribute="trailing" id="yYE-1G-BBK"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="Xh0-zI-Zjg"/>
+                    <navigationItem key="navigationItem" id="Xh0-zI-Zjg">
+                        <barButtonItem key="rightBarButtonItem" title="追加" id="BTE-GT-tAh"/>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="addBtn" destination="Vxf-0b-nht" id="bdz-rg-5T5"/>
+                        <outlet property="addBtn" destination="BTE-GT-tAh" id="lRl-gX-SW6"/>
                         <outlet property="searchBar" destination="Sze-LJ-mAH" id="5Br-0c-3b7"/>
                         <outlet property="tableView" destination="rBY-ZD-hDv" id="Ad9-aT-rRE"/>
                     </connections>
@@ -1928,7 +1914,7 @@
                     <navigationItem key="navigationItem" id="Ejp-C7-n8H">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="Hcn-fC-erS">
                             <connections>
-                                <segue destination="nOS-Ry-knr" kind="modal" identifier="toAddList" id="WOV-jf-b55"/>
+                                <segue destination="nOS-Ry-knr" kind="show" identifier="toAddList" id="WOV-jf-b55"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2006,8 +1992,8 @@
                         <outlet property="searchBar" destination="zld-V7-1rc" id="eoI-ZI-sZn"/>
                         <outlet property="tableView" destination="oKS-Wb-FBn" id="Y1z-gm-c0M"/>
                         <segue destination="81G-z8-iDb" kind="show" identifier="toMusicDetail" id="57p-0q-63F"/>
-                        <segue destination="YE3-ZG-H1b" kind="modal" identifier="toAddListMusic" id="rCM-HR-UGm"/>
-                        <segue destination="7HZ-IO-hqs" kind="modal" identifier="toAddDetail" id="QA8-j6-C1e"/>
+                        <segue destination="YE3-ZG-H1b" kind="show" identifier="toAddListMusic" id="rCM-HR-UGm"/>
+                        <segue destination="7HZ-IO-hqs" kind="show" identifier="toAddDetail" id="QA8-j6-C1e"/>
                         <segue destination="2F0-Nh-Vbf" kind="showDetail" identifier="toAddToList" id="lBV-Gx-b3j"/>
                         <segue destination="8bX-pp-uC9" kind="show" identifier="toAddWanna" id="ZnX-ai-DCv"/>
                     </connections>
@@ -2055,11 +2041,11 @@
             </objects>
             <point key="canvasLocation" x="-57" y="1468"/>
         </scene>
-        <!--Profile-->
+        <!--PROFILE-->
         <scene sceneID="07T-pE-zyR">
             <objects>
                 <navigationController id="rfm-8c-NmF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="person.circle" catalog="system" id="riT-y8-Ufe">
+                    <tabBarItem key="tabBarItem" title="PROFILE" image="person.circle" catalog="system" id="riT-y8-Ufe">
                         <color key="badgeColor" name="imageColor"/>
                         <imageReference key="selectedImage" image="person.circle" catalog="system" symbolScale="large"/>
                     </tabBarItem>
@@ -3147,9 +3133,9 @@
         <segue reference="Ote-00-YaL"/>
         <segue reference="wLi-IT-D5I"/>
         <segue reference="Jdv-Bg-noN"/>
-        <segue reference="QA8-j6-C1e"/>
+        <segue reference="qcR-nH-NSM"/>
         <segue reference="kMw-MZ-sVf"/>
-        <segue reference="9r5-ef-xkP"/>
+        <segue reference="h6t-0C-YdF"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemBackgroundColor"/>
     <resources>

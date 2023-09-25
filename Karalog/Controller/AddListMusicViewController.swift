@@ -22,7 +22,7 @@ class AddListMusicViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var addBtn: UIButton!
+    @IBOutlet var addBtn: UIBarButtonItem!
     
     
     //MARK: - View Controller methods
@@ -33,14 +33,6 @@ class AddListMusicViewController: UIViewController {
         setupTableView()
         searchBar.delegate = self
         title = "リストに追加"
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        guard let presentationController = presentationController else {
-            return
-        }
-        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
     }
     
     

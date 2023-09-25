@@ -60,14 +60,6 @@ class AddDetailViewController: UIViewController {
         setupSlider()
     }
     
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        guard let presentationController = presentationController else {
-            return
-        }
-        presentationController.delegate?.presentationControllerDidDismiss?(presentationController)
-    }
-    
     
     //MARK: - Setup
     
@@ -241,7 +233,7 @@ class AddDetailViewController: UIViewController {
                 musicFB.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
                 fromAddDetail = true
             }
-            self.dismiss(animated: true)
+            navigationController?.popViewController(animated: true)
         }else{
             func alert(title: String, message: String) {
                 alertCtl = UIAlertController(title: title, message: message, preferredStyle: .alert)

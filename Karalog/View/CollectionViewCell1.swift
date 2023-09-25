@@ -17,7 +17,6 @@ class CollectionViewCell1: UICollectionViewCell {
     
     @IBOutlet var image: UIImageView!
     @IBOutlet var label: UILabel!
-    @IBOutlet var background: UILabel!
     
     
     //MARK: - CollectionViewCell methods
