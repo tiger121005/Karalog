@@ -68,13 +68,6 @@ class AddMusicViewController: UIViewController {
         setupImageBtn()
         setupImage()
         
-        Task {
-            addBtn.isEnabled = false
-            addBtn.backgroundColor = UIColor.gray
-            await setMusicImage()
-            addBtn.isEnabled = true
-            addBtn.backgroundColor = UIColor.imageColor
-        }
         title = "曲を追加"
     }
     
@@ -663,35 +656,39 @@ class AddMusicViewController: UIViewController {
     
     
     func add() {
-        
-        let df = DateFormatter()
-        df.dateFormat = "yy年MM月dd日HH:mm"
-        df.timeZone = TimeZone.current
-        let time = df.string(from: Date())
-        
-        let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text! && $0.artistName == artistTF.text!}
-        if !filterMusic.isEmpty {
-            guard let id = filterMusic.first?.id else {
-                let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style: .default)
-                alert.addAction(ok)
-                present(alert, animated: true, completion: nil)
-                return
-            }
-            musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
-        } else {
-            musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
-                
-            })
+        Task{
             
-        }
-        //追加されたことを知らせる
-        fromAdd = true
-        
-        //2画面前に戻る
-        DispatchQueue.main.async {
-            let screenIndex = self.navigationController!.viewControllers.count - 3
-            self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
+            await setMusicImage()
+            
+            let df = DateFormatter()
+            df.dateFormat = "yy年MM月dd日HH:mm"
+            df.timeZone = TimeZone.current
+            let time = df.string(from: Date())
+            
+            let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text! && $0.artistName == artistTF.text!}
+            if !filterMusic.isEmpty {
+                guard let id = filterMusic.first?.id else {
+                    let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+                    let ok = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(ok)
+                    present(alert, animated: true, completion: nil)
+                    return
+                }
+                musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+            } else {
+                musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                    
+                })
+                
+            }
+            //追加されたことを知らせる
+            fromAdd = true
+            
+            //2画面前に戻る
+            DispatchQueue.main.async {
+                let screenIndex = 3
+                self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
+            }
         }
         
         
