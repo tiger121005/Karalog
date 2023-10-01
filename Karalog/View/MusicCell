@@ -1,0 +1,53 @@
+//
+//  LogCell.swift
+//  Karalog
+//
+//  Created by 伊藤汰海 on 2023/09/29.
+//
+
+import UIKit
+
+//MARK: - LogCell1Delegate
+
+protocol LogCellDelegate {
+    func reloadCell(indexPath: IndexPath)
+}
+
+
+//MARK: - LogCell
+
+class LogCell: UICollectionViewCell {
+    
+    var delegate: LogCellDelegate?
+    var indexPath: IndexPath!
+    
+    
+    //MARK: - UI objects
+    
+    @IBOutlet var scoreLabel: UILabel!
+    @IBOutlet var musicLabel: UILabel!
+    @IBOutlet var artistLabel: UILabel!
+    @IBOutlet var musicImage: UIImageView!
+    @IBOutlet var favoriteBtn: UIButton!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+        
+        self.layer.cornerRadius = self.frame.height * 0.2
+        self.layer.cornerCurve = .continuous
+        self.layer.borderColor = UIColor.white.cgColor
+        self.layer.borderWidth = 1
+        
+        musicImage.layer.cornerRadius = musicImage.frame.height * 0.1
+        musicImage.clipsToBounds = true
+        
+    }
+
+    
+    @IBAction func touchFavoriteBtn(_ sender: Any) {
+
+        delegate?.reloadCell(indexPath: indexPath)
+        
+    }
+}
