@@ -159,6 +159,47 @@ class SelectedPostViewController: UIViewController {
 
 extension SelectedPostViewController: UICollectionViewDelegate {
     
+    //長押しした時の処理
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt
+                        indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        if kind == "past" && userID == manager.user.id{
+            
+            let actionProvider: ([UIMenuElement]) -> UIMenu? = { _ in
+                let delete = UIAction(title: "削除", image: UIImage.trash, attributes: .destructive) { _ in
+                    
+                    //alert
+                    let alert = UIAlertController(title: "削除", message: "”" + manager.lists[indexPath.row].listName + "”" + "を削除しますか", preferredStyle: .alert)
+                    let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
+                        
+                    }
+                    
+                    let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
+                        postFB.deletePost(id: self.shareList[indexPath.row].id!) {_ in
+                            self.shareList.remove(at: indexPath.row)
+                            collectionView.reloadData()
+                        }
+                        
+                    }
+                    alert.addAction(cancel)
+                    alert.addAction(delete)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                
+                return UIMenu(title: "編集", image: nil, identifier: nil, children: [delete])
+            }
+            
+            return UIContextMenuConfiguration(identifier: nil,
+                                              previewProvider: nil,
+                                              actionProvider: actionProvider)
+        } else {
+            return nil
+        }
+        
+        
+        
+        
+    }
 }
 
 
@@ -210,35 +251,65 @@ extension SelectedPostViewController: UICollectionViewDataSource {
 extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        Task {
+        
             // スクロールが最下部に達したら次のページのデータを取得
-            if !finalContent {
-                if indexPath.row == self.shareList.count - 1 {
-                    if kind == "past" {
-                        postFB.searchUserPost(first: false, id: userID, name: userName) { list in
-                            if list.isEmpty {
-                                self.finalContent = true
-                                return
-                            }
-                            self.shareList.append(contentsOf: list)
-                            DispatchQueue.main.async {
-                                collectionView.reloadData()
-                            }
-                        }
-                    } else if kind == "good" {
-                        let first6 = remainingList.prefix(6)
-                        if first6.isEmpty {
-                            self.finalContent = true
+        if !finalContent {
+            if indexPath.row == self.shareList.count - 1 {
+                if kind == "past" {
+                    postFB.searchUserPost(first: false, id: userID, name: userName) { list in
+                        if list.isEmpty {
+                            print("finalContent")
                             return
                         }
-                        remainingList.removeFirst(first6.count)
-                        
+                        let oldCount = self.shareList.count
+                        self.shareList.append(contentsOf: list)
+                        let newCount = self.shareList.count
+                        let newIndePaths = (oldCount..<newCount).map {IndexPath(item: $0, section: 0) }
+                        DispatchQueue.main.async {
+                            collectionView.insertItems(at: newIndePaths)
+                        }
+                    }
+                } else if kind == "good" {
+                    let first6 = remainingList.prefix(6)
+                    if first6.isEmpty {
+                        self.finalContent = true
+                        return
+                    }
+                    remainingList.removeFirst(first6.count)
+                    Task {
+                        let oldCount = self.shareList.count
                         self.shareList.append(contentsOf: await postFB.searchGoodList(goodList: first6))
-                        self.collectionView.reloadData()
+                        let newCount = self.shareList.count
+                        let newCountIndexPaths = (oldCount..<newCount).map {IndexPath(item: $0, section: 0) }
+                        DispatchQueue.main.async {
+                            self.collectionView.insertItems(at: newCountIndexPaths)
+                        }
                     }
                 }
             }
+            
         }
+//        Task {
+//            // スクロールが最下部に達したら次のページのデータを取得
+//            if !finalContent {
+//                if indexPath.row == self.shareList.count - 1 {
+//
+//                    let list = await postFB.searchUserPost(first: false, id: userID, name: userName) {
+//                    if list.isEmpty {
+//                        finalContent = true
+//                        return
+//                    }
+//                    let oldCount = self.shareList.count
+//                    self.shareList.append(contentsOf: list)
+//                    let newCount = self.shareList.count
+//                    let newIndexPaths = (oldCount..<newCount).map { IndexPath(item: $0, section: 0) }
+//                    DispatchQueue.main.async {
+//                        collectionView.insertItems(at: newIndexPaths)
+//                    }
+//
+//                }
+//            }
+//        }
     }
 }
 

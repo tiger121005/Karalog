@@ -16,7 +16,7 @@ var fromAdd = false
 class MusicViewController: UIViewController {
     
     //曲名,アーティスト名が入る
-    var tvList: [MusicList] = []
+    var cvList: [MusicList] = []
     
     //sortされている種類を調べる
     var judgeSort: String!
@@ -36,7 +36,7 @@ class MusicViewController: UIViewController {
     
     //MARK: - UI objects
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var editBtn: UIBarButtonItem!
     @IBOutlet var addBtn: UIBarButtonItem!
     @IBOutlet var searchBar: UISearchBar!
@@ -53,12 +53,14 @@ class MusicViewController: UIViewController {
         super.viewDidLoad()
         
         judgeSort = UserDefaultsKey.judgeSort.get() ?? Sort.追加順（遅）.rawValue
-        setupTableView()
+        setupCollectionView()
         setupSearchBar()
         setupBarItem()
         createMenu()
         get()
         title = "HOME"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,26 +75,35 @@ class MusicViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toAddToList" {
+        
+        switch Segue(rawValue: segue.identifier) {
+            
+        case .addToList:
             let nextView = segue.destination as! AddToListViewController
             idList = []
-            if tableView.indexPathsForSelectedRows != nil {
-                let indexPathList = tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
-                for i in indexPathList {
-                    idList.append(tvList[i.row].id!)
-                }
-            } else {
+            guard let items = collectionView.indexPathsForSelectedItems else {
                 idList = [musicID]
+                return
             }
+            let indexPathList = items.sorted{ $1.row < $0.row}
+            for i in indexPathList {
+                idList.append(cvList[i.row].id!)
+            }
+            
             nextView.idList = idList
-        }else if segue.identifier == "toMusicDetail" {
+            
+        case .musicDetail:
             let nextView = segue.destination as! MusicDetailViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicID = musicID
             nextView.musicImage = musicImage
             
+        default:
+            break
         }
+        
+    
     }
     
     // ステータスバーを黒く
@@ -103,22 +114,25 @@ class MusicViewController: UIViewController {
     
     //MARK: - Setup
     
-    func setupTableView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
+    func setupCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UINib(nibName: "MusicCell", bundle: nil), forCellWithReuseIdentifier: "musicCell")
         //セクションの高さ
-        tableView.rowHeight = 70
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.keyboardDismissMode = .onDrag
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
+        collectionView.collectionViewLayout = layout
+       
+        collectionView.allowsMultipleSelectionDuringEditing = true
+        collectionView.keyboardDismissMode = .onDrag
         
-        tableView.refreshControl = refreshCtl
+        collectionView.refreshControl = refreshCtl
         refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
         refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
-        tableView.addSubview(refreshCtl)
+        collectionView.addSubview(refreshCtl)
         
-        tableView.emptyDataSetSource = self
-        tableView.emptyDataSetDelegate = self
+        collectionView.emptyDataSetSource = self
+        collectionView.emptyDataSetDelegate = self
     }
     
     func setupSearchBar() {
@@ -128,8 +142,8 @@ class MusicViewController: UIViewController {
     
     func setupBarItem() {
         let delete = UIAction(title: "削除", image: UIImage.trash, handler: { [self]_ in
-            if self.tableView.indexPathsForSelectedRows != nil {
-                let indexPathList = self.tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
+            if self.collectionView.indexPathsForSelectedItems != nil {
+                let indexPathList = self.collectionView.indexPathsForSelectedItems!.sorted{ $1.row < $0.row}
                 let alert = UIAlertController(title: "削除", message: String(indexPathList.count) + "個の曲のデータを削除します", preferredStyle: .alert)
                 let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (action) in
                     
@@ -137,12 +151,12 @@ class MusicViewController: UIViewController {
                 let delete = UIAlertAction(title: "削除", style: .destructive) { [self] (action) in
                     idList = []
                     for i in indexPathList {
-                        idList.append(tvList[i.row].id!)
+                        idList.append(cvList[i.row].id!)
                     }
                     for i in 0...indexPathList.count - 1 {
                         musicFB.deleteMusic(id: idList[i], completionHandler: {_ in
-                            self.tvList.remove(at: indexPathList[i].row)
-                            self.tableView.reloadData()
+                            self.cvList.remove(at: indexPathList[i].row)
+                            self.collectionView.reloadData()
                         })
                     }
                     
@@ -160,8 +174,8 @@ class MusicViewController: UIViewController {
             }
         })
         let addToList = UIAction(title: "リストに追加", image: UIImage.folder, handler: { [self]_ in
-            if self.tableView.indexPathForSelectedRow != nil {
-                performSegue(withIdentifier: "toAddToList", sender: nil)
+            if self.collectionView.indexPathsForSelectedItems != nil {
+                segue(identifier: .addToList)
             }else{
                 let alert = UIAlertController(title: "データなし", message: "データが選択されていません", preferredStyle: .alert)
                 let ok = UIAlertAction(title: "OK", style: .cancel) { (action) in
@@ -175,7 +189,7 @@ class MusicViewController: UIViewController {
         selectBtn = UIBarButtonItem(title: "", image: UIImage.ellipsisCircle, menu: selectMenu)
         
         allSelectBtn = UIBarButtonItem(title: "全て選択", style: .plain, target: self, action: #selector(tapAllSelectBtn(_:)))
-        doneBtn = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(tapDoneBtn(_:)))
+        doneBtn = UIBarButtonItem(title: "完了", style: .done, target: self, action: #selector(tapDoneBtn(_:)))
         self.navigationItem.rightBarButtonItems = [editBtn, addBtn, selectBtn]
         self.navigationItem.leftBarButtonItems = [doneBtn, allSelectBtn]
         selectBtn.isHidden = true
@@ -199,10 +213,11 @@ class MusicViewController: UIViewController {
                 self.navigationItem.hidesBackButton = true
                 
                 super.setEditing(true, animated: true)
-                self.tableView.setEditing(true, animated: true)
                 
-                self.tableView.allowsMultipleSelection = true
-                self.tableView.isEditing = true
+                self.collectionView.inputViewController?.setEditing(true, animated: true)
+                
+                self.collectionView.allowsMultipleSelection = true
+                self.collectionView.isEditing = true
                 
                 if self.searchBar.isFirstResponder {
                     self.searchBar.resignFirstResponder()
@@ -211,77 +226,81 @@ class MusicViewController: UIViewController {
                 self.idList = []
             })
         ])
+        
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
             if judgeSort != Sort.追加順（遅）.rawValue {
                 judgeSort = Sort.追加順（遅）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }else{
                 judgeSort = Sort.追加順（早）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }
+            UserDefaultsKey.judgeSort.set(value: judgeSort)
             self.createMenu()
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
             if judgeSort != Sort.得点（高）.rawValue{
                 judgeSort = Sort.得点（高）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }else{
                 judgeSort = Sort.得点（低）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }
+            UserDefaultsKey.judgeSort.set(value: judgeSort)
             self.createMenu()
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
             if judgeSort != Sort.曲名順（降）.rawValue{
                 judgeSort = Sort.曲名順（降）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }else{
                 judgeSort = Sort.曲名順（昇）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
             }
+            UserDefaultsKey.judgeSort.set(value: judgeSort)
             self.createMenu()
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
             if judgeSort != Sort.アーティスト順（降）.rawValue{
                 judgeSort = Sort.アーティスト順（降）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
             }else{
                 judgeSort = Sort.アーティスト順（昇）.rawValue
-                function.sort(sortKind: judgeSort, updateList: tvList, completionHandler: {list in
-                    self.tvList = list
-                    self.tableView.reloadData()
+                function.sort(sortKind: judgeSort, updateList: cvList, completionHandler: {list in
+                    self.cvList = list
+                    self.collectionView.reloadData()
                 })
-                UserDefaultsKey.judgeSort.set(value: judgeSort)
+                
 
             }
+            UserDefaultsKey.judgeSort.set(value: judgeSort)
             self.createMenu()
         })]
         
@@ -291,22 +310,21 @@ class MusicViewController: UIViewController {
     }
     
     func get() {
-        print("\(manager.user.id) is login!")
         musicFB.getMusic(completionHandler: { musicList in
-            self.tvList = musicList
-            function.sort(sortKind: self.judgeSort, updateList: self.tvList, completionHandler: { list in
-                self.tvList = list
+            self.cvList = musicList
+            function.sort(sortKind: self.judgeSort, updateList: self.cvList, completionHandler: { list in
+                self.cvList = list
                 
             })
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         })
         
     }
     
     func setData() {
         function.sort(sortKind: judgeSort, updateList: manager.musicList, completionHandler: {list in
-            self.tvList = list
-            self.tableView.reloadData()
+            self.cvList = list
+            self.collectionView.reloadData()
         })
     }
     
@@ -320,6 +338,11 @@ class MusicViewController: UIViewController {
         }
     }
     
+    func segue(identifier: Segue) {
+        let id = identifier.rawValue
+        self.performSegue(withIdentifier: id, sender: nil)
+    }
+    
     
     //MARK: - Objective - C
     
@@ -329,7 +352,7 @@ class MusicViewController: UIViewController {
         self.navigationItem.hidesBackButton = false
         
         super.setEditing(false, animated: true)
-        self.tableView.setEditing(false, animated: true)
+        self.collectionView.endEditing(true)
         self.selectBtn.isHidden = true
         self.doneBtn.isHidden = true
         self.allSelectBtn.isHidden = true
@@ -338,15 +361,17 @@ class MusicViewController: UIViewController {
     @objc func tapAllSelectBtn(_ sender: UIBarButtonItem) {
         
         if allSelected {
-            for i in 0...tvList.count - 1 {
-                self.tableView.deselectRow(at: IndexPath(row: i, section: 0), animated: false)
+            for i in 0...cvList.count - 1 {
+                self.collectionView.deselectItem(at: IndexPath(row: i, section: 0), animated: false)
             }
             allSelectBtn.title = "全て選択"
             allSelected = false
             
         }else{
-            for i in 0...tvList.count - 1 {
-                self.tableView.selectRow(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: .none)
+            for i in 0...cvList.count - 1 {
+                
+                self.collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
+                
             }
             allSelectBtn.title = "全て解除"
             allSelected = true
@@ -356,7 +381,7 @@ class MusicViewController: UIViewController {
     
     @objc func reload() {
         musicFB.getMusic() { list in
-            self.tvList = list
+            self.cvList = list
             self.searchBar.text = ""
             self.refreshCtl.endRefreshing()
         }
@@ -369,164 +394,200 @@ class MusicViewController: UIViewController {
 }
 
 
-//MARK: - UITableViewDataSource
+//MARK: - UICollectionViewDataSource
 
-extension MusicViewController: UITableViewDataSource {
-    //セクション数
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tvList.count
+extension MusicViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return cvList.count
     }
     
-    //セルを生成
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //tableView.bounds.widthはスマホの横幅を取得するメソッド
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell1", for: indexPath) as! TableViewCell1
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "musicCell", for: indexPath) as! MusicCell
         
         var list: [MusicList] = []
         var a: [Double] = []
-        for i in tvList {
+        for i in cvList {
             let b = i.data
             var c: [Double] = []
             c += b.map{$0.score}
             a.append(c.max()!)
         }
         let d = a.indices.sorted{ a[$1] < a[$0]}
-        list = d.map{tvList[$0]}
+        list = d.map{cvList[$0]}
         
         var n: Int!
-        if tvList.count < 10 {
+        if cvList.count < 10 {
             n = 1
-        } else if tvList.count < 40 {
-            n = Int(ceil(Double(tvList.count / 10)))
+        } else if cvList.count < 40 {
+            n = Int(ceil(Double(cvList.count / 10)))
         } else {
-            n = Int(ceil(Double(tvList.count / 5)))
+            n = Int(ceil(Double(cvList.count / 5)))
         }
         let m = n * 3
         let high = list[n - 1].data.map{$0.score}.max()!
         var medium: Double = 0.0
-        if tvList.count > 3 {
+        if cvList.count > 3 {
             medium = list[m - 1].data.map{$0.score}.max()!
         }
         //cellのdelegateを呼び出して、indexに代入。お気に入りボタンに使用
         cell.delegate = self
         cell.indexPath = indexPath
         
-        cell.musicLabel?.text = tvList[indexPath.row].musicName
-        cell.artistLabel?.text = tvList[indexPath.row].artistName
-        let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
+        cell.musicLabel?.text = cvList[indexPath.row].musicName
+        cell.artistLabel?.text = cvList[indexPath.row].artistName
+        let useImage = UIImage(data: cvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
         cell.musicImage?.image = useImage
         
         //最高得点
-        let scoreList = tvList[indexPath.row].data.map{$0.score}
+        let scoreList = cvList[indexPath.row].data.map{$0.score}
         let max = scoreList.max()
         cell.scoreLabel.text = String(format: "%.3f", max!)
+        let attributedText = NSMutableAttributedString(string: cell.scoreLabel.text!)
         if max! >= Double(high) {
-            cell.scoreLabel.textColor = UIColor.imageColor
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        } else if max! >= Double(medium) && tvList.count > 3 {
-            cell.scoreLabel.textColor = UIColor.subImageColor
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
+            if cell.scoreLabel.text!.count == 7 {
+                attributedText.addAttributes(
+                    [
+                        //一部の文字に反映させたい内容
+                        .font: UIFont(name: "Futura Bold", size: 18)!, //フォントサイズを変更
+                        .foregroundColor: UIColor.imageColor // テキストカラーを変更
+                    ],
+                    // sampleUILabelの0文字目から９文字目までに変更内容を反映させる
+                    range: NSMakeRange(0, 3)
+                )
+            } else {
+                attributedText.addAttributes(
+                    [
+                        .font: UIFont(name: "Futura Bold", size: 18)!,
+                        .foregroundColor: UIColor.imageColor
+                    ],
+                    range: NSMakeRange(0, 2)
+                )
+            }
+        } else if max! >= Double(medium) && cvList.count > 3 {
+            attributedText.addAttributes(
+                [
+                    .font: UIFont(name: "Futura Bold", size: 16)!,
+                    .foregroundColor: UIColor.subImageColor
+                ],
+                range: NSMakeRange(0, 2)
+            )
         } else {
-            cell.scoreLabel.textColor = .gray
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
+            attributedText.addAttributes(
+                [
+                    .font: UIFont(name: "Futura Bold", size: 16)!,
+                    .foregroundColor: UIColor.lightGray
+                ],
+                range: NSMakeRange(0, 2)
+            )
         }
+        cell.scoreLabel.attributedText = attributedText
         
         //お気に入りボタン
-        if tvList[indexPath.row].favorite == false {
+        if cvList[indexPath.row].favorite == false {
             cell.favoriteBtn?.setImage(UIImage.star, for: .normal)
-        }else if tvList[indexPath.row].favorite == true {
+        }else if cvList[indexPath.row].favorite == true {
             cell.favoriteBtn?.setImage(UIImage.starFill, for: .normal)
         }
         
-        cell.backgroundColor = .clear
-        
-        var selectedBgView = UIView()
-        selectedBgView.backgroundColor = .gray
+        let selectedBgView = UIView()
+        selectedBgView.backgroundColor = .darkGray
         cell.selectedBackgroundView = selectedBgView
         
         return cell
     }
-    
-    //削除機能
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let alert = UIAlertController(title: "削除", message: "”" + tvList[indexPath.row].musicName + "”" + "を削除します", preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
-                
-            }
-            let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
-                self.selectedID = self.tvList[indexPath.row].id!
-                musicFB.deleteMusic(id: self.selectedID, completionHandler: {_ in
-                    self.tvList.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .fade)
-                })
-                
-                if self.tvList.count == 0 {
-                    self.tableView.reloadData()
-                }
-            }
-            alert.addAction(cancel)
-            alert.addAction(delete)
-            present(alert, animated: true, completion: nil)
+}
+
+
+//MARK: - MusicCellDelegate
+
+extension MusicViewController: MusicCellDelegate {
+    func reloadCell(indexPath: IndexPath) {
+        if !isEditing {
+            selectedID = cvList[indexPath.row].id!
+            musicFB.favoriteUpdate(id: selectedID, favorite: cvList[indexPath.row].favorite, completionHandler: {_ in
+                self.cvList[indexPath.row].favorite.toggle()
+                self.collectionView.reloadData()
+            })
         }
     }
 }
 
 
-//MARK: - UITableViewDelegate
+//MARK: - UICollectionViewDelegate {
 
-extension MusicViewController: UITableViewDelegate {
+extension MusicViewController: UICollectionViewDelegate {
     
-    //削除のラベルを変更
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "削除"
+    //長押しした時の処理
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt
+                        indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        // ②メニューの定義
+        let actionProvider: ([UIMenuElement]) -> UIMenu? = { _ in
+            
+            let addList = UIAction(title: "リストに追加", image: UIImage.folder) {_ in
+                self.segue(identifier: .addToList)
+            }
+            
+            let delete = UIAction(title: "削除", image: UIImage.trash, attributes: .destructive) {_ in
+                
+                //alert
+                let alert = UIAlertController(title: "削除", message: "”" + manager.lists[indexPath.row].listName + "”" + "を削除しますか", preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
+                    
+                }
+                
+                let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
+                    listFB.deleteList(indexPath: indexPath, completionHandler: {_  in
+                        self.collectionView.reloadData()
+                    })
+                    
+                }
+                alert.addAction(cancel)
+                alert.addAction(delete)
+                self.present(alert, animated: true, completion: nil)
+                
+            }
+            
+
+            return UIMenu(title: "編集", image: nil, identifier: nil, children: [addList, delete])
+        }
+
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: nil,
+                                          actionProvider: actionProvider)
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
 
-        tableView.deselectRow(at: indexPath, animated: true)
-        musicID = tvList[indexPath.row].id
+        musicID = cvList[indexPath.row].id
         if isEditing == false {
-            musicData = tvList[indexPath.row].data
-            musicName = tvList[indexPath.row].musicName
-            artistName = tvList[indexPath.row].artistName
-            musicID = tvList[indexPath.row].id
-            musicImage = tvList[indexPath.row].musicImage
+            musicData = cvList[indexPath.row].data
+            musicName = cvList[indexPath.row].musicName
+            artistName = cvList[indexPath.row].artistName
+            musicImage = cvList[indexPath.row].musicImage
             if searchBar.isFirstResponder {
                 searchBar.resignFirstResponder()
             }
-            performSegue(withIdentifier: "toMusicDetail", sender: nil)
-            tableView.deselectRow(at: indexPath, animated: true)
+            segue(identifier: .musicDetail)
+            collectionView.deselectItem(at: indexPath, animated: false)
         }
     }
-    
-    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let addList = UIAction(title: "リストに追加") {_ in
-            self.musicID = self.tvList[indexPath.row].id
-            self.performSegue(withIdentifier: "toAddToList", sender: nil)
-        }
-        
-        let menu = UIMenu(title: "選択", image: nil, identifier: nil, options: [], children: [addList])
-                let contextMenuConfiguration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-                    menu
-                }
-                
-                return contextMenuConfiguration
-    }
-    
 }
 
 
-//MARK: - TableViewCell1Delegate
+//MARK: - UICollectionViewDelegateFlowLayout
 
-extension MusicViewController: TableViewCell1Delegate {
-    func reloadCell(indexPath: IndexPath) {
-        selectedID = tvList[indexPath.row].id!
-        musicFB.favoriteUpdate(id: selectedID, favorite: tvList[indexPath.row].favorite, completionHandler: {_ in
-            self.tvList[indexPath.row].favorite.toggle()
-            self.tableView.reloadData()
-        })
-        
+extension MusicViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 10
+        return CGSize(width: width, height: 90)
     }
 }
 
@@ -555,20 +616,20 @@ extension MusicViewController: DZNEmptyDataSetDelegate {
 
 extension MusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        tvList = []
+        cvList = []
         print(searchText)
         if searchText == "" {
-            tvList = manager.musicList
+            cvList = manager.musicList
         }else{
             for d in manager.musicList {
                 if d.musicName.contains(searchText) {
-                    tvList.append(d)
+                    cvList.append(d)
                 }else if d.artistName.contains(searchText) {
-                    tvList.append(d)
+                    cvList.append(d)
                 }
             }
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     //改行したら自動的にキーボードを非表示にする

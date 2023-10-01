@@ -35,6 +35,8 @@ class AllListViewController: UIViewController {
         
         setupCollectionView()
         title = "LIST"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,11 +53,15 @@ class AllListViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toList" {
+        switch Segue(rawValue: segue.identifier) {
+        case .list:
             let nextView = segue.destination as! ListViewController
             
             nextView.listID = listID
             nextView.listName = listName
+            
+        default:
+            break
         }
     }
     
@@ -69,6 +75,11 @@ class AllListViewController: UIViewController {
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
         collectionView.dragInteractionEnabled = true
+        
+        //セクションの高さ
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        collectionView.collectionViewLayout = layout
         
         collectionView.refreshControl = refreshCtl
         refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
@@ -114,7 +125,7 @@ extension AllListViewController: UICollectionViewDelegate {
             listID = manager.lists[indexPath.row].id!
         }
         listName = manager.lists[indexPath.row].listName
-        performSegue(withIdentifier: "toList", sender: nil)
+        performSegue(withIdentifier: Segue.list.rawValue, sender: nil)
     }
     
     //長押しした時の処理
@@ -192,7 +203,7 @@ extension AllListViewController: UICollectionViewDataSource {
         cell.image.image = UIImage(data: manager.lists[indexPath.row].listImage)!
         cell.label.text = manager.lists[indexPath.row].listName
         
-        var selectedBgView = UIView()
+        let selectedBgView = UIView()
         selectedBgView.backgroundColor = .gray
         cell.selectedBackgroundView = selectedBgView
         

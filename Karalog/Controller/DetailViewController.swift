@@ -15,6 +15,7 @@ class DetailViewController: UIViewController {
     var time: String = ""
     var musicName: String = ""
     var artistName: String = ""
+    var musicImage: UIImage!
     var score: String = ""
     var key: String = ""
     var model: String = ""
@@ -32,16 +33,17 @@ class DetailViewController: UIViewController {
     
     //MARK: - UI objects
     
+    @IBOutlet var musicImageView: UIImageView!
+    @IBOutlet var blackLayer: UIView!
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
-    @IBOutlet var scoreLabel: EmphasizeLabel!
+    @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var keyLabel: UILabel!
     @IBOutlet var modelLabel: UILabel!
     @IBOutlet var commentLabel: UILabel!
     @IBOutlet var views: [UIView]!
     @IBOutlet var commentViewHeight: NSLayoutConstraint!
-    @IBOutlet var viewHeight: NSLayoutConstraint!
     
     
     //MARK: - View Controller methods
@@ -49,13 +51,20 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
     
     //MARK: - Setup
     
     func setup() {
+        
+        musicImageView.image = musicImage
+        
+        blackLayer.backgroundColor = .black.withAlphaComponent(0.3)
+        
         dateLabel.text = time
         
         musicLabel.text = musicName
@@ -63,9 +72,7 @@ class DetailViewController: UIViewController {
         artistLabel.text = artistName
         
         scoreLabel.text = score
-        scoreLabel.textColor = UIColor.imageColor
-        scoreLabel.shadowColorForCustom = UIColor.subImageColor.withAlphaComponent(0.8)
-        scoreLabel.shadowOffsetForCustom = CGSize(width: 2, height: 2)
+        scoreLabel.textColor = UIColor.white
         
         keyLabel.text = key
         
@@ -79,17 +86,14 @@ class DetailViewController: UIViewController {
         let commentHeight = otherHeight + commentLabelHeight
         commentViewHeight.constant = commentHeight
         
-        viewHeight.constant = (otherViewHeight * 4) + (space * 7) + scoreViewHeight + commentHeight
-        
         
         for view in views {
             view.layer.cornerRadius = radius
             view.layer.cornerCurve = .continuous
             view.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
-            view.layer.shadowColor = UIColor.black.cgColor
+            view.layer.shadowColor = UIColor.baseColor.cgColor
             view.layer.shadowOpacity = 0.8
-            view.layer.shadowRadius = 5
-            
+            view.layer.shadowRadius = 3
         }
     }
 }

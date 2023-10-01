@@ -46,20 +46,15 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
         setupSearchBar()
         
         
-        title = "検索"
+        title = "SEARCH"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toAddMusic"{
+        switch Segue(rawValue: segue.identifier) {
+        case .addMusic:
             let nextView = segue.destination as! AddMusicViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
-//            do {
-//                nextView.musicImage = try Data(contentsOf: URL(string: musicImage)!)
-//            } catch {
-//                print("Error")
-//            }
-            
             // URLSessionを作成
             let session = URLSession.shared
                 
@@ -75,20 +70,15 @@ class SearchViewController: UIViewController, VNDocumentCameraViewControllerDele
                     }
                         
                     if let data {
-                        
                         nextView.musicImage = data
-//                        // 画像を使用してUIの更新などを行う
-//                        DispatchQueue.main.async {
-//                            // このブロック内でUIの更新を行う
-//                            // 例: UIImageViewに画像を設定する
-//                            nextView.musicImage = UIImageView(image: image)
-//                            // 画像を表示するなどの処理を行う
-//                        }
                     }
                 }
                 // タスクを開始
                 task.resume()
             }
+            
+        default:
+            break
         }
     }
     
@@ -153,7 +143,7 @@ extension SearchViewController: UICollectionViewDelegate {
         artistName = musicInfoModel[indexPath.row].artistName
         musicImage = musicInfoModel[indexPath.row].artworkUrl100
         
-        performSegue(withIdentifier: "toAddMusic", sender: nil)
+        performSegue(withIdentifier: Segue.addMusic.rawValue, sender: nil)
     }
 }
 

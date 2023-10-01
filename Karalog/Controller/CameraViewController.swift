@@ -83,8 +83,9 @@ class CameraViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.global(qos: .background).async{
             self.captureSession.startRunning()
+            
         }
-        
+        self.cameraBtn.isEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -120,13 +121,18 @@ class CameraViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        self.cameraBtn.isEnabled = true
         captureSession.stopRunning()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toAddMusic" {
+        switch Segue(rawValue: segue.identifier) {
+        case .addMusic:
             let nextView = segue.destination as! AddMusicViewController
             nextView.image = image
+            
+        default:
+            break
         }
     }
     
@@ -233,7 +239,6 @@ class CameraViewController: UIViewController {
         
         guard let _results = request.results as? [VNRecognizedTextObservation] else { return }
         
-        let maximumCandidates = 1
         
         for visionResult in _results {
             boxes.append(visionResult.boundingBox)
@@ -286,12 +291,15 @@ class CameraViewController: UIViewController {
     
     // シャッターボタンが押された時のアクション
     @IBAction func cameraButton_TouchUpInside(_ sender: Any) {
+        cameraBtn.isEnabled = false
+        
         let settings = AVCapturePhotoSettings()
         
         //カメラの手ぶれ補正
         settings.isAutoStillImageStabilizationEnabled = true
         // 撮影された画像をdelegateメソッドで処理
         self.photoOutput.capturePhoto(with: settings, delegate: self as AVCapturePhotoCaptureDelegate)
+        
         
     }
 
@@ -336,8 +344,8 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             image = UIImage(data: imageData)
-            
-            self.performSegue(withIdentifier: "toAddMusic", sender: nil)
+            captureSession.stopRunning()
+            self.performSegue(withIdentifier: Segue.addMusic.rawValue, sender: nil)
         }
     }
 }

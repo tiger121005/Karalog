@@ -12,7 +12,7 @@ import UIKit
 
 class AddListMusicViewController: UIViewController {
     
-    var tvList: [MusicList] = []
+    var cvList: [MusicList] = []
     var fromFav: Bool = false
     var idList: [String] = []
     var listID: String = ""
@@ -20,7 +20,7 @@ class AddListMusicViewController: UIViewController {
     
     //MARK: - UI objects
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var addBtn: UIBarButtonItem!
     
@@ -39,25 +39,29 @@ class AddListMusicViewController: UIViewController {
     //MARK: - Setup
     
     func setupTableView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "TableViewCell1", bundle: nil), forCellReuseIdentifier: "tableViewCell1")
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(UINib(nibName: "MusicCell", bundle: nil), forCellWithReuseIdentifier: "musicCell")
         
-        tableView.rowHeight = 70
-        tableView.keyboardDismissMode = .onDrag
-        tableView.allowsMultipleSelection = true
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.isEditing = true
+        //セクションの高さ
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
+        collectionView.collectionViewLayout = layout
         
-        tvList = manager.musicList
+        collectionView.keyboardDismissMode = .onDrag
+        collectionView.allowsMultipleSelection = true
+        collectionView.allowsMultipleSelectionDuringEditing = true
+        collectionView.isEditing = true
+        
+        cvList = manager.musicList
     }
     
     
     //MARK: - UI interaction
     
     @IBAction func add() {
-        if self.tableView.indexPathsForSelectedRows != nil {
-            let indexPathList = self.tableView.indexPathsForSelectedRows!.sorted{ $1.row < $0.row}
+        if self.collectionView.indexPathsForSelectedItems != nil {
+            let indexPathList = self.collectionView.indexPathsForSelectedItems!.sorted{ $1.row < $0.row}
             
             let alert = UIAlertController(title: "追加", message: String(indexPathList.count) + "個の曲のデータを追加します", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (action) in
@@ -66,7 +70,7 @@ class AddListMusicViewController: UIViewController {
             let delete = UIAlertAction(title: "追加", style: .default) { [self] (action) in
                 idList = []
                 for i in indexPathList {
-                    idList.append(tvList[i.row].id!)
+                    idList.append(cvList[i.row].id!)
                     
                 }
                 if fromFav == false {
@@ -101,37 +105,24 @@ class AddListMusicViewController: UIViewController {
 }
 
 
-//MARK: - UITableViewDelegate
-
-extension AddListMusicViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 選択されたセルを取得する
-        let selectedCell = tableView.cellForRow(at: indexPath)
-        
-    }
-
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        // 選択が解除されたセルを取得する
-        let deselectedCell = tableView.cellForRow(at: indexPath)
-        
-    }
-}
-
-
-//MARK: - UITableViewDataSource
-
-extension AddListMusicViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         tvList.count
+//MARK: - UICollectionViewDataSource
+extension AddListMusicViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell1", for: indexPath) as! TableViewCell1
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return cvList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "musicCell", for: indexPath) as! MusicCell
         
         var list: [MusicList] = []
         var a: [Double] = []
         
-        for i in tvList {
+        for i in cvList {
             let b = i.data
             var c: [Double] = []
             for j in b {
@@ -140,46 +131,103 @@ extension AddListMusicViewController: UITableViewDataSource {
             a.append(c.max()!)
         }
         let d = a.indices.sorted{ a[$1] < a[$0]}
-        list = d.map{tvList[$0]}
+        list = d.map{cvList[$0]}
         
         var n: Int!
-        if tvList.count < 10 {
+        if cvList.count < 10 {
             n = 1
-        } else if tvList.count < 40 {
-            n = Int(ceil(Double(tvList.count / 10)))
+        } else if cvList.count < 40 {
+            n = Int(ceil(Double(cvList.count / 10)))
         } else {
-            n = Int(ceil(Double(tvList.count / 5)))
+            n = Int(ceil(Double(cvList.count / 5)))
         }
         let m = n * 3
-        let high = list[n - 1].data.map{$0.score}.max()!
+        let high = list[n - 1].data.map{$0.score}.max() ?? 0
         var medium: Double = 0.0
-        if tvList.count > 3 {
-            medium = list[m - 1].data.map{$0.score}.max()!
-        }   
-        
-        cell.musicLabel?.text = tvList[indexPath.row].musicName
-        cell.artistLabel?.text = tvList[indexPath.row].artistName
-        let useImage = UIImage(data: tvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
-        cell.musicImage?.image = useImage
-        
-        let scoreList = tvList[indexPath.row].data.map{$0.score}
-        let max = scoreList.max()
-        cell.scoreLabel.text = String(format: "%.3f", max!)
-        if max! >= Double(high) {
-            cell.scoreLabel.textColor = UIColor.imageColor
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        } else if max! >= Double(medium) && tvList.count > 3 {
-            cell.scoreLabel.textColor = UIColor.subImageColor
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 13)
-        } else {
-            cell.scoreLabel.textColor = .gray
-            cell.scoreLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        if cvList.count > 3 {
+            medium = list[m - 1].data.map{$0.score}.max() ?? 0
         }
         
+        cell.musicLabel?.text = cvList[indexPath.row].musicName
+        cell.artistLabel?.text = cvList[indexPath.row].artistName
+        let useImage = UIImage(data: cvList[indexPath.row].musicImage)?.withRenderingMode(.alwaysOriginal)
+        cell.musicImage?.image = useImage
+        
+        let scoreList = cvList[indexPath.row].data.map{$0.score}
+        let max = scoreList.max()
+        cell.scoreLabel.text = String(format: "%.3f", max!)
+        let attributedText = NSMutableAttributedString(string: cell.scoreLabel.text!)
+        if max! >= Double(high) {
+            if cell.scoreLabel.text!.count == 7 {
+                attributedText.addAttributes(
+                    [
+                        //一部の文字に反映させたい内容
+                        .font: UIFont(name: "Futura Bold", size: 18)!, //フォントサイズを変更
+                        .foregroundColor: UIColor.imageColor // テキストカラーを変更
+                    ],
+                    // sampleUILabelの0文字目から９文字目までに変更内容を反映させる
+                    range: NSMakeRange(0, 3)
+                )
+            } else {
+                attributedText.addAttributes(
+                    [
+                        .font: UIFont(name: "Futura Bold", size: 18)!,
+                        .foregroundColor: UIColor.imageColor
+                    ],
+                    range: NSMakeRange(0, 2)
+                )
+            }
+        } else if max! >= Double(medium) && cvList.count > 3 {
+            attributedText.addAttributes(
+                [
+                    .font: UIFont(name: "Futura Bold", size: 16)!,
+                    .foregroundColor: UIColor.subImageColor
+                ],
+                range: NSMakeRange(0, 2)
+            )
+        } else {
+            attributedText.addAttributes(
+                [
+                    .font: UIFont(name: "Futura Bold", size: 16)!,
+                    .foregroundColor: UIColor.lightGray
+                ],
+                range: NSMakeRange(0, 2)
+            )
+        }
+        cell.scoreLabel.attributedText = attributedText
+        
         cell.favoriteBtn.isHidden = true
-        cell.selectionStyle = .default
+        
+        let selectedBgView = UIView()
+        selectedBgView.backgroundColor = .darkGray
+        cell.selectedBackgroundView = selectedBgView
         
         return cell
+    }
+    
+    
+}
+
+
+//MARK: - UICollectionViewDelegate
+extension AddListMusicViewController: UICollectionViewDelegate {
+    func collectionView(_ tableView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 選択されたセルを取得する
+        let selectedCell = collectionView.cellForItem(at: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let deselectedCell = collectionView.cellForItem(at: indexPath)
+    }
+}
+
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
+extension AddListMusicViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 10
+        return CGSize(width: width, height: 90)
     }
 }
 
@@ -188,19 +236,19 @@ extension AddListMusicViewController: UITableViewDataSource {
 
 extension AddListMusicViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        tvList = []
+        cvList = []
         if searchText == "" {
-            tvList = manager.musicList
+            cvList = manager.musicList
         }else{
             for d in manager.musicList {
                 if d.musicName.contains(searchText) {
-                    tvList.append(d)
+                    cvList.append(d)
                 }else if d.artistName.contains(searchText) {
-                    tvList.append(d)
+                    cvList.append(d)
                 }
             }
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

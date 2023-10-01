@@ -43,9 +43,14 @@ class QRViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toProfile" {
+        switch Segue(rawValue: segue.identifier) {
+        case .profile:
             let nextView = segue.destination as! ProfileViewController
             nextView.userID = gotID
+            
+        default:
+            break
+            
         }
     }
     
@@ -149,27 +154,32 @@ class QRViewController: UIViewController {
 //MARK: - AVCaptureMetaDataOutputObjectDelegate
 
 extension QRViewController: AVCaptureMetadataOutputObjectsDelegate {
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    private func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) async {
 
-        //カメラ画像にオブジェクトがあるか確認
-        if metadataObjects.count == 0 {
-            return
-        }
-        //オブジェクトの中身を確認
-        for metadata in metadataObjects as! [AVMetadataMachineReadableCodeObject] {
-            // metadataのtype： metadata.type
-            // QRの中身： metadata.stringValue
-            guard let value = metadata.stringValue else { return }
-            print("読み取りvalue：",value)
-            //一旦停止
-            AVsession.stopRunning()
-            videoPreviewLayer?.removeFromSuperlayer()
-            cancelBtn.removeFromSuperview()
-            backView.removeFromSuperview()
-
-            gotID = value
-            performSegue(withIdentifier: "toProfile", sender: nil)
-
+        Task {
+            //カメラ画像にオブジェクトがあるか確認
+            if metadataObjects.count == 0 {
+                return
+            }
+            //オブジェクトの中身を確認
+            for metadata in metadataObjects as! [AVMetadataMachineReadableCodeObject] {
+                // metadataのtype： metadata.type
+                // QRの中身： metadata.stringValue
+                guard let value = metadata.stringValue else { return }
+                print("読み取りvalue：",value)
+                //一旦停止
+                AVsession.stopRunning()
+                videoPreviewLayer?.removeFromSuperlayer()
+                cancelBtn.removeFromSuperview()
+                backView.removeFromSuperview()
+                
+                gotID = value
+                
+                if await userFB.getUserInformation(id: gotID) != nil {
+                    performSegue(withIdentifier: Segue.profile.rawValue, sender: nil)
+                }
+            }
+            
         }
     }
 }

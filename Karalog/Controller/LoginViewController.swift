@@ -84,16 +84,16 @@ class LoginViewController: UIViewController {
                                                          accessToken: _user.accessToken.tokenString)
             Auth.auth().signIn(with: credential) { result, error in
                 
-                if let _user = result?.user {
-                    
-                    Task {
-                        await self.set(uid: _user.uid, userName: _user.displayName)
-                        
-                        self.performSegue(withIdentifier: "toTabBar", sender: nil)
-                    }
-                }else {
-                    print("google login error:", error!)
+                guard let _user = result?.user else {
+                    print("google login error", error!)
+                    return
                 }
+                Task {
+                    await self.set(uid: _user.uid, userName: _user.displayName)
+                    
+                    segue(identifier: .tabBar)
+                }
+                
             }
         }
     }
@@ -107,7 +107,7 @@ class LoginViewController: UIViewController {
         if let _pastUserInformation = await userFB.getUserInformation(id: uid) {
             function.login(first: false, user: _pastUserInformation)
             UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
-            self.performSegue(withIdentifier: "toTabBar", sender: nil)
+            segue(identifier: .tabBar)
             return
         }
         
@@ -132,18 +132,22 @@ class LoginViewController: UIViewController {
         
     }
     
+    func segue(identifier: Segue) {
+        let id = identifier.rawValue
+        self.performSegue(withIdentifier: id, sender: nil)
+    }
+    
     
     // MARK: UI interaction
     
     //メール
     @IBAction func lookPassword() {
-        if passwordTF.isSecureTextEntry == true {
-            passwordTF.isSecureTextEntry = false
+        if passwordTF.isSecureTextEntry {
             lookPasswordBtn.setImage(UIImage.eye, for: .normal)
         }else{
-            passwordTF.isSecureTextEntry = true
             lookPasswordBtn.setImage(UIImage.eyeSlash, for: .normal)
         }
+        passwordTF.isSecureTextEntry.toggle()
     }
     
     
@@ -156,19 +160,20 @@ class LoginViewController: UIViewController {
         }
         
         Auth.auth().signIn(withEmail: _mail, password: _password) { (result, err) in
-            if let _user = result?.user {
-                Task {
-                    function.login(first: false, user: await userFB.getUserInformation(id: _user.uid)!)
-                    UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
-                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
-                }
-            }else{
+            guard let _user = result?.user else {
                 print("cannot find account:", err!)
                 
                 let dialog = UIAlertController(title: "アカウントが見つかりませんでした", message: err?.localizedDescription, preferredStyle: .alert)
                 dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(dialog, animated: true, completion: nil)
+                return
             }
+            Task {
+                function.login(first: false, user: await userFB.getUserInformation(id: _user.uid)!)
+                UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+                self.segue(identifier: .tabBar)
+            }
+            
         }
     }
     

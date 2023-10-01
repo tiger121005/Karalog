@@ -41,7 +41,7 @@ class AddMusicViewController: UIViewController {
     @IBOutlet var artistTF: UITextField!
     @IBOutlet var scoreTF: UITextField!
     @IBOutlet var keyLabel: UILabel!
-    @IBOutlet var modelBtn: CustomButton!
+    @IBOutlet var modelBtn: UIButton!
     @IBOutlet var textView: UITextView!
     @IBOutlet var addBtn: CustomButton!
     @IBOutlet var customSlider: CustomSliderView!
@@ -123,6 +123,10 @@ class AddMusicViewController: UIViewController {
         modelBtn.layer.borderWidth = 2
         modelBtn.tintColor = UIColor.imageColor
         modelBtn.backgroundColor = .clear
+        modelBtn.layer.shadowColor = UIColor.imageColor.cgColor
+        modelBtn.layer.shadowOpacity = 0.8
+        modelBtn.layer.shadowRadius = 5
+        modelBtn.layer.shadowOffset = CGSize(width: 0, height: 0)
         configureMenuButton()
     }
     
@@ -164,7 +168,10 @@ class AddMusicViewController: UIViewController {
         keyLabel.layer.borderWidth = 2
         keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
         keyLabel.layer.cornerCurve = .continuous
-        keyLabel.clipsToBounds = true
+        keyLabel.layer.shadowColor = UIColor.imageColor.cgColor
+        keyLabel.layer.shadowOpacity = 0.8
+        keyLabel.layer.shadowRadius = 3
+        keyLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
     
@@ -226,7 +233,7 @@ class AddMusicViewController: UIViewController {
     }
     
     func showAlert() {
-        if let image {
+        if image != nil {
             let alert = UIAlertController(title: "入力された値を確認してください", message: "上の写真マークから撮影した画像を見返すことができます", preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style: .default)
             alert.addAction(ok)
@@ -284,79 +291,50 @@ class AddMusicViewController: UIViewController {
         }
     }
     
-    func setMusicImage() async {
-        Task {
-            if let musicImageData = await getMusicImage() {
-                await stringToData(string: musicImageData)
-            } else if musicImage == nil {
-                print("no image")
-                musicImage = UIImage.musicNote.withTintColor(UIColor.imageColor).jpegData(compressionQuality: 1.0)
-            } else {
-                print("have image")
-            }
-        }
-    }
     
-    
-    
-    func getMusicImage() async -> String? {
+    func getMusicImage() async -> Data? {
         await withCheckedContinuation { continuation in
-            if musicImage == nil {
-                //日本語をパソコン言語になおす
-                let parameters = ["term": (musicTF.text ?? "") + "　" + (artistTF.text ?? ""), "country": "jp", "limit": "14"]
-                //termが検索キーワード　countryが国　limitが数の上限
-                //parameterを使ってsearch以降の文を書いている
-                AF.request("https://itunes.apple.com/search", parameters: parameters).responseData { response in
-                    //if文みたいなやつ,この場合response.resultがsuccessの時とfailureの時で場合分けをしている
-                    switch response.result {
-                    case .success:
-                        //doはエラーが出なかった場合 catchはエラーが出たとき
-                        do {
-                            let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: response.data!)
+            //日本語をパソコン言語になおす
+            let parameters = ["term": (musicTF.text ?? "") + "　" + (artistTF.text ?? ""), "country": "jp", "limit": "14"]
+            //termが検索キーワード　countryが国　limitが数の上限
+            //parameterを使ってsearch以降の文を書いている
+            AF.request("https://itunes.apple.com/search", parameters: parameters).responseData { response in
+                //if文みたいなやつ,この場合response.resultがsuccessの時とfailureの時で場合分けをしている
+                switch response.result {
+                case .success:
+                    //doはエラーが出なかった場合 catchはエラーが出たとき
+                    do {
+                        let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: response.data!)
+                        
+                        if let musicImageURL = iTunesData.results.first?.artworkUrl100 {
                             
-                            let musicImageData = iTunesData.results.first?.artworkUrl100
+                            if let imageUrl = URL(string: musicImageURL) {
+                                
+                                Task {
+    
+                                    let (data, _) = try await URLSession.shared.data(from: imageUrl)
+                                    
+                                    continuation.resume(returning: data)
+                                }
+                                
+                            } else {
+                                continuation.resume(returning: nil)
+                            }
                             
-                            
-                            continuation.resume(returning: musicImageData)
-                        } catch {
-                            print("デコードに失敗しました")
+                        } else {
                             continuation.resume(returning: nil)
                         }
-                    case .failure(let error):
-                        print("error", error)
+                        
+                    } catch {
+                        print("デコードに失敗しました")
                         continuation.resume(returning: nil)
                     }
+                case .failure(let error):
+                    print("error", error)
+                    continuation.resume(returning: nil)
                 }
-            } else {
-                continuation.resume(returning: nil)
             }
         }
-    }
-    
-    func stringToData(string: String) async {
-        print("in func")
-        
-        // URLSessionを作成
-        let session = URLSession.shared
-        print("after let session")
-        // リクエストを作成
-        if let imageUrl = URL(string: string) {
-            print("after if let")
-            
-            Task {
-                let (data, _) = try await session.data(from: imageUrl)
-                
-                print("after await")
-                
-                self.musicImage = data
-                print("add music")
-            }
-            
-        } else if musicImage == nil {
-            musicImage = UIImage.musicNote.withTintColor(UIColor.imageColor).jpegData(compressionQuality: 1.0)
-            print("add music")
-        }
-        
     }
     
     
@@ -452,7 +430,7 @@ class AddMusicViewController: UIViewController {
                     self.getString(cgImage: trimedImage) { results in
                         var musicY: CGFloat!
                         for visionRequest in results {
-                            print("music", visionRequest.topCandidates(1).first?.string)
+                            print("music", visionRequest.topCandidates(1).first?.string ?? "")
                             if var musicY {
                                 if visionRequest.boundingBox.minY < musicY {
                                     musicY = visionRequest.boundingBox.minY
@@ -481,7 +459,7 @@ class AddMusicViewController: UIViewController {
                         
                         var artistY: CGFloat!
                         for visionRequest in results {
-                            print("artist", visionRequest.topCandidates(1).first?.string)
+                            print("artist", visionRequest.topCandidates(1).first?.string ?? "")
                             if var artistY {
                                 if visionRequest.boundingBox.minY < artistY {
                                     artistY = visionRequest.boundingBox.minY
@@ -580,9 +558,9 @@ class AddMusicViewController: UIViewController {
                         for visionRequest in results {
                             if first {
                                 commentText = visionRequest.topCandidates(1).first?.string
+                                first = false
                             } else {
-                                print("comment", visionRequest.topCandidates(1).first?.string)
-                                commentText += visionRequest.topCandidates(1).first!.string
+                                commentText += visionRequest.topCandidates(1).first?.string ?? ""
                             }
                         }
                         
@@ -593,14 +571,7 @@ class AddMusicViewController: UIViewController {
                     break
                     
                 }
-//                let confidence = result.confidence // labelの信頼度
-//                print(confidence)
-//                // 0.8664
-//
-//                let boundingBox = result.boundingBox // 認識された物体の境界ボックス
-//                print(boundingBox)
-                // (0.4403754696249962, 0.3421999216079712, 0.12934787571430206, 0.38909912109375)
-                //* Core Imageと同じで右下が原点
+
             }
             
         }
@@ -619,12 +590,12 @@ class AddMusicViewController: UIViewController {
     func trimmingImage(trimmingArea: CGRect) -> UIImage {
         let cgImage = image.cgImage!
         
-        let imgRef = cgImage.cropping(to: CGRect(x: image.size.height - (trimmingArea.maxY * image.size.height),
+        let imgRef = cgImage.cropping(to: CGRect(x: trimmingArea.minX * image.size.height,
                                                  y: image.size.width - (trimmingArea.maxY * image.size.width),
                                                  width: trimmingArea.width * image.size.height,
                                                  height: trimmingArea.height * image.size.width))
-        let trimImage = UIImage(cgImage: imgRef!, scale: image.scale, orientation: image.imageOrientation)
         
+        let trimImage = UIImage(cgImage: imgRef!, scale: 0, orientation: image.imageOrientation)
         
         return trimImage
         
@@ -655,10 +626,17 @@ class AddMusicViewController: UIViewController {
     }
     
     
-    func add() {
+    func add() async {
         Task{
             
-            await setMusicImage()
+            if musicImage == nil {
+                if let musicImageData = await getMusicImage() {
+                    musicImage = musicImageData
+                } else {
+                    musicImage = UIImage.musicNote.withTintColor(UIColor.imageColor).jpegData(compressionQuality: 1.0)
+                }
+            }
+            
             
             let df = DateFormatter()
             df.dateFormat = "yy年MM月dd日HH:mm"
@@ -686,7 +664,7 @@ class AddMusicViewController: UIViewController {
             
             //2画面前に戻る
             DispatchQueue.main.async {
-                let screenIndex = 3
+                let screenIndex = 0
                 self.navigationController?.popToViewController(self.navigationController!.viewControllers[screenIndex], animated: true)
             }
         }

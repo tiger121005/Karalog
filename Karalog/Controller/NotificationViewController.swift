@@ -26,6 +26,7 @@ class NotificationViewController: UIViewController {
         super.viewDidLoad()
 
         setupTableView()
+        title = "通知"
     }
     
     
@@ -44,6 +45,7 @@ class NotificationViewController: UIViewController {
 extension NotificationViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("manager", manager.user.request.count)
         if notificationList[indexPath.row].title == "フォローリクエスト" {
             let alert = UIAlertController(title: "フォローリクエスト", message: "”\(notificationList[indexPath.row].from)”からフォローリクエストを承認しますか", preferredStyle: .alert)
             
@@ -54,7 +56,9 @@ extension NotificationViewController: UITableViewDelegate {
             let approve = UIAlertAction(title: "承認", style: .default) { (action) in
                 userFB.deleteRequest(notice: self.notificationList[indexPath.row])
                 userFB.follow(followUser: self.notificationList[indexPath.row].from, followedUser: self.userID)
-                manager.user.request.remove(at: indexPath.row)
+                print("indexPath", indexPath.row)
+                print(manager.user.notice.count)
+                manager.user.notice.remove(at: indexPath.row)
                 self.notificationList.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .fade)
                 

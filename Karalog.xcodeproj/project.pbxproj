@@ -24,6 +24,10 @@
 		1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC629D0741300245BB3 /* GoogleSignIn */; };
 		1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC829D0741300245BB3 /* GoogleSignInSwift */; };
 		19426CC62AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */; };
+		194A62F62AC48E8400B2CD43 /* GaussianBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */; };
+		194A62F82AC48F1900B2CD43 /* CustomCIFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */; };
+		194A63012AC6F49B00B2CD43 /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */; };
+		194A63022AC6F49B00B2CD43 /* MusicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 194A63002AC6F49B00B2CD43 /* MusicCell.xib */; };
 		1960CD2129FE30730065FF05 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2029FE30730065FF05 /* Manager.swift */; };
 		1960CD2329FE7B250065FF05 /* Material.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1960CD2229FE7B250065FF05 /* Material.swift */; };
 		1961E2322AA4D5E80000FAF0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1961E2312AA4D5E80000FAF0 /* FirebaseAuth */; };
@@ -81,6 +85,18 @@
 		19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */; };
 		19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E8B4872A59B44D008C8DB3 /* LineGraph.swift */; };
 		19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EAE28D2AAA20DE00173632 /* QRViewController.swift */; };
+		19F4D7AE2AC732FA00C62083 /* NotoSansJP-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7A52AC732F600C62083 /* NotoSansJP-Thin.otf */; };
+		19F4D7AF2AC732FA00C62083 /* NotoSansJP-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7A62AC732F600C62083 /* NotoSansJP-Light.otf */; };
+		19F4D7B02AC732FA00C62083 /* NotoSansJP-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7A72AC732F700C62083 /* NotoSansJP-ExtraLight.otf */; };
+		19F4D7B12AC732FA00C62083 /* NotoSansJP-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7A82AC732F700C62083 /* NotoSansJP-Bold.otf */; };
+		19F4D7B22AC732FA00C62083 /* NotoSansJP-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7A92AC732F800C62083 /* NotoSansJP-ExtraBold.otf */; };
+		19F4D7B32AC732FA00C62083 /* NotoSansJP-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AA2AC732F800C62083 /* NotoSansJP-Black.otf */; };
+		19F4D7B42AC732FA00C62083 /* NotoSansJP-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AB2AC732F900C62083 /* NotoSansJP-Medium.otf */; };
+		19F4D7B52AC732FA00C62083 /* NotoSansJP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AC2AC732F900C62083 /* NotoSansJP-Regular.otf */; };
+		19F4D7B62AC732FA00C62083 /* NotoSansJP-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */; };
+		19F4D7B82AC95B9900C62083 /* CustomButtonShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */; };
+		19F4D7BD2AC9757200C62083 /* LogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F4D7BB2AC9757200C62083 /* LogCell.swift */; };
+		19F4D7BE2AC9757200C62083 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7BC2AC9757200C62083 /* LogCell.xib */; };
 		60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */; };
 		C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */; };
 /* End PBXBuildFile section */
@@ -122,6 +138,10 @@
 		1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell2.xib; sourceTree = "<group>"; };
 		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
 		19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "Detect_DAM_DX-G.mlmodel"; path = "../../../../Downloads/Detect_DAM_DX-G.mlmodel"; sourceTree = "<group>"; };
+		194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianBlurFilter.swift; sourceTree = "<group>"; };
+		194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCIFilter.swift; sourceTree = "<group>"; };
+		194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
+		194A63002AC6F49B00B2CD43 /* MusicCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MusicCell.xib; sourceTree = "<group>"; };
 		1960CD2029FE30730065FF05 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		1960CD2229FE7B250065FF05 /* Material.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		196415172AB19B8300A7808C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +192,18 @@
 		19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		19E8B4872A59B44D008C8DB3 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		19EAE28D2AAA20DE00173632 /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
+		19F4D7A52AC732F600C62083 /* NotoSansJP-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Thin.otf"; sourceTree = "<group>"; };
+		19F4D7A62AC732F600C62083 /* NotoSansJP-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Light.otf"; sourceTree = "<group>"; };
+		19F4D7A72AC732F700C62083 /* NotoSansJP-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-ExtraLight.otf"; sourceTree = "<group>"; };
+		19F4D7A82AC732F700C62083 /* NotoSansJP-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Bold.otf"; sourceTree = "<group>"; };
+		19F4D7A92AC732F800C62083 /* NotoSansJP-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-ExtraBold.otf"; sourceTree = "<group>"; };
+		19F4D7AA2AC732F800C62083 /* NotoSansJP-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Black.otf"; sourceTree = "<group>"; };
+		19F4D7AB2AC732F900C62083 /* NotoSansJP-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Medium.otf"; sourceTree = "<group>"; };
+		19F4D7AC2AC732F900C62083 /* NotoSansJP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Regular.otf"; sourceTree = "<group>"; };
+		19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-SemiBold.otf"; sourceTree = "<group>"; };
+		19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonShadow.swift; sourceTree = "<group>"; };
+		19F4D7BB2AC9757200C62083 /* LogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCell.swift; sourceTree = "<group>"; };
+		19F4D7BC2AC9757200C62083 /* LogCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogCell.xib; sourceTree = "<group>"; };
 		35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog_KaralogUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6468C3A3597ED225A0446E38 /* Pods-Karalog-KaralogUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog-KaralogUITests.release.xcconfig"; path = "Target Support Files/Pods-Karalog-KaralogUITests/Pods-Karalog-KaralogUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6D12E4A062AA62995FF3D031 /* Pods-Karalog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.release.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.release.xcconfig"; sourceTree = "<group>"; };
@@ -264,8 +296,8 @@
 				199668832AAD9EE10003D295 /* PostFirebase.swift */,
 				192D26702A0543A80058D739 /* Function.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
-				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
-				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
+				194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */,
+				194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */,
 				1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */,
 				1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */,
 				19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */,
@@ -285,13 +317,29 @@
 				1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */,
 				1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */,
 				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
+				194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */,
+				194A63002AC6F49B00B2CD43 /* MusicCell.xib */,
+				19F4D7BB2AC9757200C62083 /* LogCell.swift */,
+				19F4D7BC2AC9757200C62083 /* LogCell.xib */,
 				192D26B02A1F1C140058D739 /* ShareCell.swift */,
 				192D26B12A1F1C140058D739 /* ShareCell.xib */,
 				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
 				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
+				19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */,
 				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
 				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
 				196415192AB19CBC00A7808C /* VideoView.swift */,
+				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
+				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
+				19F4D7AA2AC732F800C62083 /* NotoSansJP-Black.otf */,
+				19F4D7A82AC732F700C62083 /* NotoSansJP-Bold.otf */,
+				19F4D7A92AC732F800C62083 /* NotoSansJP-ExtraBold.otf */,
+				19F4D7A72AC732F700C62083 /* NotoSansJP-ExtraLight.otf */,
+				19F4D7A62AC732F600C62083 /* NotoSansJP-Light.otf */,
+				19F4D7AB2AC732F900C62083 /* NotoSansJP-Medium.otf */,
+				19F4D7AC2AC732F900C62083 /* NotoSansJP-Regular.otf */,
+				19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */,
+				19F4D7A52AC732F600C62083 /* NotoSansJP-Thin.otf */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -497,12 +545,23 @@
 			files = (
 				1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */,
 				196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */,
+				19F4D7B12AC732FA00C62083 /* NotoSansJP-Bold.otf in Resources */,
 				192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */,
+				19F4D7AE2AC732FA00C62083 /* NotoSansJP-Thin.otf in Resources */,
+				19F4D7B02AC732FA00C62083 /* NotoSansJP-ExtraLight.otf in Resources */,
+				19F4D7B32AC732FA00C62083 /* NotoSansJP-Black.otf in Resources */,
+				19F4D7B22AC732FA00C62083 /* NotoSansJP-ExtraBold.otf in Resources */,
+				19F4D7B52AC732FA00C62083 /* NotoSansJP-Regular.otf in Resources */,
 				19A12D3929CC2C9F00B798A4 /* LaunchScreen.storyboard in Resources */,
+				19F4D7B42AC732FA00C62083 /* NotoSansJP-Medium.otf in Resources */,
 				1938FBBE29D0584600245BB3 /* CollectionViewCell1.xib in Resources */,
+				19F4D7BE2AC9757200C62083 /* LogCell.xib in Resources */,
+				194A63022AC6F49B00B2CD43 /* MusicCell.xib in Resources */,
 				1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */,
+				19F4D7AF2AC732FA00C62083 /* NotoSansJP-Light.otf in Resources */,
 				19A12D3629CC2C9F00B798A4 /* Assets.xcassets in Resources */,
 				19A12D3429CC2C9E00B798A4 /* Main.storyboard in Resources */,
+				19F4D7B62AC732FA00C62083 /* NotoSansJP-SemiBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +697,7 @@
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
 				19A12D6129CD945100B798A4 /* SearchViewController.swift in Sources */,
+				194A62F82AC48F1900B2CD43 /* CustomCIFilter.swift in Sources */,
 				1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
 				19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */,
@@ -646,6 +706,7 @@
 				196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
 				197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */,
+				19F4D7BD2AC9757200C62083 /* LogCell.swift in Sources */,
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
 				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
 				192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */,
@@ -665,9 +726,12 @@
 				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
 				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
 				19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */,
+				194A62F62AC48E8400B2CD43 /* GaussianBlurFilter.swift in Sources */,
 				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
 				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
+				19F4D7B82AC95B9900C62083 /* CustomButtonShadow.swift in Sources */,
+				194A63012AC6F49B00B2CD43 /* MusicCell.swift in Sources */,
 				1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */,
 				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
 				19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */,

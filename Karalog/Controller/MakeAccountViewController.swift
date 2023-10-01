@@ -81,13 +81,12 @@ class MakeAccountViewController: UIViewController {
     // MARK: UI interaction
     
     @IBAction func lookPassword() {
-        if passwordTF.isSecureTextEntry == true {
-            passwordTF.isSecureTextEntry = false
+        if passwordTF.isSecureTextEntry {
             lookPasswordBtn.setImage(UIImage.eye, for: .normal)
         }else{
-            passwordTF.isSecureTextEntry = true
             lookPasswordBtn.setImage(UIImage.eyeSlash, for: .normal)
         }
+        passwordTF.isSecureTextEntry.toggle()
     }
     
     @IBAction func createAccount() {

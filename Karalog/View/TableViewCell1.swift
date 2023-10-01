@@ -24,6 +24,8 @@ class TableViewCell1: UITableViewCell {
     
     //MARK: - UI objects
     
+    @IBOutlet var background: UIView!
+    @IBOutlet var cell: UIView!
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var musicLabel: UILabel!
     @IBOutlet var artistLabel: UILabel!
@@ -38,13 +40,31 @@ class TableViewCell1: UITableViewCell {
         musicImage.layer.cornerRadius = musicImage.frame.height * 0.1
         musicImage.clipsToBounds = true
         
-        scoreLabel.transform = CGAffineTransformMakeRotation(CGFloat.pi / 5)
+        
+        
+        
+        cell.backgroundColor = .clear
+        cell.layer.cornerRadius = cell.frame.height * 0.3
+        cell.layer.cornerCurve = .continuous
+        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.layer.borderWidth = 2
+        
+        background.backgroundColor = .black
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = cell.frame
+        maskLayer.cornerRadius = cell.frame.height * 0.3
+        maskLayer.cornerCurve = .continuous
+        background.layer.mask = maskLayer
+        
     }
+    
+    
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        
+        self.cell.backgroundColor = selected ? .darkGray : .black
+
     }
     
     

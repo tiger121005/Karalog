@@ -137,4 +137,28 @@ enum UserDefaultsKey: String {
 }
 
 
+//MARK: - Segue
+
+enum Segue: String {
+    case login = "toLogin"
+    case tabBar = "toTabBar"
+    case addToList = "toAddToList"
+    case musicDetail = "toMusicDetail"
+    case addMusic = "toAddMusic"
+    case detail = "toDetail"
+    case list = "toList"
+    case addWanna = "toAddWanna"
+    case addListMusic = "toAddListMusic"
+    case addDetail = "toAddDetail"
+    case addFriend = "toAddFriend"
+    case friends = "toFriends"
+    case notification = "toNotification"
+    case selectedPost = "toSelectedPost"
+    case qr = "toQR"
+    case profile = "toProfile"
+    case post = "toPost"
+    
+}
+
+
 

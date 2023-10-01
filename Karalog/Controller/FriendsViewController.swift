@@ -37,7 +37,8 @@ class FriendsViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toProfile" {
+        switch Segue(rawValue: segue.identifier) {
+        case .profile:
             let nextView = segue.destination as! ProfileViewController
             nextView.userID = selectedUser.id
             nextView.userName = selectedUser?.name
@@ -46,15 +47,20 @@ class FriendsViewController: UIViewController {
             nextView.showAll = selectedUser?.showAll
             nextView.notification = selectedUser?.notice ?? []
             
-            if let s = selectedUser?.showAll {
-                if s {
-                    nextView.selectedSettingShow = SettingShow.全て.rawValue
-                } else {
-                    nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
-                }
+            guard let s = selectedUser?.showAll else {
+                nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
+                return
+            }
+            if s {
+                nextView.selectedSettingShow = SettingShow.全て.rawValue
             } else {
                 nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
             }
+            
+            
+        default:
+            break
+            
         }
     }
     
@@ -119,6 +125,10 @@ class FriendsViewController: UIViewController {
         }
     }
     
+    func segue(identifier: Segue) {
+        let id = identifier.rawValue
+        self.performSegue(withIdentifier: id, sender: nil)
+    }
     
     //MARK: - Objective - C
 
@@ -185,7 +195,7 @@ extension FriendsViewController: UIPageViewControllerDataSource {
 extension FriendsViewController: FollowerDelegate {
     func selectedFollowerCell(indexPath: IndexPath) {
         selectedUser = followerList[indexPath.row]
-        performSegue(withIdentifier: "toProfile", sender: nil)
+        segue(identifier: .profile)
     }
 }
 
@@ -195,6 +205,6 @@ extension FriendsViewController: FollowerDelegate {
 extension FriendsViewController: FollowDelegate {
     func selectedFollowCell(indexPath: IndexPath) {
         selectedUser = followList[indexPath.row]
-        performSegue(withIdentifier: "toProfile", sender: nil)
+        segue(identifier: .profile)
     }
 }

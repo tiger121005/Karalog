@@ -61,15 +61,25 @@ extension AddToListViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             for id in idList {
                 musicFB.favoriteUpdate(id: id, favorite: true, completionHandler: { _ in})
             }
-        } else {
+            
+        case 1:
+            for id in idList {
+                if let music = manager.musicList.first(where: {$0.id == id}) {
+                    listFB.addWanna(musicName: music.musicName, artistName: music.artistName, musicImage: music.musicImage)
+                }
+            }
+            
+        default:
             for id in idList {
                 musicFB.addMusicToList(musicID: id, listID: manager.lists[indexPath.row + 1].id!)
             }
         }
+        
         self.dismiss(animated: true)
             
     }
@@ -81,13 +91,12 @@ extension AddToListViewController: UICollectionViewDelegate {
 extension AddToListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        manager.lists.count - 1
+        manager.lists.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "customCollectionCell1", for: indexPath) as! CollectionViewCell1
         var a: [Lists] = manager.lists
-        a.remove(at: 1)
         cell.image.image = UIImage(data: a[indexPath.row].listImage)!
         cell.label.text = a[indexPath.row].listName
         return cell

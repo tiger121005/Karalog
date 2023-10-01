@@ -247,8 +247,10 @@ class MusicFirebase: ObservableObject {
             } else {
                 print("favorite successfully updated")
                 
-                let num = manager.musicList.firstIndex(where: {$0.id!.contains(selectedID)})
-                manager.musicList.remove(at: num!)
+                let num1 = manager.musicList.firstIndex(where: {$0.id!.contains(selectedID)})
+                print("lists", manager.musicList[num1!].lists)
+                let num2 = manager.musicList[num1!].lists.firstIndex(where: {$0 == listID})
+                manager.musicList[num1!].lists.remove(at: num2!)
                 
                 completionHandler(true)
             }

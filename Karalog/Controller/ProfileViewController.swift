@@ -39,7 +39,6 @@ class ProfileViewController: UIViewController {
     @IBOutlet var followBtn: UIButton!
     @IBOutlet var followNumBtn: UIButton!
     @IBOutlet var followerNumBtn: UIButton!
-    @IBOutlet var followView: UIView!
     
     @IBOutlet var showPast: UIButton!
     
@@ -52,10 +51,10 @@ class ProfileViewController: UIViewController {
     @IBOutlet var musicImage: UIImageView!
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var scrollView: UIScrollView!
-    
     @IBOutlet var menuBtn: UIBarButtonItem!
     
     let refreshCtl = UIRefreshControl()
+    var noticeBadge = UILabel()
     
     
     //MARK: - View Controller methods
@@ -65,7 +64,11 @@ class ProfileViewController: UIViewController {
         setupTableView()
         setupFollowView()
         setupNameView()
+        setupScrollView()
+        showPast.iconToRight()
         title = "PROFILE"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,25 +77,38 @@ class ProfileViewController: UIViewController {
         setupBestView()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        if !menuHidden {
+            switchMenu()
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toSelectedPost" {
+        switch Segue(rawValue: segue.identifier) {
+        case .selectedPost:
             let nextView = segue.destination as! SelectedPostViewController
             nextView.kind = selectPostKind
             nextView.userID = userID
             nextView.userName = userName
-        } else if segue.identifier == "toFriends" {
+            
+        case .friends:
             let nextView = segue.destination as! FriendsViewController
             nextView.selected = followSelected
             nextView.follow = followList
             nextView.follower = followerList
-        } else if segue.identifier == "toNotification" {
+            
+        case .notification:
             let nextView = segue.destination as! NotificationViewController
             nextView.notificationList = notification
             nextView.userID = userID
-        } else if segue.identifier == "toQR" {
+            
+        case .qr:
             let nextView = segue.destination as! QRViewController
             nextView.userID = userID
+            
+        default:
+            break
+            
         }
     }
     
@@ -108,7 +124,6 @@ class ProfileViewController: UIViewController {
     }
     
     func setupFollowView() {
-        followView.layer.cornerRadius = followView.frame.height * 0.1
         
         self.followNumBtn.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -122,13 +137,21 @@ class ProfileViewController: UIViewController {
             return outgoing
         }
         
-        followView.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
-        followView.layer.shadowColor = UIColor.black.cgColor
-        followView.layer.shadowOpacity = 0.8
-        followView.layer.shadowRadius = 5
+    }
+    
+    func setupScrollView() {
+        scrollView.refreshControl = refreshCtl
+        refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
+        refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
+        scrollView.addSubview(refreshCtl)
     }
     
     func setupView() {
+        showPast.isHidden = true
+        menuBtn.isHidden = true
+        followNumBtn.isEnabled = false
+        followerNumBtn.isEnabled = false
+        followBtn.isHidden = true
         if userID == nil {
             userID = manager.user.id
         }
@@ -141,9 +164,15 @@ class ProfileViewController: UIViewController {
                     }
                     alert.addAction(ok)
                     present(alert, animated: true, completion: nil)
+                    
                     return
                     
                 }
+                showPast.isHidden = false
+                menuBtn.isHidden = false
+                followNumBtn.isEnabled = true
+                followerNumBtn.isEnabled = true
+                followBtn.isHidden = false
                 self.userName = user.name
                 self.followList = user.follow
                 self.followerList = user.follower
@@ -198,11 +227,6 @@ class ProfileViewController: UIViewController {
         if manager.user.id != userID {
             menuBtn.isHidden = true
         }
-        
-        scrollView.refreshControl = refreshCtl
-        refreshCtl.attributedTitle = NSAttributedString(string: "再読み込み中")
-        refreshCtl.addTarget(self, action: #selector(self.reload), for: .valueChanged)
-        scrollView.addSubview(refreshCtl)
         
         
     }
@@ -317,12 +341,20 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    func segue(identifier: Segue) {
+        let id = identifier.rawValue
+        self.performSegue(withIdentifier: id, sender: nil)
+    }
     
     //MARK: - UI interaction
     
+    @IBAction func showMenuBtn() {
+        switchMenu()
+    }
+    
     @IBAction func tapFollowBtn() {
         if userID == manager.user.id {
-            performSegue(withIdentifier: "toAddFriend", sender: nil)
+            segue(identifier: .addFriend)
         } else {
             if let _i = manager.user.follow.firstIndex(where: {$0 == userID}) {
                 //deleteFollow
@@ -363,27 +395,25 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    @IBAction func showMenuBtn() {
-        switchMenu()
-    }
-    
     @IBAction func tapToPastPost() {
         selectPostKind = "past"
-        performSegue(withIdentifier: "toSelectedPost", sender: nil)
+        segue(identifier: .selectedPost)
     }
     
     @IBAction func tapFollowNumBtn() {
         followSelected = "follow"
-        performSegue(withIdentifier: "toFriends", sender: nil)
+        segue(identifier: .friends)
     }
     
     @IBAction func tapFollowerNumBtn() {
         followSelected = "follower"
-        performSegue(withIdentifier: "toFriends", sender: nil)
+        segue(identifier: .friends)
     }
     
     
     //MARK: - Objective - C
+    
+    
     
     @objc func reload() {
         Task {
@@ -393,12 +423,14 @@ class ProfileViewController: UIViewController {
             } else {
                 manager.user = await userFB.getUserInformation(id: manager.user.id!)
             }
+            print(manager.user.request.count)
             self.userName = user?.name
             self.followList = user?.follow ?? []
             self.followerList = user?.follower ?? []
             self.followNumBtn.setTitle(String(self.followList.count), for: .normal)
             self.followerNumBtn.setTitle(String(self.followerList.count), for: .normal)
             self.userNameLabel.text = self.userName
+            self.notification = manager.user.notice
             if let s = user?.showAll {
                 if s {
                     self.selectedSettingShow = SettingShow.全て.rawValue
@@ -498,7 +530,7 @@ extension ProfileViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             switchMenu()
-            performSegue(withIdentifier: "toNotification", sender: nil)
+            segue(identifier: .notification)
             
         case 1:
             var textFieldOnAlert = UITextField()
@@ -525,11 +557,11 @@ extension ProfileViewController: UITableViewDelegate {
         case 2:
             switchMenu()
             selectPostKind = "good"
-            performSegue(withIdentifier: "toSelectedPost", sender: nil)
+            segue(identifier: .selectedPost)
             
         case 3:
             switchMenu()
-            performSegue(withIdentifier: "toQR", sender: nil)
+            segue(identifier: .qr)
             
         case 4:
             let alert = UIAlertController(title: "公開制限", message: "", preferredStyle: .actionSheet)

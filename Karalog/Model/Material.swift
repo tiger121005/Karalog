@@ -17,18 +17,18 @@ struct Material {
     
     func initialListData() -> [Lists] {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 300, height: 300))
-        var checkImage = UIImage.starFill.withTintColor(UIColor.imageColor)
-        checkImage = checkImage.resized(toWidth: 300)!
+        var starImage = UIImage.starFill.withTintColor(UIColor.imageColor)
+        starImage = starImage.resized(toWidth: 300)!
         
-        let newCheck = renderer.image { context in
+        let newStar = renderer.image { context in
             // 背景色を描画
             UIColor.black.setFill()
             context.fill(CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
             
             // SFSymbolを描画
-            checkImage.draw(in: CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
+            starImage.draw(in: CGRect(origin: .zero, size: CGSize(width: 300, height: 300)))
         }
-        let checkData = newCheck.jpegData(compressionQuality: 1.0)!
+        let starData = newStar.jpegData(compressionQuality: 1.0)!
         
         var lassoImage = UIImage.lassoAndSparkles.withTintColor(UIColor.imageColor)
         lassoImage = lassoImage.resized(toWidth: 300)!
@@ -39,7 +39,7 @@ struct Material {
         }
         let lassoData = newLasso.jpegData(compressionQuality: 1.0)!
         
-        return [Lists(listName: "お気に入り", listImage: checkData, id: "favorite"),
+        return [Lists(listName: "お気に入り", listImage: starData, id: "favorite"),
                 Lists(listName: "歌いたい", listImage: lassoData, id: "wanna")]
     }
     
@@ -240,6 +240,10 @@ extension UIColor {
     static var subImageColor: UIColor {
         return UIColor(named: "subImageColor")!
     }
+    
+    static var lightImageColor: UIColor {
+        return UIColor(named: "lightImageColor")!
+    }
 }
 
 
@@ -255,23 +259,33 @@ extension UIImage {
     }
     
     func rotatedBy(degree: CGFloat) -> UIImage {
-            let radian = degree * CGFloat.pi / 180
-            var rotatedRect = CGRect(origin: .zero, size: self.size)
+        let radian = degree * CGFloat.pi / 180
+        var rotatedRect = CGRect(origin: .zero, size: self.size)
             
-            rotatedRect = rotatedRect.applying(CGAffineTransform(rotationAngle: radian))
-            
-            UIGraphicsBeginImageContext(rotatedRect.size)
-            let context = UIGraphicsGetCurrentContext()!
-            context.translateBy(x: rotatedRect.size.width / 2, y: rotatedRect.size.height / 2)
-            context.scaleBy(x: 1.0, y: -1.0)
+        rotatedRect = rotatedRect.applying(CGAffineTransform(rotationAngle: radian))
+        
+        UIGraphicsBeginImageContext(rotatedRect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.translateBy(x: rotatedRect.size.width / 2, y: rotatedRect.size.height / 2)
+        context.scaleBy(x: 1.0, y: -1.0)
 
-            context.rotate(by: radian)
-            context.draw(self.cgImage!, in: CGRect(x: -(self.size.width / 2), y: -(self.size.height / 2), width: self.size.width, height: self.size.height))
+        context.rotate(by: radian)
+        context.draw(self.cgImage!, in: CGRect(x: -(self.size.width / 2), y: -(self.size.height / 2), width: self.size.width, height: self.size.height))
 
-            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()!
-            UIGraphicsEndImageContext()
-            return rotatedImage
+        let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return rotatedImage
+    }
+    
+    func toCIImage() -> CIImage? {
+        if let ciImage = self.ciImage {
+            return ciImage
         }
+        if let cgImage = self.cgImage {
+            return CIImage(cgImage: cgImage)
+        }
+        return nil
+    }
     
     static var eye: UIImage {
         return UIImage(systemName: "eye")!
@@ -337,11 +351,84 @@ extension UIImage {
         return UIImage(systemName: "music.note")!
     }
     
+    static var line3Horizontal: UIImage {
+        return UIImage(systemName: "line.3.horizontal")!
+    }
+    
     static var KaralogQRImage: UIImage {
         return UIImage(named: "KaralogQRImage")!
     }
     
     static var KaralogImage: UIImage {
         return UIImage(named: "KaralogImage")!
+    }
+}
+
+
+//MARK: - UIButton
+
+extension UIButton {
+    // ボタンのアイコンをLeading(右側)に表示する
+    func iconToRight() {
+        if #available(iOS 11.0, *) {
+            // leadingはiOS 11以降のため
+            contentHorizontalAlignment = .leading
+        } else {
+            contentHorizontalAlignment = .right
+        }
+        semanticContentAttribute =
+            UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
+            ? .forceLeftToRight : .forceRightToLeft
+    }
+}
+
+
+//MARK: - UIView
+
+extension UIView {
+
+    func clipMask(withRect rect: CGRect, isReversed: Bool = false) {
+        let maskLayer = CAShapeLayer()
+        let path = CGMutablePath()
+
+        if isReversed {
+            // 切り抜きを反転させる場合は、自身のboundsをpathに追加する
+            path.addRect(bounds)
+
+            // 塗りつぶしルールの指定
+            // 反転させる場合は、パスが重なっていない箇所を領域外と判定して残す
+            maskLayer.fillRule = .evenOdd
+        }
+
+        path.addRect(rect)
+        maskLayer.path = path
+
+        // 作成したMask用のレイヤーをセットする
+        layer.mask = maskLayer
+    }
+}
+
+
+//MARK: - UIFont
+
+extension UIFont {
+    class func NotoSansJPBold(size: CGFloat) -> UIFont! {
+        return UIFont(name: "NotoSansJP-Bold", size: size)!
+    }
+    
+    class func NotoSansJPBlack(size: CGFloat) -> UIFont! {
+        return UIFont(name: "NotoSansJP-Black", size: size)!
+    }
+}
+
+
+//MARK: - RawRepresentable
+
+extension RawRepresentable {
+    init?(rawValue: Self.RawValue?) {
+        guard let rawValue = rawValue else {
+            return nil
+        }
+        self.init(rawValue: rawValue)
     }
 }

@@ -20,11 +20,11 @@ class CheckBox: UIButton {
             if isChecked == true {
                 self.setImage(checkedImage, for: .normal)
                 self.tintColor = UIColor.imageColor
-                
+                self.layer.shadowRadius = 3
             } else {
                 self.setImage(uncheckedImage, for: .normal)
-                self.tintColor = UIColor.separator
-                
+                self.tintColor = UIColor.gray
+                self.layer.shadowRadius = 0
             }
         }
     }
@@ -36,7 +36,11 @@ class CheckBox: UIButton {
         self.layer.borderColor = UIColor.imageColor.cgColor
         self.layer.cornerRadius = self.frame.height * 0.2
         self.layer.cornerCurve = .continuous
-        self.tintColor = UIColor.separator
+        self.layer.shadowColor = UIColor.imageColor.cgColor
+        self.layer.shadowOpacity = 0.8
+        self.layer.shadowRadius = 0
+        self.layer.shadowOffset = CGSize(width: 0, height: 0)
+        self.tintColor = UIColor.gray
         addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
     }
     

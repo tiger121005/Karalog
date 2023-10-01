@@ -54,13 +54,13 @@ class ShareCell: UICollectionViewCell {
         
         self.musicName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 20)
+            outgoing.font = UIFont.NotoSansJPBlack(size: 20)
             return outgoing
         }
         
         self.artistName.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 18)
+            outgoing.font = UIFont.NotoSansJPBold(size: 18)
             return outgoing
         }
         

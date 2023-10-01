@@ -24,7 +24,7 @@ class AddDetailViewController: UIViewController {
     var sliderValue: Float = 0
     var callView: Bool = true
     var scaleList: [UIView] = []
-    var post: Bool = false
+    var postEnable: Bool = false
     var category: [String] = []
     
     
@@ -52,6 +52,8 @@ class AddDetailViewController: UIViewController {
         setupKeyLabel()
         setupTableView()
         setupCategoryView()
+        textView.layer.cornerRadius = 5
+        textView.layer.cornerCurve = .continuous
         title = "記録を追加"
     }
     
@@ -70,6 +72,10 @@ class AddDetailViewController: UIViewController {
         modelBtn.layer.borderWidth = 2
         modelBtn.tintColor = UIColor.imageColor
         modelBtn.backgroundColor = .clear
+        modelBtn.layer.shadowColor = UIColor.imageColor.cgColor
+        modelBtn.layer.shadowOpacity = 0.8
+        modelBtn.layer.shadowRadius = 3
+        modelBtn.layer.shadowOffset = CGSize(width: 0, height: 0)
         configureMenuButton()
     }
     
@@ -110,7 +116,10 @@ class AddDetailViewController: UIViewController {
         keyLabel.layer.borderWidth = 2
         keyLabel.layer.cornerRadius = keyLabel.frame.height * 0.5
         keyLabel.layer.cornerCurve = .continuous
-        keyLabel.clipsToBounds = true
+        keyLabel.layer.shadowColor = UIColor.imageColor.cgColor
+        keyLabel.layer.shadowOpacity = 0.8
+        keyLabel.layer.shadowRadius = 3
+        keyLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
     func setupTableView() {
@@ -124,6 +133,9 @@ class AddDetailViewController: UIViewController {
     func setupCategoryView() {
         
         categoryView.isHidden = true
+        categoryLabel.layer.cornerRadius = 5
+        categoryLabel.layer.cornerCurve = .continuous
+        categoryLabel.layer.masksToBounds = true
     }
     
     func setCategory() {
@@ -172,6 +184,42 @@ class AddDetailViewController: UIViewController {
         }
     }
     
+    func post() {
+        if postEnable {
+            let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
+            postFB.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: category)
+        }
+    }
+    
+    func add() {
+        
+        let df = DateFormatter()
+        df.dateFormat = "yy年MM月dd日HH:mm"
+        df.timeZone = TimeZone.current
+        let time = df.string(from: Date())
+        
+        let filterMusic = manager.musicList.filter {$0.musicName == musicName && $0.artistName == artistName}
+        if !filterMusic.isEmpty {
+            guard let id = filterMusic.first?.id else {
+                let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default)
+                alert.addAction(ok)
+                present(alert, animated: true, completion: nil)
+                return
+            }
+            musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+        } else {
+            musicFB.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                
+            })
+            
+        }
+        
+        if fromWanna {
+            listFB.deleteWanna(wannaID: wannaID)
+        }
+    }
+    
     
     //MARK: - UI interaction
 
@@ -216,23 +264,10 @@ class AddDetailViewController: UIViewController {
     
     @IBAction func tapAddBtn() {
         if Double(scoreTF.text!) != nil {
-            if post {
-                let content = "得点:　\(scoreTF.text!)\nキー:　\(keyLabel.text!)\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text!)"
-                postFB.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: content, category: category)
-            }
-            let df = DateFormatter()
-            df.dateFormat = "yy年MM月dd日HH:mm"
-            df.timeZone = TimeZone.current
-            time = df.string(from: Date())
             
-            if fromWanna {
-                musicFB.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time!, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text, completionHandler: {_ in})
-                
-                listFB.deleteWanna(wannaID: wannaID)
-            }else{
-                musicFB.addMusicDetail(musicID: musicID, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: String(selectedMenuType.rawValue), comment: textView.text)
-                fromAddDetail = true
-            }
+            post()
+            add()
+            
             navigationController?.popViewController(animated: true)
         }else{
             func alert(title: String, message: String) {
@@ -245,7 +280,7 @@ class AddDetailViewController: UIViewController {
     }
     
     @IBAction func tapCheckBox() {
-        post.toggle()
+        postEnable.toggle()
         categoryView.isHidden.toggle()
     }
     

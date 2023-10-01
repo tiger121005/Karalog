@@ -32,6 +32,7 @@ class ShareViewController: UIViewController {
     @IBOutlet var categoryLabel: UILabel!
     @IBOutlet var searchBtn: CustomButton!
     @IBOutlet var searchViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet var postBtn: UIButton!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout! {
         didSet{
             flowLayout.minimumLineSpacing = 1
@@ -53,9 +54,12 @@ class ShareViewController: UIViewController {
         super.viewDidLoad()
         
         setupTableView()
+        setupPostBtn()
         setupSearchView()
         setupCollectionView()
         title = "SHARE"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +106,12 @@ class ShareViewController: UIViewController {
         refreshCtl.addTarget(self, action: #selector(self.reload), for: UIControl.Event.valueChanged)
         collectionView.addSubview(refreshCtl)
         collectionView.collectionViewLayout = compositionalLayout
+    }
+    
+    func setupPostBtn() {
+        postBtn.layer.cornerRadius = postBtn.frame.height * 0.5
+        let image = UIImage.pencil.resized(toWidth: 30)
+        postBtn.setImage(image, for: .normal)
     }
     
     func setCategory() {
@@ -223,7 +233,7 @@ class ShareViewController: UIViewController {
                 
             })
             searchViewHidden = true
-            self.searchViewTopConstraint.constant -= self.searchView.frame.height
+            self.searchViewTopConstraint.constant = -self.searchView.frame.height
         }
         outBtn.isHidden.toggle()
     }
@@ -264,10 +274,6 @@ class ShareViewController: UIViewController {
     
     
     //MARK: - UI interaction
-    
-    @IBAction func toProfile() {
-        performSegue(withIdentifier: "toProfile", sender: nil)
-    }
     
     @IBAction func tapAddCategory() {
         tableView.isHidden.toggle()

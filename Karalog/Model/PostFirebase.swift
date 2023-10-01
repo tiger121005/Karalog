@@ -348,7 +348,6 @@ class PostFirebase: ObservableObject {
     func selectPost(post: [Post]) async -> [Post] {
         var list: [Post] = []
         for p in post {
-            print("here")
             guard let user = await userFB.getUserInformation(id: p.userID) else {
                 print("continueeee")
                 continue
@@ -406,6 +405,7 @@ class PostFirebase: ObservableObject {
                 completionHandler([])
                 return
             }
+            print(_lastDocument, 4444)
             shareRef
                 .whereField(ShareRef.userID.rawValue, isEqualTo: id)
                 .order(by: ShareRef.time.rawValue, descending: true)
@@ -428,7 +428,7 @@ class PostFirebase: ObservableObject {
                             
                         }
                         
-                        self.postDocuments = collection!.documents
+                        self.userPostDocuments = collection!.documents
                         completionHandler(list)
                     }
                 }
@@ -488,6 +488,21 @@ class PostFirebase: ObservableObject {
             if let _err = err {
                 print("Error adding music: \(_err)")
             }
+        }
+    }
+    
+    
+    //MARK: - Delete
+    
+    func deletePost(id: String, completionHandler: @escaping (Any) -> Void) {
+        shareRef.document(id).delete() { err in
+            if let _err = err {
+                print("error deleting post: \(_err)")
+            }else{
+                print("music successfully deleted")
+                completionHandler(true)
+            }
+            
         }
     }
     

@@ -14,10 +14,10 @@ class StartViewController: UIViewController {
     
     
     //MARK: - View Controller methods
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
     
@@ -39,20 +39,28 @@ class StartViewController: UIViewController {
     
     func judgeSegue() {
         //userIDが保存されていた場合
-        if let u: String = UserDefaultsKey.userID.get(){
-            Task {
-                print("userID: ", u)
-                guard let a = await userFB.getUserInformation(id: u) else {
-                    self.performSegue(withIdentifier: "toLogin", sender: nil)
-                    return
-                }
-                function.login(first: false, user: a)
-                
-                self.performSegue(withIdentifier: "toTabBar", sender: nil)
-            }
+        guard let u: String = UserDefaultsKey.userID.get() else {
             //保存されていない場合
-        } else {
-            self.performSegue(withIdentifier: "toLogin", sender: nil)
+            segue(identifier: .login)
+            return
         }
+        
+        Task {
+            print("userID: ", u)
+            guard let a = await userFB.getUserInformation(id: u) else {
+                segue(identifier: .login)
+                return
+            }
+            function.login(first: false, user: a)
+            
+            segue(identifier: .tabBar)
+        }
+        
     }
+    
+    func segue(identifier: Segue) {
+        let id = identifier.rawValue
+        self.performSegue(withIdentifier: id, sender: nil)
+    }
+    
 }

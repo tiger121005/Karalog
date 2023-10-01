@@ -34,10 +34,15 @@ class AddFriendViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toProfile" {
+        switch Segue(rawValue: segue.identifier) {
+        case .profile:
             let nextView = segue.destination as! ProfileViewController
             nextView.userName = userName
             nextView.userID = userID
+            
+        default:
+            break
+            
         }
     }
     
@@ -63,7 +68,7 @@ extension AddFriendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         userName = userList[indexPath.row].name
         userID = userList[indexPath.row].id
-        performSegue(withIdentifier: "toProfile", sender: nil)
+        performSegue(withIdentifier: Segue.profile.rawValue, sender: nil)
     }
 }
 
@@ -95,6 +100,7 @@ extension AddFriendViewController: UISearchBarDelegate {
         print(searchText)
         if searchText == "" {
             userList = []
+            self.tableView.reloadData()
         }else{
             userFB.searchUserName(string: searchText) { list in
                 self.userList = list

@@ -9,6 +9,7 @@
 			<array>
 				<string>com.googleusercontent.apps.370665892572-fennevaiav0sbhll97rqo9v9bt36go38</string>
 				<string>fb1138210856848474</string>
+				<string></string>
 			</array>
 		</dict>
 	</array>
@@ -22,6 +23,18 @@
 	<array>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>NotoSansJP-Black.otf</string>
+		<string>NotoSansJP-Bold.otf</string>
+		<string>NotoSansJP-ExtraBold.otf</string>
+		<string>NotoSansJP-ExtraLight.otf</string>
+		<string>NotoSansJP-Light.otf</string>
+		<string>NotoSansJP-Medium.otf</string>
+		<string>NotoSansJP-Regular.otf</string>
+		<string>NotoSansJP-SemiBold.otf</string>
+		<string>NotoSansJP-Thin.otf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

@@ -42,15 +42,19 @@ class GetMusicViewController: UIViewController {
         setupCollectionView()
         setupSearchBar()
         
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        title = "SEARCH"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toPost"{
+        switch Segue(rawValue: segue.identifier) {
+        case .post:
             let nextView = segue.destination as! PostViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = try! Data(contentsOf: URL(string: musicImage)!)
+            
+        default:
+            break
             
         }
     }
@@ -120,7 +124,7 @@ extension GetMusicViewController: UICollectionViewDelegate {
             artistName = musicInfoModel[indexPath.row].artistName
             musicImage = musicInfoModel[indexPath.row].artworkUrl100
             
-            performSegue(withIdentifier: "toPost", sender: nil)
+            performSegue(withIdentifier: Segue.post.rawValue, sender: nil)
         }
     }
 }

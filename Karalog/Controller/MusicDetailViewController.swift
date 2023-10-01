@@ -35,7 +35,9 @@ class MusicDetailViewController: UIViewController {
     
     //MARK: - UI objects
     
-    @IBOutlet var bestLabel: EmphasizeLabel!
+    @IBOutlet var musicImageView: UIImageView!
+    @IBOutlet var bestView: UIView!
+    @IBOutlet var bestLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var graphView: UIView!
     var addAlert: UIAlertController!
@@ -46,7 +48,9 @@ class MusicDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        setupBestView()
         title = musicName
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,10 +58,14 @@ class MusicDetailViewController: UIViewController {
         
         getData()
         setupGraphAndLabel()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toDetail" {
+        
+        switch Segue(rawValue: segue.identifier) {
+        case .detail:
             let nextView = segue.destination as! DetailViewController
             nextView.time = time
             nextView.musicName = musicName
@@ -66,14 +74,19 @@ class MusicDetailViewController: UIViewController {
             nextView.key = key
             nextView.model = model
             nextView.comment = comment
-        }else if segue.identifier == "toAddDetail" {
+            nextView.musicImage = musicImageView.image
+            
+        case .addDetail:
             let nextView = segue.destination as! AddDetailViewController
             nextView.musicID = musicID
             nextView.musicName = musicName
             nextView.artistName = artistName
             nextView.musicImage = musicImage
             
+        default:
+            break
         }
+        
     }
     
     
@@ -82,9 +95,31 @@ class MusicDetailViewController: UIViewController {
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 50
+        tableView.rowHeight = 70
+        tableView.register(UINib(nibName: "LogCell", bundle: nil), forCellReuseIdentifier: "logCell")
         tableView.emptyDataSetSource = self
         tableView.emptyDataSetDelegate = self
+    }
+    
+    func setupBestView() {
+        let uiImage = UIImage(data: musicImage)!.resized(toWidth: musicImageView.frame.width)!
+        let ciImage = uiImage.toCIImage()
+        
+        let filter = GaussianBlurFilter()
+        filter.radius = 5
+        filter.setDefaults()
+        filter.inputImage = ciImage
+        let filteredImage = filter.outputImage
+
+        let context = CIContext(options: nil)
+        let cgImage = context.createCGImage(filteredImage!, from: filteredImage!.extent)
+        
+        musicImageView.image = UIImage(cgImage: cgImage!)
+        
+        bestView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        bestView.layer.cornerRadius = bestView.frame.height * 0.5
+        bestView.layer.borderWidth = 3
+        bestView.layer.borderColor = UIColor.imageColor.cgColor
     }
     
     func getData() {
@@ -129,9 +164,6 @@ class MusicDetailViewController: UIViewController {
         vc.view.leftAnchor.constraint(equalTo: graphView.leftAnchor, constant: 0).isActive = true
         vc.view.rightAnchor.constraint(equalTo: graphView.rightAnchor, constant: 0).isActive = true
         
-        bestLabel.textColor = UIColor.imageColor
-        bestLabel.shadowColorForCustom = UIColor.subImageColor.withAlphaComponent(0.8)
-        bestLabel.shadowOffsetForCustom = CGSize(width: 2, height: 2)
         
     }
     
@@ -172,7 +204,7 @@ extension MusicDetailViewController: UITableViewDelegate {
         key = String(tvList[indexPath.row].key)
         model = tvList[indexPath.row].model
         comment = tvList[indexPath.row].comment
-        performSegue(withIdentifier: "toDetail", sender: nil)
+        performSegue(withIdentifier: Segue.detail.rawValue, sender: nil)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -191,17 +223,14 @@ extension MusicDetailViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "logCell", for: indexPath) as! LogCell
         
-        cell.textLabel?.text = String(format: "%.3f", tvList[indexPath.row].score)//追加の際入力した文字を表示
-        cell.textLabel?.textColor = .white
-        cell.detailTextLabel?.text = tvList[indexPath.row].time + "　　　キー:　" + String(tvList[indexPath.row].key) + "　　　機種:　" + tvList[indexPath.row].model
-        cell.detailTextLabel?.textColor = .white
+        cell.scoreLabel?.text = String(format: "%.3f", tvList[indexPath.row].score)//追加の際入力した文字を表示
+        cell.scoreLabel?.textColor = .white
+        cell.detailLabel?.text = tvList[indexPath.row].time + "　　　キー:　" + String(tvList[indexPath.row].key) + "　　　機種:　" + tvList[indexPath.row].model
+        cell.detailLabel?.textColor = .white
         
-        cell.backgroundColor = .black
-        let cellSelectedBgView = UIView()
-        cellSelectedBgView.backgroundColor = .gray
-        cell.selectedBackgroundView = cellSelectedBgView
+        
         
         return cell
     }
