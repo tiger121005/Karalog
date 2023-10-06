@@ -7,29 +7,33 @@
 
 import UIKit
 
-var function = Function.shared
+var utility = Utility.shared
 
 
 //MARK: - Function
 
-struct Function {
-    static var shared = Function()
+struct Utility {
+    static var shared = Utility()
     private var impactFeedbackGenerator: UIImpactFeedbackGenerator?
     private var notificationFeedbackGenerator: UINotificationFeedbackGenerator?
     
-    func login(first: Bool, user: User) {
+    func login(first: Bool, user: User, completionHandler: @escaping (Bool) -> Void) {
         manager.user = user
-        userFB.setupFirebase(userID: user.id!)
-        UserDefaultsKey.userID.set(value: user.id!)
+        guard let id = user.id else { return }
+        userFB.setupFirebase(userID: id)
+        UserDefaultsKey.userID.set(value: id)
         if first {
             manager.lists = material.initialListData()
             UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+            completionHandler(true)
         } else {
-            listFB.getList(completionHandler: {_ in})
+            listFB.getList(completionHandler: {_ in
+                completionHandler(true)
+            })
         }
     }
     
-    func sort(sortKind: String, updateList: [MusicList], completionHandler: @escaping ([MusicList]) -> Void) {
+    func sort(sortKind: String, updateList: [MusicList]) async -> [MusicList] {
         
         var list: [MusicList] = []
         switch sortKind {
@@ -39,10 +43,13 @@ struct Function {
                 let b = i.data
                 var c: [Date] = []
                 for j in b {
-                    c.append(dateFromString(string: j.time, format: "yy年MM月dd日HH:mm"))
+                    if let string = dateFromString(string: j.time, format: "yy年MM月dd日HH:mm") {
+                        c.append(string)
+                    }
                 }
-                a.append(c.min()!)
-                
+                if let min = c.min() {
+                    a.append(min)
+                }
 
             }
             let d = a.indices.sorted{ a[$1] < a[$0] }
@@ -60,7 +67,9 @@ struct Function {
                 for j in b {
                     c.append(j.score)
                 }
-                a.append(c.max()!)
+                if let max = c.max() {
+                    a.append(max)
+                }
             }
             let d = a.indices.sorted{ a[$1] < a[$0]}
             list = d.map{updateList[$0]}
@@ -83,15 +92,19 @@ struct Function {
 
         default: print("error sort")
         }
-        completionHandler(list)
+        return list
         
     }
     
-    func dateFromString(string: String, format: String) -> Date {
+    func dateFromString(string: String, format: String) -> Date? {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.dateFormat = format
-        return formatter.date(from: string)!
+        if let date = formatter.date(from: string) {
+            return date
+        } else {
+            return nil
+        }
     }
     
     func stringFromDate(date: Date, format: String) -> String {
