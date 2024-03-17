@@ -85,11 +85,6 @@ struct LineMarkView: View {
                                     )
                                     .foregroundStyle(imageColor)
                                     
-                                    //                            AreaMark(
-                                    //                                x: .value("Date", data.date),
-                                    //                                y: .value("Score", data.score)
-                                    //                            )
-                                    //                            .foregroundStyle(gradient)
                                 }
                             }
                             .id(1)

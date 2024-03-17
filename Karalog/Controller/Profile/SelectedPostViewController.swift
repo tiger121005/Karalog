@@ -194,7 +194,8 @@ extension SelectedPostViewController: UICollectionViewDelegate {
                     }
                     
                     let delete = UIAlertAction(title: "削除", style: .destructive) { (action) in
-                        postFB.deletePost(id: self.shareList[indexPath.row].id!) {_ in
+                        guard let id = self.shareList[indexPath.row].id else { return }
+                        postFB.deletePost(id: id) {_ in
                             self.shareList.remove(at: indexPath.row)
                             self.imageList.remove(at: indexPath.row)
                             self.collectionView.deleteItems(at: [indexPath])
@@ -344,28 +345,29 @@ extension SelectedPostViewController: UICollectionViewDelegateFlowLayout {
 extension SelectedPostViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
-        let selectedID = shareList[indexPath.row].id!
-        
-        var good: Bool!
-        if manager.user.goodList.contains(where: { $0 == selectedID}) {
-            good = true
-        } else {
-            good = false
+        if let selectedID = shareList[indexPath.row].id {
+            
+            var good: Bool!
+            if manager.user.goodList.contains(where: { $0 == selectedID}) {
+                good = true
+            } else {
+                good = false
+            }
+            
+            postFB.goodUpdate(id: selectedID, good: good)
+            
+            if good {
+                shareList[indexPath.row].goodNumber -= 1
+                cell.goodBtn.setImage(UIImage.heart, for: .normal)
+            } else {
+                shareList[indexPath.row].goodNumber += 1
+                cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
+            }
+            
+            cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
+            
+            collectionView.reloadData()
         }
-        
-        postFB.goodUpdate(id: selectedID, good: good)
-        
-        if good {
-            shareList[indexPath.row].goodNumber -= 1
-            cell.goodBtn.setImage(UIImage.heart, for: .normal)
-        } else {
-            shareList[indexPath.row].goodNumber += 1
-            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
-        }
-        
-        cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
-        
-        collectionView.reloadData()
     }
     
     func tapMusic(indexpath: IndexPath) {
@@ -381,12 +383,12 @@ extension SelectedPostViewController: ShareCellDelegate {
 //MARK: - DZNEmptyDataSetSource
 
 extension SelectedPostViewController: DZNEmptyDataSetSource {
-    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString {
         return NSAttributedString("データがありません")
     }
     
-    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage! {
-        return UIImage.KaralogImage.resized(toWidth: 250)
+    func image(forEmptyDataSet scrollView: UIScrollView!) -> UIImage {
+        return UIImage.KaralogImage.resized(toWidth: 250) ?? UIImage.KaralogImage
     }
 }
 

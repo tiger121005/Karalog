@@ -20,10 +20,9 @@ class GetMusicViewController: UIViewController {
     
     //itunesの情報を取得
     let decoder: JSONDecoder = JSONDecoder()
-    var musicInfoModel = [MusicInfoModel]() {
-        didSet {
-        }
-    }
+    var musicInfoModel: [MusicInfoModel] = []
+    var imageList: [UIImage] = []
+    
     var fromList: Bool = false
     var resultingText: String = ""
     
@@ -51,7 +50,7 @@ class GetMusicViewController: UIViewController {
             let nextView = segue.destination as! PostViewController
             nextView.musicName = musicName
             nextView.artistName = artistName
-            nextView.musicImage = try! Data(contentsOf: URL(string: musicImage)!)
+            nextView.musicImage = musicImage
             
         default:
             break
@@ -75,29 +74,31 @@ class GetMusicViewController: UIViewController {
         searchBar.becomeFirstResponder()
     }
     
-    func getMusicArticles(text: String) {
-        //日本語をパソコン言語になおす
-        let parameters = ["term": text, "country": "jp", "limit": "14"]
-        //termが検索キーワード　countryが国　limitが数の上限
-        //parameterを使ってsearch以降の文を書いている
-        AF.request("https://itunes.apple.com/search", parameters: parameters).responseJSON { response in
-            //if文みたいなやつ,この場合response.resultがsuccessの時とfailureの時で場合分けをしている
-            switch response.result {
-            case .success:
-                //doはエラーが出なかった場合 catchはエラーが出たとき
-                do {
-                    let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: response.data!)
-                    
-                    self.musicInfoModel = iTunesData.results
-                    
-                    //dataが送られるまでにラグがあるからtextFieldChanged内ではなくこっちに書く
-                    self.collectionView.reloadData()
+    func getMusicArticles(text: String) async -> [MusicInfoModel]? {
+        await withCheckedContinuation{ continuation in
+            //日本語をパソコン言語になおす
+            let parameters = ["term": text, "country": "jp", "limit": "14"]
+            //termが検索キーワード　countryが国　limitが数の上限
+            //parameterを使ってsearch以降の文を書いている
+            AF.request("https://itunes.apple.com/search", parameters: parameters).responseJSON { response in
+                //if文みたいなやつ,この場合response.resultがsuccessの時とfailureの時で場合分けをしている
+                switch response.result {
+                case .success:
+                    //doはエラーが出なかった場合 catchはエラーが出たとき
+                    do {
+                        guard let data = response.data else { return }
+                        let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: data)
                         
-                } catch {
-                    print("デコードに失敗しました")
+                        continuation.resume(returning: iTunesData.results)
+                        
+                    } catch {
+                        print("デコードに失敗しました")
+                        continuation.resume(returning: nil)
+                    }
+                case .failure(let error):
+                    print("error", error)
+                    continuation.resume(returning: nil)
                 }
-            case .failure(let error):
-                print("error", error)
             }
         }
     }
@@ -114,17 +115,19 @@ extension GetMusicViewController: UICollectionViewDelegate {
         if fromList {
             listFB.addWanna(musicName: musicInfoModel[indexPath.row].trackName,
                                         artistName: musicInfoModel[indexPath.row].artistName,
-                                        musicImage: try! Data(contentsOf: URL(string: musicInfoModel[indexPath.row].artworkUrl100)!))
+                            musicImage: musicInfoModel[indexPath.row].artworkUrl100, completionHandler: {_ in
+                self.fromList = false
+                self.navigationController?.popViewController(animated: true)
+            })
             
-            fromList = false
-            self.navigationController?.popViewController(animated: true)
+            
             
         } else {
             musicName = musicInfoModel[indexPath.row].trackName
             artistName = musicInfoModel[indexPath.row].artistName
             musicImage = musicInfoModel[indexPath.row].artworkUrl100
             
-            performSegue(withIdentifier: Segue.post.rawValue, sender: nil)
+            segue(identifier: .post)
         }
     }
 }
@@ -143,15 +146,9 @@ extension GetMusicViewController: UICollectionViewDataSource {
         cell.musicLabel?.text = String(musicInfoModel[indexPath.row].trackName)
         cell.artistLabel?.text = String(musicInfoModel[indexPath.row].artistName)
         
-        let url = NSURL(string: self.musicInfoModel[indexPath.row].artworkUrl100)
-        let req = NSURLRequest(url:url! as URL)
-
-        NSURLConnection.sendAsynchronousRequest(req as URLRequest, queue:OperationQueue.main){(res, data, err) in
-            let image = UIImage(data:data!)
-            // 画像に対する処理 (cellのUIImageViewに表示する等)
-            cell.image?.image = image
+        cell.image?.image = imageList[indexPath.row]
             
-        }
+        
         
         let selectedBgView = UIView()
         selectedBgView.backgroundColor = .gray
@@ -176,7 +173,29 @@ extension GetMusicViewController: UICollectionViewDelegateFlowLayout {
 extension GetMusicViewController: UISearchBarDelegate {
     //searchBarに値が入力されるごとに呼び出される変数
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        getMusicArticles(text: searchText)
+        Task {
+            if searchText == "" {
+                musicInfoModel = []
+                imageList = []
+                collectionView.reloadData()
+                return
+            }
+            guard let results = await getMusicArticles(text: searchText) else { return }
+            musicInfoModel = results
+            let list = musicInfoModel
+            imageList = []
+            if musicInfoModel.count != 0 {
+                for i in 0..<musicInfoModel.count {
+                    guard let image = await UIImage.fromUrl(url: list[i].artworkUrl100) else {
+                        musicInfoModel.remove(at: i)
+                        return
+                    }
+                    imageList.append(image)
+                }
+                collectionView.reloadData()
+            }
+            
+        }
     }
     //改行したら自動的にキーボードを非表示にする
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

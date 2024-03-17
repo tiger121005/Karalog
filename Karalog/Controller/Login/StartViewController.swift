@@ -23,20 +23,14 @@ class StartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        setupDarkMode()
+//        UserDefaultsKey.userID.remove()
         judgeSegue()
-        UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
-        
+        UserDefaultsKey.judgeSort.set(value: Sort.late.rawValue)
         
     }
     
     
     //MARK: - Setup
-    
-    func setupDarkMode() {
-        UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
-    }
     
     func judgeSegue() {
         //userIDが保存されていた場合
@@ -52,16 +46,18 @@ class StartViewController: UIViewController {
                 segue(identifier: .login)
                 return
             }
-            function.login(first: false, user: a)
             
-            segue(identifier: .tabBar)
+            utility.login(first: false, user: a) {_ in
+                if UserDefaultsKey.showTutorial.get() == nil {
+                    self.segue(identifier: .tutorial)
+                } else {
+                    self.segue(identifier: .tabBar)
+                }
+            }
+            
         }
         
     }
     
-    func segue(identifier: Segue) {
-        let id = identifier.rawValue
-        self.performSegue(withIdentifier: id, sender: nil)
-    }
     
 }

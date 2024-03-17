@@ -68,7 +68,7 @@ extension AddFriendViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         userName = userList[indexPath.row].name
         userID = userList[indexPath.row].id
-        performSegue(withIdentifier: Segue.profile.rawValue, sender: nil)
+        segue(identifier: .profile)
     }
 }
 

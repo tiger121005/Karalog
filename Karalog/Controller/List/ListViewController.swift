@@ -20,7 +20,7 @@ class ListViewController: UIViewController {
     var cvList: [MusicList] = []
     var imageList: [UIImage] = []
     
-    var judgeSort: String = Sort.追加順（遅）.rawValue
+    var judgeSort: String = Sort.late.rawValue
     var allSelected: Bool = false
     var idList: [String] = []
     
@@ -100,7 +100,9 @@ class ListViewController: UIViewController {
             if let list = collectionView.indexPathsForSelectedItems {
                 let indexPathList = list.sorted{ $1.row < $0.row}
                 for i in indexPathList {
-                    idList.append(cvList[i.row].id!)
+                    if let id = cvList[i.row].id {
+                        idList.append(id)
+                    }
                 }
             } else {
                 idList = [selectedID]
@@ -235,16 +237,16 @@ class ListViewController: UIViewController {
         ])
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.追加順（遅）.rawValue {
-                    judgeSort = Sort.追加順（遅）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                if judgeSort != Sort.late.rawValue {
+                    judgeSort = Sort.late.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
                     
                 }else{
-                    judgeSort = Sort.追加順（早）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                    judgeSort = Sort.early.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                 }
@@ -256,16 +258,16 @@ class ListViewController: UIViewController {
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.得点（高）.rawValue{
-                    judgeSort = Sort.得点（高）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                if judgeSort != Sort.scoreHigh.rawValue{
+                    judgeSort = Sort.scoreHigh.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
                     
                 }else{
-                    judgeSort = Sort.得点（低）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                    judgeSort = Sort.scoreLow.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
@@ -277,16 +279,16 @@ class ListViewController: UIViewController {
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.曲名順（降）.rawValue{
-                    judgeSort = Sort.曲名順（降）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                if judgeSort != Sort.musicDown.rawValue{
+                    judgeSort = Sort.musicDown.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
                     
                 }else{
-                    judgeSort = Sort.曲名順（昇）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                    judgeSort = Sort.musicUp.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
@@ -297,16 +299,16 @@ class ListViewController: UIViewController {
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.アーティスト順（降）.rawValue{
-                    judgeSort = Sort.アーティスト順（降）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                if judgeSort != Sort.artistDown.rawValue{
+                    judgeSort = Sort.artistDown.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
                     
                 }else{
-                    judgeSort = Sort.アーティスト順（昇）.rawValue
-                    let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                    judgeSort = Sort.artistUp.rawValue
+                    let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                     self.cvList = list
                     await reloadData()
                     
@@ -373,11 +375,6 @@ class ListViewController: UIViewController {
             Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
             fromAddListMusic = false
         }
-    }
-    
-    func segue(identifier: Segue) {
-        let id = identifier.rawValue
-        self.performSegue(withIdentifier: id, sender: nil)
     }
     
     

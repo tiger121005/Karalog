@@ -381,11 +381,12 @@ class PostFirebase: ObservableObject {
                     .order(by: ShareRef.time.rawValue, descending: true)
                     .limit(to: self.getLimit)
                     .getDocuments { (collection, err) in
+                        guard let collection else { return }
                         if let _err = err {
                             print("Error getiing user post: \(_err)")
                             continuation.resume(returning: nil)
                         } else {
-                            for document in collection!.documents {
+                            for document in collection.documents {
                                 
                                 do{
                                     var a = try document.data(as: Post.self)
@@ -397,7 +398,7 @@ class PostFirebase: ObservableObject {
                                 
                             }
                             
-                            self.userPostDocuments = collection!.documents
+                            self.userPostDocuments = collection.documents
                             continuation.resume(returning: list)
                         }
                     }
@@ -406,7 +407,7 @@ class PostFirebase: ObservableObject {
                     continuation.resume(returning: nil)
                     return
                 }
-                print(_lastDocument, 4444)
+                
                 shareRef
                     .whereField(ShareRef.userID.rawValue, isEqualTo: id)
                     .order(by: ShareRef.time.rawValue, descending: true)
@@ -417,7 +418,8 @@ class PostFirebase: ObservableObject {
                             print("Error getiing user post: \(_err)")
                             continuation.resume(returning: nil)
                         } else {
-                            for document in collection!.documents {
+                            guard let collection else { return }
+                            for document in collection.documents {
                                 
                                 do{
                                     var a = try document.data(as: Post.self)
@@ -429,7 +431,7 @@ class PostFirebase: ObservableObject {
                                 
                             }
                             
-                            self.userPostDocuments = collection!.documents
+                            self.userPostDocuments = collection.documents
                             continuation.resume(returning: list)
                         }
                     }
@@ -477,18 +479,20 @@ class PostFirebase: ObservableObject {
     
     func post(musicName: String, artistName: String, musicImage: String, content: String, category: [String]) {
         let time = Timestamp(date: Date())
-        shareRef.addDocument(data: [
-            ShareRef.musicName.rawValue: musicName,
-            ShareRef.artistName.rawValue: artistName,
-            ShareRef.musicImage.rawValue: musicImage,
-            ShareRef.content.rawValue: content,
-            ShareRef.userID.rawValue: UserDefaultsKey.userID.get()!,
-            ShareRef.time.rawValue: time,
-            ShareRef.goodNumber.rawValue: 0,
-            ShareRef.category.rawValue: category
-        ]) { err in
-            if let _err = err {
-                print("Error adding music: \(_err)")
+        if let id = manager.user.id {
+            shareRef.addDocument(data: [
+                ShareRef.musicName.rawValue: musicName,
+                ShareRef.artistName.rawValue: artistName,
+                ShareRef.musicImage.rawValue: musicImage,
+                ShareRef.content.rawValue: content,
+                ShareRef.userID.rawValue: id,
+                ShareRef.time.rawValue: time,
+                ShareRef.goodNumber.rawValue: 0,
+                ShareRef.category.rawValue: category
+            ]) { err in
+                if let _err = err {
+                    print("Error adding music: \(_err)")
+                }
             }
         }
     }
@@ -514,19 +518,20 @@ class PostFirebase: ObservableObject {
     //投稿のいいねボタンが押された時に呼び出される
     func goodUpdate(id: String, good: Bool) {
         if  good {
-            let num = manager.user.goodList.firstIndex(of: id)!
-            manager.user.goodList.remove(at: num)
-            userRef.updateData([
-                UserRef.goodList.rawValue: FieldValue.arrayRemove([id])
-                
-            ])
-            shareRef.document(id).updateData([
-                ShareRef.goodNumber.rawValue: FieldValue.increment(Double(-1))
-            ]){ err in
-                if let _err = err {
-                    print("Error updating good: \(_err)")
-                }else{
+            if let num = manager.user.goodList.firstIndex(of: id) {
+                manager.user.goodList.remove(at: num)
+                userRef.updateData([
+                    UserRef.goodList.rawValue: FieldValue.arrayRemove([id])
                     
+                ])
+                shareRef.document(id).updateData([
+                    ShareRef.goodNumber.rawValue: FieldValue.increment(Double(-1))
+                ]){ err in
+                    if let _err = err {
+                        print("Error updating good: \(_err)")
+                    }else{
+                        
+                    }
                 }
             }
         }else{
@@ -553,7 +558,8 @@ class PostFirebase: ObservableObject {
             return nil
         }else{
             var list: [Post] = []
-            for document in collection!.documents {
+            guard let collection else { return nil }
+            for document in collection.documents {
                 
                 do{
                     list.append(try document.data(as: Post.self))
@@ -562,7 +568,7 @@ class PostFirebase: ObservableObject {
                 }
                 
             }
-            self.postDocuments = collection!.documents
+            self.postDocuments = collection.documents
             return list
         }
     }

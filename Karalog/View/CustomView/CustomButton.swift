@@ -34,14 +34,4 @@ class CustomButton: UIButton {
         
     }
     
-//コードでviewを生成するとき
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        self.layer.cornerRadius = self.frame.height * 0.5
-//        self.layer.shadowOpacity = 0.7
-//        self.layer.shadowRadius = 3
-//        self.layer.shadowColor = UIColor(named: "imageShadowColor")?.cgColor
-//        self.backgroundColor = UIColor.imageColor
-//    }
-    
 }

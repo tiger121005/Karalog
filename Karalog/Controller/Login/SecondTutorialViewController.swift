@@ -17,13 +17,4 @@ class SecondTutorialViewController: UIViewController {
         
     }
     
-    @IBAction func tapCheckBox() {
-        if show {
-            UserDefaultsKey.showTutorial.set(value: "false")
-            show = false
-        } else {
-            UserDefaultsKey.showTutorial.remove()
-            show = true
-        }
-    }
 }

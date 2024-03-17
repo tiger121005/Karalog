@@ -24,7 +24,7 @@ struct Utility {
         UserDefaultsKey.userID.set(value: id)
         if first {
             manager.lists = material.initialListData()
-            UserDefaultsKey.judgeSort.set(value: Sort.追加順（遅）.rawValue)
+            UserDefaultsKey.judgeSort.set(value: Sort.late.rawValue)
             completionHandler(true)
         } else {
             listFB.getList(completionHandler: {_ in
@@ -37,7 +37,7 @@ struct Utility {
         
         var list: [MusicList] = []
         switch sortKind {
-        case Sort.追加順（遅）.rawValue:
+        case Sort.late.rawValue:
             var a: [Date] = []
             for i in updateList {
                 let b = i.data
@@ -55,11 +55,11 @@ struct Utility {
             let d = a.indices.sorted{ a[$1] < a[$0] }
             list = d.map { updateList[$0] }
 
-        case Sort.追加順（早）.rawValue:
+        case Sort.early.rawValue:
             list = updateList.reversed()
 
 
-        case Sort.得点（高）.rawValue:
+        case Sort.scoreHigh.rawValue:
             var a: [Double] = []
             for i in updateList {
                 let b = i.data
@@ -74,20 +74,20 @@ struct Utility {
             let d = a.indices.sorted{ a[$1] < a[$0]}
             list = d.map{updateList[$0]}
 
-        case Sort.得点（低）.rawValue:
+        case Sort.scoreLow.rawValue:
             list = updateList.reversed()
 
 
-        case Sort.曲名順（昇）.rawValue:
+        case Sort.musicDown.rawValue:
             list = updateList.sorted(by: {$0.musicName < $1.musicName})
 
-        case Sort.曲名順（昇）.rawValue:
+        case Sort.musicUp.rawValue:
             list = updateList.reversed()
 
-        case Sort.アーティスト順（降）.rawValue:
+        case Sort.artistDown.rawValue:
             list = updateList.sorted(by: {($0.artistName, $0.musicName) < ($1.artistName, $1.musicName)})
 
-        case Sort.アーティスト順（昇）.rawValue:
+        case Sort.artistUp.rawValue:
             list = updateList.reversed()
 
         default: print("error sort")
@@ -117,7 +117,7 @@ struct Utility {
     mutating func playImpact(type: Haptic) {
         switch type {
             case .impact(let style, let intensity):
-                impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style.value)
+                impactFeedbackGenerator = UIImpactFeedbackGenerator(style: style)
                 impactFeedbackGenerator?.prepare()
 
                 if let _intensity = intensity {
@@ -130,7 +130,7 @@ struct Utility {
             case .notification(let type):
                 notificationFeedbackGenerator = UINotificationFeedbackGenerator()
                 notificationFeedbackGenerator?.prepare()
-                notificationFeedbackGenerator?.notificationOccurred(type.value)
+                notificationFeedbackGenerator?.notificationOccurred(type)
                 notificationFeedbackGenerator = nil
         }
     }

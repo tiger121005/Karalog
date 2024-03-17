@@ -106,7 +106,6 @@ class CameraViewController: UIViewController {
         if deviceOrientation.isPortrait || deviceOrientation.isLandscape {
             currentOrientation = deviceOrientation
         }
-        print("currentOrientation", currentOrientation)
         
         // Handle device orientation in the preview layer.
         if let videoPreviewLayerConnection = previewView.videoPreviewLayer.connection {
@@ -116,7 +115,7 @@ class CameraViewController: UIViewController {
         }
         
         // The orientation changed. Figure out the new ROI.
-//        calculateRegionOfInterest()
+
         setupOrientationAndTransform()
     }
     
@@ -295,8 +294,7 @@ class CameraViewController: UIViewController {
         
         let settings = AVCapturePhotoSettings()
         
-        //カメラの手ぶれ補正
-        settings.isAutoStillImageStabilizationEnabled = true
+        
         // 撮影された画像をdelegateメソッドで処理
         self.photoOutput.capturePhoto(with: settings, delegate: self as AVCapturePhotoCaptureDelegate)
         
@@ -308,25 +306,29 @@ class CameraViewController: UIViewController {
     
     @objc private func onPinchGesture(_ sender: UIPinchGestureRecognizer) {
         if sender.state == .began {
-            self.baseZoomFactor = (self.captureDevice?.videoZoomFactor)!
+            if let zoomFactor = self.captureDevice?.videoZoomFactor {
+                self.baseZoomFactor = zoomFactor
+            }
         }
         
         let tempZoomFactor: CGFloat = self.baseZoomFactor * sender.scale
         let newZoomFactor: CGFloat
-        if tempZoomFactor < (self.captureDevice?.minAvailableVideoZoomFactor)! {
-            newZoomFactor = (self.captureDevice?.minAvailableVideoZoomFactor)!
-        } else if tempZoomFactor > (self.captureDevice?.maxAvailableVideoZoomFactor)! {
-            newZoomFactor = (self.captureDevice?.maxAvailableVideoZoomFactor)!
-        } else {
-            newZoomFactor = tempZoomFactor
-        }
-        
-        do {
-            try self.captureDevice?.lockForConfiguration()
-            self.captureDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 32.0)
-            self.captureDevice?.unlockForConfiguration()
-        } catch {
-            print("Failed to change zoom factor")
+        if let zoomFactor = self.captureDevice?.videoZoomFactor {
+            if tempZoomFactor < zoomFactor {
+                newZoomFactor = zoomFactor
+            } else if tempZoomFactor > zoomFactor {
+                newZoomFactor = zoomFactor
+            } else {
+                newZoomFactor = tempZoomFactor
+            }
+            
+            do {
+                try self.captureDevice?.lockForConfiguration()
+                self.captureDevice?.ramp(toVideoZoomFactor: newZoomFactor, withRate: 32.0)
+                self.captureDevice?.unlockForConfiguration()
+            } catch {
+                print("Failed to change zoom factor")
+            }
         }
     }
     
@@ -345,7 +347,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             // Data型をUIImageオブジェクトに変換
             image = UIImage(data: imageData)
             captureSession.stopRunning()
-            self.performSegue(withIdentifier: Segue.addMusic.rawValue, sender: nil)
+            segue(identifier: .addMusic)
         }
     }
 }

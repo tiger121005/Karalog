@@ -28,7 +28,7 @@ class ImageRec {
     //MARK: - imageRec {
     func rec(image: UIImage) -> DetectLog {
         self.image = image
-        guard let model = classifyModel() else { print("AA"); return emptyLog }
+        guard let model = classifyModel() else { return emptyLog }
         guard var getLog = detectString(kind: model) else { return DetectLog(music: "", artist: "", score: "", model: model, comment: "") }
         getLog.model = model
         return getLog
@@ -65,7 +65,7 @@ class ImageRec {
             return
         }
         
-        guard let cgImage = image.cgImage else { print("AA"); return nil }
+        guard let cgImage = image.cgImage else { return nil }
         // imageRequestHanderにimageをセット
         let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
         // imageRequestHandlerにrequestをセットし、実行
@@ -109,14 +109,11 @@ class ImageRec {
             
             guard let results = request.results as? [VNRecognizedObjectObservation] else { return }
             
-            
-            print("results: ", results)
             for result in results {
                 //やってみてから調整
                 // ラベル名。「labels」の０番目（例えば”Car”の信頼度が一番高い。１番目（例えば”Truck”）の信頼度が次に高い。
                 let label:String = result.labels.first!.identifier
                 
-                print("model label: ", label)
                 // "Car"
                 switch label {
                 case Objects.music.rawValue:
@@ -131,7 +128,6 @@ class ImageRec {
                     self.getString(cgImage: trimedImage) { results in
                         var musicY: CGFloat!
                         for visionRequest in results {
-                            print("music", visionRequest.topCandidates(1).first?.string ?? "")
                             guard var musicY else {
                                 musicY = visionRequest.boundingBox.minY
                                 musicText = visionRequest.topCandidates(1).first?.string ?? ""
@@ -157,7 +153,6 @@ class ImageRec {
                         
                         var artistY: CGFloat!
                         for visionRequest in results {
-                            print("artist", visionRequest.topCandidates(1).first?.string ?? "")
                             guard var artistY else {
                                 artistY = visionRequest.boundingBox.minY
                                 artistText = visionRequest.topCandidates(1).first?.string ?? ""
@@ -297,7 +292,6 @@ class ImageRec {
                 
             }
             completionHandler(_results)
-            print(_results)
         }
 
         request.recognitionLanguages = ["ja-JP", "en_US"]

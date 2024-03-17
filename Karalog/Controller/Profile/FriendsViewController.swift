@@ -48,13 +48,13 @@ class FriendsViewController: UIViewController {
             nextView.notification = selectedUser?.notice ?? []
             
             guard let s = selectedUser?.showAll else {
-                nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
+                nextView.selectedSettingShow = SettingShow.follower.rawValue
                 return
             }
             if s {
-                nextView.selectedSettingShow = SettingShow.全て.rawValue
+                nextView.selectedSettingShow = SettingShow.all.rawValue
             } else {
-                nextView.selectedSettingShow = SettingShow.フォロワー.rawValue
+                nextView.selectedSettingShow = SettingShow.follower.rawValue
             }
             
             
@@ -117,18 +117,11 @@ class FriendsViewController: UIViewController {
                 }
             }
             
-            print("")
-            print("---followerList")
-            print(followerList)
             setupPageView()
             setupSegment()
         }
     }
     
-    func segue(identifier: Segue) {
-        let id = identifier.rawValue
-        self.performSegue(withIdentifier: id, sender: nil)
-    }
     
     //MARK: - Objective - C
 
@@ -182,8 +175,9 @@ extension FriendsViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
             
         if let vcName = pageViewController.viewControllers?.first?.restorationIdentifier {
-            let index = idArray.firstIndex(of: vcName)
-            segmentedCtl.selectedSegmentIndex = index!
+            if let index = idArray.firstIndex(of: vcName) {
+                segmentedCtl.selectedSegmentIndex = index
+            }
         }
     }
     

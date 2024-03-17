@@ -55,24 +55,29 @@ extension AddToListViewController: UICollectionViewDelegate {
         switch indexPath.row {
         case 0:
             for id in idList {
-                musicFB.favoriteUpdate(id: id, favorite: true, completionHandler: { _ in})
+                musicFB.favoriteUpdate(id: id, favorite: true, completionHandler: { _ in
+                    self.dismiss(animated: true)
+                })
             }
             
         case 1:
             for id in idList {
                 if let music = manager.musicList.first(where: {$0.id == id}) {
-                    listFB.addWanna(musicName: music.musicName, artistName: music.artistName, musicImage: music.musicImage)
+                    listFB.addWanna(musicName: music.musicName, artistName: music.artistName, musicImage: music.musicImage, completionHandler: { _ in
+                        self.dismiss(animated: true)
+                    })
                 }
             }
             
         default:
             for id in idList {
                 guard let listID = manager.lists[indexPath.row].id else { continue }
-                musicFB.addMusicToList(musicID: id, listID: listID)
+                musicFB.addMusicToList(musicID: id, listID: listID) {_ in 
+                    self.dismiss(animated: true)
+                }
             }
         }
         
-        self.dismiss(animated: true)
             
     }
 }

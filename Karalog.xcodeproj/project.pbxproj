@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0513E246E9A899BD4EAC29C2 /* Pods_Karalog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB4C410CD43EC7ED72095BD /* Pods_Karalog.framework */; };
-		192D26712A0543A80058D739 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26702A0543A80058D739 /* Function.swift */; };
+		192D26712A0543A80058D739 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26702A0543A80058D739 /* Utility.swift */; };
 		192D26AF2A1F1AB20058D739 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26AE2A1F1AB20058D739 /* ShareViewController.swift */; };
 		192D26B22A1F1C140058D739 /* ShareCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B02A1F1C140058D739 /* ShareCell.swift */; };
 		192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 192D26B12A1F1C140058D739 /* ShareCell.xib */; };
 		192D26B52A1F98770058D739 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B42A1F98770058D739 /* PostViewController.swift */; };
 		192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */; };
-		1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB529D012E700245BB3 /* TableViewCell1.swift */; };
-		1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBB629D012E700245BB3 /* TableViewCell1.xib */; };
 		1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBB929D045B900245BB3 /* AddToListViewController.swift */; };
 		1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */; };
 		1938FBBE29D0584600245BB3 /* CollectionViewCell1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */; };
@@ -23,7 +21,6 @@
 		1938FBC229D0641700245BB3 /* CollectionViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */; };
 		1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC629D0741300245BB3 /* GoogleSignIn */; };
 		1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1938FBC829D0741300245BB3 /* GoogleSignInSwift */; };
-		19426CC62AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */; };
 		194A62F62AC48E8400B2CD43 /* GaussianBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */; };
 		194A62F82AC48F1900B2CD43 /* CustomCIFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */; };
 		194A63012AC6F49B00B2CD43 /* MusicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */; };
@@ -37,16 +34,23 @@
 		196415182AB19B8300A7808C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196415172AB19B8300A7808C /* CameraViewController.swift */; };
 		1964151A2AB19CBC00A7808C /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196415192AB19CBC00A7808C /* VideoView.swift */; };
 		1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */; };
-		1964151E2AB1AD4500A7808C /* Detect_JOY-new.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */; };
+		1964151E2AB1AD4500A7808C /* Detect_JOY_new.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151D2AB1AD4500A7808C /* Detect_JOY_new.mlmodel */; };
 		196415202AB1AD5500A7808C /* Detect_DAM-AI.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */; };
 		196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */; };
 		196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 196D97352A66A02B00A96892 /* GoogleService-Info.plist */; };
 		1972C61F2AA4CA7500D64C2E /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C61E2AA4CA7500D64C2E /* FacebookCore */; };
 		1972C6212AA4CA7500D64C2E /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C6202AA4CA7500D64C2E /* FacebookLogin */; };
 		1972C6232AA4CA7500D64C2E /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1972C6222AA4CA7500D64C2E /* FacebookShare */; };
-		197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */; };
+		197528BF2ACB374C00D80241 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197528BE2ACB374C00D80241 /* TutorialViewController.swift */; };
+		197528C12ACB3A5500D80241 /* FirstTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197528C02ACB3A5500D80241 /* FirstTutorialViewController.swift */; };
+		197528C32ACB3A6500D80241 /* SecondTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197528C22ACB3A6500D80241 /* SecondTutorialViewController.swift */; };
+		197528C52ACB3A7600D80241 /* ThirdTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197528C42ACB3A7600D80241 /* ThirdTutorialViewController.swift */; };
+		197528C72ACB3A8500D80241 /* FourthTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197528C62ACB3A8500D80241 /* FourthTutorialViewController.swift */; };
+		197528C92ACC203E00D80241 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 197528C82ACC203E00D80241 /* FirebaseStorage */; };
 		197F7C6E2A84BEEF00F80C34 /* SelectedPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */; };
 		1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1980AAC12A60DE0900FA93A1 /* CheckBox.swift */; };
+		19875DDE2ACD674F00967649 /* PostBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19875DDD2ACD674F00967649 /* PostBox.swift */; };
+		19875DEB2ACD73C700967649 /* Detect_DAM_DX_G.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 19875DEA2ACD73C700967649 /* Detect_DAM_DX_G.mlmodel */; };
 		199060092A98DD5E00037A0C /* FollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199060082A98DD5E00037A0C /* FollowViewController.swift */; };
 		1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1990600A2A98DD7000037A0C /* FollowerViewController.swift */; };
 		199668842AAD9EE10003D295 /* PostFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199668832AAD9EE10003D295 /* PostFirebase.swift */; };
@@ -78,6 +82,8 @@
 		19A12D8329CD966200B798A4 /* MakeAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */; };
 		19A12D8529CDE70700B798A4 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */; };
 		19A12D8729CF465900B798A4 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A12D8629CF465900B798A4 /* Article.swift */; };
+		19CA32102ACAF5AF00A2E43C /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA320F2ACAF5AF00A2E43C /* TabController.swift */; };
+		19CA32122ACB127A00A2E43C /* ImageRec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA32112ACB127A00A2E43C /* ImageRec.swift */; };
 		19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D363FE2A3DB1AF0046DA9A /* Slider.swift */; };
 		19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D364022A3DB24A0046DA9A /* CustomSliderView.swift */; };
 		19D619172AAB21B100C7B868 /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 19D619162AAB21B100C7B868 /* QRCode */; };
@@ -94,7 +100,6 @@
 		19F4D7B42AC732FA00C62083 /* NotoSansJP-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AB2AC732F900C62083 /* NotoSansJP-Medium.otf */; };
 		19F4D7B52AC732FA00C62083 /* NotoSansJP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AC2AC732F900C62083 /* NotoSansJP-Regular.otf */; };
 		19F4D7B62AC732FA00C62083 /* NotoSansJP-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */; };
-		19F4D7B82AC95B9900C62083 /* CustomButtonShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */; };
 		19F4D7BD2AC9757200C62083 /* LogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F4D7BB2AC9757200C62083 /* LogCell.swift */; };
 		19F4D7BE2AC9757200C62083 /* LogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F4D7BC2AC9757200C62083 /* LogCell.xib */; };
 		60476196096EB912B2FDFF70 /* Pods_KaralogTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */; };
@@ -123,21 +128,18 @@
 		19019BF729E189CD00315AFD /* Karalog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Karalog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19019BF829E189CD00315AFD /* KaralogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19019BF929E189CD00315AFD /* KaralogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KaralogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		192D26702A0543A80058D739 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
+		192D26702A0543A80058D739 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		192D26AE2A1F1AB20058D739 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		192D26B02A1F1C140058D739 /* ShareCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCell.swift; sourceTree = "<group>"; };
 		192D26B12A1F1C140058D739 /* ShareCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShareCell.xib; sourceTree = "<group>"; };
 		192D26B42A1F98770058D739 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMusicViewController.swift; sourceTree = "<group>"; };
-		1938FBB529D012E700245BB3 /* TableViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell1.swift; sourceTree = "<group>"; };
-		1938FBB629D012E700245BB3 /* TableViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCell1.xib; sourceTree = "<group>"; };
 		1938FBB929D045B900245BB3 /* AddToListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListViewController.swift; sourceTree = "<group>"; };
 		1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell1.swift; sourceTree = "<group>"; };
 		1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell1.xib; sourceTree = "<group>"; };
 		1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell2.swift; sourceTree = "<group>"; };
 		1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell2.xib; sourceTree = "<group>"; };
 		1938FBD129D0A05C00245BB3 /* Karalog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Karalog.entitlements; sourceTree = "<group>"; };
-		19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "Detect_DAM_DX-G.mlmodel"; path = "../../../../Downloads/Detect_DAM_DX-G.mlmodel"; sourceTree = "<group>"; };
 		194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussianBlurFilter.swift; sourceTree = "<group>"; };
 		194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCIFilter.swift; sourceTree = "<group>"; };
 		194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
@@ -147,13 +149,19 @@
 		196415172AB19B8300A7808C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		196415192AB19CBC00A7808C /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = KaraokeClassifier.mlmodel; sourceTree = "<group>"; };
-		1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_JOY-new.mlmodel"; sourceTree = "<group>"; };
+		1964151D2AB1AD4500A7808C /* Detect_JOY_new.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Detect_JOY_new.mlmodel; sourceTree = "<group>"; };
 		1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "Detect_DAM-AI.mlmodel"; sourceTree = "<group>"; };
 		196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Detect_JOY_old.mlmodel; sourceTree = "<group>"; };
 		196D97352A66A02B00A96892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizeLabel.swift; sourceTree = "<group>"; };
+		197528BE2ACB374C00D80241 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		197528C02ACB3A5500D80241 /* FirstTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTutorialViewController.swift; sourceTree = "<group>"; };
+		197528C22ACB3A6500D80241 /* SecondTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTutorialViewController.swift; sourceTree = "<group>"; };
+		197528C42ACB3A7600D80241 /* ThirdTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdTutorialViewController.swift; sourceTree = "<group>"; };
+		197528C62ACB3A8500D80241 /* FourthTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourthTutorialViewController.swift; sourceTree = "<group>"; };
 		197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPostViewController.swift; sourceTree = "<group>"; };
 		1980AAC12A60DE0900FA93A1 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
+		19875DDD2ACD674F00967649 /* PostBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBox.swift; sourceTree = "<group>"; };
+		19875DEA2ACD73C700967649 /* Detect_DAM_DX_G.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Detect_DAM_DX_G.mlmodel; sourceTree = "<group>"; };
 		199060082A98DD5E00037A0C /* FollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewController.swift; sourceTree = "<group>"; };
 		1990600A2A98DD7000037A0C /* FollowerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerViewController.swift; sourceTree = "<group>"; };
 		199668832AAD9EE10003D295 /* PostFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFirebase.swift; sourceTree = "<group>"; };
@@ -186,6 +194,8 @@
 		19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeAccountViewController.swift; sourceTree = "<group>"; };
 		19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		19A12D8629CF465900B798A4 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		19CA320F2ACAF5AF00A2E43C /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		19CA32112ACB127A00A2E43C /* ImageRec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRec.swift; sourceTree = "<group>"; };
 		19D363FE2A3DB1AF0046DA9A /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		19D364022A3DB24A0046DA9A /* CustomSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSliderView.swift; sourceTree = "<group>"; };
 		19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -201,7 +211,6 @@
 		19F4D7AB2AC732F900C62083 /* NotoSansJP-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Medium.otf"; sourceTree = "<group>"; };
 		19F4D7AC2AC732F900C62083 /* NotoSansJP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-Regular.otf"; sourceTree = "<group>"; };
 		19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansJP-SemiBold.otf"; sourceTree = "<group>"; };
-		19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonShadow.swift; sourceTree = "<group>"; };
 		19F4D7BB2AC9757200C62083 /* LogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCell.swift; sourceTree = "<group>"; };
 		19F4D7BC2AC9757200C62083 /* LogCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogCell.xib; sourceTree = "<group>"; };
 		35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Karalog_KaralogUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,6 +233,7 @@
 				1938FBC729D0741300245BB3 /* GoogleSignIn in Frameworks */,
 				1972C6232AA4CA7500D64C2E /* FacebookShare in Frameworks */,
 				1938FBC929D0741300245BB3 /* GoogleSignInSwift in Frameworks */,
+				197528C92ACC203E00D80241 /* FirebaseStorage in Frameworks */,
 				1972C61F2AA4CA7500D64C2E /* FacebookCore in Frameworks */,
 				1961E2342AA4D5E80000FAF0 /* FirebaseFirestore in Frameworks */,
 				1961E2322AA4D5E80000FAF0 /* FirebaseAuth in Frameworks */,
@@ -255,31 +265,12 @@
 		1960CD1B29FE0E780065FF05 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */,
-				19A12D8029CD964F00B798A4 /* LoginViewController.swift */,
-				19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */,
-				19A12D5C29CD941200B798A4 /* MusicViewController.swift */,
-				1938FBB929D045B900245BB3 /* AddToListViewController.swift */,
-				19A12D6029CD945100B798A4 /* SearchViewController.swift */,
-				196415172AB19B8300A7808C /* CameraViewController.swift */,
-				19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */,
-				19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */,
-				19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */,
-				19A12D6629CD94AC00B798A4 /* DetailViewController.swift */,
-				19A12D6829CD94C300B798A4 /* AllListViewController.swift */,
-				19A12D6A29CD94D500B798A4 /* AddListViewController.swift */,
-				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
-				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
-				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
-				192D26B42A1F98770058D739 /* PostViewController.swift */,
-				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
-				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
-				197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */,
-				19A12D7429CD958300B798A4 /* FriendsViewController.swift */,
-				1990600A2A98DD7000037A0C /* FollowerViewController.swift */,
-				199060082A98DD5E00037A0C /* FollowViewController.swift */,
-				19A12D7229CD957600B798A4 /* NotificationViewController.swift */,
-				19EAE28D2AAA20DE00173632 /* QRViewController.swift */,
+				19875DE52ACD704600967649 /* Login */,
+				19CA320F2ACAF5AF00A2E43C /* TabController.swift */,
+				19875DE62ACD706500967649 /* Log */,
+				19875DE72ACD707C00967649 /* List */,
+				19875DE82ACD709000967649 /* Share */,
+				19875DE92ACD70D900967649 /* Profile */,
 				192D26B62A1FABBD0058D739 /* GetMusicViewController.swift */,
 			);
 			path = Controller;
@@ -290,19 +281,10 @@
 			children = (
 				19A12D8629CF465900B798A4 /* Article.swift */,
 				1960CD2229FE7B250065FF05 /* Material.swift */,
-				199668852AADA3600003D295 /* UserFirebase.swift */,
-				199668872AADA38D0003D295 /* MusicFirebase.swift */,
-				199668892AADA3C50003D295 /* ListFirebase.swift */,
-				199668832AAD9EE10003D295 /* PostFirebase.swift */,
-				192D26702A0543A80058D739 /* Function.swift */,
+				192D26702A0543A80058D739 /* Utility.swift */,
 				1960CD2029FE30730065FF05 /* Manager.swift */,
-				194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */,
-				194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */,
-				1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */,
-				1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */,
-				19426CC52AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel */,
-				1964151D2AB1AD4500A7808C /* Detect_JOY-new.mlmodel */,
-				196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */,
+				19875DE12ACD6EDE00967649 /* Firebase */,
+				19875DDF2ACD6E6D00967649 /* DetectModel */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -311,26 +293,39 @@
 			isa = PBXGroup;
 			children = (
 				19A12D3229CC2C9E00B798A4 /* Main.storyboard */,
-				1938FBB529D012E700245BB3 /* TableViewCell1.swift */,
-				1938FBB629D012E700245BB3 /* TableViewCell1.xib */,
-				1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */,
-				1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */,
-				1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */,
-				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
-				194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */,
-				194A63002AC6F49B00B2CD43 /* MusicCell.xib */,
-				19F4D7BB2AC9757200C62083 /* LogCell.swift */,
-				19F4D7BC2AC9757200C62083 /* LogCell.xib */,
-				192D26B02A1F1C140058D739 /* ShareCell.swift */,
-				192D26B12A1F1C140058D739 /* ShareCell.xib */,
-				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
-				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
-				19F4D7B72AC95B9900C62083 /* CustomButtonShadow.swift */,
-				197F7C6B2A83CAD400F80C34 /* EmphasizeLabel.swift */,
-				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
-				196415192AB19CBC00A7808C /* VideoView.swift */,
-				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
-				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
+				19875DE42ACD6FF900967649 /* CustomView */,
+				19875DE32ACD6FCF00967649 /* Cell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		19875DDF2ACD6E6D00967649 /* DetectModel */ = {
+			isa = PBXGroup;
+			children = (
+				19CA32112ACB127A00A2E43C /* ImageRec.swift */,
+				1964151B2AB1AD2E00A7808C /* KaraokeClassifier.mlmodel */,
+				1964151F2AB1AD5500A7808C /* Detect_DAM-AI.mlmodel */,
+				19875DEA2ACD73C700967649 /* Detect_DAM_DX_G.mlmodel */,
+				1964151D2AB1AD4500A7808C /* Detect_JOY_new.mlmodel */,
+				196415232AB1AD7800A7808C /* Detect_JOY_old.mlmodel */,
+			);
+			path = DetectModel;
+			sourceTree = "<group>";
+		};
+		19875DE12ACD6EDE00967649 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				199668852AADA3600003D295 /* UserFirebase.swift */,
+				199668872AADA38D0003D295 /* MusicFirebase.swift */,
+				199668892AADA3C50003D295 /* ListFirebase.swift */,
+				199668832AAD9EE10003D295 /* PostFirebase.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		19875DE22ACD6F9B00967649 /* Font */ = {
+			isa = PBXGroup;
+			children = (
 				19F4D7AA2AC732F800C62083 /* NotoSansJP-Black.otf */,
 				19F4D7A82AC732F700C62083 /* NotoSansJP-Bold.otf */,
 				19F4D7A92AC732F800C62083 /* NotoSansJP-ExtraBold.otf */,
@@ -341,7 +336,105 @@
 				19F4D7AD2AC732FA00C62083 /* NotoSansJP-SemiBold.otf */,
 				19F4D7A52AC732F600C62083 /* NotoSansJP-Thin.otf */,
 			);
-			path = View;
+			path = Font;
+			sourceTree = "<group>";
+		};
+		19875DE32ACD6FCF00967649 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1938FBBB29D0584600245BB3 /* CollectionViewCell1.swift */,
+				1938FBBC29D0584600245BB3 /* CollectionViewCell1.xib */,
+				1938FBBF29D0641700245BB3 /* CollectionViewCell2.swift */,
+				1938FBC029D0641700245BB3 /* CollectionViewCell2.xib */,
+				194A62FF2AC6F49B00B2CD43 /* MusicCell.swift */,
+				194A63002AC6F49B00B2CD43 /* MusicCell.xib */,
+				19F4D7BB2AC9757200C62083 /* LogCell.swift */,
+				19F4D7BC2AC9757200C62083 /* LogCell.xib */,
+				192D26B02A1F1C140058D739 /* ShareCell.swift */,
+				192D26B12A1F1C140058D739 /* ShareCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		19875DE42ACD6FF900967649 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				19D364022A3DB24A0046DA9A /* CustomSliderView.swift */,
+				19E8B47D2A3EA620008C8DB3 /* CustomButton.swift */,
+				1980AAC12A60DE0900FA93A1 /* CheckBox.swift */,
+				19875DDD2ACD674F00967649 /* PostBox.swift */,
+				196415192AB19CBC00A7808C /* VideoView.swift */,
+				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
+				19E8B4872A59B44D008C8DB3 /* LineGraph.swift */,
+				194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */,
+				194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		19875DE52ACD704600967649 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				19E8B47F2A3EC8EB008C8DB3 /* StartViewController.swift */,
+				19A12D8029CD964F00B798A4 /* LoginViewController.swift */,
+				19A12D8229CD966200B798A4 /* MakeAccountViewController.swift */,
+				197528BE2ACB374C00D80241 /* TutorialViewController.swift */,
+				197528C02ACB3A5500D80241 /* FirstTutorialViewController.swift */,
+				197528C22ACB3A6500D80241 /* SecondTutorialViewController.swift */,
+				197528C42ACB3A7600D80241 /* ThirdTutorialViewController.swift */,
+				197528C62ACB3A8500D80241 /* FourthTutorialViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		19875DE62ACD706500967649 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D5C29CD941200B798A4 /* MusicViewController.swift */,
+				1938FBB929D045B900245BB3 /* AddToListViewController.swift */,
+				19A12D6029CD945100B798A4 /* SearchViewController.swift */,
+				196415172AB19B8300A7808C /* CameraViewController.swift */,
+				19A12D5E29CD942F00B798A4 /* AddMusicViewController.swift */,
+				19A12D6229CD946D00B798A4 /* MusicDetailViewController.swift */,
+				19A12D6429CD94A200B798A4 /* AddDetailViewController.swift */,
+				19A12D6629CD94AC00B798A4 /* DetailViewController.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		19875DE72ACD707C00967649 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D6829CD94C300B798A4 /* AllListViewController.swift */,
+				19A12D6A29CD94D500B798A4 /* AddListViewController.swift */,
+				19A12D6C29CD94E300B798A4 /* ListViewController.swift */,
+				19A12D6E29CD94ED00B798A4 /* AddListMusicViewController.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		19875DE82ACD709000967649 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				192D26AE2A1F1AB20058D739 /* ShareViewController.swift */,
+				192D26B42A1F98770058D739 /* PostViewController.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
+		19875DE92ACD70D900967649 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				19A12D7029CD955500B798A4 /* ProfileViewController.swift */,
+				19A12D8429CDE70700B798A4 /* AddFriendViewController.swift */,
+				197F7C6D2A84BEEF00F80C34 /* SelectedPostViewController.swift */,
+				19A12D7429CD958300B798A4 /* FriendsViewController.swift */,
+				1990600A2A98DD7000037A0C /* FollowerViewController.swift */,
+				199060082A98DD5E00037A0C /* FollowViewController.swift */,
+				19A12D7229CD957600B798A4 /* NotificationViewController.swift */,
+				19EAE28D2AAA20DE00173632 /* QRViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		19A12D2029CC2C9E00B798A4 = {
@@ -367,6 +460,7 @@
 				1960CD1B29FE0E780065FF05 /* Controller */,
 				1960CD1D29FE0ECD0065FF05 /* View */,
 				1960CD1C29FE0EA40065FF05 /* Model */,
+				19875DE22ACD6F9B00967649 /* Font */,
 				19A12D3529CC2C9F00B798A4 /* Assets.xcassets */,
 				19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */,
 				19A12D3A29CC2C9F00B798A4 /* Info.plist */,
@@ -444,6 +538,7 @@
 				1961E2352AA4D5E80000FAF0 /* FirebaseFirestoreSwift */,
 				19D619162AAB21B100C7B868 /* QRCode */,
 				196415152AB08E7000A7808C /* IQKeyboardManagerSwift */,
+				197528C82ACC203E00D80241 /* FirebaseStorage */,
 			);
 			productName = Karalog;
 			productReference = 19019BF729E189CD00315AFD /* Karalog.app */;
@@ -543,7 +638,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1938FBB829D012E700245BB3 /* TableViewCell1.xib in Resources */,
 				196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */,
 				19F4D7B12AC732FA00C62083 /* NotoSansJP-Bold.otf in Resources */,
 				192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */,
@@ -693,6 +787,7 @@
 				19A12D7529CD958300B798A4 /* FriendsViewController.swift in Sources */,
 				19E8B4802A3EC8EB008C8DB3 /* StartViewController.swift in Sources */,
 				196415182AB19B8300A7808C /* CameraViewController.swift in Sources */,
+				197528C72ACB3A8500D80241 /* FourthTutorialViewController.swift in Sources */,
 				19D364032A3DB24A0046DA9A /* CustomSliderView.swift in Sources */,
 				19A12D6729CD94AC00B798A4 /* DetailViewController.swift in Sources */,
 				19E8B47E2A3EA620008C8DB3 /* CustomButton.swift in Sources */,
@@ -701,11 +796,11 @@
 				1990600B2A98DD7000037A0C /* FollowerViewController.swift in Sources */,
 				19A12D6D29CD94E300B798A4 /* ListViewController.swift in Sources */,
 				19EAE28E2AAA20DE00173632 /* QRViewController.swift in Sources */,
+				197528C52ACB3A7600D80241 /* ThirdTutorialViewController.swift in Sources */,
 				19A12D6929CD94C300B798A4 /* AllListViewController.swift in Sources */,
 				192D26B72A1FABBD0058D739 /* GetMusicViewController.swift in Sources */,
 				196415242AB1AD7800A7808C /* Detect_JOY_old.mlmodel in Sources */,
 				19A12D7129CD955500B798A4 /* ProfileViewController.swift in Sources */,
-				197F7C6C2A83CAD400F80C34 /* EmphasizeLabel.swift in Sources */,
 				19F4D7BD2AC9757200C62083 /* LogCell.swift in Sources */,
 				19A12D7329CD957600B798A4 /* NotificationViewController.swift in Sources */,
 				192D26B52A1F98770058D739 /* PostViewController.swift in Sources */,
@@ -717,20 +812,22 @@
 				19A12D6B29CD94D500B798A4 /* AddListViewController.swift in Sources */,
 				19E8B4882A59B44E008C8DB3 /* LineGraph.swift in Sources */,
 				199060092A98DD5E00037A0C /* FollowViewController.swift in Sources */,
-				192D26712A0543A80058D739 /* Function.swift in Sources */,
+				192D26712A0543A80058D739 /* Utility.swift in Sources */,
 				19A12D5D29CD941200B798A4 /* MusicViewController.swift in Sources */,
 				19A12D6529CD94A200B798A4 /* AddDetailViewController.swift in Sources */,
+				19CA32122ACB127A00A2E43C /* ImageRec.swift in Sources */,
 				1938FBC129D0641700245BB3 /* CollectionViewCell2.swift in Sources */,
-				19426CC62AB336D400DA14BB /* Detect_DAM_DX-G.mlmodel in Sources */,
 				1960CD2129FE30730065FF05 /* Manager.swift in Sources */,
 				19A12D6329CD946D00B798A4 /* MusicDetailViewController.swift in Sources */,
 				19A12D5F29CD942F00B798A4 /* AddMusicViewController.swift in Sources */,
+				19875DEB2ACD73C700967649 /* Detect_DAM_DX_G.mlmodel in Sources */,
 				19D363FF2A3DB1AF0046DA9A /* Slider.swift in Sources */,
 				194A62F62AC48E8400B2CD43 /* GaussianBlurFilter.swift in Sources */,
 				1938FBBD29D0584600245BB3 /* CollectionViewCell1.swift in Sources */,
-				1938FBB729D012E700245BB3 /* TableViewCell1.swift in Sources */,
+				19CA32102ACAF5AF00A2E43C /* TabController.swift in Sources */,
+				197528BF2ACB374C00D80241 /* TutorialViewController.swift in Sources */,
 				1938FBBA29D045B900245BB3 /* AddToListViewController.swift in Sources */,
-				19F4D7B82AC95B9900C62083 /* CustomButtonShadow.swift in Sources */,
+				197528C32ACB3A6500D80241 /* SecondTutorialViewController.swift in Sources */,
 				194A63012AC6F49B00B2CD43 /* MusicCell.swift in Sources */,
 				1964151C2AB1AD2F00A7808C /* KaraokeClassifier.mlmodel in Sources */,
 				19A12D8729CF465900B798A4 /* Article.swift in Sources */,
@@ -738,8 +835,10 @@
 				1996688A2AADA3C50003D295 /* ListFirebase.swift in Sources */,
 				1980AAC22A60DE0900FA93A1 /* CheckBox.swift in Sources */,
 				1964151A2AB19CBC00A7808C /* VideoView.swift in Sources */,
-				1964151E2AB1AD4500A7808C /* Detect_JOY-new.mlmodel in Sources */,
+				1964151E2AB1AD4500A7808C /* Detect_JOY_new.mlmodel in Sources */,
+				19875DDE2ACD674F00967649 /* PostBox.swift in Sources */,
 				1960CD2329FE7B250065FF05 /* Material.swift in Sources */,
+				197528C12ACB3A5500D80241 /* FirstTutorialViewController.swift in Sources */,
 				19A12D2D29CC2C9E00B798A4 /* AppDelegate.swift in Sources */,
 				19A12D2F29CC2C9E00B798A4 /* SceneDelegate.swift in Sources */,
 				196415202AB1AD5500A7808C /* Detect_DAM-AI.mlmodel in Sources */,
@@ -923,13 +1022,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "曲の検索のため";
+				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識、QRコード読み込みのため";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -937,6 +1037,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -945,6 +1046,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.Karalog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -959,13 +1064,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Karalog/Karalog.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Karalog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Karalog;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識のため";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "曲の検索のため";
+				INFOPLIST_KEY_NSCameraUsageDescription = "文字認識、QRコード読み込みのため";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -973,14 +1079,20 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				"MARKETING_VERSION[sdk=iphoneos*]" = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.Karalog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -995,11 +1107,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.KaralogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -1016,11 +1128,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.KaralogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -1036,11 +1148,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.KaralogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1057,11 +1169,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2H27PW62KS;
+				DEVELOPMENT_TEAM = 2KUQ5AS45S;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.Ito.tiger.KaralogUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.NAOKO.ITO.KaralogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -1200,6 +1312,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1938FBCA29D08C1900245BB3 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookShare;
+		};
+		197528C82ACC203E00D80241 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1961E2302AA4D5E80000FAF0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 		19D619162AAB21B100C7B868 /* QRCode */ = {
 			isa = XCSwiftPackageProductDependency;

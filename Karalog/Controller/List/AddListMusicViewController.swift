@@ -90,7 +90,7 @@ class AddListMusicViewController: UIViewController {
                 if fromFav == false {
                     
                     for i in 0..<indexPathList.count {
-                        musicFB.addMusicToList(musicID: idList[i], listID: listID)
+                        musicFB.addMusicToList(musicID: idList[i], listID: listID, completionHandler: {_ in})
                     }
                 } else {
                     for i in 0..<indexPathList.count {
@@ -226,12 +226,11 @@ extension AddListMusicViewController: UICollectionViewDataSource {
 //MARK: - UICollectionViewDelegate
 extension AddListMusicViewController: UICollectionViewDelegate {
     func collectionView(_ tableView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // 選択されたセルを取得する
-        let selectedCell = collectionView.cellForItem(at: indexPath)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let deselectedCell = collectionView.cellForItem(at: indexPath)
+        
     }
 }
 

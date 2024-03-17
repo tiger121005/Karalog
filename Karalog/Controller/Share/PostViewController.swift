@@ -108,7 +108,8 @@ class PostViewController: UIViewController {
         
         postFB.post(musicName: musicName, artistName: artistName, musicImage: musicImage, content: textView.text, category: category)
         fromPost = true
-        let screenIndex = navigationController!.viewControllers.count - 3
+        let screenIndex = (navigationController?.viewControllers.count ?? 3) - 3
+        print(screenIndex)
         self.navigationController?.popToViewController(navigationController!.viewControllers[screenIndex], animated: true)
     }
     
@@ -122,7 +123,8 @@ class PostViewController: UIViewController {
 extension PostViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        if tableView.indexPathsForSelectedRows!.count <= 5 {
+        guard let rows = tableView.indexPathsForSelectedRows else { return }
+        if rows.count <= 5 {
             cell?.accessoryType = .checkmark
             setCategory()
         }else{
@@ -159,7 +161,8 @@ extension PostViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
+        guard let contain = selectedIndexPaths?.contains(indexPath) else { return cell }
+        if selectedIndexPaths != nil && contain {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none

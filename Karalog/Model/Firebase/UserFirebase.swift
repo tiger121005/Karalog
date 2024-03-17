@@ -52,11 +52,11 @@ class UserFirebase: ObservableObject {
                             continuation.resume(returning: user)
                         } catch {
                             continuation.resume(returning: nil)
-                            print("Error getting user information: \(err)")
+                            print("Error getting user information: \(String(describing: err))")
                         }
                     } else {
                         continuation.resume(returning: nil)
-                        print("Error getting user information: \(err)")
+                        print("Error getting user information: \(String(describing: err))")
                     }
                 }
             }
@@ -72,7 +72,8 @@ class UserFirebase: ObservableObject {
                 if let _err = err {
                     print("Error getting user: \(_err)")
                 } else {
-                    for document in collection!.documents {
+                    guard let collection else { return }
+                    for document in collection.documents {
                         do {
                             list.append(try document.data(as: User.self))
                         } catch {
@@ -173,11 +174,13 @@ class UserFirebase: ObservableObject {
             }
         }
         
-        db.collection("user").document(notice.from).updateData([
-            UserRef.request.rawValue: FieldValue.arrayRemove([userID])
-        ]) { err in
-            if let _err = err {
-                print("Error remove request: \(_err)")
+        if let userID {
+            db.collection("user").document(notice.from).updateData([
+                UserRef.request.rawValue: FieldValue.arrayRemove([userID])
+            ]) { err in
+                if let _err = err {
+                    print("Error remove request: \(_err)")
+                }
             }
         }
         
@@ -205,8 +208,9 @@ class UserFirebase: ObservableObject {
             }
         }
         
-        let i = manager.user.request.firstIndex(where: {$0 == receiveUser})!
-        manager.user.request.remove(at: i)
+        if let i = manager.user.request.firstIndex(where: {$0 == receiveUser}) {
+            manager.user.request.remove(at: i)
+        }
     }
     
     
@@ -234,4 +238,17 @@ class UserFirebase: ObservableObject {
             }
         }
     }
+    
+    func updateGetImage(id: String, newBool: Bool) {
+        userRef.updateData([
+            UserRef.getImage.rawValue: newBool
+        ]) { err in
+            if let _err = err {
+                print("Error updating user getImage: \(_err)")
+            }
+        }
+        
+        manager.user.getImage = newBool
+    }
 }
+

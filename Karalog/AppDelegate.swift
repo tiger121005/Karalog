@@ -12,6 +12,7 @@ import FirebaseAuth
 import GoogleSignIn
 import FacebookCore
 import IQKeyboardManagerSwift
+import MusicKit
 
 
 @main
@@ -27,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         // 外側をタップしたときにキーボードを閉じる
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        
+        Task {
+            await MusicAuthorization.request()
+        }
         
         return true
     }

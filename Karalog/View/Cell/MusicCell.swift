@@ -40,8 +40,6 @@ class MusicCell: UICollectionViewCell {
         self.layer.borderWidth = 0
         self.layer.cornerRadius = self.frame.height * 0.2
         self.layer.cornerCurve = .continuous
-//        self.layer.borderColor = UIColor.darkGray.cgColor
-//        self.layer.borderWidth = 1
         
         musicImage.layer.cornerRadius = musicImage.frame.height * 0.1
         musicImage.clipsToBounds = true

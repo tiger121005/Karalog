@@ -8,11 +8,21 @@
 import UIKit
 
 class FourthTutorialViewController: UIViewController {
+    
+    var show = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
     }
     
-
+    @IBAction func tapCheckBox() {
+        if show {
+            UserDefaultsKey.showTutorial.set(value: "false")
+            show = false
+        } else {
+            UserDefaultsKey.showTutorial.remove()
+            show = true
+        }
+    }
 }

@@ -118,13 +118,14 @@ class MusicDetailViewController: UIViewController {
             filter.inputImage = ciImage
             
             
-            let filteredImage = filter.outputImage
-            
-            let context = CIContext(options: nil)
-            let cgImage = context.createCGImage(filteredImage!, from: filteredImage!.extent)
-            
-            musicImageView.image = UIImage(cgImage: cgImage!)
-            
+            if let filteredImage = filter.outputImage {
+                
+                let context = CIContext(options: nil)
+                if let cgImage = context.createCGImage(filteredImage, from: filteredImage.extent) {
+                    
+                    musicImageView.image = UIImage(cgImage: cgImage)
+                }
+            }
             bestView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
             bestView.layer.cornerRadius = bestView.frame.height * 0.5
             bestView.layer.borderWidth = 3
@@ -179,8 +180,8 @@ class MusicDetailViewController: UIViewController {
     
     func xTitle(data: String) -> String {
         
-        let d = function.dateFromString(string: data, format: "yy年MM月dd日HH:mm")
-        let s = function.stringFromDate(date: d, format: "MM/dd")
+        guard let d = utility.dateFromString(string: data, format: "yy年MM月dd日HH:mm") else { return "00年00月00日00:00" }
+        let s = utility.stringFromDate(date: d, format: "MM/dd")
         return s
     }
     
@@ -214,7 +215,7 @@ extension MusicDetailViewController: UITableViewDelegate {
         key = String(tvList[indexPath.row].key)
         model = tvList[indexPath.row].model
         comment = tvList[indexPath.row].comment
-        performSegue(withIdentifier: Segue.detail.rawValue, sender: nil)
+        segue(identifier: .detail)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

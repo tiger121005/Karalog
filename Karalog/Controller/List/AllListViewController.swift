@@ -134,7 +134,7 @@ extension AllListViewController: UICollectionViewDelegate {
             listID = manager.lists[indexPath.row].id!
         }
         listName = manager.lists[indexPath.row].listName
-        performSegue(withIdentifier: Segue.list.rawValue, sender: nil)
+        segue(identifier: .list)
     }
     
     //長押しした時の処理

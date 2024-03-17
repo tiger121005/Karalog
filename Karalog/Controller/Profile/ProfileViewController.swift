@@ -19,15 +19,16 @@ class ProfileViewController: UIViewController {
     var followList: [String] = []
     var followerList: [String] = []
     var showAll: Bool!
+    var getImage: Bool!
     var notification: [Notice] = []
     var selectPostKind: String!
-    var selectedSettingShow = SettingShow.全て.rawValue
-    var selectedSettingFollow = SettingFollow.全て.rawValue
+    var selectedSettingShow = SettingShow.all.rawValue
+    var selectedSettingFollow = SettingFollow.all.rawValue
     var menuHidden: Bool = true
     var outBtn: UIButton!
     var followSelected: String!
     var fromFriends = false
-    let hamburgerMenuList = ["通知", "名前変更", "いいね", "QRコード", "公開制限", "ログアウト"]
+    let hamburgerMenuList = ["通知", "名前変更", "いいね", "QRコード", "公開制限", "画像の送信", "ログアウト"]
     
     
     //MARK: - UI objects
@@ -53,6 +54,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var menuBtn: UIBarButtonItem!
     
+    var activityIndicatorView = UIActivityIndicatorView()
     let refreshCtl = UIRefreshControl()
     var noticeBadge = UILabel()
     
@@ -112,6 +114,13 @@ class ProfileViewController: UIViewController {
     
     
     //MARK: - Setup
+    func makeIndicator() {
+        activityIndicatorView.center = view.center
+        activityIndicatorView.style = .large
+        activityIndicatorView.color = .imageColor
+
+        view.addSubview(activityIndicatorView)
+    }
     
     func setupNameView() {
         nameView.layer.cornerRadius = nameView.frame.height * 0.1
@@ -161,8 +170,10 @@ class ProfileViewController: UIViewController {
             userID = manager.user.id
         }
         Task {
+            activityIndicatorView.startAnimating()
             if !fromFriends {
                 guard let user = await userFB.getUserInformation(id: self.userID) else {
+                    activityIndicatorView.stopAnimating()
                     let alert = UIAlertController(title: "エラー", message: "ユーザーが見つかりません", preferredStyle: .alert)
                     let ok = UIAlertAction(title: "OK", style: .default) {_ in
                         self.navigationController?.popViewController(animated: true)
@@ -177,13 +188,14 @@ class ProfileViewController: UIViewController {
                 self.followList = user.follow
                 self.followerList = user.follower
                 self.showAll = user.showAll
+                self.getImage = user.getImage
                 self.notification = user.notice
                 
                 
                 if showAll {
-                    self.selectedSettingShow = SettingShow.全て.rawValue
+                    self.selectedSettingShow = SettingShow.all.rawValue
                 } else {
-                    self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                    self.selectedSettingShow = SettingShow.follower.rawValue
                 }
                 
             }
@@ -208,7 +220,7 @@ class ProfileViewController: UIViewController {
                     showPast.isHidden = true
                 }
             }
-            
+            self.activityIndicatorView.stopAnimating()
         }
         
         //tableView表示時、関係ない部分を暗くする
@@ -286,32 +298,32 @@ class ProfileViewController: UIViewController {
             var a: [Double] = []
             for m in musicList {
                 let b = m.data.map{$0.score}
-                a.append(b.max()!)
+                a.append(b.max() ?? 0)
             }
             let c = a.indices.sorted{ a[$1] < a[$0]}
             a.sort(by: {$1 < $0})
             list = c.map{musicList[$0]}
-            var best = list.first
+            guard var best = list.first else { return }
             let bestScore = a.first
             if a.count > 1 {
                 for i in 1..<a.count {
                     if bestScore == a[i] {
-                        if list[i].data.count > best!.data.count {
+                        if list[i].data.count > best.data.count {
                             best = list[i]
-                        } else if list[i].data.count == best?.data.count && list[i].data.last!.time > best!.data.last!.time{
+                        } else if list[i].data.count == best.data.count && list[i].data.last!.time > best.data.last!.time{
                             best = list[i]
                         }
                     }
                 }
             }
-            musicLabel.text = best?.musicName
-            artistLabel.text = best?.artistName
-            let useImage = await UIImage.fromUrl(url: best!.musicImage)
+            musicLabel.text = best.musicName
+            artistLabel.text = best.artistName
+            let useImage = await UIImage.fromUrl(url: best.musicImage)
             musicImage.image = useImage
             
-            let scoreList = best?.data.map{$0.score}
-            let max = scoreList!.max()
-            scoreLabel.text = String(format: "%.3f", max!)
+            let scoreList = best.data.map{$0.score}
+            let max = scoreList.max() ?? 0
+            scoreLabel.text = String(format: "%.3f", max)
         }
     }
     
@@ -347,10 +359,6 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    func segue(identifier: Segue) {
-        let id = identifier.rawValue
-        self.performSegue(withIdentifier: id, sender: nil)
-    }
     
     //MARK: - UI interaction
     
@@ -362,6 +370,7 @@ class ProfileViewController: UIViewController {
         if userID == manager.user.id {
             segue(identifier: .addFriend)
         } else {
+            guard let id = manager.user.id else { return }
             if let _i = manager.user.follow.firstIndex(where: {$0 == userID}) {
                 //deleteFollow
                 userFB.deleteFollow(followedUser: userID, indexPathRow: _i)
@@ -371,7 +380,7 @@ class ProfileViewController: UIViewController {
                     followerNumBtn.isEnabled = false
                     showPast.isHidden = true
                 }
-                if let i = followerList.firstIndex(where: {$0 == manager.user.id}) {
+                if let i = followerList.firstIndex(where: {$0 == id}) {
                     followerList.remove(at: i)
                     followerNumBtn.setTitle(String(followerList.count), for: .normal)
                 }
@@ -379,16 +388,16 @@ class ProfileViewController: UIViewController {
             } else if manager.user.request.contains(where: {$0 == userID}) {
                 //deleteRequest
                 let notice = Notice(title: "フォローリクエスト",
-                                    content: "\(manager.user.name)さん（ユーザーID: \(String(manager.user.id!))）からフォローリクエストが届きました",
+                                    content: "\(manager.user.name)さん（ユーザーID: \(id)）からフォローリクエストが届きました",
                                     seen: false,
-                                    from: manager.user.id!)
+                                    from: id)
                 userFB.cancelRequest(notice: notice, receiveUser: userID)
                 followBtn.setTitle("フォローする", for: .normal)
             } else {
                 if showAll {
                     //follow
-                    userFB.follow(followUser: manager.user.id!, followedUser: userID)
-                    followerList.append(manager.user.id!)
+                    userFB.follow(followUser: id, followedUser: userID)
+                    followerList.append(id)
                     followerNumBtn.setTitle(String(followerList.count), for: .normal)
                     followBtn.setTitle("フォローを外す", for: .normal)
                 } else {
@@ -427,9 +436,10 @@ class ProfileViewController: UIViewController {
             if manager.user.id == userID {
                 manager.user = user
             } else {
-                manager.user = await userFB.getUserInformation(id: manager.user.id!)
+                guard let id = manager.user.id else { return }
+                manager.user = await userFB.getUserInformation(id: id)
             }
-            print(manager.user.request.count)
+            
             self.userName = user?.name
             self.followList = user?.follow ?? []
             self.followerList = user?.follower ?? []
@@ -439,12 +449,12 @@ class ProfileViewController: UIViewController {
             self.notification = manager.user.notice
             if let s = user?.showAll {
                 if s {
-                    self.selectedSettingShow = SettingShow.全て.rawValue
+                    self.selectedSettingShow = SettingShow.all.rawValue
                 } else {
-                    self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                    self.selectedSettingShow = SettingShow.follower.rawValue
                 }
             } else {
-                self.selectedSettingShow = SettingShow.フォロワー.rawValue
+                self.selectedSettingShow = SettingShow.follower.rawValue
             }
             
             //followBtnの名前の設定
@@ -494,33 +504,42 @@ class ProfileViewController: UIViewController {
             var a: [Double] = []
             for m in self.musicList {
                 let b = m.data.map{$0.score}
-                a.append(b.max()!)
+                if let max = b.max() {
+                    a.append(max)
+                } else {
+                    a.append(0)
+                }
             }
             let c = a.indices.sorted{ a[$1] < a[$0]}
             a.sort(by: {$1 < $0})
             list = c.map{musicList[$0]}
-            var best = list.first
-            let bestScore = a.first
-            if a.count > 1 {
-                for i in 1..<a.count {
-                    if bestScore == a[i] {
-                        if list[i].data.count > best!.data.count {
-                            best = list[i]
-                        } else if list[i].data.count == best?.data.count && list[i].data.last!.time > best!.data.last!.time{
-                            best = list[i]
+            if var best = list.first {
+                let bestScore = a.first
+                if a.count > 1 {
+                    for i in 1..<a.count {
+                        if bestScore == a[i] {
+                            guard let last = list[i].data.last else { return }
+                            if list[i].data.count > best.data.count {
+                                best = list[i]
+                            } else if list[i].data.count == best.data.count && last.time > last.time{
+                                best = list[i]
+                            }
                         }
                     }
                 }
+                musicLabel.text = best.musicName
+                artistLabel.text = best.artistName
+                let useImage = await UIImage.fromUrl(url: best.musicImage)
+                musicImage.image = useImage
+                let scoreList = best.data.map{$0.score}
+                if let max = scoreList.max() {
+                    scoreLabel.text = String(format: "%.3f", max)
+                } else {
+                    scoreLabel.text = String(format: "%.3f", 0)
+                }
+                
+                refreshCtl.endRefreshing()
             }
-            musicLabel.text = best?.musicName
-            artistLabel.text = best?.artistName
-            let useImage = await UIImage.fromUrl(url: best!.musicImage)
-            musicImage.image = useImage
-            let scoreList = best?.data.map{$0.score}
-            let max = scoreList!.max()
-            scoreLabel.text = String(format: "%.3f", max!)
-            
-            refreshCtl.endRefreshing()
         }
         
     }
@@ -574,16 +593,16 @@ extension ProfileViewController: UITableViewDelegate {
         case 4:
             let alert = UIAlertController(title: "公開制限", message: "", preferredStyle: .actionSheet)
             
-            let all = UIAlertAction(title: SettingShow.全て.rawValue, style: .default) {_ in
-                if self.selectedSettingShow != SettingShow.全て.rawValue {
-                    self.selectedSettingShow = SettingShow.全て.rawValue
+            let all = UIAlertAction(title: SettingShow.all.rawValue, style: .default) {_ in
+                if self.selectedSettingShow != SettingShow.all.rawValue {
+                    self.selectedSettingShow = SettingShow.all.rawValue
                     userFB.updateShowAll(id: self.userID, newBool: true)
                 }
             }
             
-            let follower = UIAlertAction(title: SettingShow.フォロワー.rawValue, style: .default) {_ in
-                if self.selectedSettingShow != SettingShow.フォロワー.rawValue {
-                    self.selectedSettingShow = SettingShow.フォロワー.rawValue
+            let follower = UIAlertAction(title: SettingShow.follower.rawValue, style: .default) {_ in
+                if self.selectedSettingShow != SettingShow.follower.rawValue {
+                    self.selectedSettingShow = SettingShow.follower.rawValue
                     userFB.updateShowAll(id: self.userID, newBool: false)
                 }
                 
@@ -596,7 +615,28 @@ extension ProfileViewController: UITableViewDelegate {
             alert.addAction(cancel)
             present(alert, animated: true)
             
+            
         case 5:
+            let alert = UIAlertController(title: "画像の送信", message: "画像認識向上のため撮影した採点画面の画像を送信することを許可しますか", preferredStyle: .actionSheet)
+            let allow = UIAlertAction(title: SettingGetImage.allow.rawValue, style: .default) {_ in
+                if self.getImage != true {
+                    userFB.updateGetImage(id: self.userID, newBool: true)
+                    self.getImage = true
+                }
+            }
+            let not = UIAlertAction(title: SettingGetImage.not.rawValue, style: .cancel) {_ in
+                if self.getImage != false {
+                    userFB.updateGetImage(id: self.userID, newBool: false)
+                    self.getImage = false
+                }
+            }
+            
+            alert.addAction(allow)
+            alert.addAction(not)
+            present(alert, animated: true)
+            
+            
+        case 6:
             let alert = UIAlertController(title: "ログアウト", message: "”Karalog”からログアウトしますか？", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "キャンセル", style: .default) { (action) in
                 
@@ -639,19 +679,9 @@ extension ProfileViewController: UITableViewDataSource {
         
         cell.textLabel?.text = hamburgerMenuList[indexPath.row]
         cell.backgroundColor = UIColor.baseColor
-//        var selectedView = UIView()
-//        var color: UIColor = UIColor.subImageColor
-//        var hue : CGFloat = 0
-//        var saturation : CGFloat = 0
-//        var brightness : CGFloat = 0
-//        var alpha : CGFloat = 0
-//        if color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha) {
-//             color = UIColor(hue: hue, saturation: saturation, brightness: brightness * 0.9, alpha: alpha)
-//        }
-//        selectedView.backgroundColor = color
-//        cell.selectedBackgroundView = selectedView
+
         
-        if indexPath.row == 5 {
+        if indexPath.row == 6 {
             cell.textLabel?.textColor = UIColor.red
         } else  {
             cell.textLabel?.textColor = UIColor.white

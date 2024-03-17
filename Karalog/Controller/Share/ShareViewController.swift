@@ -47,6 +47,7 @@ class ShareViewController: UIViewController {
     var alertCtl: UIAlertController!
     var addAlert: UIAlertController!
     let refreshCtl = UIRefreshControl()
+    var activityIndicatorView = UIActivityIndicatorView()
     var outBtn: UIButton!
     
     
@@ -54,7 +55,7 @@ class ShareViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        makeIndicator()
         setupTableView()
         setupPostBtn()
         setupSearchView()
@@ -81,6 +82,13 @@ class ShareViewController: UIViewController {
     
     
     //MARK: - Setup
+    func makeIndicator() {
+        activityIndicatorView.center = view.center
+        activityIndicatorView.style = .large
+        activityIndicatorView.color = .imageColor
+
+        view.addSubview(activityIndicatorView)
+    }
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -177,6 +185,7 @@ class ShareViewController: UIViewController {
     
     func setData() {
         Task {
+            
             let list = await postFB.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
             self.finalContent = false
@@ -214,10 +223,10 @@ class ShareViewController: UIViewController {
         // リサイズ後のUIImageを生成して返却
         UIGraphicsBeginImageContext(resizedSize)
         image.draw(in: CGRect(x: 0, y: 0, width: resizedSize.width, height: resizedSize.height))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        guard let resizedImage = UIGraphicsGetImageFromCurrentImageContext() else { return image }
         UIGraphicsEndImageContext()
         
-        return resizedImage!
+        return resizedImage
     }
     
     func tapOutTableView () {
@@ -234,14 +243,14 @@ class ShareViewController: UIViewController {
                            options: [.curveEaseOut],
                            animations: {
                 
-                self.searchView.center.y = self.searchView.frame.height/2 + (self.navigationController?.navigationBar.frame.maxY)!
+                self.searchView.center.y = self.searchView.frame.height/2 + (self.navigationController?.navigationBar.frame.maxY ?? 44)
                 
                 
             }, completion: {(finished: Bool) in
                 
             })
             searchViewHidden = false
-            self.searchViewTopConstraint.constant = (self.navigationController?.navigationBar.frame.maxY)!
+            self.searchViewTopConstraint.constant = (self.navigationController?.navigationBar.frame.maxY ?? 44)
         } else {
             UIView.animate(withDuration: 0.3,
                            delay: 0,
@@ -312,7 +321,7 @@ class ShareViewController: UIViewController {
     
     @IBAction func tapSearchBtn() {
         Task {
-            let list = await postFB.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
+            let list = await postFB.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
             self.finalContent = false
             await reloadData()
@@ -346,7 +355,7 @@ class ShareViewController: UIViewController {
     
     @objc func reload() {
         Task {
-            let list = await postFB.searchPost(first: true, music: musicTF.text!, artist: artistTF.text!, category: category)
+            let list = await postFB.searchPost(first: true, music: musicTF.text ?? "", artist: artistTF.text ?? "", category: category)
             self.shareList = list
             self.finalContent = false
             await reloadData()
@@ -424,7 +433,6 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         Task {
-            print(99999, indexPath.row, self.shareList.count)
             // スクロールが最下部に達したら次のページのデータを取得
             if !finalContent {
                 if indexPath.row == self.shareList.count - 1 {
@@ -478,28 +486,29 @@ extension ShareViewController: UICollectionViewDelegateFlowLayout {
 extension ShareViewController: ShareCellDelegate {
     func reloadCell(indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shareCell", for: indexPath) as! ShareCell
-        let selectedID = shareList[indexPath.row].id!
-        
-        var good: Bool!
-        if manager.user.goodList.contains(where: { $0 == selectedID}) {
-            good = true
-        } else {
-            good = false
+        if let selectedID = shareList[indexPath.row].id {
+            
+            var good: Bool!
+            if manager.user.goodList.contains(where: { $0 == selectedID}) {
+                good = true
+            } else {
+                good = false
+            }
+            
+            postFB.goodUpdate(id: selectedID, good: good)
+            
+            if good {
+                shareList[indexPath.row].goodNumber -= 1
+                cell.goodBtn.setImage(UIImage.heart, for: .normal)
+            } else {
+                shareList[indexPath.row].goodNumber += 1
+                cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
+            }
+            
+            cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
+            
+            collectionView.reloadData()
         }
-        
-        postFB.goodUpdate(id: selectedID, good: good)
-        
-        if good {
-            shareList[indexPath.row].goodNumber -= 1
-            cell.goodBtn.setImage(UIImage.heart, for: .normal)
-        } else {
-            shareList[indexPath.row].goodNumber += 1
-            cell.goodBtn.setImage(UIImage.heartFill, for: .normal)
-        }
-        
-        cell.goodNumLabel.text = showGoodNumber(n: shareList[indexPath.row].goodNumber)
-        
-        collectionView.reloadData()
     }
     
     func tapMusic(indexpath indexPath: IndexPath) {
@@ -546,7 +555,8 @@ extension ShareViewController: ShareCellDelegate {
 extension ShareViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        if tableView.indexPathsForSelectedRows!.count <= 5 {
+        guard let rows = tableView.indexPathsForSelectedRows else { return }
+        if rows.count <= 5 {
             cell?.accessoryType = .checkmark
             setCategory()
         }else{
@@ -582,7 +592,9 @@ extension ShareViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
+        
+        guard let contain = selectedIndexPaths?.contains(indexPath) else { return cell }
+        if selectedIndexPaths != nil && contain {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none

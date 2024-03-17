@@ -20,7 +20,7 @@ class AddDetailViewController: UIViewController {
     var musicImage: String!
     var musicID: String = ""
     var wannaID: String = ""
-    var selectedMenuType = ModelMenuType.未選択
+    var selectedMenuType = ModelMenuType.no
     var sliderValue: Float = 0
     var callView: Bool = true
     var scaleList: [UIView] = []
@@ -87,9 +87,9 @@ class AddDetailViewController: UIViewController {
     func configureMenuButton() {
         var actions = [UIMenuElement]()
         // HIGH
-        actions.append(UIAction(title: ModelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.未選択 ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.no.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.no ? .on : .off,
                                 handler: { (_) in
-                                    self.selectedMenuType = .未選択
+                                    self.selectedMenuType = .no
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
@@ -212,9 +212,9 @@ class AddDetailViewController: UIViewController {
                 present(alert, animated: true, completion: nil)
                 return
             }
-            musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+            musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, image: nil)
         } else {
-            musicFB.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+            musicFB.addMusic(musicName: musicName, artistName: artistName, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, image: nil, completionHandler: {_ in
                 
             })
             
@@ -255,7 +255,7 @@ class AddDetailViewController: UIViewController {
         }
         customSlider.slider.setValue(preValue, animated: false)
         if preValue != sliderValue {
-            function.playImpact(type: .impact(.light))
+            utility.playImpact(type: .impact(.light))
             sliderValue = preValue
             for i in 0..<scaleList.count {
                 if i  <= Int(sliderValue) + 7 {

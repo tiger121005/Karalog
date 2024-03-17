@@ -46,6 +46,7 @@ class MusicViewController: UIViewController {
     var doneBtn: UIBarButtonItem!
     var allSelectBtn: UIBarButtonItem!
     let refreshCtl = UIRefreshControl()
+    var activityIndicatorView = UIActivityIndicatorView()
     var addAlert: UIAlertController!
     
     
@@ -53,8 +54,8 @@ class MusicViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        judgeSort = UserDefaultsKey.judgeSort.get() ?? Sort.追加順（遅）.rawValue
+        makeIndicator()
+        judgeSort = UserDefaultsKey.judgeSort.get() ?? Sort.late.rawValue
         setupCollectionView()
         setupSearchBar()
         setupBarItem()
@@ -88,7 +89,7 @@ class MusicViewController: UIViewController {
             let indexPathList = items.sorted{ $1.row < $0.row}
             for i in indexPathList {
                 guard let id = cvList[i.row].id else { continue }
-                idList.append(cvList[i.row].id!)
+                idList.append(id)
             }
             
             nextView.idList = idList
@@ -114,6 +115,13 @@ class MusicViewController: UIViewController {
     
     
     //MARK: - Setup
+    func makeIndicator() {
+        activityIndicatorView.center = view.center
+        activityIndicatorView.style = .large
+        activityIndicatorView.color = .imageColor
+
+        view.addSubview(activityIndicatorView)
+    }
     
     func setupCollectionView() {
         collectionView.dataSource = self
@@ -143,9 +151,9 @@ class MusicViewController: UIViewController {
     
     func setupBarItem() {
         let delete = UIAction(title: "削除", image: UIImage.trash, handler: { [self]_ in
-            if self.collectionView.indexPathsForSelectedItems != nil && !self.collectionView.indexPathsForSelectedItems!.isEmpty {
-                let indexPathList = self.collectionView.indexPathsForSelectedItems!.sorted{ $1.row < $0.row }
-                let sortedList = indexPathList.sorted{ $1.row < $0.row }
+            guard let items = self.collectionView.indexPathsForSelectedItems else { return }
+            if self.collectionView.indexPathsForSelectedItems != nil && !items.isEmpty {
+                let indexPathList = items.sorted{ $1.row < $0.row }
                 let alert = UIAlertController(title: "削除", message: String(indexPathList.count) + "個の曲のデータを削除します", preferredStyle: .alert)
                 let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (action) in
                     
@@ -205,7 +213,7 @@ class MusicViewController: UIViewController {
         doneBtn.isHidden = true
         allSelectBtn.isHidden = true
         
-        title = "HOME"
+        title = "LOG"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:  " ", style:  .plain, target: nil, action: nil)
@@ -241,14 +249,14 @@ class MusicViewController: UIViewController {
         
         let subItems = [UIAction(title: "追加順", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.追加順（遅）.rawValue {
-                    judgeSort = Sort.追加順（遅）.rawValue
+                if judgeSort != Sort.late.rawValue {
+                    judgeSort = Sort.late.rawValue
                 }else{
-                    judgeSort = Sort.追加順（早）.rawValue
+                    judgeSort = Sort.early.rawValue
                     
                 }
                 
-                let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                 self.cvList = list
                 await reloadData()
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
@@ -257,17 +265,17 @@ class MusicViewController: UIViewController {
         }),
                         UIAction(title: "スコア", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.得点（高）.rawValue{
-                    judgeSort = Sort.得点（高）.rawValue
+                if judgeSort != Sort.scoreHigh.rawValue{
+                    judgeSort = Sort.scoreHigh.rawValue
                     
                     
                     
                 }else{
-                    judgeSort = Sort.得点（低）.rawValue
+                    judgeSort = Sort.scoreLow.rawValue
                     
                     
                 }
-                let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                 self.cvList = list
                 await reloadData()
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
@@ -276,16 +284,16 @@ class MusicViewController: UIViewController {
         }),
                         UIAction(title: "曲名", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.曲名順（降）.rawValue{
-                    judgeSort = Sort.曲名順（降）.rawValue
+                if judgeSort != Sort.musicDown.rawValue{
+                    judgeSort = Sort.musicDown.rawValue
                     
                     
                     
                 }else{
-                    judgeSort = Sort.曲名順（昇）.rawValue
+                    judgeSort = Sort.musicUp.rawValue
                     
                 }
-                let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                 self.cvList = list
                 await reloadData()
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
@@ -294,17 +302,17 @@ class MusicViewController: UIViewController {
         }),
                         UIAction(title: "アーティスト", handler: { [self] _ in
             Task {
-                if judgeSort != Sort.アーティスト順（降）.rawValue{
-                    judgeSort = Sort.アーティスト順（降）.rawValue
+                if judgeSort != Sort.artistDown.rawValue{
+                    judgeSort = Sort.artistDown.rawValue
                     
                     
                     
                 }else{
-                    judgeSort = Sort.アーティスト順（昇）.rawValue
+                    judgeSort = Sort.artistUp.rawValue
                     
                     
                 }
-                let list = await function.sort(sortKind: judgeSort, updateList: cvList)
+                let list = await utility.sort(sortKind: judgeSort, updateList: cvList)
                 self.cvList = list
                 await reloadData()
                 UserDefaultsKey.judgeSort.set(value: judgeSort)
@@ -320,7 +328,7 @@ class MusicViewController: UIViewController {
     func get() async {
         Task {
             guard let musicList = await musicFB.getMusic() else { return }
-            let list = await function.sort(sortKind: self.judgeSort, updateList: musicList)
+            let list = await utility.sort(sortKind: self.judgeSort, updateList: musicList)
             self.cvList = list
             await reloadData()
         }
@@ -329,12 +337,14 @@ class MusicViewController: UIViewController {
     
     func setData() {
         Task {
+            activityIndicatorView.startAnimating()
             if didLoad {
                 await get()
                 didLoad = false
             }
-            let list = await function.sort(sortKind: judgeSort, updateList: manager.musicList)
+            let list = await utility.sort(sortKind: judgeSort, updateList: manager.musicList)
             self.cvList = list
+            activityIndicatorView.stopAnimating()
             await reloadData()
         }
         
@@ -361,18 +371,12 @@ class MusicViewController: UIViewController {
     }
     
     func showMessage() {
-        print("fromAdd: ", fromAdd)
         if fromAdd {
             addAlert = UIAlertController(title: "追加しました", message: "", preferredStyle: .alert)
             present(addAlert, animated: true, completion: nil)
             Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false)
             fromAdd = false
         }
-    }
-    
-    func segue(identifier: Segue) {
-        let id = identifier.rawValue
-        self.performSegue(withIdentifier: id, sender: nil)
     }
     
     
@@ -389,7 +393,8 @@ class MusicViewController: UIViewController {
         self.doneBtn.isHidden = true
         self.allSelectBtn.isHidden = true
         
-        let indexPathList = self.collectionView.indexPathsForSelectedItems!.sorted{ $1.row < $0.row }
+        guard let items = self.collectionView.indexPathsForSelectedItems else { return }
+        let indexPathList = items.sorted{ $1.row < $0.row }
         for i in indexPathList {
             self.collectionView.deselectItem(at: i, animated: false)
         }

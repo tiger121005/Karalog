@@ -3,7 +3,7 @@
 //  Karalog
 //
 //  Created by 伊藤汰海 on 2023/09/08.
-//
+
 
 import UIKit
 import AVFoundation
@@ -63,10 +63,12 @@ class QRViewController: UIViewController {
         doc.design.backgroundColor(UIColor.baseColor.cgColor)
         doc.design.shape.eye = QRCode.EyeShape.RoundedRect()
         doc.design.style.onPixels = QRCode.FillStyle.Solid(UIColor.imageColor.cgColor)
-        doc.logoTemplate = QRCode.LogoTemplate(image: UIImage.KaralogQRImage.cgImage!)
+        guard let cgImage = UIImage.KaralogQRImage.cgImage else { return }
+        doc.logoTemplate = QRCode.LogoTemplate(image: cgImage)
         
-        let generated = doc.cgImage(CGSize(width: 800, height: 800))
-        QRImageView.image = UIImage(cgImage: generated!)
+        if let generated = doc.cgImage(CGSize(width: 800, height: 800)) {
+            QRImageView.image = UIImage(cgImage: generated)
+        }
     }
     
     
@@ -111,14 +113,16 @@ class QRViewController: UIViewController {
                             self.backView.isHidden = true
                         }
                         cancelBtn.addAction(cancel, for: .touchUpInside)
+                        let navigationBtm = navigationController?.navigationBar.frame.maxY ?? 44
+                        let tabBarY = tabBarController?.tabBar.frame.minY ?? 0
                         cancelBtn.frame = CGRect(x: view.frame.width - 110,
-                                                 y: (navigationController?.navigationBar.frame.maxY)! + 10,
+                                                 y: navigationBtm + 10,
                                                  width: 100,
                                                  height: 30)
                         //カメラ画像を表示するvideoPreviewLayerの大きさをview（superview）の大きさに設定
-                        let safeHeight = (tabBarController?.tabBar.frame.minY)! - (navigationController?.navigationBar.frame.maxY)!
+                        let safeHeight = tabBarY - navigationBtm
                         videoPreviewLayer?.frame = CGRect(x: 0,
-                                                          y: (self.navigationController?.navigationBar.frame.maxY)! + 50,
+                                                          y: navigationBtm + 50,
                                                           width: backView.frame.width,
                                                           height: safeHeight - 50)
                         //カメラ画像を表示するvideoPreviewLayerをビューに追加
@@ -154,18 +158,22 @@ class QRViewController: UIViewController {
 //MARK: - AVCaptureMetaDataOutputObjectDelegate
 
 extension QRViewController: AVCaptureMetadataOutputObjectsDelegate {
-    private func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) async {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) /*async*/ {
 
         Task {
             //カメラ画像にオブジェクトがあるか確認
             if metadataObjects.count == 0 {
+                print("no object")
                 return
             }
             //オブジェクトの中身を確認
             for metadata in metadataObjects as! [AVMetadataMachineReadableCodeObject] {
                 // metadataのtype： metadata.type
                 // QRの中身： metadata.stringValue
-                guard let value = metadata.stringValue else { return }
+                guard let value = metadata.stringValue else { 
+                    print("Cannot read QR code")
+                    return
+                }
                 print("読み取りvalue：",value)
                 //一旦停止
                 AVsession.stopRunning()
@@ -176,7 +184,8 @@ extension QRViewController: AVCaptureMetadataOutputObjectsDelegate {
                 gotID = value
                 
                 if await userFB.getUserInformation(id: gotID) != nil {
-                    performSegue(withIdentifier: Segue.profile.rawValue, sender: nil)
+                    
+                    segue(identifier: .profile)
                 }
             }
             

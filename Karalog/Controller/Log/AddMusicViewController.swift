@@ -20,7 +20,7 @@ class AddMusicViewController: UIViewController {
     var artistName: String = ""
     var musicImage: String!
     var sliderValue: Float = 0
-    var selectedMenuType = ModelMenuType.未選択
+    var selectedMenuType = ModelMenuType.no
     var alertCtl: UIAlertController!
     var callView: Bool = true
     var scaleList: [UIView] = []
@@ -141,9 +141,9 @@ class AddMusicViewController: UIViewController {
         
         var actions = [UIMenuElement]()
         // HIGH
-        actions.append(UIAction(title: ModelMenuType.未選択.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.未選択 ? .on : .off,
+        actions.append(UIAction(title: ModelMenuType.no.rawValue, image: nil, state: self.selectedMenuType == ModelMenuType.no ? .on : .off,
                                 handler: { (_) in
-                                    self.selectedMenuType = .未選択
+                                    self.selectedMenuType = .no
                                     // UIActionのstate(チェックマーク)を更新するためにUIMenuを再設定する
                                     self.configureMenuButton()
                                 }))
@@ -263,8 +263,8 @@ class AddMusicViewController: UIViewController {
             backView.backgroundColor = .black.withAlphaComponent(0.4)
             
             let imageAspect = image.size.height / image.size.width
-            let areaHeight = (tabBarController?.tabBar.frame.minY)! - (navigationController?.navigationBar.frame.maxY)!
-            let areaCenter = (navigationController?.navigationBar.frame.maxY)! + (areaHeight / 2)
+            let areaHeight = (tabBarController?.tabBar.frame.minY ?? viewHeight) - (navigationController?.navigationBar.frame.maxY ?? 44)
+            let areaCenter = (navigationController?.navigationBar.frame.maxY ?? 44) + (areaHeight / 2)
             var imageViewWidth = viewWidth - 80
             var imageViewHeight = imageViewWidth * imageAspect
             var imageViewX: CGFloat = 40
@@ -312,7 +312,8 @@ class AddMusicViewController: UIViewController {
                 case .success:
                     //doはエラーが出なかった場合 catchはエラーが出たとき
                     do {
-                        let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: response.data!)
+                        guard let data = response.data else { return }
+                        let iTunesData: ITunesData = try self.decoder.decode(ITunesData.self, from: data)
                         
                         guard let musicImageURL = iTunesData.results.first?.artworkUrl100 else { continuation.resume(returning: nil)
                             return
@@ -334,289 +335,6 @@ class AddMusicViewController: UIViewController {
     }
     
     
-//    //撮影した画像を機種ごとに分類する
-//    func classifyModel() {
-//        var model: VNCoreMLModel!
-//        do {
-//            model = try VNCoreMLModel(for: KaraokeClassifier(configuration: config).model)
-//        } catch {
-//            return
-//        }
-//        
-//        requestModel = VNCoreMLRequest(model: model) { (request, error) in
-//            if let _error = error {
-//                
-//                print("Error: \(_error)")
-//                return
-//            }
-//            
-//            
-//            guard let _results = request.results as? [VNClassificationObservation], let _firstObservation = _results.first else {
-//                return
-//            }
-//            let predictModel = _firstObservation.identifier
-////            DispatchQueue.main.async {
-////                self.addFrame(model: _firstObservation.identifier)
-////            }
-//            self.branchImage(kind: predictModel)
-//        }
-//        guard let cgImage = image.cgImage else { return }
-//        // imageRequestHanderにimageをセット
-//        let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
-//        // imageRequestHandlerにrequestをセットし、実行
-//        try? imageRequestHandler.perform([requestModel])
-//        
-//    }
-//    
-//    //機種によって分類する
-//    func branchImage(kind: String) {
-//        var mlModel: MLModel!
-//        switch kind {
-//        case Model.DAMAI.rawValue:
-//            mlModel = try? Detect_DAM_AI(configuration: config).model
-//            self.selectedMenuType = .DAM
-//            self.configureMenuButton()
-//        case Model.DAMDXG.rawValue:
-//            mlModel = try? Detect_DAM_DX_G(configuration: config).model
-//            self.selectedMenuType = .DAM
-//            self.configureMenuButton()
-//        case Model.JOYnew.rawValue:
-//            mlModel = try? Detect_JOY_new(configuration: config).model
-//            self.selectedMenuType = .JOYSOUND
-//            self.configureMenuButton()
-//        case Model.JOYold.rawValue:
-//            mlModel = try? Detect_JOY_old(configuration: config).model
-//            self.selectedMenuType = .JOYSOUND
-//            self.configureMenuButton()
-//        default:
-//            return
-//        }
-//        detectString(mlModel: mlModel)
-//    }
-//    
-//    //得点などの記録の位置を取得し、文字認識をしてデータを取り込む
-//    func detectString(mlModel: MLModel) {
-//        guard let model = try? VNCoreMLModel(for: mlModel) else { return }
-//        requestDetectModel = VNCoreMLRequest(model: model) { (request, error) in
-//            if let _error = error {
-//                print("Error: \(_error)")
-//                return
-//            }
-//            
-//            guard let results = request.results as? [VNRecognizedObjectObservation] else { return }
-//            
-//            var musicText: String!
-//            var artistText: String!
-//            var scoreText: String!
-//            var commentText: String!
-//            print("results: ", results)
-//            for result in results {
-//                //やってみてから調整
-//                // ラベル名。「labels」の０番目（例えば”Car”の信頼度が一番高い。１番目（例えば”Truck”）の信頼度が次に高い。
-//                let label:String = result.labels.first!.identifier
-//                
-//                print("model label: ", label)
-//                // "Car"
-//                switch label {
-//                case Objects.music.rawValue:
-//                    
-//
-//                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
-//                        print("error music trimed")
-//                        return
-//                        
-//                    }
-//                    
-//                    self.getString(cgImage: trimedImage) { results in
-//                        var musicY: CGFloat!
-//                        for visionRequest in results {
-//                            print("music", visionRequest.topCandidates(1).first?.string ?? "")
-//                            if var musicY {
-//                                if visionRequest.boundingBox.minY < musicY {
-//                                    musicY = visionRequest.boundingBox.minY
-//                                    musicText = visionRequest.topCandidates(1).first?.string
-//                                }
-//                            } else {
-//                                musicY = visionRequest.boundingBox.minY
-//                                musicText = visionRequest.topCandidates(1).first?.string
-//                            }
-//                            
-//                            
-//                        }
-//                        
-//                        self.musicTF.text = musicText
-//                    }
-//                    
-//                case Objects.artist.rawValue:
-//                    
-//                    
-//                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
-//                        print("error artist trimed")
-//                        return
-//                        
-//                    }
-//                    self.getString(cgImage: trimedImage) { results in
-//                        
-//                        var artistY: CGFloat!
-//                        for visionRequest in results {
-//                            print("artist", visionRequest.topCandidates(1).first?.string ?? "")
-//                            if var artistY {
-//                                if visionRequest.boundingBox.minY < artistY {
-//                                    artistY = visionRequest.boundingBox.minY
-//                                    artistText = visionRequest.topCandidates(1).first?.string
-//                                }
-//                            } else {
-//                                artistY = visionRequest.boundingBox.minY
-//                                artistText = visionRequest.topCandidates(1).first?.string
-//                            }
-//                            
-//                            
-//                        }
-//                        
-//                        self.artistTF.text = artistText
-//                        
-//                    }
-//                    
-//                case Objects.score.rawValue:
-//                    
-//
-//                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
-//                        print("error score trimed")
-//                        return
-//                        
-//                    }
-//                    
-//                    self.getString(cgImage: trimedImage) { results in
-//                        var scoreMaxHeight: CGFloat!
-//                        var largeText: String!
-//                        var scoreSecondHeight: CGFloat!
-//                        var smallText: String!
-//                        for visionRequest in results {
-//                            
-//                            if var scoreMaxHeight {
-//                                
-//                                if visionRequest.boundingBox.height > scoreMaxHeight {
-//                                    
-//                                    scoreSecondHeight = scoreMaxHeight
-//                                    smallText = largeText
-//                                    scoreMaxHeight = visionRequest.boundingBox.height
-//                                    largeText = visionRequest.topCandidates(1).first?.string
-//                                    
-//                                } else if visionRequest.boundingBox.height > scoreSecondHeight {
-//                                    
-//                                    scoreSecondHeight = visionRequest.boundingBox.height
-//                                    smallText = visionRequest.topCandidates(1).first?.string
-//                                    
-//                                }
-//                            } else {
-//                                
-//                                scoreMaxHeight = visionRequest.boundingBox.height
-//                                largeText = visionRequest.topCandidates(1).first?.string
-//                                
-//                            }
-//                            
-//                            guard let largeScore = Double(largeText) else { return }
-//                            
-//                            if largeText.count >= 6 {
-//                                if largeText.last == "点" {
-//                                    largeText = String(largeText.dropLast())
-//                                }
-//                                scoreText = largeText
-//                                
-//                            } else {
-//                                
-//                                if largeText.last == "." {
-//                                    largeText = String(largeText.dropLast())
-//                                }
-//                                if var smallText {
-//                                    if smallText.first == "." {
-//                                        smallText = String(smallText.dropFirst())
-//                                    }
-//                                    if smallText.last == "点" {
-//                                        smallText = String(smallText.dropLast())
-//                                    }
-//                                    scoreText = largeText + "." + smallText
-//                                }
-//                            }
-//                            
-//                        }
-//                        
-//                        self.scoreTF.text = scoreText
-//                    }
-//                    
-//                case Objects.comment.rawValue:
-//                    
-//                    
-//                    guard let trimedImage = self.trimmingImage(trimmingArea: result.boundingBox).cgImage else {
-//                        print("error comment trimed")
-//                        return
-//                        
-//                    }
-//                    
-//                    self.getString(cgImage: trimedImage) { results in
-//                        var first = true
-//                        for visionRequest in results {
-//                            if first {
-//                                commentText = visionRequest.topCandidates(1).first?.string
-//                                first = false
-//                            } else {
-//                                commentText += visionRequest.topCandidates(1).first?.string ?? ""
-//                            }
-//                        }
-//                        
-//                        self.textView.text = commentText
-//                    }
-//                    
-//                default:
-//                    break
-//                    
-//                }
-//
-//            }
-//            
-//        }
-//        
-//        if let cgImage = image.cgImage {
-//            // imageRequestHanderにimageをセット
-//            let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
-//            // imageRequestHandlerにrequestをセットし、実行
-//            try? imageRequestHandler.perform([requestDetectModel])
-//        }
-//        
-//        
-//        
-//    }
-//
-//    func trimmingImage(trimmingArea: CGRect) -> UIImage {
-//        let cgImage = image.cgImage!
-//        
-//        guard let imgRef = cgImage.cropping(to: CGRect(x: trimmingArea.minX * image.size.height,
-//                                                 y: image.size.width - (trimmingArea.maxY * image.size.width),
-//                                                 width: trimmingArea.width * image.size.height,
-//                                                       height: trimmingArea.height * image.size.width)) else { return UIImage.heart}
-//        
-//        let trimImage = UIImage(cgImage: imgRef, scale: 0, orientation: image.imageOrientation)
-//        
-//        return trimImage
-//        
-//    }
-//    
-//    //文字認識を行う
-//    func getString(cgImage: CGImage, completionHandler: @escaping([VNRecognizedTextObservation]) -> Void) {
-//        let request = VNRecognizeTextRequest { (request, error) in
-//            guard let _results = request.results as? [VNRecognizedTextObservation] else {
-//                print("error get string")
-//                return
-//                
-//            }
-//            completionHandler(_results)
-//            print(_results)
-//        }
-//
-//        request.recognitionLanguages = ["ja-JP", "en_US"]
-//        let handler = VNImageRequestHandler(cgImage: cgImage)
-//        try? handler.perform([request])
-//    }
     func post() {
         if postEnable {
             let content = "得点:　\(scoreTF.text ?? "")\nキー:　\(keyLabel.text ?? "")\n機種:　\(selectedMenuType.rawValue)\nコメント:　\(textView.text ?? "")"
@@ -632,7 +350,7 @@ class AddMusicViewController: UIViewController {
                 if let musicImageData = await self.getMusicImage() {
                     musicImage = musicImageData
                 } else {
-                    musicImage = "https://s.widget-club.com/samples/4Xo8MX7tM5NRDsSL9BxGgs0vtQt2/9yMsO8MumnSoOb4W58Rt/1F199258-FC7E-4241-B785-269FE34C0A38.jpg?q=70"
+                    musicImage = material.noMusicImageURL
                 }
             }
             
@@ -642,7 +360,7 @@ class AddMusicViewController: UIViewController {
             df.timeZone = TimeZone.current
             let time = df.string(from: Date())
             
-            let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text ?? "" && $0.artistName == artistTF.text ?? ""}
+            let filterMusic = manager.musicList.filter {$0.musicName == musicTF.text ?? "" && $0.artistName == self.artistTF.text ?? ""}
             if !filterMusic.isEmpty {
                 guard let id = filterMusic.first?.id else {
                     let alert = UIAlertController(title: "エラー", message: "エラーが発生しました", preferredStyle: .alert)
@@ -651,9 +369,9 @@ class AddMusicViewController: UIViewController {
                     present(alert, animated: true, completion: nil)
                     return
                 }
-                musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!)
+                musicFB.addMusicDetail(musicID: id, time: time, score: Double(scoreTF.text ?? "") ?? 0, key: Int(keyLabel.text ?? "") ?? 0, model: selectedMenuType.rawValue, comment: textView.text ?? "", image: image)
             } else {
-                musicFB.addMusic(musicName: musicTF.text!, artistName: artistTF.text!, musicImage: musicImage, time: time, score: Double(scoreTF.text!)!, key: Int(keyLabel.text!)!, model: selectedMenuType.rawValue, comment: textView.text!, completionHandler: {_ in
+                musicFB.addMusic(musicName: musicTF.text ?? "", artistName: artistTF.text ?? "", musicImage: musicImage, time: time, score: Double(scoreTF.text ?? "") ?? 0, key: Int(keyLabel.text ?? "") ?? 0, model: selectedMenuType.rawValue, comment: textView.text ?? "", image: image, completionHandler: {_ in
                     
                 })
                 
@@ -679,7 +397,7 @@ class AddMusicViewController: UIViewController {
         guard let _scoreValue = scoreTF.text else { return }
         
         if Double(_scoreValue) ?? 0.0 > 100 {
-            scoreTF.text = String(Double(scoreTF.text!)! / 10)
+            scoreTF.text = String((Double(scoreTF.text ?? "") ?? 0) / 10)
         }
         // textField内の文字数
         let textFieldNumber = _scoreValue.count
@@ -700,7 +418,7 @@ class AddMusicViewController: UIViewController {
         }
         customSlider.slider.setValue(preValue, animated: false)
         if preValue != sliderValue {
-            function.playImpact(type: .impact(.light))
+            utility.playImpact(type: .impact(.light))
             sliderValue = preValue
             for i in 0..<scaleList.count {
                 if i  <= Int(sliderValue) + 7 {
@@ -756,7 +474,8 @@ class AddMusicViewController: UIViewController {
 extension AddMusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        if tableView.indexPathsForSelectedRows!.count <= 5 {
+        guard let rows = tableView.indexPathsForSelectedRows else { return }
+        if rows.count <= 5 {
             cell?.accessoryType = .checkmark
             setCategory()
         }else{
@@ -791,14 +510,17 @@ extension AddMusicViewController: UITableViewDataSource {
         cell.textLabel?.text = material.categoryList[indexPath.row]
         cell.selectionStyle = .none
         cell.textLabel?.textColor = .white
+        
+        cell.backgroundColor = .black
         // セルの状態を確認しチェック状態を反映する
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        if selectedIndexPaths != nil && (selectedIndexPaths?.contains(indexPath))! {
+        guard let contains = selectedIndexPaths?.contains(indexPath) else { return cell }
+        if selectedIndexPaths != nil && contains {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
         }
-        cell.backgroundColor = .black
+        
         return cell
     }
     
