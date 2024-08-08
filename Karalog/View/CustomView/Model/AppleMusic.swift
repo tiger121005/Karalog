@@ -7,6 +7,7 @@
 
 import MusicKit
 import Foundation
+import UIKit
 
 class AppleMusic {
     
@@ -14,6 +15,7 @@ class AppleMusic {
     
     func getMusic(word: String) async -> [Song] {
         do {
+            
             var request = MusicCatalogSearchRequest(term: word, types: [Song.self])
             request.limit = 10
             let response = try await request.response()

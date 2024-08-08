@@ -1,0 +1,369 @@
+
+/* Class = "UILabel"; text = "Karalog"; ObjectID = "0rN-dj-bdk"; */
+"0rN-dj-bdk.text" = "Karalog";
+
+/* Class = "UISearchBar"; placeholder = "曲を検索"; ObjectID = "1oL-4s-h2Z"; */
+"1oL-4s-h2Z.placeholder" = "曲を検索";
+
+/* Class = "UIButton"; configuration.title = "フォローする"; ObjectID = "24e-QF-VcH"; */
+"24e-QF-VcH.configuration.title" = "フォローする";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "24e-QF-VcH"; */
+"24e-QF-VcH.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "コメント"; ObjectID = "2Sv-HI-zpr"; */
+"2Sv-HI-zpr.text" = "コメント";
+
+/* Class = "UILabel"; text = "得点"; ObjectID = "2W6-hd-MYN"; */
+"2W6-hd-MYN.text" = "得点";
+
+/* Class = "UILabel"; text = "次に歌いたい曲が探しやすい！"; ObjectID = "3eF-Au-X5P"; */
+"3eF-Au-X5P.text" = "次に歌いたい曲が探しやすい！";
+
+/* Class = "UILabel"; text = "機種"; ObjectID = "4qa-Th-mJE"; */
+"4qa-Th-mJE.text" = "機種";
+
+/* Class = "UILabel"; text = "userName"; ObjectID = "5Wr-GT-pUu"; */
+"5Wr-GT-pUu.text" = "userName";
+
+/* Class = "UILabel"; text = "アーティスト"; ObjectID = "7ez-PE-mQj"; */
+"7ez-PE-mQj.text" = "アーティスト";
+
+/* Class = "UILabel"; text = "リスト名"; ObjectID = "91Y-DG-gSq"; */
+"91Y-DG-gSq.text" = "リスト名";
+
+/* Class = "UITabBarItem"; title = "Share"; ObjectID = "Ayv-Ak-rsy"; */
+"Ayv-Ak-rsy.title" = "Share";
+
+/* Class = "UIButton"; configuration.title = "ログイン"; ObjectID = "BDe-RE-YPm"; */
+"BDe-RE-YPm.configuration.title" = "ログイン";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "BDe-RE-YPm"; */
+"BDe-RE-YPm.normalTitle" = "Button";
+
+/* Class = "UIBarButtonItem"; title = "追加"; ObjectID = "BTE-GT-tAh"; */
+"BTE-GT-tAh.title" = "追加";
+
+/* Class = "UILabel"; text = "キー:"; ObjectID = "Bw1-GS-gos"; */
+"Bw1-GS-gos.text" = "キー:";
+
+/* Class = "UISearchBar"; placeholder = "曲名、アーティスト名を入力"; ObjectID = "C8N-Hg-Kow"; */
+"C8N-Hg-Kow.placeholder" = "曲名、アーティスト名を入力";
+
+/* Class = "UILabel"; text = "持ち歌"; ObjectID = "CM8-B9-Xlh"; */
+"CM8-B9-Xlh.text" = "持ち歌";
+
+/* Class = "UILabel"; text = "00.000"; ObjectID = "D0e-n7-PsV"; */
+"D0e-n7-PsV.text" = "00.000";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "DfU-0N-OVr"; */
+"DfU-0N-OVr.text" = "0";
+
+/* Class = "UILabel"; text = "パスワード"; ObjectID = "Dlf-9N-xul"; */
+"Dlf-9N-xul.text" = "パスワード";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Eet-ey-hOr"; */
+"Eet-ey-hOr.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "0"; ObjectID = "ExP-YC-vqW"; */
+"ExP-YC-vqW.configuration.title" = "0";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ExP-YC-vqW"; */
+"ExP-YC-vqW.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "JOYSOUND"; ObjectID = "Fu9-6E-wbB"; */
+"Fu9-6E-wbB.text" = "JOYSOUND";
+
+/* Class = "UILabel"; text = "カテゴリー"; ObjectID = "GG7-qr-cRZ"; */
+"GG7-qr-cRZ.text" = "カテゴリー";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "HE5-92-ZV2"; */
+"HE5-92-ZV2.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "アカウント作成"; ObjectID = "IPy-WN-sBh"; */
+"IPy-WN-sBh.configuration.title" = "アカウント作成";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "IPy-WN-sBh"; */
+"IPy-WN-sBh.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "曲名"; ObjectID = "IxL-2G-3Eb"; */
+"IxL-2G-3Eb.text" = "曲名";
+
+/* Class = "UILabel"; text = "記録方法は"; ObjectID = "Ixt-r3-eS5"; */
+"Ixt-r3-eS5.text" = "記録方法は";
+
+/* Class = "UIButton"; configuration.title = "投稿"; ObjectID = "JR0-TE-NSD"; */
+"JR0-TE-NSD.configuration.title" = "投稿";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "JR0-TE-NSD"; */
+"JR0-TE-NSD.normalTitle" = "Button";
+
+/* Class = "UIBarButtonItem"; title = "　"; ObjectID = "Jgu-Ik-fkl"; */
+"Jgu-Ik-fkl.title" = "　";
+
+/* Class = "UILabel"; text = "曲名"; ObjectID = "LkI-ml-SE3"; */
+"LkI-ml-SE3.text" = "曲名";
+
+/* Class = "UIButton"; configuration.title = "検索"; ObjectID = "Lrl-Nb-bYS"; */
+"Lrl-Nb-bYS.configuration.title" = "検索";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Lrl-Nb-bYS"; */
+"Lrl-Nb-bYS.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "フォロワー"; ObjectID = "Lyr-Sz-6ap"; */
+"Lyr-Sz-6ap.text" = "フォロワー";
+
+/* Class = "UITabBarItem"; title = "LOG"; ObjectID = "M3m-St-81G"; */
+"M3m-St-81G.title" = "LOG";
+
+/* Class = "UILabel"; text = "88年6月30日"; ObjectID = "MAg-Os-56m"; */
+"MAg-Os-56m.text" = "88年6月30日";
+
+/* Class = "UISearchBar"; placeholder = "ユーザーID、ユーザー名を入力"; ObjectID = "O5V-qk-ozj"; */
+"O5V-qk-ozj.placeholder" = "ユーザーID、ユーザー名を入力";
+
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "S8L-gp-Vz0"; */
+"S8L-gp-Vz0.title" = "Title";
+
+/* Class = "UILabel"; text = "00.000"; ObjectID = "SNO-oT-ceu"; */
+"SNO-oT-ceu.text" = "00.000";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "Sa7-Az-Tjm"; */
+"Sa7-Az-Tjm.text" = "0";
+
+/* Class = "UISearchBar"; placeholder = "曲名、アーティスト名を入力"; ObjectID = "Sze-LJ-mAH"; */
+"Sze-LJ-mAH.placeholder" = "曲名、アーティスト名を入力";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "TFZ-Tk-LCM"; */
+"TFZ-Tk-LCM.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "メールアドレス"; ObjectID = "UtJ-jQ-uto"; */
+"UtJ-jQ-uto.text" = "メールアドレス";
+
+/* Class = "UISearchBar"; placeholder = "曲を検索"; ObjectID = "VAe-MB-ext"; */
+"VAe-MB-ext.placeholder" = "曲を検索";
+
+/* Class = "UILabel"; text = "アーティスト名"; ObjectID = "W2J-wW-dkX"; */
+"W2J-wW-dkX.text" = "アーティスト名";
+
+/* Class = "UILabel"; text = "次から表示しない"; ObjectID = "W2p-SJ-OLm"; */
+"W2p-SJ-OLm.text" = "次から表示しない";
+
+/* Class = "UILabel"; text = "あいみょん"; ObjectID = "WD0-95-6KY"; */
+"WD0-95-6KY.text" = "あいみょん";
+
+/* Class = "UILabel"; text = "artistName"; ObjectID = "WLa-QX-lHo"; */
+"WLa-QX-lHo.text" = "artistName";
+
+/* Class = "UILabel"; text = "カテゴリー"; ObjectID = "X16-vI-HgO"; */
+"X16-vI-HgO.text" = "カテゴリー";
+
+/* Class = "UILabel"; text = "99.999"; ObjectID = "Xnf-VI-yrc"; */
+"Xnf-VI-yrc.text" = "99.999";
+
+/* Class = "UIButton"; configuration.title = "未選択"; ObjectID = "Y07-jN-xVb"; */
+"Y07-jN-xVb.configuration.title" = "未選択";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Y07-jN-xVb"; */
+"Y07-jN-xVb.normalTitle" = "Button";
+
+/* Class = "UITabBarItem"; title = "LIST"; ObjectID = "YMy-sh-khX"; */
+"YMy-sh-khX.title" = "LIST";
+
+/* Class = "UIButton"; configuration.title = "0"; ObjectID = "YWK-Qv-329"; */
+"YWK-Qv-329.configuration.title" = "0";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "YWK-Qv-329"; */
+"YWK-Qv-329.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "YuW-Ox-f1V"; */
+"YuW-Ox-f1V.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "フォロー"; ObjectID = "a6V-Hi-hr9"; */
+"a6V-Hi-hr9.text" = "フォロー";
+
+/* Class = "UILabel"; text = "カテゴリー"; ObjectID = "aBK-QS-G97"; */
+"aBK-QS-G97.text" = "カテゴリー";
+
+/* Class = "UILabel"; text = "投稿する"; ObjectID = "bgz-dj-0zc"; */
+"bgz-dj-0zc.text" = "投稿する";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "bvc-NU-fnB"; */
+"bvc-NU-fnB.text" = "Label";
+
+/* Class = "UILabel"; text = "BEST"; ObjectID = "cGq-1T-heQ"; */
+"cGq-1T-heQ.text" = "BEST";
+
+/* Class = "UIButton"; configuration.title = "アカウントがない場合"; ObjectID = "cRZ-Zb-5d8"; */
+"cRZ-Zb-5d8.configuration.title" = "アカウントがない場合";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "cRZ-Zb-5d8"; */
+"cRZ-Zb-5d8.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "dhf-ZP-YUS"; */
+"dhf-ZP-YUS.text" = "0";
+
+/* Class = "UILabel"; text = "コメント:"; ObjectID = "eYe-Zb-oxL"; */
+"eYe-Zb-oxL.text" = "コメント:";
+
+/* Class = "UILabel"; text = "キー"; ObjectID = "edB-vc-y0E"; */
+"edB-vc-y0E.text" = "キー";
+
+/* Class = "UIButton"; configuration.title = "追加"; ObjectID = "fHW-uY-TDb"; */
+"fHW-uY-TDb.configuration.title" = "追加";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "fHW-uY-TDb"; */
+"fHW-uY-TDb.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "機種:"; ObjectID = "fo6-JH-oOg"; */
+"fo6-JH-oOg.text" = "機種:";
+
+/* Class = "UILabel"; text = "musicName"; ObjectID = "gGM-pM-BPM"; */
+"gGM-pM-BPM.text" = "musicName";
+
+/* Class = "UILabel"; text = "曲名:"; ObjectID = "gbD-71-7ne"; */
+"gbD-71-7ne.text" = "曲名:";
+
+/* Class = "UILabel"; text = "機種"; ObjectID = "hLb-hw-wf6"; */
+"hLb-hw-wf6.text" = "機種";
+
+/* Class = "UILabel"; text = "Karalog"; ObjectID = "iFk-oi-HBc"; */
+"iFk-oi-HBc.text" = "Karalog";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "jsl-S0-yll"; */
+"jsl-S0-yll.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "リストを作れば"; ObjectID = "kPs-xz-xZc"; */
+"kPs-xz-xZc.text" = "リストを作れば";
+
+/* Class = "UILabel"; text = "コメント"; ObjectID = "kVv-yU-LDr"; */
+"kVv-yU-LDr.text" = "コメント";
+
+/* Class = "UILabel"; text = "ユーザー名"; ObjectID = "kzH-Vx-U7K"; */
+"kzH-Vx-U7K.text" = "ユーザー名";
+
+/* Class = "UILabel"; text = "userID"; ObjectID = "lGy-yG-5qJ"; */
+"lGy-yG-5qJ.text" = "userID";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "lOr-Pn-DQS"; */
+"lOr-Pn-DQS.text" = "Label";
+
+/* Class = "UIButton"; configuration.title = "過去の投稿を見る"; ObjectID = "m6l-q6-po0"; */
+"m6l-q6-po0.configuration.title" = "過去の投稿を見る";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "m6l-q6-po0"; */
+"m6l-q6-po0.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "パスワード"; ObjectID = "mIa-Tk-Hiv"; */
+"mIa-Tk-Hiv.text" = "パスワード";
+
+/* Class = "UILabel"; text = "アーティスト"; ObjectID = "maR-In-Rdk"; */
+"maR-In-Rdk.text" = "アーティスト";
+
+/* Class = "UILabel"; text = "友達と感想を共有して、"; ObjectID = "nRD-GY-Zng"; */
+"nRD-GY-Zng.text" = "友達と感想を共有して、";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "odL-Ze-irk"; */
+"odL-Ze-irk.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "採点画面を撮影するだけ！"; ObjectID = "peH-D0-blQ"; */
+"peH-D0-blQ.text" = "採点画面を撮影するだけ！";
+
+/* Class = "UILabel"; text = "コメント"; ObjectID = "pww-04-lQ9"; */
+"pww-04-lQ9.text" = "コメント";
+
+/* Class = "UILabel"; text = "得点"; ObjectID = "py3-HJ-lxp"; */
+"py3-HJ-lxp.text" = "得点";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "qvr-mC-XdU"; */
+"qvr-mC-XdU.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "r0l-Di-A3n"; */
+"r0l-Di-A3n.normalTitle" = "Button";
+
+/* Class = "UITabBarItem"; title = "PROFILE"; ObjectID = "riT-y8-Ufe"; */
+"riT-y8-Ufe.title" = "PROFILE";
+
+/* Class = "UIButton"; configuration.title = "閉じる"; ObjectID = "rzx-Xt-Tne"; */
+"rzx-Xt-Tne.configuration.title" = "閉じる";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "rzx-Xt-Tne"; */
+"rzx-Xt-Tne.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "よりカラオケを楽しもう！"; ObjectID = "s8i-pe-xBU"; */
+"s8i-pe-xBU.text" = "よりカラオケを楽しもう！";
+
+/* Class = "UIButton"; configuration.title = "QRコードを読み取る"; ObjectID = "sDq-WT-EzQ"; */
+"sDq-WT-EzQ.configuration.title" = "QRコードを読み取る";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "sDq-WT-EzQ"; */
+"sDq-WT-EzQ.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "アプリを始める"; ObjectID = "tNe-3i-Ngh"; */
+"tNe-3i-Ngh.configuration.title" = "アプリを始める";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "tNe-3i-Ngh"; */
+"tNe-3i-Ngh.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "未選択"; ObjectID = "ts3-p1-vgZ"; */
+"ts3-p1-vgZ.configuration.title" = "未選択";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ts3-p1-vgZ"; */
+"ts3-p1-vgZ.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "フォローで友達と繋がろう！"; ObjectID = "tvZ-xt-5RI"; */
+"tvZ-xt-5RI.text" = "フォローで友達と繋がろう！";
+
+/* Class = "UIButton"; configuration.title = "検索条件をクリア"; ObjectID = "u4s-mW-nly"; */
+"u4s-mW-nly.configuration.title" = "検索条件をクリア";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "u4s-mW-nly"; */
+"u4s-mW-nly.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "ul8-m3-J6h"; */
+"ul8-m3-J6h.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "キー"; ObjectID = "vEp-tl-PEA"; */
+"vEp-tl-PEA.text" = "キー";
+
+/* Class = "UILabel"; text = "曲名"; ObjectID = "vIh-iB-y6B"; */
+"vIh-iB-y6B.text" = "曲名";
+
+/* Class = "UILabel"; text = "カテゴリー"; ObjectID = "vr7-OE-moD"; */
+"vr7-OE-moD.text" = "カテゴリー";
+
+/* Class = "UISegmentedControl"; vx5-Lb-3QX.segmentTitles[0] = "フォロワー"; ObjectID = "vx5-Lb-3QX"; */
+"vx5-Lb-3QX.segmentTitles[0]" = "フォロワー";
+
+/* Class = "UISegmentedControl"; vx5-Lb-3QX.segmentTitles[1] = "フォロー"; ObjectID = "vx5-Lb-3QX"; */
+"vx5-Lb-3QX.segmentTitles[1]" = "フォロー";
+
+/* Class = "UILabel"; text = "メールアドレス"; ObjectID = "x4U-d3-NEc"; */
+"x4U-d3-NEc.text" = "メールアドレス";
+
+/* Class = "UIButton"; configuration.title = "追加"; ObjectID = "x7X-zM-U5i"; */
+"x7X-zM-U5i.configuration.title" = "追加";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "x7X-zM-U5i"; */
+"x7X-zM-U5i.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "アーティスト名:"; ObjectID = "xb6-cx-6TD"; */
+"xb6-cx-6TD.text" = "アーティスト名:";
+
+/* Class = "UILabel"; text = "貴方解剖純愛歌〜死ね〜"; ObjectID = "yXz-gy-NSF"; */
+"yXz-gy-NSF.text" = "貴方解剖純愛歌〜死ね〜";
+
+/* Class = "UILabel"; text = "投稿する"; ObjectID = "z8V-W5-scp"; */
+"z8V-W5-scp.text" = "投稿する";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "zeR-lg-MX0"; */
+"zeR-lg-MX0.text" = "Label";
+
+/* Class = "UISearchBar"; placeholder = "曲名、アーティスト名を入力"; ObjectID = "zld-V7-1rc"; */
+"zld-V7-1rc.placeholder" = "曲名、アーティスト名を入力";
+
+/* Class = "UIButton"; configuration.title = "追加"; ObjectID = "zs3-4n-Jt6"; */
+"zs3-4n-Jt6.configuration.title" = "追加";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "zs3-4n-Jt6"; */
+"zs3-4n-Jt6.normalTitle" = "Button";

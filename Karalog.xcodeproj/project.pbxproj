@@ -113,6 +113,7 @@
 		942763D72C649D3C00035EEC /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942763D62C649D3C00035EEC /* DetailView.swift */; };
 		942763D92C649E1900035EEC /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942763D82C649E1900035EEC /* Actions.swift */; };
 		942763DB2C649E4C00035EEC /* AppleMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942763DA2C649E4C00035EEC /* AppleMusic.swift */; };
+		942763E62C64D8F000035EEC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 942763E52C64D8F000035EEC /* Main.storyboard */; };
 		C816F45B2B5571E4BD1891D3 /* Pods_Karalog_KaralogUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35DDE236F0B387BF8920612C /* Pods_Karalog_KaralogUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -179,9 +180,7 @@
 		199668892AADA3C50003D295 /* ListFirebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFirebase.swift; sourceTree = "<group>"; };
 		19A12D2C29CC2C9E00B798A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		19A12D3329CC2C9E00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		19A12D3529CC2C9F00B798A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		19A12D3829CC2C9F00B798A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		19A12D3A29CC2C9F00B798A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19A12D4329CC2CA000B798A4 /* KaralogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogTests.swift; sourceTree = "<group>"; };
 		19A12D4D29CC2CA000B798A4 /* KaralogUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaralogUITests.swift; sourceTree = "<group>"; };
@@ -238,6 +237,11 @@
 		942763D62C649D3C00035EEC /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		942763D82C649E1900035EEC /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		942763DA2C649E4C00035EEC /* AppleMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusic.swift; sourceTree = "<group>"; };
+		942763E02C64D6D400035EEC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		942763E12C64D6D400035EEC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		942763E22C64D6F800035EEC /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		942763E32C64D6F900035EEC /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		942763E52C64D8F000035EEC /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9444EA6D5DF5A4528A21B133 /* Pods_KaralogTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaralogTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E101F8ECE477F51A4867B549 /* Pods-KaralogTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaralogTests.debug.xcconfig"; path = "Target Support Files/Pods-KaralogTests/Pods-KaralogTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E590B4190CFA172B8D53B312 /* Pods-Karalog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Karalog.debug.xcconfig"; path = "Target Support Files/Pods-Karalog/Pods-Karalog.debug.xcconfig"; sourceTree = "<group>"; };
@@ -323,6 +327,7 @@
 				19A12D3229CC2C9E00B798A4 /* Main.storyboard */,
 				19875DE42ACD6FF900967649 /* CustomView */,
 				19875DE32ACD6FCF00967649 /* Cell */,
+				942763E52C64D8F000035EEC /* Main.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -394,6 +399,7 @@
 				19D363FE2A3DB1AF0046DA9A /* Slider.swift */,
 				194A62F72AC48F1900B2CD43 /* CustomCIFilter.swift */,
 				194A62F52AC48E8400B2CD43 /* GaussianBlurFilter.swift */,
+				1960CD1C29FE0EA40065FF05 /* Model */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -485,7 +491,6 @@
 				19A12D2E29CC2C9E00B798A4 /* SceneDelegate.swift */,
 				1960CD1B29FE0E780065FF05 /* Controller */,
 				1960CD1D29FE0ECD0065FF05 /* View */,
-				1960CD1C29FE0EA40065FF05 /* Model */,
 				19875DE22ACD6F9B00967649 /* Font */,
 				19A12D3529CC2C9F00B798A4 /* Assets.xcassets */,
 				19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */,
@@ -647,11 +652,12 @@
 			};
 			buildConfigurationList = 19A12D2429CC2C9E00B798A4 /* Build configuration list for PBXProject "Karalog" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ja;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 19A12D2029CC2C9E00B798A4;
 			packageReferences = (
@@ -680,6 +686,7 @@
 				196D97362A66A02C00A96892 /* GoogleService-Info.plist in Resources */,
 				19F4D7B12AC732FA00C62083 /* NotoSansJP-Bold.otf in Resources */,
 				192D26B32A1F1C140058D739 /* ShareCell.xib in Resources */,
+				942763E62C64D8F000035EEC /* Main.storyboard in Resources */,
 				19F4D7AE2AC732FA00C62083 /* NotoSansJP-Thin.otf in Resources */,
 				19F4D7B02AC732FA00C62083 /* NotoSansJP-ExtraLight.otf in Resources */,
 				19F4D7B32AC732FA00C62083 /* NotoSansJP-Black.otf in Resources */,
@@ -951,7 +958,8 @@
 		19A12D3229CC2C9E00B798A4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				19A12D3329CC2C9E00B798A4 /* Base */,
+				942763E02C64D6D400035EEC /* en */,
+				942763E22C64D6F800035EEC /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -959,7 +967,8 @@
 		19A12D3729CC2C9F00B798A4 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				19A12D3829CC2C9F00B798A4 /* Base */,
+				942763E12C64D6D400035EEC /* en */,
+				942763E32C64D6F900035EEC /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -971,6 +980,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1031,6 +1041,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
