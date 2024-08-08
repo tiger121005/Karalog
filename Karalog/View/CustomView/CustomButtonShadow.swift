@@ -11,10 +11,7 @@ class CustomButtonShadow: UIView {
 
     required init(coder aDecorder: NSCoder) {
         super.init(coder: aDecorder)!
-        
 
-        
-        
     }
 
 }

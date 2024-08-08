@@ -7,14 +7,12 @@
 
 import UIKit
 
-
 //MARK: - Slider
 
 class Slider: UISlider {
-    
-    
+
     //MARK: - Slider methods
-    
+
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let tapPoint = touch.location(in: self)
         let fraction = Float(tapPoint.x / bounds.width)
@@ -24,5 +22,5 @@ class Slider: UISlider {
         }
         return true
     }
-    
+
 }

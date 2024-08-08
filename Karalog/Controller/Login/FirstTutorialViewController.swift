@@ -1,21 +1,20 @@
+////
+////  FirstTutorialViewController.swift
+////  Karalog
+////
+////  Created by 伊藤汰海 on 2023/10/03.
+////
 //
-//  FirstTutorialViewController.swift
-//  Karalog
+//import UIKit
 //
-//  Created by 伊藤汰海 on 2023/10/03.
+//class FirstTutorialViewController: UIViewController {
 //
-
-import UIKit
-
-class FirstTutorialViewController: UIViewController {
-    
-    @IBOutlet var showBtn: CheckBox!
-    var show: Bool = true
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-    
-    
-}
+//    @IBOutlet var showBtn: CheckBox!
+//    var show: Bool = true
+//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//    }
+//
+//}

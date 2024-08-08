@@ -16,7 +16,7 @@ struct SearchPostView: View {
                     .frame(width: 200, height: 200)
                     .transition(.move(edge: .trailing))
             }
-                
+
             Button("Switch") {
                 withAnimation {
                     self.isShow.toggle()

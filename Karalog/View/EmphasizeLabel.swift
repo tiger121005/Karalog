@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 //MARK: - EmphasizeLabel
 
 class EmphasizeLabel: UILabel {

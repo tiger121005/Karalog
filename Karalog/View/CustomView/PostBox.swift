@@ -11,12 +11,12 @@ class PostBox: UIButton {
 
     let checkedImage = UIImage(systemName: "arrowshape.turn.up.right.fill")
     let uncheckedImage = UIImage(systemName: "arrowshape.turn.up.right")
-    
+
     var checkedColor = UIColor.imageColor
     var uncheckedColor = UIColor.gray
-    
+
     var isChecked: Bool = false {
-        didSet{
+        didSet {
             if isChecked == true {
                 self.setImage(checkedImage, for: .normal)
                 self.tintColor = checkedColor
@@ -29,7 +29,7 @@ class PostBox: UIButton {
         }
     }
 
-    required init?(coder  aDecorder: NSCoder) {
+    required init?(coder aDecorder: NSCoder) {
         super.init(coder: aDecorder)!
         self.setImage(uncheckedImage, for: .normal)
         self.layer.borderWidth = 1.0
@@ -43,8 +43,7 @@ class PostBox: UIButton {
         self.tintColor = UIColor.gray
         addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
     }
-    
-    
+
     //MARK: - Objective - C
 
     @objc func buttonClicked(sender: UIButton) {

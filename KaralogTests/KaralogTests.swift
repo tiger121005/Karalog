@@ -6,6 +6,7 @@
 //
 
 import XCTest
+
 @testable import Karalog
 
 final class KaralogTests: XCTestCase {

@@ -17,13 +17,13 @@ class UIBadgeBarButtonItem: UIBarButtonItem {
         // バッジ位置です。BarButtonItemの中央からの差分をとっています
         static let defaultOffset: CGPoint = .init(x: 12.0, y: -12.0)
     }
-        
+
     // MARK: - Property
-        
+
     public var badgeNumber: Int = 0 {
         didSet { self.updateBadge() }
     }
-        
+
     private lazy var label: UILabel = {
         let label = UILabel()
         // バッジの背景色です。必要に応じて変数化してください。
@@ -42,7 +42,7 @@ class UIBadgeBarButtonItem: UIBarButtonItem {
         label.layer.zPosition = 1
         return label
     }()
-        
+
     // MARK: - Life Cycle
     public init(image: UIImage, target: Any?, action: Selector) {
         super.init()
@@ -55,24 +55,28 @@ class UIBadgeBarButtonItem: UIBarButtonItem {
         setupBadgeLabel()
         updateBadge()
     }
-        
+
     required init?(coder: NSCoder) {
         // Interface Builderでの使用は想定していません。
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func updateBadge() {
         // badgeNumberが更新される都度 Labelの数字を更新します。
         label.text = "\(badgeNumber)"
         label.isHidden = badgeNumber == 0
     }
-        
+
     func setupBadgeLabel() {
         guard let customView = customView else { return }
         customView.addSubview(label)
         label.widthAnchor.constraint(equalToConstant: Constants.labelWidth).isActive = true
         label.heightAnchor.constraint(equalToConstant: Constants.labelHeight).isActive = true
-        label.centerXAnchor.constraint(equalTo: customView.centerXAnchor, constant: Constants.defaultOffset.x).isActive = true
-        label.centerYAnchor.constraint(equalTo: customView.centerYAnchor, constant: Constants.defaultOffset.y).isActive = true
-        }
+        label.centerXAnchor.constraint(
+            equalTo: customView.centerXAnchor, constant: Constants.defaultOffset.x
+        ).isActive = true
+        label.centerYAnchor.constraint(
+            equalTo: customView.centerYAnchor, constant: Constants.defaultOffset.y
+        ).isActive = true
+    }
 }

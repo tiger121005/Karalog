@@ -5,8 +5,8 @@
 //  Created by 伊藤汰海 on 2023/09/28.
 //
 
-import Foundation
 import CoreImage
+import Foundation
 
 open class CustomCIFilter: CIFilter {
 
@@ -21,6 +21,5 @@ open class CustomCIFilter: CIFilter {
         return self.inputImage
 
     }
-
 
 }

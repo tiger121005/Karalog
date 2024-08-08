@@ -12,8 +12,6 @@ class MakeGroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
-    
 
 }

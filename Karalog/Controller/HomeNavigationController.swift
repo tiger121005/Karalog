@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeNavigationController: UINavigationController {
-    
+
     @IBOutlet var navigationBar: UINavigationBar!
 
     override func viewDidLoad() {

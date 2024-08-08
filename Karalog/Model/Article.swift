@@ -5,59 +5,57 @@
 //  Created by 伊藤汰海 on 2023/03/26.
 //
 
-import Foundation
 import FirebaseCore
-import FirebaseFirestoreSwift
 import FirebaseFirestore
-
+import FirebaseFirestoreSwift
+import Foundation
 
 //MARK: - ITunesData
 
 struct ITunesData: Codable {
-    
+
     var resultCount: Int
     var results: [MusicInfoModel]
 }
 
-
 //MARK: - MusicInfoModel
 
-public struct MusicInfoModel: Codable {
+public struct MusicInfoModel: Codable, Identifiable {
     var artistName: String
-    var trackName: String
+    var title: String
     var artworkUrl100: String
-    
-    init(artistName: String, trackName: String, artworkUrl100: String){
+    public var id: String
+
+    init(artistName: String, title: String, artworkUrl100: String, id: String) {
         self.artistName = artistName
-        self.trackName = trackName
+        self.title = title
         self.artworkUrl100 = artworkUrl100
+        self.id = id
     }
 }
 
-
 //MARK: - MusicList
-
-public struct MusicList: Codable {
+public struct Music: Codable, Identifiable {
     let musicName: String
     let artistName: String
     let musicImage: String
     var favorite: Bool
     var lists: [String]
     var data: [MusicData]
-    @DocumentID var id: String?
+    @DocumentID public var id: String?
 }
-
 
 //MARK: - MusicData
 
-public struct MusicData: Codable {
+public struct MusicData: Codable, Identifiable {
     let time: String
     let score: Double
     let key: Int
     let model: String
     let comment: String
+    
+    public var id: String { time }
 }
-
 
 //MARK: - Lists
 
@@ -67,14 +65,11 @@ public struct Lists: Codable {
     @DocumentID var id: String?
 }
 
-
 //MARK: - FBString
 public struct ListName: Codable {
     let listName: String
     @DocumentID var id: String?
 }
-
-
 
 //MARK: - Post
 
@@ -90,15 +85,13 @@ public struct Post: Codable {
     @DocumentID var id: String?
 }
 
+//MARK: - GraphData
 
-//MARK: - SampleData
-
-public struct SampleData: Identifiable {
+public struct GraphData: Identifiable {
     public var id: String { date }
     let date: String
     let score: Double
 }
-
 
 //MARK: - User
 
@@ -115,16 +108,14 @@ public struct User: Codable {
     @DocumentID var id: String?
 }
 
-
 //MARK: - Notice
-    
+
 public struct Notice: Codable {
     let title: String
     let content: String
     var seen: Bool
     let from: String
 }
-
 
 //MARK: - DetectLog
 
@@ -136,14 +127,13 @@ public struct DetectLog: Codable {
     let comment: String
 }
 
-
 //MARK: - UserDefaultsKey
 
 enum UserDefaultsKey: String {
     case userID = "userID"
     case judgeSort = "judgeSort"
     case showTutorial = "showTutorial"
-    
+
     func get() -> String? {
         return UserDefaults.standard.string(forKey: self.rawValue)
     }
@@ -156,7 +146,6 @@ enum UserDefaultsKey: String {
         UserDefaults.standard.removeObject(forKey: self.rawValue)
     }
 }
-
 
 //MARK: - Segue
 
@@ -179,9 +168,8 @@ enum Segue: String {
     case qr = "toQR"
     case profile = "toProfile"
     case post = "toPost"
-    
-}
 
+}
 
 //MARK: - Sort
 
@@ -196,7 +184,6 @@ enum Sort: String {
     case artistUp = "アーティスト順(昇）"
 }
 
-
 //MARK: - ModelMenuType
 
 //機種設定
@@ -206,15 +193,13 @@ enum ModelMenuType: String {
     case JOYSOUND = "JOYSOUND"
 }
 
-
 //MARK: - SettingShow
 
 enum SettingShow: String {
     case all = "全て"
     case follower = "フォロワーのみ"
-    
-}
 
+}
 
 //MARK: - SettingFollow
 
@@ -223,7 +208,6 @@ enum SettingFollow: String {
     case certificaiton = "認証"
 }
 
-
 //MARK: - SettingGetImage
 
 enum SettingGetImage: String {
@@ -231,14 +215,12 @@ enum SettingGetImage: String {
     case not = "許可しない"
 }
 
-
 //MARK: - Haptic
 
 enum Haptic {
     case impact(_ style: UIImpactFeedbackGenerator.FeedbackStyle, intensity: CGFloat? = nil)
     case notification(_ type: UINotificationFeedbackGenerator.FeedbackType)
 }
-
 
 //MARK: - UserRef
 
@@ -252,14 +234,14 @@ enum UserRef: String {
     case request = "request"
     case notice = "notice"
     case getImage = "getImage"
-    
+
     enum NoticeRef: String {
         case title = "title"
         case content = "content"
         case seen = "seen"
         case from = "from"
     }
-    
+
     enum MusicListRef: String {
         case musicName = "musicName"
         case artistName = "artistName"
@@ -267,7 +249,7 @@ enum UserRef: String {
         case favorite = "favorite"
         case lists = "lists"
         case data = "data"
-        
+
         enum MusicDataRef: String {
             case time = "time"
             case score = "score"
@@ -276,19 +258,18 @@ enum UserRef: String {
             case comment = "comment"
         }
     }
-    
+
     enum ListsRef: String {
         case listImage = "listImage"
         case listName = "listName"
     }
-    
+
     enum WannaListRef: String {
         case musicName = "musicName"
         case artistName = "artistName"
         case musicImage = "musicImage"
     }
 }
-
 
 //MARK: - ShareRef
 
@@ -303,16 +284,14 @@ enum ShareRef: String {
     case category = "category"
 }
 
-
 //Model
 
-enum Model: String {
+enum ModelType: String {
     case DAMAI = "DAM精密採点AI"
     case DAMDXG = "DAM精密採点DX-G"
     case JOYnew = "JOY新"
     case JOYold = "JOY旧"
 }
-
 
 //Objects
 
@@ -322,4 +301,3 @@ enum Objects: String {
     case score = "score"
     case comment = "comment"
 }
-

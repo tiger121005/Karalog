@@ -12,9 +12,6 @@ class MorePostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
-    
 
-    
 }

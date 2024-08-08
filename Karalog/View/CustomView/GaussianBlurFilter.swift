@@ -5,8 +5,8 @@
 //  Created by 伊藤汰海 on 2023/09/28.
 //
 
-import Foundation
 import CoreImage
+import Foundation
 
 class GaussianBlurFilter: CustomCIFilter {
 
@@ -32,7 +32,7 @@ class GaussianBlurFilter: CustomCIFilter {
         guard let affineClampFilter = self._affineClampFilter else {
             return inputImage
         }
-        
+
         let transform = CGAffineTransform(scaleX: 1, y: 1)
         affineClampFilter.setValue(inputImage, forKey: kCIInputImageKey)
         affineClampFilter.setValue(transform, forKey: kCIInputTransformKey)
@@ -43,7 +43,7 @@ class GaussianBlurFilter: CustomCIFilter {
         guard let blurFilter = self._gaussianBlurFilter else {
             return affineClampedImage
         }
-        
+
         let radius = self.radius
         blurFilter.setValue(affineClampedImage, forKey: kCIInputImageKey)
         blurFilter.setValue(radius, forKey: kCIInputRadiusKey)
@@ -54,7 +54,7 @@ class GaussianBlurFilter: CustomCIFilter {
         guard let cropFilter = self._cropFilter else {
             return blurredImage
         }
-        
+
         let originalRect = inputImage.extent
         cropFilter.setValue(blurredImage, forKey: kCIInputImageKey)
         cropFilter.setValue(originalRect, forKey: "inputRectangle")
@@ -62,7 +62,6 @@ class GaussianBlurFilter: CustomCIFilter {
             return blurredImage
         }
 
-        
         return croppedImage
 
     }

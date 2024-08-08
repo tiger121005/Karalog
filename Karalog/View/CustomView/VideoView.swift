@@ -5,8 +5,8 @@
 //  Created by 伊藤汰海 on 2023/09/13.
 //
 
-import UIKit
 import AVFoundation
+import UIKit
 
 class VideoView: UIView {
 
@@ -16,12 +16,12 @@ class VideoView: UIView {
         }
         return layer
     }
-    
+
     var session: AVCaptureSession? {
         get { videoPreviewLayer.session }
-        set { videoPreviewLayer.session = newValue}
+        set { videoPreviewLayer.session = newValue }
     }
-    
+
     override class var layerClass: AnyClass {
         return AVCaptureVideoPreviewLayer.self
     }

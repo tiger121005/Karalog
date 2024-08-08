@@ -7,11 +7,9 @@
 
 import UIKit
 
-
 //MARK: - LogCell
 class LogCell: UITableViewCell {
-    
-    
+
     //MARK: - UIObjects
     @IBOutlet var scoreLabel: UILabel!
     @IBOutlet var detailLabel: UILabel!
@@ -29,5 +27,5 @@ class LogCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
 }

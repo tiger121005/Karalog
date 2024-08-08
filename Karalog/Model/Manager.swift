@@ -1,23 +1,23 @@
+////
+////  Manager.swift
+////  Karalog
+////
+////  Created by 伊藤汰海 on 2023/04/30.
+////
 //
-//  Manager.swift
-//  Karalog
+//import Foundation
 //
-//  Created by 伊藤汰海 on 2023/04/30.
+//var manager = Manager.shared
 //
-
-import Foundation
-
-var manager = Manager.shared
-
-
-//MARK: Manager
-
-struct Manager {
-    static var shared = Manager()
-    
-    var musicList: [MusicList] = []
-    
-    var lists: [Lists] = []
-        
-    var user: User!
-}
+////MARK: Manager
+//
+//struct Manager {
+//    static var shared = Manager()
+//
+////    var musicList: [MusicList] = []
+//
+//    var lists: [Lists] = []
+//
+//    var user: User!
+//}
+//

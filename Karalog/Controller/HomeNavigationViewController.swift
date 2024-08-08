@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeNavigationViewController: UIViewController {
-    
+
     @IBOutlet var navigationBar: UINavigationBar!
 
     override func viewDidLoad() {
@@ -21,6 +21,6 @@ class HomeNavigationViewController: UIViewController {
 
 extension HomeNavigationViewController: UINavigationBarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
-            return .topAttached
-        }
+        return .topAttached
+    }
 }

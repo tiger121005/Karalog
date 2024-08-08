@@ -9,6 +9,4 @@ import UIKit
 
 class CustomSearchBar: UISearchBar {
 
-    
-
 }
